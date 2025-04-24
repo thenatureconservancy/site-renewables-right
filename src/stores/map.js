@@ -53,7 +53,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     { header: 'Avoid / Minimize Development',
     id: 'avoid',
     subheaders: [
-      {title: 'Avoid Development', id: 'avoid', visible: true, visibleModel: true, description: 'Short description of data category', 
+      {title: 'Avoid Development', id: 'avoid', visible: true, visibleModel: true, description: 'Avoid developing critical ecological areas', 
         sublayers: [
           { id: 6, elid: 'woopingCraneW', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true,title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description' },
 	        { id: 7, elid: 'woopingCraneS', visible: true, visibleModel: true, opacity: 0.9, category: 'solar', filter: true, title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description' },
@@ -69,7 +69,7 @@ export const useMapStore = defineStore('mapStore', () => ({
           { id: 16, elid: 'climateResistance', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Climate Resilience', description: 'short description', longDescription: 'long' }
         ]
       },
-      {title: 'Minimize Development', id: 'minimize', visible: true, visibleModel: true, description: 'Short description of data category', 
+      {title: 'Minimize Development', id: 'minimize', visible: true, visibleModel: true, description: 'Minimize development in vital connectivity corridors', 
         sublayers: [
           {id: 29, elid:'corrd', filter: true, visible: true, visibleModel: true, category: 'both', title: 'Landscape Connectivity', description: 'short description ', longDescription: 'long description', opacity: .7}
         ]
@@ -79,7 +79,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
    header: 'Opportunities for Development',
    subheaders:[
-      {title: 'Opportunities for Development', id: 'swipeLayers', visible: true, description: 'Short description of data category',
+      {title: 'Opportunities for Development', id: 'swipeLayers', visible: true, description: 'Focus development in areas with lower ecological impact',
         sublayers: [
           { id:0, elid:'brownfields', visible: false, filter: true,visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 50 acres (solar)', description: 'short description',longDescription: 'long description'  },
           { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description' },
@@ -428,6 +428,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       {name: 'Intact Habitats', id: 27, color: '#BABABA', index: 8, map:'intersectingFeatures'},
       {name: 'Climate Resilience', id: 28, color: '#80A26F', index: 9,  map:'intersectingFeatures'},
       {name: 'Landscape Connectivity', id: 30, color: '#71a599', index: 2, map:'intersectingFeatures'},
+      {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures'},
       {name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities'},
       {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities'},
     ]
