@@ -4,17 +4,18 @@ import Graphic from '@arcgis/core/Graphic.js'
 import * as bufferOperator from '@arcgis/core/geometry/operators/bufferOperator.js'
 import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator.js";
 import * as areaOperator from "@arcgis/core/geometry/operators/areaOperator.js";
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 
 export const useMapStore = defineStore('mapStore', () => ({
   opacity: 70,
   tab: 'layers',
   compare: true, 
-  panelState: 'open',
+  panelState: 'closed',
   activeTool: 'legend',
   activeHelpElement: '',  
   category: 'both',
   legend: '',
-  bufferSize: 5000,
+  bufferSize: 1,
   currentPoint: '',
   results: [],
   oppResults: [],
@@ -47,13 +48,15 @@ export const useMapStore = defineStore('mapStore', () => ({
     return counts
   
   },
+  splash: true,
+
  
   //layers referenced by component
   layers:  [
     { header: 'Avoid / Minimize Development',
     id: 'avoid',
     subheaders: [
-      {title: 'Avoid Development', id: 'avoid', visible: true, visibleModel: true, description: 'Avoid developing critical ecological areas', 
+      {title: 'Highly Sensitive', id: 'avoid', visible: true, visibleModel: true, description: 'Avoid developing critical ecological areas', 
         sublayers: [
           { id: 6, elid: 'woopingCraneW', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true,title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description' },
 	        { id: 7, elid: 'woopingCraneS', visible: true, visibleModel: true, opacity: 0.9, category: 'solar', filter: true, title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description' },
@@ -69,7 +72,7 @@ export const useMapStore = defineStore('mapStore', () => ({
           { id: 16, elid: 'climateResistance', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Climate Resilience', description: 'short description', longDescription: 'long' }
         ]
       },
-      {title: 'Minimize Development', id: 'minimize', visible: true, visibleModel: true, description: 'Minimize development in vital connectivity corridors', 
+      {title: 'Moderately Sensitive', id: 'minimize', visible: true, visibleModel: true, description: 'Minimize development in vital connectivity corridors', 
         sublayers: [
           {id: 29, elid:'corrd', filter: true, visible: true, visibleModel: true, category: 'both', title: 'Landscape Connectivity', description: 'short description ', longDescription: 'long description', opacity: .7}
         ]
@@ -79,7 +82,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
    header: 'Opportunities for Development',
    subheaders:[
-      {title: 'Opportunities for Development', id: 'swipeLayers', visible: true, description: 'Focus development in areas with lower ecological impact',
+      {title: ' Second Life Lands & Waters', id: 'swipeLayers', visible: true, description: 'Focus development in areas with lower ecological impact',
         sublayers: [
           { id:0, elid:'brownfields', visible: false, filter: true,visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 50 acres (solar)', description: 'short description',longDescription: 'long description'  },
           { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description' },
@@ -90,7 +93,8 @@ export const useMapStore = defineStore('mapStore', () => ({
     ],
   },
   ],
-
+   
+ 
   //map loads sublayers in reverse order from the list in the ui which causes confusion about 
   //which layer is on top.  This function reverses the order
   //and is used by the MapImageLayer to define sublayers.  
@@ -125,7 +129,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   //sets overall group layer visibility
   setLayerVisibility(layer) {
-    layer.visible = !layer.visible
     let map = document.querySelector("arcgis-map").map;
     let mapLayer = map.findLayerById(layer.id);
     let sublayers = layer.sublayers
@@ -404,7 +407,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       graphic.geometry = point
     }
 
-    const buffer = bufferOperator.execute(point, this.bufferSize, { unit: 'meters' })
+    const buffer = bufferOperator.execute(point, this.bufferSize, { unit: 'miles' })
     if (bufferLayer.graphics.length === 0) {
       bufferLayer.add(
         new Graphic({
@@ -463,7 +466,7 @@ export const useMapStore = defineStore('mapStore', () => ({
 
     sublayer.queryFeatures(queryGeom).then((results) => {
       let obj = ''
-      let bufferArea = areaOperator.execute(buffer,{unit:'square-kilometers'})
+      let bufferArea = areaOperator.execute(buffer,{unit:'square-miles'})
       if(results.features.length === 0){
         this.reportSummary.further = this.reportSummary.further + 1
      
@@ -488,7 +491,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         const clip = intersectionOperator.executeMany(geoms, buffer)
         let area = 0
         for(let i=0;i<clip.length;i++){
-          let fa = areaOperator.execute(clip[i], {unit:'square-kilometers'})
+          let fa = areaOperator.execute(clip[i], {unit:'square-miles'})
           area = area + fa
         }
         obj = {

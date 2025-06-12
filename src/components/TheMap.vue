@@ -12,10 +12,17 @@ import DrawAction from '@arcgis/core/views/draw/DrawAction.js'
 /**GET STORE */
 import { useMapStore } from '../stores/map'
 const mapStore = useMapStore()
-
-onMounted(() => {
-  const arcgisSwipe = document.querySelector('arcgis-swipe')
+const showResetZoomButton = ref(false)
+function zoomHome() {
   const arcgisMap = document.querySelector('arcgis-map')
+  arcgisMap.zoom = 3
+  arcgisMap.center = '-95.5348, 38.7946'
+}
+onMounted(() => {
+  const arcgisMap = document.querySelector('arcgis-map')
+
+/**WATCH */
+
 
   let avoid = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
@@ -38,7 +45,7 @@ onMounted(() => {
     id: 'opportunities',
     visible: false,
   })
-  let brownfields_swipe = new FeatureLayer({
+  /*let brownfields_swipe = new FeatureLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
     renderer: {
       type: 'simple',
@@ -72,16 +79,13 @@ onMounted(() => {
     visible: false,
     id: 'brownfields_opp',
   })
-  //a copy of the opportunities layer group is used to turn on and off the
-  //swipe tool.  could not find a way to turn off and reinitiate this component. So
-  //I am just hiding it and the associated layers when the user turns on and off the compare
   let swipeLayers = new MapImageLayer({
     // URL to the service
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
     sublayers: mapStore.opportunitiesLayersReverse(),
     title: 'Opportunities for Development',
     id: 'swipeLayers',
-  })
+  })*/
   //these layers will be used for the reporting.  The viewable map layers are raster. These
   //are polygons
   let intersectingFeatures = new MapImageLayer({
@@ -99,41 +103,55 @@ onMounted(() => {
       { id: 28 },
       { id: 30 },
     ],
+    listMode: 'hide',
     id: 'intersectingFeatures',
     visible: false,
   })
   //defining graphic layers to be used with the buffer tool
-  let bufferLayer = new GraphicsLayer({ id: 'bufferLayer' })
-  let pointLayer = new GraphicsLayer({ id: 'pointLayer' })
-
+  let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
+  let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
+  watch(
+    () => mapStore.panelState,
+    () => {
+      if(mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+      }
+      else {
+        bufferLayer.visible = false
+        pointLayer.visible = false
+      }
+    }
+  )
+  watch(
+    () => mapStore.activeTool,
+    () => {
+      if(mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+      }
+      else {
+        bufferLayer.visible = false
+        pointLayer.visible = false
+      }
+    }
+  )
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [
-      develop,
-      minimize,
-      avoid,
-      swipeLayers,
-      brownfields_opp,
-      brownfields_swipe,
-      bufferLayer,
-      pointLayer,
-      intersectingFeatures,
-    ],
+    layers: [develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
   })
 
-  //set up listener for swipe
-  arcgisSwipe.addEventListener('arcgisPropertyChange', (e) => {
-    if (e.detail.name === 'state' && arcgisSwipe.state === 'ready') {
-      arcgisMap.constraints.maxZoom = 11
-      arcgisSwipe.trailingLayers.add(swipeLayers)
-      arcgisSwipe.trailingLayers.add(brownfields_swipe)
-      arcgisSwipe.leadingLayers.add(minimize)
-      arcgisSwipe.leadingLayers.add(avoid)
-    }
+  arcgisMap.addEventListener('arcgisViewChange', (e) => {
+    console.log('view changed', e)
+    arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
-    mapStore.createBuffer(e)
+    if (mapStore.activeTool == 'Site Report' && mapStore.panelState == 'open') {
+      bufferLayer.visible = true
+      pointLayer.visible = true
+      mapStore.createBuffer(e)
+    }
   })
   //add legend symbols to toc layers list
   mapStore.getLegendData()
@@ -142,30 +160,20 @@ onMounted(() => {
 
 <template>
   <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3">
-    <arcgis-swipe v-show="mapStore.compare" swipe-position="50"></arcgis-swipe>
-    <div
-      v-if="mapStore.compare"
-      style="position: absolute; left: 0px; width: calc(50%); top: 0px; z-index: 999"
+    <arcgis-zoom position="bottom-left"></arcgis-zoom>
+    <arcgis-search position="top-left"></arcgis-search>
+    <q-btn
+      v-if="showResetZoomButton"
+      size="12px"
+      @click="zoomHome()"
+      color="white"
+      padding=""
+      class="text-blue"
+      unelevated
+      square
+      style="z-index: 999; position: absolute; right: 15px; top: 15px"
+      >Reset Zoom</q-btn
     >
-      <q-item-label
-        overline
-        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
-        class="text-center q-pa-sm text-white text-bold"
-        >AVOID / MINIMIZE DEVELOPMENT
-      </q-item-label>
-    </div>
-    <div
-      v-if="mapStore.compare"
-      style="position: absolute; right: 0px; width: calc(50%); top: 0px; z-index: 999"
-    >
-      <q-item-label
-        overline
-        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
-        class="text-center q-pa-sm text-white text-bold"
-      >
-        OPPORTUNITIES FOR DEVELOPMENT
-      </q-item-label>
-    </div>
   </arcgis-map>
 </template>
 

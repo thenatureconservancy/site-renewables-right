@@ -4,16 +4,16 @@ const mapStore = useMapStore()
 </script>
 
 <template>
-  <div v-if="mapStore.results.length > 0">
+  <div v-if="mapStore.currentPoint !== ''">
     <q-separator></q-separator>
     <q-separator></q-separator>
     <q-expansion-item
       expand-separator
-      label="Avoid developing critical ecological areas"
-      class="text-body1 text-weight-light text-white bg-blue-grey-9"
+      label="Highly Sensitive"
+      class="text-body1 bg-white"
       default-opened=""
     >
-      <q-list bordered="">
+      <q-list>
         <p class="q-ml-md q-mb-sm q-mt-sm text-body2 text-caption">
           Features: {{ mapStore.getCounts().avoid }}
         </p>
@@ -33,7 +33,7 @@ const mapStore = useMapStore()
             </q-item-section>
             <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
               <span class="text-caption">Area <br /></span>
-              {{ item.totalArea }} KM2
+              {{ item.totalArea }}  <br/>sq mi
             </q-item-section>
             <q-item-section class="q-pl-md">
               <span class="text-caption">Perc of Total <br /></span>
@@ -43,14 +43,14 @@ const mapStore = useMapStore()
         </div>
       </q-list>
     </q-expansion-item>
-    <q-separator></q-separator>
+
     <q-expansion-item
       expand-separator
-      label="Minimize development in vital connectivity corridors"
-      class="text-body1 text-weight-light text-white bg-blue-grey-9"
+      label="Moderately Sensitive"
+      class="text-body1 bg-white"
       default-opened=""
     >
-      <q-list bordered="">
+      <q-list>
         <p class="q-ml-md q-mb-sm q-mt-sm text-caption">
           Features: {{ mapStore.getCounts().minimize }}
         </p>
@@ -66,7 +66,7 @@ const mapStore = useMapStore()
             </q-item-section>
             <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
               <span class="text-caption">Area <br /></span>
-              {{ item.totalArea }} KM2
+              {{ item.totalArea }}  <br/>sq mi
             </q-item-section>
             <q-item-section class="q-pl-md">
               <span class="text-caption">Perc of Total <br /></span>
@@ -77,11 +77,10 @@ const mapStore = useMapStore()
       </q-list>
     </q-expansion-item>
 
-    <q-separator></q-separator>
     <q-expansion-item
       expand-separator
-      label="Focus development in areas with lower ecological impact"
-      class="text-body1 text-weight-light text-white bg-blue-grey-9"
+      label="Second Life Lands and Waters"
+      class="text-body1 bg-white"
       default-opened=""
     >
       <p class="q-ml-md q-mb-sm q-mt-sm text-caption">
@@ -96,7 +95,7 @@ const mapStore = useMapStore()
           </q-item-section>
           <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
             <span class="text-caption">Area <br /></span>
-            {{ item.totalArea }} KM2
+            {{ item.totalArea }} <br/>sq mi
           </q-item-section>
           <q-item-section class="q-pl-md">
             <span class="text-caption">Perc of Total <br /></span>
@@ -104,7 +103,7 @@ const mapStore = useMapStore()
           </q-item-section>
         </q-item>
       </div>
-      <q-list bordered="">
+      <q-list>
         <div v-for="(item, index) in mapStore.oppResults" :key="index">
           <q-item class="" v-if="item.count > 0">
             <q-item-section class="col-4 bg-yellow-1">
@@ -122,8 +121,8 @@ const mapStore = useMapStore()
         </div>
       </q-list>
     </q-expansion-item>
-    <q-separator></q-separator>
-    <q-expansion-item
+
+    <!--q-expansion-item
       expand-separator
       label="Further review may be needed"
       class="text-body1 text-weight-light text-white bg-blue-grey-9"
@@ -169,24 +168,25 @@ const mapStore = useMapStore()
           </q-item>
         </div>
       </q-list>
-    </q-expansion-item>
+    </q-expansion-item-->
     <!--p class="q-ma-md">Stats for QAQC:</p>
     <ul>
-      <li>Total area intersected: {{ mapStore.results.totalArea }} km2</li>
+      <li>Total area intersected: {{ mapStore.results.totalArea }} sq mi</li>
       <li>Total number of features: {{ mapStore.results.numFeatures }}</li>
-      <li>Buffer area: {{ mapStore.results.bufferArea }} km2</li>
+      <li>Buffer area: {{ mapStore.results.bufferArea }} sq mi</li>
       <li>Percent of total: {{ mapStore.results.percentOfTotal }}</li>
     </ul-->
   </div>
   <div
     v-if="mapStore.results.length == 0"
-    class="shadow-2 q-pa-lg q-mg-lg text-h6 text-weight-light text-grey"
+    class="q-pa-lg q-mg-lg q-mt-xl text-h6 text-weight-light text-grey"
   >
-    <div class="text-center q-mb-md">
+    <div class="text-center q-mb-md q-pa-md">
       <q-icon name="o_pin_drop" size="xl" class="text-center"></q-icon>
+
+      <p class="q-pb-xl q-mb-xl">
+        Click anywhere on the map to generate a Site Renewables Right area summary
+      </p>
     </div>
-    <p class="q-pb-xl q-mb-xl">
-      Click anywhere on the map to generate a Site Renewables Right area summary
-    </p>
   </div>
 </template>
