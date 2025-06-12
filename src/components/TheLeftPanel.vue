@@ -34,7 +34,7 @@ computed(() => {
 </script>
 <template>
   <div class="">
-    <!--div class="bg-blue-grey-1">
+    <div class="bg-blue-grey-1">
       <q-tabs
         v-model="mapStore.tab"
         dense
@@ -48,7 +48,7 @@ computed(() => {
         <q-tab name="layers" label="View Layers" icon="layers" />
         <q-tab name="sketch" label="Area Explorer" icon="search" />
       </q-tabs>
-    </div-->
+    </div>
     <!--q-tab-panels v-model="mapStore.tab" animated class="bg-blue-grey-1">
       <q-tab-panel name="layers" class="q-mt-sm q-pt-none q-px-sm"-->
     <q-scroll-area style="height: calc(100vh)">
