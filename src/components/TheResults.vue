@@ -1,6 +1,20 @@
 <script setup>
 import { useMapStore } from '../stores/map'
 const mapStore = useMapStore()
+function getRange(val) {
+  let newVal = val * 100
+  let range = ''
+  newVal > 0 && newVal < 26
+    ? (range = '0 - 25%')
+    : newVal > 25 && newVal < 51
+      ? (range = '26 - 50%')
+      : newVal > 50 && newVal < 76
+        ? (range = '51 - 75%')
+        : newVal > 75 && newVal < 101
+          ? (range = '76 - 100%')
+          : (range = '0 - 100%')
+  return range
+}
 </script>
 
 <template>
@@ -14,9 +28,16 @@ const mapStore = useMapStore()
       default-opened=""
     >
       <q-list>
-        <p class="q-ml-md q-mb-sm q-mt-sm text-body2 text-caption">
-          Features: {{ mapStore.getCounts().avoid }}
-        </p>
+        <!--p class="q-ml-md q-mb-sm q-mt-sm text-body2 text-caption">
+          Number of features: {{ mapStore.getCounts().avoid }}
+        </p-->
+        <div>
+          <q-item dense>
+            <q-item-section class="col-5 text-caption"> Highly Sensitive Habitats </q-item-section>
+            <q-item-section class="col-3 q-pl-md text-caption"> Area (sq mi) </q-item-section>
+            <q-item-section class="q-pl-md text-caption"> Percent of total </q-item-section>
+          </q-item>
+        </div>
         <div v-for="(item, index) in mapStore.results" :key="index">
           <q-item
             class=""
@@ -26,18 +47,27 @@ const mapStore = useMapStore()
               item.layerName !== 'Landscape Connectivity'
             "
           >
-            <q-item-section class="col-4" :style="{ background: item.color }">
+            <q-item-section class="col-1">
+              <q-avatar square :style="{ background: item.color }" size="sm"></q-avatar>
+            </q-item-section>
+
+            <q-item-section class="col-4">
               <q-item-label class="text-blue-grey-9 text-body2 q-pa-md text-bold">
                 {{ item.layerName }}</q-item-label
               >
             </q-item-section>
-            <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
-              <span class="text-caption">Area <br /></span>
-              {{ item.totalArea }}  <br/>sq mi
+            <q-item-section
+              class="col-3 q-pl-md text-caption text-center"
+              style="border-right: 1px solid gainsboro"
+            >
+              {{ item.totalArea }}
             </q-item-section>
             <q-item-section class="q-pl-md">
-              <span class="text-caption">Perc of Total <br /></span>
-              {{ item.percentOfTotal }}
+              <q-linear-progress size="25px" :value="item.percentOfTotal" color="blue">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white" text-color="blue" :label="getRange(item.percentOfTotal)" />
+                </div>
+              </q-linear-progress>
             </q-item-section>
           </q-item>
         </div>
@@ -51,26 +81,42 @@ const mapStore = useMapStore()
       default-opened=""
     >
       <q-list>
-        <p class="q-ml-md q-mb-sm q-mt-sm text-caption">
-          Features: {{ mapStore.getCounts().minimize }}
-        </p>
+        <!--p class="q-ml-md q-mb-sm q-mt-sm text-caption">
+         Number of features: {{ mapStore.getCounts().minimize }}
+        </p-->
+        <q-item dense>
+          <q-item-section class="col-5 text-caption">
+            Moderately Sensitive Habitats
+          </q-item-section>
+          <q-item-section class="col-3 q-pl-md text-caption"> Area (sq mi) </q-item-section>
+          <q-item-section class="q-pl-md text-caption"> Percent of total </q-item-section>
+        </q-item>
         <div v-for="(item, index) in mapStore.results" :key="index">
           <q-item
             class=""
             v-if="item.layerName === 'Landscape Connectivity' && item.totalArea !== 0"
           >
-            <q-item-section class="col-4" :style="{ background: item.color }">
+            <q-item-section class="col-1">
+              <q-avatar square :style="{ background: item.color }" size="sm"></q-avatar>
+            </q-item-section>
+
+            <q-item-section class="col-4">
               <q-item-label class="text-blue-grey-9 text-body2 q-pa-md text-bold">
                 {{ item.layerName }}</q-item-label
               >
             </q-item-section>
-            <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
-              <span class="text-caption">Area <br /></span>
-              {{ item.totalArea }}  <br/>sq mi
+            <q-item-section
+              class="col-3 q-pl-md text-caption text-center"
+              style="border-right: 1px solid gainsboro"
+            >
+              {{ item.totalArea }}
             </q-item-section>
             <q-item-section class="q-pl-md">
-              <span class="text-caption">Perc of Total <br /></span>
-              {{ item.percentOfTotal }}
+              <q-linear-progress size="25px" :value="item.percentOfTotal" color="blue">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white" text-color="blue" :label="getRange(item.percentOfTotal)" />
+                </div>
+              </q-linear-progress>
             </q-item-section>
           </q-item>
         </div>
@@ -83,38 +129,58 @@ const mapStore = useMapStore()
       class="text-body1 bg-white"
       default-opened=""
     >
-      <p class="q-ml-md q-mb-sm q-mt-sm text-caption">
+      <!--p class="q-ml-md q-mb-sm q-mt-sm text-caption">
         Features: {{ mapStore.getCounts().develop }}
-      </p>
+      </p-->
+      <q-item dense >
+        <q-item-section class="col-5 text-caption"> </q-item-section>
+        <q-item-section class="col-3 q-pl-md text-caption"> Area (sq mi) </q-item-section>
+        <q-item-section class="q-pl-md text-caption"> Percent of total </q-item-section>
+      </q-item>
       <div v-for="(item, index) in mapStore.results" :key="index">
         <q-item class="" v-if="item.totalArea !== 0 && item.map == 'opportunities'">
-          <q-item-section class="col-4" :style="{ background: item.color }">
+          <q-item-section class="col-1">
+            <q-avatar square :style="{ background: item.color }" size="sm"></q-avatar>
+          </q-item-section>
+
+          <q-item-section class="col-4">
             <q-item-label class="text-blue-grey-9 text-body2 q-pa-md text-bold">
               {{ item.layerName }}</q-item-label
             >
           </q-item-section>
-          <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
-            <span class="text-caption">Area <br /></span>
-            {{ item.totalArea }} <br/>sq mi
+          <q-item-section
+            class="col-3 q-pl-md text-caption text-center"
+            style="border-right: 1px solid gainsboro"
+          >
+            {{ item.totalArea }}
           </q-item-section>
           <q-item-section class="q-pl-md">
-            <span class="text-caption">Perc of Total <br /></span>
-            {{ item.percentOfTotal }}
+            <q-linear-progress size="25px" :value="item.percentOfTotal" color="blue">
+              <div class="absolute-full flex flex-center">
+                <q-badge color="white" text-color="blue" :label="getRange(item.percentOfTotal)" />
+              </div>
+            </q-linear-progress>
           </q-item-section>
         </q-item>
       </div>
       <q-list>
+        
         <div v-for="(item, index) in mapStore.oppResults" :key="index">
           <q-item class="" v-if="item.count > 0">
-            <q-item-section class="col-4 bg-yellow-1">
+            <q-item-section class="col-1">
+              <q-avatar square color="yellow-1" size="sm"></q-avatar>
+            </q-item-section>
+            <q-item-section class="col-4">
               <q-item-label class="text-blue-grey-9 text-body2 q-pa-md text-bold">
                 {{ item.layerName }}</q-item-label
               >
             </q-item-section>
-            <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
-              <span class="text-caption">#Features <br /></span>
+ <q-item-section class="col-3">
+              <q-item-label class="text-blue-grey-9 text-caption q-pa-md ">
+                Number of features</q-item-label
+              >
             </q-item-section>
-            <q-item-section class="col-4 q-pl-md" style="border-right: 1px solid gainsboro">
+            <q-item-section class="q-pl-md" style="border-right: 1px solid gainsboro">
               {{ item.count }}
             </q-item-section>
           </q-item>

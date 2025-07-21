@@ -4,6 +4,7 @@ import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+
 import TextSymbol from '@arcgis/core/symbols/TextSymbol.js'
 import Graphic from '@arcgis/core/Graphic.js'
 import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils.js'
@@ -21,8 +22,7 @@ function zoomHome() {
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
 
-/**WATCH */
-
+  /**WATCH */
 
   let avoid = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
@@ -43,7 +43,23 @@ onMounted(() => {
     sublayers: mapStore.opportunitiesLayersReverse(),
     title: 'Opportunities for Development',
     id: 'opportunities',
+  })
+  let brownfields = new FeatureLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
+    renderer: {
+      type: 'simple',
+      symbol: {
+        type: 'simple-marker',
+        size: 4,
+        color: '#FDFD96',
+        outline: {
+          color: 'white',
+          width: 0.5,
+        },
+      },
+    },
     visible: false,
+    id: 'brownfields',
   })
   /*let brownfields_swipe = new FeatureLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
@@ -110,35 +126,45 @@ onMounted(() => {
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
-  watch(
+  /*watch(
     () => mapStore.panelState,
     () => {
-      if(mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
+      if (mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
         bufferLayer.visible = true
         pointLayer.visible = true
-      }
-      else {
+      } else {
         bufferLayer.visible = false
         pointLayer.visible = false
       }
-    }
+    },
   )
   watch(
     () => mapStore.activeTool,
     () => {
-      if(mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
+      if (mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
         bufferLayer.visible = true
         pointLayer.visible = true
-      }
-      else {
+      } else {
         bufferLayer.visible = false
         pointLayer.visible = false
       }
-    }
+    },
+  )*/
+  watch(
+    () => mapStore.tab,
+    () => {
+      if (mapStore.tab == 'sketch') {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+      } else {
+        bufferLayer.visible = false
+        pointLayer.visible = false
+      }
+    },
   )
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
+    layers: [brownfields, develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
@@ -147,7 +173,7 @@ onMounted(() => {
   })
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
-    if (mapStore.activeTool == 'Site Report' && mapStore.panelState == 'open') {
+    if (mapStore.tab == 'sketch') {
       bufferLayer.visible = true
       pointLayer.visible = true
       mapStore.createBuffer(e)
@@ -159,9 +185,57 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3">
+  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
-    <arcgis-search position="top-left"></arcgis-search>
+    <arcgis-search
+      position="top-left"
+      search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
+    ></arcgis-search>
+
+    <q-btn
+      square
+      padding="xs"
+      flat
+      unelevated=""
+      class="bg-grey-8"
+      size="md"
+      color="white"
+      icon="o_info"
+      style="position: absolute; top: 16px; left: 255px; z-index: 999; "
+    >
+      <q-tooltip
+        ><p class="text-caption text-white">
+          To search by coordinates use the format: longitude, latitude (ie: -75.1652, 39.9526)
+        </p></q-tooltip
+      >
+    </q-btn>
+
+    <!--q-btn
+      v-if="mapStore.panelState == 'open'"
+      size="12px"
+      @click="mapStore.togglePanel()"
+      color="white"
+      padding=""
+      class="text-blue"
+      unelevated
+      square
+      style="z-index: 999; position: absolute; right: 15px; top: 15px"
+    >
+      Close Panel
+    </q-btn>
+    <q-btn
+      v-else
+      size="12px"
+      @click="mapStore.togglePanel()"
+      color="white"
+      padding=""
+      class="text-blue"
+      unelevated
+      square
+      style="z-index: 999; position: absolute; right: 15px; top: 15px"
+    >
+      Open Panel
+    </q-btn-->
     <q-btn
       v-if="showResetZoomButton"
       size="12px"
@@ -174,6 +248,29 @@ onMounted(() => {
       style="z-index: 999; position: absolute; right: 15px; top: 15px"
       >Reset Zoom</q-btn
     >
+    <div
+      style="z-index: 999; position: absolute; right: 15px; bottom: 15px"
+      class="text-center bg-white q-px-sm q-pt-sm q-mb-md"
+    >
+      <q-knob
+        show-value
+        font-size="20px"
+        class="text-secondary q-mb-none"
+        v-model="mapStore.opacity"
+        size="50px"
+        :thickness="0.3"
+        color="blue"
+        track-color="grey-3"
+        @update:model-value="mapStore.changeOpacity()"
+      >
+        <q-icon name="opacity" class="text-blue-grey-9">
+          <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
+        </q-icon>
+      </q-knob>
+      <p class="text-body1 text-blue-grey-9 q-mb-xs" style="text-shadow: 1px 1px 2px lightgray">
+        &nbsp;{{ mapStore.opacity }}%
+      </p>
+    </div>
   </arcgis-map>
 </template>
 
@@ -183,7 +280,6 @@ onMounted(() => {
 
 #my-map {
   flex: 1;
-  min-height: calc(100vh - 120px);
   height: 100%;
   width: 100%;
   position: relative;
