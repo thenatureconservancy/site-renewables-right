@@ -5,6 +5,8 @@ import TheHelp from '@/components/TheHelp.vue'
 import TheLegend from '@/components/TheLegend.vue'
 import TheReport from '@/components/TheReport.vue'
 import { useMapStore } from '../stores/map'
+//import LocalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/LocalBasemapsSource.js'
+import Basemap from '@arcgis/core/Basemap.js'
 import { ref } from 'vue'
 
 const mapStore = useMapStore()
@@ -12,6 +14,28 @@ const showDialog = ref(true)
 function openPanel(active) {
   mapStore.panelState = 'open'
   mapStore.activeTool = active
+}
+
+
+
+function onComponentReady() {
+ console.log
+  
+// Create a custom basemap from a PortalItem
+const customBasemap = new Basemap({
+  portalItem: {
+    id: "defa1b2287604d069c70af515331e30f" // Replace with your own PortalItem ID
+  }
+});
+
+document.querySelector("arcgis-basemap-gallery").source = new LocalBasemapsSource({
+  basemaps: [
+    Basemap.fromId("topo-vector"),
+    Basemap.fromId("hybrid"),
+    customBasemap
+  ]
+});
+
 }
 </script>
 
@@ -68,7 +92,10 @@ function openPanel(active) {
 
     <div class="col"><the-map></the-map></div>
     <div class="col-1" style="width: 40px">
-      <div class="bg-white text-dark" style="height: 100%; border-right: 1px solid gainsboro">
+      <div
+        class="bg-white text-dark"
+        style="height: 100%; border-right: 1px solid gainsboro; border-top: 1px solid gainsboro"
+      >
         <div id="" class="text-center">
           <q-btn
             square
@@ -98,19 +125,19 @@ function openPanel(active) {
             <q-tooltip>Legend</q-tooltip>
             <calcite-icon icon="legend" scale="m"></calcite-icon> </q-btn
           ><br />
-          <q-btn
+          <!--q-btn
             square
             padding="xs"
             flat
             size="md"
             :class="
-              mapStore.activeTool == 'opacity' ? 'q-mt-md bg-blue-grey-9 text-white' : 'q-mt-md'
+              mapStore.activeTool == 'set opacity' ? 'q-mt-md bg-blue-grey-9 text-white' : 'q-mt-md'
             "
-            @click.stop="openPanel('opacity')"
+            @click.stop="openPanel('set opacity')"
           >
-            <q-tooltip>Opacity</q-tooltip>
+            <q-tooltip>Set Opacity</q-tooltip>
             <calcite-icon icon="transparency" scale="m"></calcite-icon> </q-btn
-          ><br />
+          ><br /-->
           <q-btn
             square
             padding="xs"
@@ -151,7 +178,7 @@ function openPanel(active) {
             <q-tooltip>Help</q-tooltip>
             <calcite-icon icon="question" scale="m"></calcite-icon>
           </q-btn>
-          <q-btn
+          <!--q-btn
             square
             padding="xs"
             flat
@@ -163,11 +190,16 @@ function openPanel(active) {
           >
             <q-tooltip>Site Report</q-tooltip>
             <calcite-icon icon="file-report" scale="m"></calcite-icon>
-          </q-btn>
+          </q-btn-->
         </div>
       </div>
     </div>
-    <div class="col-1" :style="mapStore.panelState == 'open' ? 'width: 25%' : 'width: 0'">
+    <div
+      class="col-1"
+      :style="
+        mapStore.panelState == 'open' ? 'width: 25%; border-top: 1px solid gainsboro' : 'width: 0;'
+      "
+    >
       <div class="sub q-pa-sm q-ml-sm">
         <p class="text-caption q-mb-none text-weight-medium">
           {{ mapStore.activeTool.toUpperCase() }}
@@ -186,30 +218,34 @@ function openPanel(active) {
       </div>
       <div v-show="mapStore.activeTool == 'basemaps'" id="basemaps" class="basemaps">
         <q-scroll-area style="height: calc(100vh - 90px)">
-          <arcgis-basemap-gallery reference-element="my-map"></arcgis-basemap-gallery>
+          <arcgis-basemap-gallery reference-element="my-map" ></arcgis-basemap-gallery>
         </q-scroll-area>
       </div>
-      <div v-if="mapStore.activeTool == 'opacity'" class="text-center">
-        <q-knob
-          show-value
-          font-size="20px"
-          class="text-secondary q-mt-md"
-          v-model="mapStore.opacity"
-          size="80px"
-          :thickness="0.3"
-          color="secondary"
-          track-color="grey-3"
-          @update:model-value="mapStore.changeOpacity()"
-        >
-          <q-icon name="opacity" class="">
-            <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
-          </q-icon>
-        </q-knob>
-        <p class="text-h6 q-mt-md">{{ mapStore.opacity }}%</p>
+      <div v-if="mapStore.activeTool == 'set opacity'" class="text-center">
+        <q-scroll-area style="height: calc(100vh - 90px)">
+          <q-knob
+            show-value
+            font-size="20px"
+            class="text-secondary q-mt-xl"
+            v-model="mapStore.opacity"
+            size="130px"
+            :thickness="0.3"
+            color="secondary"
+            track-color="grey-3"
+            @update:model-value="mapStore.changeOpacity()"
+          >
+            <q-icon name="opacity" class="">
+              <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
+            </q-icon>
+          </q-knob>
+          <p class="text-h6 q-mt-md">{{ mapStore.opacity }}%</p>
+        </q-scroll-area>
       </div>
 
       <div v-if="mapStore.activeTool == 'help'">
-        <TheHelp></TheHelp>
+        <q-scroll-area style="height: calc(100vh - 90px)">
+          <TheHelp></TheHelp>
+        </q-scroll-area>
       </div>
     </div>
   </div>

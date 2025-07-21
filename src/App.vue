@@ -23,7 +23,7 @@ const mobile = computed(() => {
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <!--q-header class="bg-white text-dark text-body1 shadow-1">
+    <q-header class="bg-white text-dark text-body1">
       <q-toolbar>
         <a href="https://www.nature.org/en-us/">
           <img
@@ -36,7 +36,7 @@ const mobile = computed(() => {
         >
         <q-space></q-space>
       </q-toolbar>
-    </q-header-->
+    </q-header>
 
     <q-page-container>
       <RouterView />
