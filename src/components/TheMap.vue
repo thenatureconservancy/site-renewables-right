@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch, reactive } from 'vue'
+import {markRaw, ref, onMounted, computed, watch, reactive } from 'vue'
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
@@ -61,47 +61,7 @@ onMounted(() => {
     visible: false,
     id: 'brownfields',
   })
-  /*let brownfields_swipe = new FeatureLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
-    renderer: {
-      type: 'simple',
-      symbol: {
-        type: 'simple-marker',
-        size: 4,
-        color: '#FDFD96',
-        outline: {
-          color: 'white',
-          width: 0.5,
-        },
-      },
-    },
-    id: 'brownfields_swipe',
-    title: 'Opportunities for Development:Brownfields over 50acres',
-  })
-  let brownfields_opp = new FeatureLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
-    renderer: {
-      type: 'simple',
-      symbol: {
-        type: 'simple-marker',
-        size: 4,
-        color: '#FDFD96',
-        outline: {
-          color: 'white',
-          width: 0.5,
-        },
-      },
-    },
-    visible: false,
-    id: 'brownfields_opp',
-  })
-  let swipeLayers = new MapImageLayer({
-    // URL to the service
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
-    sublayers: mapStore.opportunitiesLayersReverse(),
-    title: 'Opportunities for Development',
-    id: 'swipeLayers',
-  })*/
+
   //these layers will be used for the reporting.  The viewable map layers are raster. These
   //are polygons
   let intersectingFeatures = new MapImageLayer({
@@ -126,51 +86,19 @@ onMounted(() => {
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
-  /*watch(
-    () => mapStore.panelState,
-    () => {
-      if (mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
-        bufferLayer.visible = true
-        pointLayer.visible = true
-      } else {
-        bufferLayer.visible = false
-        pointLayer.visible = false
-      }
-    },
-  )
-  watch(
-    () => mapStore.activeTool,
-    () => {
-      if (mapStore.panelState == 'open' && mapStore.activeTool == 'Site Report') {
-        bufferLayer.visible = true
-        pointLayer.visible = true
-      } else {
-        bufferLayer.visible = false
-        pointLayer.visible = false
-      }
-    },
-  )*/
-  watch(
-    () => mapStore.tab,
-    () => {
-      if (mapStore.tab == 'sketch') {
-        bufferLayer.visible = true
-        pointLayer.visible = true
-      } else {
-        bufferLayer.visible = false
-        pointLayer.visible = false
-      }
-    },
-  )
+
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
     layers: [brownfields, develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
   })
 
-  arcgisMap.addEventListener('arcgisViewChange', (e) => {
-    console.log('view changed', e)
+   arcgisMap.addEventListener('arcgisViewChange', (e) => {
+    mapStore.currentMapExtent = markRaw(arcgisMap.extent)
+    console.log(arcgisMap.extent)
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
+   
   })
+
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
     if (mapStore.tab == 'sketch') {
@@ -185,7 +113,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
+  <arcgis-map
+    basemap="topo"
+    id="my-map"
+    center="-95.5348, 38.7946"
+    zoom="3"
+    :constraints="{ minZoom: 2 }"
+  >
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
     <arcgis-search
       position="top-left"
@@ -201,7 +135,7 @@ onMounted(() => {
       size="md"
       color="white"
       icon="o_info"
-      style="position: absolute; top: 16px; left: 255px; z-index: 999; "
+      style="position: absolute; top: 16px; left: 255px; z-index: 999"
     >
       <q-tooltip
         ><p class="text-caption text-white">

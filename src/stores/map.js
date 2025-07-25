@@ -17,7 +17,29 @@ export const useMapStore = defineStore('mapStore', () => ({
   legend: '',
   bufferSize: 1,
   currentPoint: '',
-  results: [],
+  currentMapExtent: '',
+  results: {
+    highlySensitiveTotalArea: 0,
+    highlySensitiveCount: 0,
+    moderatelySensitiveTotalArea: 0,
+    minesTotalArea: 0,
+    waterBodies: 0,
+    brownfields: 0,
+    bufferArea: 0
+  },
+   summary: {
+    highlySensitiveTotalArea: 0,
+    highlySensitiveCount: 0,
+    moderatelySensitiveTotalArea: 0,
+    minesTotalArea: 0,
+    waterBodies: 0,
+    brownfields: 0,
+    bufferArea: 0,
+    highlySensitiveHabitats: [],
+    hsExtentCount: 0,
+    minesExtentCount: 0,
+    msExtentCount: 0,
+  },
   oppResults: [],
   getCounts(){
     let counts = {avoid: 0, develop: 0, review: 0, minimize: 0}
@@ -58,26 +80,23 @@ export const useMapStore = defineStore('mapStore', () => ({
     subheaders: [
       {title: 'Highly Sensitive', id: 'avoid', visible: true, visibleModel: true, description: 'Avoid developing critical ecological areas', 
         sublayers: [
-          { id: 10, elid: 'biggame', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Big Game', description: 'short description for Big Game', longDescription: 'long description'},
-		        { id: 16, elid: 'climateResistance', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Climate Resilience', description: 'short description', longDescription: 'long' },
-          { id: 8, elid: 'eagles', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true, title: 'Eagles (wind)', description: 'short description', longDescription: 'long description' },
-	          { id: 12, elid: 'birdareas', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Important Bird Areas', description: 'short description', longDescription: 'long description' },	   
-          { id: 15, elid: 'intacthabitats', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Intact Habitats', description: 'short description', longDescription: 'long description' },
-		       { id: 9, elid: 'grouse', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prarie Grouse', description: 'short description', longDescription: 'long description' },
-          { id: 14, elid: 'protectedareas', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description', longDescription: 'long description' },
-		    
-          { id: 3, elid: 'tande',visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Threatened & Endangered Species', description: 'short description', longDescription: 'long description' },
- 
-          { id: 13, elid: 'wetlandsS',visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Wetlands (solar)', description: 'short description', longDescription: 'long description' },
-          { id: 11, elid: 'wetlandsW', visible: true, filter: true,visibleModel: true, opacity: 0.9, category: 'wind', title: 'Wetlands (wind)', description: 'short description', longDescription: 'long description' },
-           { id: 7, elid: 'woopingCraneS', visible: true, visibleModel: true, opacity: 0.9, category: 'solar', filter: true, title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description' },
-          { id: 6, elid: 'woopingCraneW', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true,title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description' },
-	       
+          { id: 10, elid: 'biggame', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Big Game', description: 'short description for Big Game', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+		      { id: 16, elid: 'climateResistance', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Climate Resilience', description: 'short description', longDescription: 'long', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 8, elid: 'eagles', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true, title: 'Eagles (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+	        { id: 12, elid: 'birdareas', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Important Bird Areas', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },	   
+          { id: 15, elid: 'intacthabitats', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Intact Habitats', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+		      { id: 9, elid: 'grouse', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prarie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 14, elid: 'protectedareas', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 3, elid: 'tande',visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Threatened & Endangered Species', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 13, elid: 'wetlandsS',visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Wetlands (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 11, elid: 'wetlandsW', visible: true, filter: true,visibleModel: true, opacity: 0.9, category: 'wind', title: 'Wetlands (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''  },
+          { id: 7, elid: 'woopingCraneS', visible: true, visibleModel: true, opacity: 0.9, category: 'solar', filter: true, title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id: 6, elid: 'woopingCraneW', visible: true, visibleModel: true, opacity: 0.9, category: 'wind', filter: true,title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description',  totalArea: 0, percentOfTotal: 0, inExtent: '' },
         ]
       },
       {title: 'Moderately Sensitive', id: 'minimize', visible: true, visibleModel: true, description: 'Minimize development in vital connectivity corridors', 
         sublayers: [
-          {id: 29, elid:'corrd', filter: true, visible: true, visibleModel: true, category: 'both', title: 'Landscape Connectivity', description: 'short description ', longDescription: 'long description', opacity: .7}
+          {id: 29, elid:'corrd', filter: true, visible: true, visibleModel: true, category: 'both', title: 'Landscape Connectivity', description: 'short description ', longDescription: 'long description', opacity: .7, totalArea: 0, percentOfTotal:0 , inExtent: '' },
         ]
       },
     ],
@@ -87,11 +106,10 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders:[
       {title: 'Second Life Lands & Waters', id: 'opportunities', visible: true, description: 'Focus development in areas with lower ecological impact',
         sublayers: [
-          { id:0, elid:'brownfields', visible: false, filter: true,visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 50 acres (solar)', description: 'short description',longDescription: 'long description'  },
-           { id:19, elid: 'fsd', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Low impact water bodies for floating solar development (solar)', description: 'short description', longDescription: 'Waterbodies 2.5 acres or greater within 5 kilometers of the transmission lines, that are suitable for development because they are man-made reservoirs with Slightly Below Average to Far Below Average level of biodiversity and/or resilience.' },
-          { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description' },
-          { id:1, elid: 'minesin', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines in Suitability (solar)', description: 'short description', longDescription: 'long description' },
-         
+          { id:0, elid:'brownfields', visible: false, filter: true,visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 50 acres (solar)', description: 'short description',longDescription: 'long description', totalArea: 0, percentOfTotal: 0, count: 0, inExtent: '' },
+          { id:19, elid: 'fsd', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Low impact water bodies for floating solar development (solar)', description: 'short description', longDescription: 'Waterbodies 2.5 acres or greater within 5 kilometers of the transmission lines, that are suitable for development because they are man-made reservoirs with Slightly Below Average to Far Below Average level of biodiversity and/or resilience.', totalArea: 0, percentOfTotal: 0, count:0, inExtent: '' },
+          { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+          { id:1, elid: 'minesin', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines in Suitability (solar)', description: 'short description', longDescription: 'long description',totalArea: 0, percentOfTotal: 0, inExtent: '' },
         ]
       },
     ],
@@ -190,8 +208,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       })
       this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
         let map = document.querySelector("arcgis-map").map;
-        let val = this.compare ? 'swipeLayers' : 'opportunities'
-        let mapLayer = map.findLayerById('swipeLayers');
+        let mapLayer = map.findLayerById('opportunities');
         let sub = mapLayer.findSublayerById(layer.id);
         layer.visible = true
         if (layer.id !== 0 ){
@@ -199,17 +216,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         }
      
       })
-
-      if (this.compare){
-        let map = document.querySelector("arcgis-map").map;
-        let sub2 = map.findLayerById('brownfields_swipe')
-        sub2.visible = true
-      }
-      if (!this.compare){
-        let map = document.querySelector("arcgis-map").map;
-        let sub2 = map.findLayerById('brownfields_opp')
-        sub2.visible = true
-      }
+    
     }else{
      
       this.filterLayers()
@@ -263,12 +270,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       if(layer.category !== this.category && layer.category !== 'both'){
         //turn off those layers so they are not visibl ein the map
         let mapLayer = ''
-        if(this.compare){
-          mapLayer = map.findLayerById('swipeLayers')
-        }
-        else{
-          mapLayer = map.findLayerById('opportunities') ;
-        }
+        mapLayer = map.findLayerById('opportunities') ;
         let sub = mapLayer.findSublayerById(layer.id);
         layer.filter = false
         sub.visible = false
@@ -276,73 +278,26 @@ export const useMapStore = defineStore('mapStore', () => ({
       if (layer.category == this.category || layer.category == 'both'){
         //turn on those layers
         let mapLayer = ''
-        if(this.compare){
-          mapLayer = map.findLayerById('swipeLayers')
-        }
-        else{
-          mapLayer = map.findLayerById('opportunities') ;
-        }
+        mapLayer = map.findLayerById('opportunities') ;
         let sub = mapLayer.findSublayerById(layer.id);
         layer.filter = true
         if (layer.id !== 0 ){
-        sub.visible = true
+          sub.visible = true
         }
       }
       
     })
-    if (this.compare){
-      if (this.category == 'solar'){
-        let sub2 = map.findLayerById('brownfields_swipe')
-        sub2.visible = true
-      }
-      if(this.category !==  'solar'){
-        let sub2 = map.findLayerById('brownfields_swipe')
-        sub2.visible = false
-      }
-    } 
-    if (!this.compare){
-      if (this.category == 'solar'){
-        let sub2 = map.findLayerById('brownfields_opp')
-        sub2.visible = true
-      }
-      if(this.category !==  'solar'){
-        let sub2 = map.findLayerById('brownfields_opp')
-        sub2.visible = false
-      }
-    } 
+   
+    if (this.category == 'solar'){
+      let sub2 = map.findLayerById('brownfields')
+      sub2.visible = true
+    }
+    if(this.category !==  'solar'){
+      let sub2 = map.findLayerById('brownfields')
+      sub2.visible = false
+    }
+    
       
-  },
-  //hide or show the swipe tool and layers
-  hideShowSwipe(){
-    this.compare = !this.compare 
-    let swipe = document.querySelector("arcgis-swipe");
-    let map = document.querySelector("arcgis-map").map;
-    let layer = map.findLayerById('opportunities');
-
-    if(this.compare){
-      swipe.swipePosition="50"
-      swipe.hideDivider = false;
-      swipe.hideHandle = false;
-      layer.visible = false
-      this.layers[1].subheaders[0].id = 'swipeLayers'
-      let sub = map.findLayerById('brownfields_swipe')
-      sub.visible = true
-      let sub2 = map.findLayerById('brownfields_opp')
-      sub2.visible = false
-    }
-    else{
-      swipe.swipePosition="100"
-      swipe.hideDivider = true;
-      swipe.hideHandle = true;
-      layer.visible = true;
-      this.layers[1].subheaders[0].id = 'opportunities'
-      let sub = map.findLayerById('brownfields_opp')
-      sub.visible = true
-      let sub2 = map.findLayerById('brownfields_swipe')
-      sub2.visible = false
-
-    }
-
   },
   //gets legend img from the service when app starts after map loads
   getLegendData(){
@@ -418,34 +373,61 @@ export const useMapStore = defineStore('mapStore', () => ({
       graphic.geometry = buffer
     }
     //clear values from previous buffer
- view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20}) 
-    let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures'},
-      {name: 'Whooping Crane (wind)', id: 20, color: '#FF884D', index: 1, map:'intersectingFeatures'},
-      {name: 'Whooping Crane (solar)', id: 21, color: '#FF884D', index: 2, map:'intersectingFeatures'},
-      {name: 'Eagles (wind)', id: 22, color: '#AC8B7C', index: 3, map:'intersectingFeatures'},
-      {name: 'Prarie Grouse', id: 23, color: '#93AE7F', index: 4, map:'intersectingFeatures'},
-      {name: 'Important Bird Areas (wind)', id: 24, color: '#F9BFA3', index: 5, map:'intersectingFeatures'},
-      {name: 'Threatened & Endangered Species', id: 26, color: '#D9A2F8', index: 7, map:'intersectingFeatures'},
-      {name: 'Intact Habitats', id: 27, color: '#BABABA', index: 8, map:'intersectingFeatures'},
-      {name: 'Climate Resilience', id: 28, color: '#80A26F', index: 9,  map:'intersectingFeatures'},
-      {name: 'Landscape Connectivity', id: 30, color: '#71a599', index: 2, map:'intersectingFeatures'},
-      {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures'},
-      {name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities'},
-      {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities'},
+    //view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
+    let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
+      {name: 'Whooping Crane (wind)', id: 20, color: '#FF884D', index: 1, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[11]},
+      {name: 'Whooping Crane (solar)', id: 21, color: '#FF884D', index: 2, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[10]},
+      {name: 'Eagles (wind)', id: 22, color: '#AC8B7C', index: 3, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[2]},
+      {name: 'Prarie Grouse', id: 23, color: '#93AE7F', index: 4, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[5]},
+      {name: 'Important Bird Areas', id: 24, color: '#F9BFA3', index: 5, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[3]},
+      {name: 'Threatened & Endangered Species', id: 26, color: '#D9A2F8', index: 7, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[7]},
+      {name: 'Intact Habitats', id: 27, color: '#BABABA', index: 8, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[4]},
+      {name: 'Climate Resilience', id: 28, color: '#80A26F', index: 9,  map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[1]},
+      {name: 'Landscape Connectivity', id: 30, color: '#71a599', index: 2, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[1].sublayers[0]},
+      {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[6]},
+      {name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
+      {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[3]},
     ]
     let countLayers = [
-      {name: 'Brownfields over 50 acres (solar)', id: 0, color: '#FF884D', index: 0},
-      {name: 'Low impact water bodies for floating solar development (solar)', id: 19, color: '#FF884D', index: 3},
+      {name: 'Brownfields over 50 acres (solar)', id: 0, color: '#FF884D', index: 0, map: 'opportunities', pathToLayer:  this.layers[1].subheaders[0].sublayers[0]},
+      {name: 'Low impact water bodies for floating solar development (solar)', id: 19, color: '#FF884D', index: 3, pathToLayer:  this.layers[1].subheaders[0].sublayers[1], },
     ] 
     this.results = []
     this.oppResults = []
+      //clear all previous results
+    this.layers[0].subheaders[0].sublayers.forEach((layer)=>{
+      layer.totalArea = 0
+      layer.percentOfTotal = 0
+    })
+    this.layers[0].subheaders[1].sublayers.forEach((layer)=>{ 
+      layer.totalArea = 0
+      layer.percentOfTotal = 0
+    })
+    this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
+      layer.totalArea = 0
+      layer.percentOfTotal = 0
+    })
+    this.summary= {
+        highlySensitiveTotalArea: 0,
+        highlySensitiveCount: 0,
+        moderatelySensitiveTotalArea: 0,
+        minesTotalArea: 0,
+        waterBodies: 0,
+        brownfields: 0,
+        bufferArea: 0,
+        highlySensitiveHabitats: [],
+        hsExtentCount: 0,
+        msExtentCount: 0,
+        minesExtentCount: 0,
+    }      
     for (let i=0;i<layerList.length;i++){
-      this.reportSummary ={critical: 0, additional: 0, further: 0},
       this.getIntersectionFeatures(buffer, layerList[i])
+      this.getIntersectionExtent(layerList[i])
     }  
     for(let i=0;i<countLayers.length;i++){
       this.getCountFeatures(buffer, countLayers[i])
     }
+  
   },
   //function to clip features and calculate area
   getIntersectionFeatures(buffer, item){
@@ -463,25 +445,24 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
 
     sublayer.queryFeatures(queryGeom).then((results) => {
-      let obj = ''
+      //let obj = ''
       let bufferArea = areaOperator.execute(buffer,{unit:'square-miles'})
-      if(results.features.length === 0){
-        this.reportSummary.further = this.reportSummary.further + 1
      
-        obj = {
-          map: item.map,
-          layerId: item.id,
-          layerName: item.name,
-          color: item.color,
-          totalArea: 0, 
-          numFeatures:0, 
-          bufferArea: new Intl.NumberFormat('en-US', { notation: 'compact' }).format(bufferArea),
-          percentOfTotal:  0
-          }
+      if(results.features.length === 0){
+       //TODO handle if no results come back must zero out old results
+       /* this.summary= {
+          highlySensitiveTotalArea: 0,
+          highlySensitiveCount: 0,
+          moderatelySensitiveTotalArea: 0,
+          minesTotalArea: 0,
+          waterBodies: 0,
+          brownfields: 0,
+          bufferArea: 0,
+          highlySensitiveHabitats: []
+        }*/
+      
       }
       else{
-      
-        this.reportSummary.critical = this.reportSummary.critical + 1
         let geoms = []
         for(let i=0; i<results.features.length; i++){
           geoms.push(results.features[i].geometry)
@@ -492,23 +473,33 @@ export const useMapStore = defineStore('mapStore', () => ({
           let fa = areaOperator.execute(clip[i], {unit:'square-miles'})
           area = area + fa
         }
-        obj = {
-          map: item.map,
-          layerId: item.id,
-          layerName: item.name,
-          color: item.color,
-          totalArea: new Intl.NumberFormat('en-US', { notation: 'compact' }).format(area), 
-          numFeatures: clip.length, 
-          bufferArea: new Intl.NumberFormat('en-US', { notation: 'compact' }).format(bufferArea),
-          percentOfTotal:  area/bufferArea 
-          }
-
-      }
-      this.results.push(obj)
-    })
+    
+        item.pathToLayer.totalArea= new Intl.NumberFormat('en-US', { notation: 'compact' }).format(area),
+        item.pathToLayer.percentOfTotal = area/bufferArea 
+      
+    //new Intl.NumberFormat('en-US', { notation: 'compact' }).format(bufferArea)
+    console.log(this.summary.highlySensitiveTotalArea)
+    //console.log(this.results.value.highlySensitiveTotalArea)
+    this.summary.bufferArea =bufferArea
+    if (item.id !== 1 && item.id !== 2 && item.id !== 30){ 
+      this.summary.highlySensitiveTotalArea = this.summary.highlySensitiveTotalArea + area
+      this.summary.highlySensitiveCount = this.summary.highlySensitiveCount + 1
+      this.summary.highlySensitiveHabitats.push({name: item.name, area: area, percentOfTotal: (area/bufferArea)  })
+    }
+    this.summary.highlySensitiveHabitats.sort((a, b) => b.percentOfTotal - a.percentOfTotal); 
+    if (item.id == 30){     
+    this.summary.moderatelySensitiveTotalArea= this.summary.moderatelySensitiveTotalArea + area
+    }
+    if (item.id == 1 || item.id == 2){
+      this.summary.minesTotalArea = this.summary.minesTotalArea + area
+    }
+    }
+   
+     })
   },
   //function to get count of intersecting points
-  getCountFeatures(buffer, item){
+  getCountFeatures(buffer, item){ 
+    console.log(item)
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('opportunities')
    
@@ -518,20 +509,65 @@ export const useMapStore = defineStore('mapStore', () => ({
       spatialRelationship: 'intersects',
       returnGeometry: false,
       outFields: ['*'],
-
     }
   
     sublayer.queryFeatures(queryGeom).then((results) => {
       let count = results.features.length
-      let obj = {
+      console.log(results)
+     /* let obj = {
         map: item.map,
         layerId: item.id,
         layerName: item.name,
         count: count
       }
-      this.oppResults.push(obj)
+      this.oppResults.push(obj)*/
+      if (item.id == 0){
+        this.summary.brownfields = count
+        console.log(count)
+        //item.pathToLayer.count = count
+      }
+      if (item.id == 1){
+        this.summary.waterBodies = count
+        console.log(count)
+        //item.pathToLayer.count = count
+      }
       
     })
+  },
+    //function to clip features and calculate area
+  getIntersectionExtent(item){
+    //first step is to probably query the layer and get geometries
+    let map = document.querySelector("arcgis-map").map;
+    let layer = map.findLayerById(item.map)
+    console.log(this.currentMapExtent)
+    
+    let sublayer = layer.findSublayerById(item.id)
+     const queryGeom = {
+      geometry: this.currentMapExtent,
+      spatialRelationship: 'intersects',
+      returnGeometry: false,
+      outFields: [],
+      where: item.map == 'intersectingFeatures'? 'gridcode <> 0': '1=1'
+    }
+
+    sublayer.queryFeatures(queryGeom).then((results) => {
+     if(results.features.length > 0){    
+        item.pathToLayer.inExtent = true 
+        if (item.id !== 1 && item.id !== 2 && item.id !== 30){ 
+          this.summary.hsExtentCount = this.summary.hsExtentCount + 1
+        }
+        if (item.id == 30){     
+          this.summary.msExtentCount = this.summary.msExtentCount + 1
+        }
+        if (item.id == 1 || item.id == 2){
+          this.summary.minesExtentCount = this.summary.minesExtentCount + 1
+        }
+      }
+      else{
+         item.pathToLayer.inExtent = false 
+      }
+    })
+    
   },
   changeOpacity(){
   let map = document.querySelector("arcgis-map").map;
@@ -539,7 +575,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   let minimize = map.findLayerById('minimize');
   let opportunities = map.findLayerById('opportunities');
   //let layersList = [avoid, minimize, opportunities]
-console.log(this.opacity)
   avoid.opacity = this.opacity / 100;
   minimize.opacity = this.opacity / 100;  
   opportunities.opacity = this.opacity / 100;

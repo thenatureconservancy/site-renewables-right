@@ -6,6 +6,26 @@ import TheReport from './TheReport.vue'
 const mapStore = useMapStore()
 import draggable from 'vuedraggable'
 
+const showCustom = ref(false)
+function buffer(size) {
+  mapStore.bufferSize = size
+  mapStore.createBuffer(mapStore.currentPoint)
+}
+function getRange(val) {
+  let newVal = val * 100
+  let range = ''
+  newVal > 0 && newVal < 26
+    ? (range = '0 - 25%')
+    : newVal > 25 && newVal < 51
+      ? (range = '26 - 50%')
+      : newVal > 50 && newVal < 76
+        ? (range = '51 - 75%')
+        : newVal > 75 && newVal < 101
+          ? (range = '76 - 100%')
+          : (range = '0 - 100%')
+  return range
+}
+
 // takes an element object
 function scrollToElement(elid) {
   mapStore.panelState = 'open'
@@ -45,7 +65,6 @@ computed(() => {
         active-bg-color="blue-grey-9"
         indicator-color="primary"
         align="justify"
-        @click="mapStore.compare ? mapStore.hideShowSwipe() : ''"
       >
         <q-tab name="layers" label="View Layers" icon="layers" />
         <q-tab name="sketch" label="Site Report" icon="search" />
@@ -334,7 +353,459 @@ computed(() => {
                 Report
               </q-btn-->
           </div>
-          <the-report></the-report>
+          <!--the-report></the-report-->
+          <!--the buffer tools-->
+          <div class="q-mb-md q-mt-xl bg-grey-1 q-pt-md">
+            <p class="text-bold q-pl-md q-mb-sm">
+              Buffer Size:
+              <q-btn class="q-ml-sm" flat square padding="none" icon="o_info" size="sm">
+                <q-menu>
+                  <div class="q-pa-md" style="width: 300px">
+                    <p class="">
+                      Tracking species movement is approximate. Adjust the buffer so it aligns with
+                      the project scale and includes some of the surrounding area.
+                    </p>
+                    <q-btn color="blue" size="sm" flat>More info</q-btn>
+                  </div>
+                </q-menu>
+              </q-btn>
+            </p>
+
+            <p class="q-pb-none q-mb-none q-pl-sm">
+              <q-btn
+                square
+                size="md"
+                stack
+                unelevated=""
+                @click="buffer(0.5)"
+                :style="mapStore.bufferSize == 0.5 ? 'border: 2px solid #536067' : ''"
+                class="text-weight-light"
+                label="0.5 Mile"
+              >
+              </q-btn>
+              <q-btn
+                square
+                size="md"
+                stack
+                unelevated=""
+                :style="mapStore.bufferSize == 1 ? 'border: 2px solid #536067' : ''"
+                class="text-weight-light"
+                @click="buffer(1)"
+              >
+                1 Mile
+              </q-btn>
+              <q-btn
+                square
+                size="md"
+                stack
+                unelevated=""
+                :style="mapStore.bufferSize == 5 ? 'border: 2px solid #536067' : ''"
+                class="text-weight-light q-mb-none"
+                @click="buffer(5)"
+              >
+                5 Mile
+              </q-btn>
+              <q-btn
+                square
+                size="md"
+                stack
+                unelevated=""
+                :style="
+                  mapStore.bufferSize !== 0.5 &&
+                  mapStore.bufferSize !== 5 &&
+                  mapStore.bufferSize !== 1
+                    ? 'border: 2px solid #536067'
+                    : ''
+                "
+                class="text-weight-light q-mb-none"
+                @click="
+                  mapStore.bufferSize = '';
+                  showCustom = 'true'
+                "
+              >
+                CUSTOM
+              </q-btn>
+              <br />
+            </p>
+            <p
+              class="text-weight-light q-mr-md q-ml-md q-mt-md text-caption q-mt-none q-mb-none"
+              v-if="showCustom"
+            >
+              *CUSTOM BUFFER SIZE
+              <input
+                v-model="mapStore.bufferSize"
+                type="number"
+                style="width: 40px"
+                @change="buffer(mapStore.bufferSize)"
+              />
+              MILES
+            </p>
+            <br />
+          </div>
+          <!-- second toc for report-->
+          <div
+            v-if="mapStore.currentPoint == ''"
+            class="q-pa-lg q-mg-lg q-mt-md text-h6 text-weight-light text-grey"
+          >
+            <div class="text-center q-mb-md q-pa-md">
+              <q-icon name="o_pin_drop" size="xl" class="text-center"></q-icon>
+
+              <p class="q-pb-xl q-mb-xl">
+                Click anywhere on the map to generate a Site Renewables Right area summary
+              </p>
+            </div>
+          </div>
+          <div v-if="mapStore.currentPoint !== ''">
+            <p class="text-bold q-mb-none">Report Summary</p>
+
+            <div class="row q-mb-md">
+              <div
+                class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+                style="border-top: 4px solid lightcoral"
+              >
+                <div class="bg-grey-1 q-pa-sm q-mb-sm">
+                  <p class="col text-body1 text-weight-medium q-pb-none q-mb-none">
+                    Highly Sensitive
+                  </p>
+                </div>
+                <!--ul class="q-pl-md text-left">
+                 
+                <li><p class="text-body2 text-left">{{ new Intl.NumberFormat('en-US', { notation: 'compact' }).format(mapStore.summary.highlySensitiveTotalArea) }} sq mi</p></li>
+                <li><p class="text-body2">{{(mapStore.summary.highlySensitiveTotalArea/mapStore.summary.bufferArea)*100}}% of total area</p></li>
+                <li-->
+
+                <p class="text-caption">
+                  Includes {{ mapStore.summary.highlySensitiveCount }} habitat types
+                </p>
+                <div class="row">
+                  <div class="col text-left ellipsis">Name</div>
+                  <div class="col text-right">Area (sq mi)</div>
+                  <div class="col text-center">Percent of total</div>
+                </div>
+                <q-separator></q-separator>
+                <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
+                  <div class="row">
+                    <div
+                      class="col-7 text-left"
+                      style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
+                    >
+                      {{ item.name }}
+                    </div>
+                    <div class="col-1 text-right q-pr-sm">
+                      {{
+                        new Intl.NumberFormat('en-US', { notation: 'compact' }).format(item.area)
+                      }}
+                    </div>
+                    <div class="col text-center q-ml-xs">
+                      <q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
+                        <div class="absolute-full flex flex-center">
+                          <q-badge
+                            color="white"
+                            text-color="blue"
+                            :label="getRange(item.percentOfTotal)"
+                          />
+                        </div>
+                      </q-linear-progress>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row q-mb-md">
+              <div
+                class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+                style="border-top: 4px solid orange"
+              >
+                <div class="bg-grey-1">
+                  <p class="col text-body1 text-weight-medium">
+                    Moderately <br />
+                    Sensitive
+                  </p>
+                </div>
+                <ul class="q-pl-md text-left">
+                  <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                    <p class="text-body2">Landscape connectivity</p>
+                  </li>
+                  <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                    <p class="text-body2 text-left">
+                      {{
+                        new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
+                          mapStore.summary.moderatelySensitiveTotalArea,
+                        )
+                      }}
+                      sq mi
+                    </p>
+                  </li>
+                  <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                    <p class="text-body2">
+                      {{
+                        new Intl.NumberFormat('en-US', {
+                          style: 'percent',
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(
+                          mapStore.summary.moderatelySensitiveTotalArea /
+                            mapStore.summary.bufferArea,
+                        )
+                      }}
+                      of total area
+                    </p>
+                  </li>
+                  <li v-if="mapStore.summary.moderatelySensitiveTotalArea == 0">
+                    <p class="text-body2">None intersecting buffer</p>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+                style="border-top: 4px solid green"
+              >
+                <div class="bg-grey-1">
+                  <p class="col text-body1 text-weight-medium">
+                    Degraded <br />
+                    Lands
+                  </p>
+                </div>
+                <ul class="q-pl-md text-left">
+                  <li v-if="mapStore.summary.brownfields > 0">
+                    <p class="text-body2 text-left">
+                      Brownfields: {{ mapStore.summary.brownfields }}
+                    </p>
+                  </li>
+                  <li v-if="mapStore.summary.waterBodies > 0">
+                    <p class="text-body2">
+                      Low impact water bodies: {{ mapStore.summary.waterBodies }}
+                    </p>
+                  </li>
+                  <li v-if="mapStore.summary.minesTotalArea > 0">
+                    <p class="text-body2">
+                      Mines:
+                      {{
+                        new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
+                          mapStore.summary.minesTotalArea,
+                        )
+                      }}
+                      sq mi
+                    </p>
+                  </li>
+                  <li
+                    v-if="
+                      mapStore.summary.minesTotalArea == 0 &&
+                      mapStore.summary.waterBodies == 0 &&
+                      mapStore.summary.brownfields == 0
+                    "
+                  >
+                    <p class="text-body2">None intersecting buffer</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p class="text-bold q-mb-none">Report Layers</p>
+            <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
+              <div>
+                <q-expansion-item
+                  label=""
+                  caption=""
+                  v-for="(layer, index) in item.subheaders"
+                  :key="index"
+                  header-class="bg-grey-2"
+                  expand="true"
+                  style="border-bottom: 1px solid gainsboro"
+                >
+                  <template v-slot:header>
+                    <div class="self-center">
+                      <q-checkbox
+                        size="sm"
+                        v-model="layer.visible"
+                        @update:model-value="mapStore.setLayerVisibility(layer)"
+                      >
+                      </q-checkbox>
+                    </div>
+                    <q-item-section>
+                      <q-item-label class="text-body1">{{ layer.title }} </q-item-label>
+                    </q-item-section>
+                  </template>
+                  <!--layers intersecting buffer-->
+                  <q-list
+                    dense
+                    class="q-ma-md q-pb-md bg-white"
+                    style="border-bottom: 1px solid lightgray"
+                  >
+                    <p class="text-caption text-bold">Layers intersecting buffer</p>
+                    <draggable
+                      v-model="layer.sublayers"
+                      ghostClass="ghost"
+                      @end="mapStore.updateLayerOrder(layer.id)"
+                      item-key="index"
+                    >
+                      <template #item="{ element: sublayer }">
+                        <q-item
+                          dense
+                          class=""
+                          style=""
+                          v-if="sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)"
+                        >
+                          <q-item-section side>
+                            <q-icon size="xs" name="drag_indicator"> </q-icon
+                          ></q-item-section>
+                          <q-item-section>
+                            <q-checkbox
+                              size="xs"
+                              v-model="sublayer.visibleModel"
+                              @click.stop="
+                                mapStore.setSublayerVisibility(
+                                  sublayer.elid,
+                                  layer.id,
+                                  sublayer.id,
+                                  sublayer.visibleModel,
+                                )
+                              "
+                              >{{ sublayer.title }}
+                            </q-checkbox>
+                          </q-item-section>
+                          <q-item-section side>
+                            <div style="width: 20px; height: 20px">
+                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                            </div>
+                          </q-item-section>
+                          <q-item-section side class="">
+                            <q-btn
+                              size="sm"
+                              flat
+                              padding="none"
+                              icon="o_info"
+                              @click="scrollToElement(sublayer.elid)"
+                              ><q-tooltip> more info </q-tooltip></q-btn
+                            >
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </draggable>
+                  </q-list>
+                  <!-- layers intersecting extent-->
+                  <q-list
+                    dense
+                    class="q-ma-md q-pb-md bg-white"
+                    style="border-bottom: 1px solid lightgray"
+                  >
+                    <p class="text-caption text-bold">Layers intersecting map extent</p>
+                    <draggable
+                      v-model="layer.sublayers"
+                      ghostClass="ghost"
+                      @end="mapStore.updateLayerOrder(layer.id)"
+                      item-key="index"
+                    >
+                      <template #item="{ element: sublayer }">
+                        <q-item
+                          dense
+                          class=""
+                          style=""
+                          v-if="
+                            sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
+                          "
+                        >
+                          <q-item-section side>
+                            <q-icon size="xs" name="drag_indicator"> </q-icon
+                          ></q-item-section>
+                          <q-item-section>
+                            <q-checkbox
+                              size="xs"
+                              v-model="sublayer.visibleModel"
+                              @click.stop="
+                                mapStore.setSublayerVisibility(
+                                  sublayer.elid,
+                                  layer.id,
+                                  sublayer.id,
+                                  sublayer.visibleModel,
+                                )
+                              "
+                              >{{ sublayer.title }}
+                              <span v-if="sublayer.totalArea > 0">
+                                {{ sublayer.totalArea }}SQ MI
+                              </span></q-checkbox
+                            >
+                          </q-item-section>
+                          <q-item-section side>
+                            <div style="width: 20px; height: 20px">
+                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                            </div>
+                          </q-item-section>
+                          <q-item-section side class="">
+                            <q-btn
+                              size="sm"
+                              flat
+                              padding="none"
+                              icon="o_info"
+                              @click="scrollToElement(sublayer.elid)"
+                              ><q-tooltip> more info </q-tooltip></q-btn
+                            >
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </draggable>
+                  </q-list>
+                  <!-- layers not intersecting-->
+                  <q-list dense class="q-ma-md q-pb-md bg-white">
+                    <p class="text-caption text-bold">Layers not intersecting map extent</p>
+                    <draggable
+                      v-model="layer.sublayers"
+                      ghostClass="ghost"
+                      @end="mapStore.updateLayerOrder(layer.id)"
+                      item-key="index"
+                    >
+                      <template #item="{ element: sublayer }">
+                        <q-item
+                          dense
+                          class=""
+                          style=""
+                          v-if="
+                            sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
+                          "
+                        >
+                          <q-item-section side>
+                            <q-icon size="xs" name="drag_indicator"> </q-icon
+                          ></q-item-section>
+                          <q-item-section>
+                            <q-checkbox
+                              size="xs"
+                              v-model="sublayer.visibleModel"
+                              @click.stop="
+                                mapStore.setSublayerVisibility(
+                                  sublayer.elid,
+                                  layer.id,
+                                  sublayer.id,
+                                  sublayer.visibleModel,
+                                )
+                              "
+                              >{{ sublayer.title }}
+                              <span v-if="sublayer.totalArea > 0">
+                                {{ sublayer.totalArea }}SQ MI
+                              </span></q-checkbox
+                            >
+                          </q-item-section>
+                          <q-item-section side>
+                            <div style="width: 20px; height: 20px">
+                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                            </div>
+                          </q-item-section>
+                          <q-item-section side class="">
+                            <q-btn
+                              size="sm"
+                              flat
+                              padding="none"
+                              icon="o_info"
+                              @click="scrollToElement(sublayer.elid)"
+                              ><q-tooltip> more info </q-tooltip></q-btn
+                            >
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </draggable>
+                  </q-list>
+                </q-expansion-item>
+              </div>
+            </div>
+          </div>
         </q-scroll-area>
       </q-tab-panel>
     </q-tab-panels>

@@ -1,20 +1,7 @@
 <script setup>
 import { useMapStore } from '../stores/map'
 const mapStore = useMapStore()
-function getRange(val) {
-  let newVal = val * 100
-  let range = ''
-  newVal > 0 && newVal < 26
-    ? (range = '0 - 25%')
-    : newVal > 25 && newVal < 51
-      ? (range = '26 - 50%')
-      : newVal > 50 && newVal < 76
-        ? (range = '51 - 75%')
-        : newVal > 75 && newVal < 101
-          ? (range = '76 - 100%')
-          : (range = '0 - 100%')
-  return range
-}
+
 </script>
 
 <template>
@@ -38,6 +25,7 @@ function getRange(val) {
             <q-item-section class="q-pl-md text-caption"> Percent of total </q-item-section>
           </q-item>
         </div>
+        
         <div v-for="(item, index) in mapStore.results" :key="index">
           <q-item
             class=""
@@ -47,6 +35,9 @@ function getRange(val) {
               item.layerName !== 'Landscape Connectivity'
             "
           >
+           <q-item-section class="col">
+              <q-checkbox size="sm"></q-checkbox>
+            </q-item-section>
             <q-item-section class="col-1">
               <q-avatar square :style="{ background: item.color }" size="sm"></q-avatar>
             </q-item-section>
