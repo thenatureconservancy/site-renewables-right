@@ -1,5 +1,5 @@
 <script setup>
-import {markRaw, ref, onMounted, computed, watch, reactive } from 'vue'
+import { markRaw, ref, onMounted, computed, watch, reactive } from 'vue'
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
@@ -92,13 +92,11 @@ onMounted(() => {
     layers: [brownfields, develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
   })
 
-   arcgisMap.addEventListener('arcgisViewChange', (e) => {
+  arcgisMap.addEventListener('arcgisViewChange', (e) => {
     mapStore.currentMapExtent = markRaw(arcgisMap.extent)
     console.log(arcgisMap.extent)
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
-   
   })
-
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
     if (mapStore.tab == 'sketch') {
@@ -113,13 +111,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map
-    basemap="topo"
-    id="my-map"
-    center="-95.5348, 38.7946"
-    zoom="3"
-    :constraints="{ minZoom: 2 }"
-  >
+  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
     <arcgis-search
       position="top-left"
