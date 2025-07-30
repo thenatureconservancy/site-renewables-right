@@ -104,17 +104,32 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
    header: 'Opportunities for Development',
    subheaders:[
-      {title: 'Second Life Lands & Waters', id: 'opportunities', visible: true, description: 'Focus development in areas with lower ecological impact',
+      {title: 'Degraded and Disturbed Lands and Waters', id: 'opportunities', visible: true, description: 'Focus development in areas with lower ecological impact',
         sublayers: [
           { id:0, elid:'brownfields', visible: false, filter: true,visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 50 acres (solar)', description: 'short description',longDescription: 'long description', totalArea: 0, percentOfTotal: 0, count: 0, inExtent: '' },
           { id:19, elid: 'fsd', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Low impact water bodies for floating solar development (solar)', description: 'short description', longDescription: 'Waterbodies 2.5 acres or greater within 5 kilometers of the transmission lines, that are suitable for development because they are man-made reservoirs with Slightly Below Average to Far Below Average level of biodiversity and/or resilience.', totalArea: 0, percentOfTotal: 0, count:0, inExtent: '' },
-          { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
+         // { id:2, elid: 'minesout', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines not in Suitability (solar)',description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '' },
           { id:1, elid: 'minesin', visible: true, filter: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Mines in Suitability (solar)', description: 'short description', longDescription: 'long description',totalArea: 0, percentOfTotal: 0, inExtent: '' },
         ]
       },
     ],
   },
   ],
+  reportLayers: function(){
+    return this.layers.map((layer) => {
+      return {
+        header: layer.header,
+        id: layer.id,
+        subheaders: layer.subheaders.map((subheader) => {
+          return {
+            title: subheader.title,
+            id: subheader.id,
+            visible: subheader.visible
+          }
+        })
+      }
+    })
+},
    
  
   //map loads sublayers in reverse order from the list in the ui which causes confusion about 
@@ -385,12 +400,12 @@ export const useMapStore = defineStore('mapStore', () => ({
       {name: 'Climate Resilience', id: 28, color: '#80A26F', index: 9,  map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[1]},
       {name: 'Landscape Connectivity', id: 30, color: '#71a599', index: 2, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[1].sublayers[0]},
       {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[6]},
-      {name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
-      {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[3]},
+      //{name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
+      {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
     ]
     let countLayers = [
       {name: 'Brownfields over 50 acres (solar)', id: 0, color: '#FF884D', index: 0, map: 'opportunities', pathToLayer:  this.layers[1].subheaders[0].sublayers[0]},
-      {name: 'Low impact water bodies for floating solar development (solar)', id: 19, color: '#FF884D', index: 3, pathToLayer:  this.layers[1].subheaders[0].sublayers[1], },
+      {name: 'Low impact water bodies for floating solar development (solar)', id: 19, color: '#FF884D', index: 2, pathToLayer:  this.layers[1].subheaders[0].sublayers[1], },
     ] 
     this.results = []
     this.oppResults = []
@@ -519,17 +534,20 @@ export const useMapStore = defineStore('mapStore', () => ({
         layerId: item.id,
         layerName: item.name,
         count: count
-      }
-      this.oppResults.push(obj)*/
+      }*/
+        if(count > 0){
+          item.pathToLayer.inExtent = true
+       }else{
+          item.pathToLayer.inExtent = false
+       }
+     
       if (item.id == 0){
         this.summary.brownfields = count
-        console.log(count)
-        //item.pathToLayer.count = count
+        item.pathToLayer.count = count
       }
-      if (item.id == 1){
+      if (item.id == 19){
         this.summary.waterBodies = count
-        console.log(count)
-        //item.pathToLayer.count = count
+        item.pathToLayer.count = count
       }
       
     })
@@ -539,8 +557,8 @@ export const useMapStore = defineStore('mapStore', () => ({
     //first step is to probably query the layer and get geometries
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(item.map)
-    console.log(this.currentMapExtent)
-    
+   
+    console.log(item.name)
     let sublayer = layer.findSublayerById(item.id)
      const queryGeom = {
       geometry: this.currentMapExtent,
@@ -551,22 +569,28 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
 
     sublayer.queryFeatures(queryGeom).then((results) => {
-     if(results.features.length > 0){    
+     if(results.features.length > 0){  
+       console.log(item.name)  
         item.pathToLayer.inExtent = true 
+        console.log(item.pathToLayer.inExtent)
         if (item.id !== 1 && item.id !== 2 && item.id !== 30){ 
           this.summary.hsExtentCount = this.summary.hsExtentCount + 1
         }
-        if (item.id == 30){     
+        else if (item.id == 30){     
           this.summary.msExtentCount = this.summary.msExtentCount + 1
         }
-        if (item.id == 1 || item.id == 2){
+        else if (item.id == 1 || item.id == 2){
           this.summary.minesExtentCount = this.summary.minesExtentCount + 1
+        }
+        else{
+          console.log('no match')
         }
       }
       else{
          item.pathToLayer.inExtent = false 
       }
     })
+   
     
   },
   changeOpacity(){
@@ -578,7 +602,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   avoid.opacity = this.opacity / 100;
   minimize.opacity = this.opacity / 100;  
   opportunities.opacity = this.opacity / 100;
-  
   }
 
 }

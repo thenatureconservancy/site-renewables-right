@@ -40,6 +40,27 @@ function scrollToElement(elid) {
     inline: 'nearest', // Optional: 'start', 'center', 'end', or 'nearest'
   })
 }
+function countResults(list, query){
+  if(query == 'inBuffer'){
+    let newList = list.filter((sublayer) => {
+      return sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)
+    })
+    return newList.length
+  }
+  if(query == 'inExtent'){
+    let newList = list.filter((sublayer) => {
+      return sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
+    })
+    return newList.length
+  }
+   if(query == 'outExtent'){
+    let newList = list.filter((sublayer) => {
+      return sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
+    })
+    return newList.length
+  }
+
+}
 function openPanel() {
   mapStore.activeTool = 'Site Report'
   mapStore.panelState = 'open'
@@ -437,6 +458,7 @@ computed(() => {
                 type="number"
                 style="width: 40px"
                 @change="buffer(mapStore.bufferSize)"
+                min="0"
               />
               MILES
             </p>
@@ -497,15 +519,19 @@ computed(() => {
                       }}
                     </div>
                     <div class="col text-center q-ml-xs">
-                      <q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
-                        <div class="absolute-full flex flex-center">
+                      <div class="text-body2">
+                        {{ getRange(item.percentOfTotal) }}
+                      </div>
+                      <!--div class="full-width" style="width:100%">
                           <q-badge
-                            color="white"
-                            text-color="blue"
+                            color="blue"
+                            text-color="white"
                             :label="getRange(item.percentOfTotal)"
                           />
-                        </div>
-                      </q-linear-progress>
+                        </div-->
+                      <!--q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
+                       
+                      </q-linear-progress-->
                     </div>
                   </div>
                 </div>
@@ -514,7 +540,7 @@ computed(() => {
             <div class="row q-mb-md">
               <div
                 class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
-                style="border-top: 4px solid orange"
+                style="border-top: 4px solid #FFD580"
               >
                 <div class="bg-grey-1">
                   <p class="col text-body1 text-weight-medium">
@@ -524,10 +550,10 @@ computed(() => {
                 </div>
                 <ul class="q-pl-md text-left">
                   <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-                    <p class="text-body2">Landscape connectivity</p>
+                    <p class="text-body2 q-mb-none">Landscape connectivity</p>
                   </li>
                   <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-                    <p class="text-body2 text-left">
+                    <p class="text-body2 text-left q-mb-none">
                       {{
                         new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
                           mapStore.summary.moderatelySensitiveTotalArea,
@@ -568,12 +594,12 @@ computed(() => {
                 </div>
                 <ul class="q-pl-md text-left">
                   <li v-if="mapStore.summary.brownfields > 0">
-                    <p class="text-body2 text-left">
+                    <p class="text-body2 text-left q-mb-none">
                       Brownfields: {{ mapStore.summary.brownfields }}
                     </p>
                   </li>
                   <li v-if="mapStore.summary.waterBodies > 0">
-                    <p class="text-body2">
+                    <p class="text-body2 q-mb-none">
                       Low impact water bodies: {{ mapStore.summary.waterBodies }}
                     </p>
                   </li>
@@ -601,37 +627,18 @@ computed(() => {
               </div>
             </div>
             <p class="text-bold q-mb-none">Report Layers</p>
-            <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
-              <div>
-                <q-expansion-item
-                  label=""
-                  caption=""
-                  v-for="(layer, index) in item.subheaders"
-                  :key="index"
-                  header-class="bg-grey-2"
-                  expand="true"
-                  style="border-bottom: 1px solid gainsboro"
-                >
-                  <template v-slot:header>
-                    <div class="self-center">
-                      <q-checkbox
-                        size="sm"
-                        v-model="layer.visible"
-                        @update:model-value="mapStore.setLayerVisibility(layer)"
-                      >
-                      </q-checkbox>
-                    </div>
-                    <q-item-section>
-                      <q-item-label class="text-body1">{{ layer.title }} </q-item-label>
-                    </q-item-section>
-                  </template>
-                  <!--layers intersecting buffer-->
+            
+            <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers inside buffer</p>
+           
+            <div class="" v-for="(item, index) in mapStore.layers" :key="index">
+             
+                  <div v-for="(layer, index) in item.subheaders" :key="index">
                   <q-list
+                    v-if="countResults(layer.sublayers, 'inBuffer') > 0"
                     dense
-                    class="q-ma-md q-pb-md bg-white"
-                    style="border-bottom: 1px solid lightgray"
+                    class="q-ma-none bg-white"
+                    
                   >
-                    <p class="text-caption text-bold">Layers intersecting buffer</p>
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
@@ -641,9 +648,10 @@ computed(() => {
                       <template #item="{ element: sublayer }">
                         <q-item
                           dense
-                          class=""
+                          class="q-mb-xs q-mx-sm"
                           style=""
                           v-if="sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)"
+                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
                         >
                           <q-item-section side>
                             <q-icon size="xs" name="drag_indicator"> </q-icon
@@ -682,13 +690,20 @@ computed(() => {
                       </template>
                     </draggable>
                   </q-list>
-                  <!-- layers intersecting extent-->
+                  </div>
+               
+            </div>
+            <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers in map view</p>
+            <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
+                
+                   <!-- layers intersecting extent-->
+                  <div v-for="(layer, index) in item.subheaders" :key="index">
                   <q-list
+                   v-if="countResults(layer.sublayers, 'inExtent') > 0"
                     dense
-                    class="q-ma-md q-pb-md bg-white"
-                    style="border-bottom: 1px solid lightgray"
+                    class="q-ma-none bg-white"
+                   
                   >
-                    <p class="text-caption text-bold">Layers intersecting map extent</p>
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
@@ -698,11 +713,12 @@ computed(() => {
                       <template #item="{ element: sublayer }">
                         <q-item
                           dense
-                          class=""
+                          class="q-mb-xs q-mx-sm"
                           style=""
                           v-if="
                             sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
                           "
+                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
                         >
                           <q-item-section side>
                             <q-icon size="xs" name="drag_indicator"> </q-icon
@@ -744,20 +760,24 @@ computed(() => {
                       </template>
                     </draggable>
                   </q-list>
-                  <!-- layers not intersecting-->
-                  <q-list dense class="q-ma-md q-pb-md bg-white">
-                    <p class="text-caption text-bold">Layers not intersecting map extent</p>
+                  </div>
+            </div>   
+            <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers outside map view</p>  
+             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">           <!-- layers not intersecting-->
+               <div v-for="(layer, index) in item.subheaders" :key="index">
+                  <q-list dense class="q-ma-none bg-white" v-if="countResults(layer.sublayers, 'outExtent') > 0" >
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
                       @end="mapStore.updateLayerOrder(layer.id)"
                       item-key="index"
+                      
                     >
                       <template #item="{ element: sublayer }">
                         <q-item
                           dense
-                          class=""
-                          style=""
+                          class="q-mb-xs q-mx-sm"
+                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
                           v-if="
                             sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
                           "
@@ -778,9 +798,8 @@ computed(() => {
                                 )
                               "
                               >{{ sublayer.title }}
-                              <span v-if="sublayer.totalArea > 0">
-                                {{ sublayer.totalArea }}SQ MI
-                              </span></q-checkbox
+                             
+                             </q-checkbox
                             >
                           </q-item-section>
                           <q-item-section side>
@@ -802,9 +821,10 @@ computed(() => {
                       </template>
                     </draggable>
                   </q-list>
-                </q-expansion-item>
-              </div>
+                  </div>
+                
             </div>
+           
           </div>
         </q-scroll-area>
       </q-tab-panel>

@@ -4,6 +4,7 @@ import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import BasemapGallery from "@arcgis/core/widgets/BasemapGallery.js";
 
 import TextSymbol from '@arcgis/core/symbols/TextSymbol.js'
 import Graphic from '@arcgis/core/Graphic.js'
@@ -93,8 +94,7 @@ onMounted(() => {
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
-    mapStore.currentMapExtent = markRaw(arcgisMap.extent)
-    console.log(arcgisMap.extent)
+    arcgisMap.extent ? mapStore.currentMapExtent = markRaw(arcgisMap.extent): ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
 

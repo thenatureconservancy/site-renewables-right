@@ -6,6 +6,7 @@ import TheLegend from '@/components/TheLegend.vue'
 import TheReport from '@/components/TheReport.vue'
 import { useMapStore } from '../stores/map'
 //import LocalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/LocalBasemapsSource.js'
+import PortalBasemapsSource from "@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource.js";
 import Basemap from '@arcgis/core/Basemap.js'
 import { ref } from 'vue'
 
@@ -16,27 +17,41 @@ function openPanel(active) {
   mapStore.activeTool = active
 }
 
+const portal = new PortalBasemapsSource({
+  portal: "https://tnc.maps.arcgis.com",
+  filterFunction: async (item, index, basemaps) => {
+    let bool = true;
+    await item.load().then((loadedBasemap) => {
+      // filter out basemaps - console loadedBasemap.title to get list of names
+      const basemaps = [
+        "Enhanced Contrast Dark Map",
+        "Enhanced Contrast Map",
+        "Environment Map",
+        "Human Geography Map",
+        "Imagery (WGS84)",
+        "Light Gray Canvas",
+        "Ocean Basemap",
+        "OpenStreetMap",
+        "Streets",
+        "TNC Dark Gray Map",
+        "TNC Outdoor Map",
+        "USA NAIP Imagery",
+        "USA Topo Maps",
+        "USGS National Map",
+        "World Hillshade",
+        "World Imagery (Firefly)",
+      ];
 
-
-function onComponentReady() {
- console.log
-  
-// Create a custom basemap from a PortalItem
-const customBasemap = new Basemap({
-  portalItem: {
-    id: "defa1b2287604d069c70af515331e30f" // Replace with your own PortalItem ID
-  }
+      if (basemaps.includes(loadedBasemap.title)) {
+        bool = false;
+      }
+    });
+    return bool;
+  },
 });
 
-document.querySelector("arcgis-basemap-gallery").source = new LocalBasemapsSource({
-  basemaps: [
-    Basemap.fromId("topo-vector"),
-    Basemap.fromId("hybrid"),
-    customBasemap
-  ]
-});
 
-}
+
 </script>
 
 <template>
@@ -218,7 +233,7 @@ document.querySelector("arcgis-basemap-gallery").source = new LocalBasemapsSourc
       </div>
       <div v-show="mapStore.activeTool == 'basemaps'" id="basemaps" class="basemaps">
         <q-scroll-area style="height: calc(100vh - 90px)">
-          <arcgis-basemap-gallery reference-element="my-map" ></arcgis-basemap-gallery>
+          <arcgis-basemap-gallery reference-element="my-map"  :source="portal" ></arcgis-basemap-gallery>
         </q-scroll-area>
       </div>
       <div v-if="mapStore.activeTool == 'set opacity'" class="text-center">
