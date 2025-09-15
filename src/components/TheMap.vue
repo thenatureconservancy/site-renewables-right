@@ -183,7 +183,7 @@ onMounted(() => {
         v-model="mapStore.opacity"
         size="50px"
         :thickness="0.3"
-        color="blue"
+        color="primary"
         track-color="grey-3"
         @update:model-value="mapStore.changeOpacity()"
       >
@@ -201,16 +201,16 @@ onMounted(() => {
     >
       <q-btn
         @click="showDialog = true"
-        color="blue"
+        color="primary"
         :ripple="false"
         flat
         padding="xs"
         stack
         no-caps=""
         icon="img:globe.png"
-     
+        size="xl"
         class="q-mt-sm"
-        ><p class="q-mt-sm">Add Data</p> 
+        ><p class="text-body2 text-weight-medium">Add Data</p> 
        </q-btn
       >
     </div>
