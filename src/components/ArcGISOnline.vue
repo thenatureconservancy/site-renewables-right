@@ -70,7 +70,7 @@ function showLayerInfo(layer) {
             </q-list>
         </q-card-section>
         <q-card-section class="q-pt-none">
-            <p class="text-body1 text-weight-medium q-mb-none"><q-icon color="blue-grey-9" name="star" class="q-mb-xs"></q-icon>&nbsp;Recommended</p>
+            <p class="text-body1 text-weight-medium q-mb-none"><q-icon color="blue-grey-9" name="star" class="q-mb-xs"></q-icon>&nbsp;Suggested</p>
             <q-list padding class="bg-white rounded">
                 <q-item v-for="layer in recommendedLayers" :key="layer.title" clickable @click="mapLayers.push(layer)">
                     <q-item-section avatar>
