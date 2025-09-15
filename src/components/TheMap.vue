@@ -4,17 +4,15 @@ import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery.js";
-
-import TextSymbol from '@arcgis/core/symbols/TextSymbol.js'
-import Graphic from '@arcgis/core/Graphic.js'
-import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils.js'
-import DrawAction from '@arcgis/core/views/draw/DrawAction.js'
+import ArcGISOnline from './ArcGISOnline.vue'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
 const mapStore = useMapStore()
 const showResetZoomButton = ref(false)
+const showDialog = ref(false)
+
+
 function zoomHome() {
   const arcgisMap = document.querySelector('arcgis-map')
   arcgisMap.zoom = 3
@@ -94,7 +92,7 @@ onMounted(() => {
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
-    arcgisMap.extent ? mapStore.currentMapExtent = markRaw(arcgisMap.extent): ''
+    arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
 
@@ -197,7 +195,29 @@ onMounted(() => {
         &nbsp;{{ mapStore.opacity }}%
       </p>
     </div>
+    <div
+      style="z-index: 999; position: absolute; right: 95px; bottom: 15px; height: 86px"
+      class="text-center bg-white q-pa-xs q-mb-md"
+    >
+      <q-btn
+        @click="showDialog = true"
+        color="blue"
+        :ripple="false"
+        flat
+        padding="xs"
+        stack
+        no-caps=""
+        icon="img:globe.png"
+     
+        class="q-mt-sm"
+        ><p class="q-mt-sm">Add Data</p> 
+       </q-btn
+      >
+    </div>
   </arcgis-map>
+  <q-dialog v-model="showDialog" position="bottom">
+    <ArcGISOnline></ArcGISOnline>
+  </q-dialog>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
