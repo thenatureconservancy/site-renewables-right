@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import Portal from "@arcgis/core/portal/Portal.js";
+import PortalQueryParams from "@arcgis/core/portal/PortalQueryParams.js";
 const searchResults = ref([])
 const searchTerm = ref('')
 
@@ -31,6 +33,27 @@ function showLayerInfo(layer) {
   console.log('Layer info:', layer)
   // You can expand this to show a dialog or navigate to a detail page
 }
+function searchPortal(){
+    const portal = new Portal();
+    portal.load().then(() => {
+        const queryParams = new PortalQueryParams({
+        query: searchTerm.value + ' AND type:"Feature Service" AND access:public AND contentstatus:public_authoritative',
+        sortField: "title",
+        sortOrder: "asc",
+        num: 10
+        });
+        portal.queryItems(queryParams).then((results) => {
+           
+        searchResults.value = results.results.map(item => ({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+        })
+    )});
+    });
+}
+       
+
 </script>
 <template>
     <q-card  rounded>
@@ -38,7 +61,7 @@ function showLayerInfo(layer) {
             <div class="text-h6">Search ArcGIS Online</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-            <q-input filled label="Search" color="blue-grey-9" v-model="searchTerm"
+            <q-input filled label="Search" color="blue-grey-9" v-model="searchTerm" @update:model-value="searchPortal()"
             ><template v-slot:prepend>
                 <q-icon name="search" /> </template
             ></q-input>
@@ -51,28 +74,27 @@ function showLayerInfo(layer) {
                 <q-btn flat no-caps padding="none" label="clear search results" color="blue" @click="searchResults=[]"/>
             </div>
             <q-list bordered padding class="bg-white rounded">
-                <q-item v-for="layer in searchResults" :key="layer.title" clickable>
-                    <q-item-section avatar>
-                    <q-icon :name="layer.icon" color="primary" />
-                    </q-item-section>
-
+                <q-item v-for="layer in searchResults" :key="layer.title">
+                   
                     <q-item-section>
                     <q-item-label>{{ layer.title }}</q-item-label>
                     <q-item-label caption class="text-grey-7">
                         {{ layer.author }}
-                    </q-item-label>
+                    </q-item-label >
+                        
                     </q-item-section>
-
                     <q-item-section side>
-                    <q-btn flat round icon="o_info" @click="showLayerInfo(layer)" />
+                        <q-btn outline size="sm" color="primary" round icon="add" @click="mapLayers.push(layer)" />
                     </q-item-section>
                 </q-item>
             </q-list>
         </q-card-section>
         <q-card-section class="q-pt-none">
-            <p class="text-body1 text-weight-medium q-mb-none"><q-icon color="blue-grey-9" name="star" class="q-mb-xs"></q-icon>&nbsp;Suggested</p>
-            <q-list padding class="bg-white rounded">
-                <q-item v-for="layer in recommendedLayers" :key="layer.title" clickable @click="mapLayers.push(layer)">
+            <p class="text-body1 text-weight-medium q-mb-sm"><q-icon color="blue-grey-9" 
+                name="star" class="q-mb-xs"></q-icon>&nbsp;Suggested Layers 
+                <span class="text-caption text-grey-7">Click + to add to map</span></p>
+            <q-list bordered padding class="bg-white rounded">
+                <q-item v-for="layer in recommendedLayers" :key="layer.title" >
                     <q-item-section avatar>
                     <q-icon :name="layer.icon" color="primary" />
                     </q-item-section>
@@ -85,14 +107,14 @@ function showLayerInfo(layer) {
                     </q-item-section>
 
                     <q-item-section side>
-                    <q-btn flat round icon="o_info" @click="showLayerInfo(layer)" />
+                    <q-btn outline size="sm" color="primary" round icon="add" @click="mapLayers.push(layer)" />
                     </q-item-section>
                 </q-item>
             </q-list>
         </q-card-section>
 
         <q-card-section class="q-pt-none" v-if="mapLayers.length > 0">
-            <p class="text-body1 q-mb-sm text-weight-medium"><q-icon name="settings" color="blue-grey-9" class="q-mb-xs"></q-icon> Manage Map Data</p>
+            <p class="text-body1 q-mb-sm text-weight-medium"><q-icon name="settings" color="blue-grey-9" class="q-mb-xs"></q-icon> Manage Layers</p>
             <q-list bordered padding class="bg-white rounded">
                 <q-item v-for="layer in mapLayers" :key="layer.title">
                     <q-item-section avatar>
@@ -123,7 +145,7 @@ function showLayerInfo(layer) {
             </q-list>
         </q-card-section>
         <q-card-section class="q-pt-none">
-            <p class="text-caption text-grey-7 q-pt-sm">
+            <p class="text-caption text-grey-7 q-pt-sm text-center">
             Log in to ArcGIS online to access private data and saved content
             </p>
             <q-btn
