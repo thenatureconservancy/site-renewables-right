@@ -12,6 +12,7 @@ import '@arcgis/map-components/components/arcgis-search'
 import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 
+
 const mapStore = useMapStore()
 const showDialog = ref(true)
 

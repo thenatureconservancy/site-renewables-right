@@ -12,7 +12,6 @@ const mapStore = useMapStore()
 const showResetZoomButton = ref(false)
 const showDialog = ref(false)
 
-
 function zoomHome() {
   const arcgisMap = document.querySelector('arcgis-map')
   arcgisMap.zoom = 3
@@ -210,14 +209,15 @@ onMounted(() => {
         icon="img:globe.png"
         size="xl"
         class="q-mt-sm"
-        ><p class="text-body2 text-weight-medium">Add Data</p> 
-       </q-btn
-      >
+        ><p class="text-body2 text-weight-medium">Add Data</p>
+      </q-btn>
     </div>
   </arcgis-map>
-  <q-dialog v-model="showDialog" position="bottom">
-    <ArcGISOnline></ArcGISOnline>
-  </q-dialog>
+  <keep-alive>
+    <q-dialog v-model="showDialog" position="bottom">
+      <ArcGISOnline></ArcGISOnline>
+    </q-dialog>
+  </keep-alive>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
