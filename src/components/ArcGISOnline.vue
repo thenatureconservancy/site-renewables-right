@@ -185,7 +185,28 @@ const agolStore = useAgolStore()
           </q-item-section>
           <q-item-section class="q-pt-none" side>
             <div class="row">
-              <q-btn flat round icon="description" color="primary" @click="" size="sm" />
+                <q-btn
+                  v-if="layer.description"
+                  flat
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="description"
+                  @click="showTooltip = true"
+                  ><q-tooltip
+                    v-html="layer.description"
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 300px; border: 1px solid #49aa43"
+                  >
+                  </q-tooltip>
+                  <q-menu
+                    ><div
+                      v-html="layer.longDescription"
+                      class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                      style="width: 300px"
+                    ></div
+                  ></q-menu>
+                </q-btn>
               <q-btn flat round icon="opacity" color="primary" @click="" size="sm">
                 <q-menu>
                   <div class="q-pa-lg q-pt-xl" style="width: 200px">
@@ -212,7 +233,9 @@ const agolStore = useAgolStore()
                 color="negative"
                 @click="agolStore.removeLayer(layer, index)"
                 size="sm"
-              />
+              ><q-tooltip class="text-body2 bg-white text-blue-grey-9"
+                style="width: 175px; border: 1px solid #49aa43">remove layer from map</q-tooltip>
+                </q-btn>
             </div>
           </q-item-section>
         </q-item>
@@ -691,7 +714,7 @@ const agolStore = useAgolStore()
     <div class="q-ma-sm">
       <q-card-section class="q-pt-none" v-if="agolStore.mapLayers.length > 0">
         <p class="text-body1 text-weight-medium">
-          <span><q-icon name="settings" class="q-mb-xs q-mr-sm"></q-icon></span>Manage Layers
+          <span><q-icon name="settings" class="q-mr-sm"></q-icon></span>Manage Layers
         </p>
         <q-list bordered padding class="bg-white rounded">
           <q-item v-for="(layer, index) in agolStore.mapLayers" :key="layer.title">
@@ -711,8 +734,29 @@ const agolStore = useAgolStore()
             </q-item-section>
             <q-item-section class="q-pt-none" side>
               <div class="row">
-                <q-btn flat round icon="description" color="primary" @click="" size="sm" />
-                <q-btn flat round icon="opacity" color="primary" @click="" size="sm">
+                  <q-btn
+                  v-if="layer.description"
+                  flat
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="description"
+                  @click="showTooltip = true"
+                  ><q-tooltip
+                    v-html="layer.description"
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 300px; border: 1px solid #49aa43"
+                  >
+                  </q-tooltip>
+                  <q-menu
+                    ><div
+                      v-html="layer.longDescription"
+                      class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                      style="width: 300px"
+                    ></div
+                  ></q-menu>
+                </q-btn>
+                <q-btn flat round icon="opacity" color="primary" @click="" size="sm" class="">
                   <q-menu>
                     <div class="q-pa-lg q-pt-xl" style="width: 200px">
                       <q-slider
@@ -738,7 +782,8 @@ const agolStore = useAgolStore()
                   color="negative"
                   @click="agolStore.removeLayer(layer, index)"
                   size="sm"
-                />
+                ><q-tooltip   class="text-body2 bg-white text-blue-grey-9"
+                style="width: 175px; border: 1px solid #49aa43">remove layer from map</q-tooltip></q-btn>
               </div>
             </q-item-section>
           </q-item>
@@ -752,10 +797,7 @@ const agolStore = useAgolStore()
           label="Log Out"
           style="width: 100%; background: #0079c1; color: white"
           unelevated=""
-          @click="function(){
-            agolStore.userLoggedIn = false
-            agolStore.mapLayers = []
-          }"
+          @click="agolStore.logout()"
         >
         </q-btn>
       </q-card-section>
@@ -767,16 +809,15 @@ const agolStore = useAgolStore()
   background-color: #005f8c !important;
 }
 .q-tab__indicator {
-  background-color: white  !important;
-  width: 5px;
-  height: 4px; /* Make the indicator thicker */
-  border-radius: 2px; /* Add rounded corners */
-  /* Add other CSS properties as needed */
-  
-position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 4px; /* Adjust based on your tab height */
 
+position: absolute !important;
+  bottom: 4px !important; /* Adjust as needed */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 6px !important;
+  height: 6px !important;
+  background-color: white !important;
+  border-radius: 50%   !important;;
+  
 }
 </style>

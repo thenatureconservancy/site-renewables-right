@@ -152,5 +152,21 @@ export const useAgolStore = defineStore('agolStore', () => ({
         if (mapLayer) {
             mapLayer.opacity = layerInfo.opacity;
         }
+    },
+    logout: function(){
+        this.tab = 'mycontent';
+        this.userLoggedIn = false;
+        this.searchResults = [];
+        this.mapLayers.forEach((layerInfo) => {
+            const arcgisMap = document.querySelector('arcgis-map') 
+            const mapLayer = arcgisMap.map.layers.find(layer => {
+             return layer.portalItem && layer.portalItem.id === layerInfo.id; 
+            })
+            if (mapLayer) {
+                arcgisMap.map.remove(mapLayer);
+            }
+        })
+        this.mapLayers = [];
+    
     }   
 }))
