@@ -6,6 +6,8 @@ export const useAgolStore = defineStore('agolStore', () => ({
     searchResults: [],
     searchTerm: '',
     showTooltip: false,
+    userLoggedIn: false,
+    tab: 'mycontent',
     recommendedLayers: [
     {
         title: 'USA Flood Hazard Areas',
