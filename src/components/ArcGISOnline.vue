@@ -83,7 +83,7 @@ const authStore = useAuthStore()
                   })
                   if (!mapLayer) {
                     agolStore.mapLayers.push(layer)
-                    agolStore.addLayerToMap(layer)
+                    agolStore.addLayerToMap(layer.id)
                   }
                 }
               "
@@ -152,7 +152,7 @@ const authStore = useAuthStore()
                   })
                   if (!mapLayer) {
                     agolStore.mapLayers.push(layer)
-                    agolStore.addLayerToMap(layer)
+                    agolStore.addLayerToMap(layer.id)
                   }
                 }
               "
@@ -265,10 +265,10 @@ const authStore = useAuthStore()
       active-class="active"
       indicator-color="#007ac2"
     >
-      <q-tab name="mycontent" label="My Content" />
-      <q-tab name="mygroups" label="My Groups" />
-      <q-tab name="myorganization" label="My Organization" />
-      <q-tab name="public" label="Living Atlas" />
+      <q-tab name="mycontent" label="My Content" class="custom-dot-tab" />
+      <q-tab name="mygroups" label="My Groups" class="custom-dot-tab" />
+      <q-tab name="myorganization" label="My Organization" class="custom-dot-tab"/>
+      <q-tab name="public" label="Living Atlas" class="custom-dot-tab" />
     </q-tabs>
     <q-tab-panels v-model="agolStore.tab" animated>
       <q-tab-panel name="mycontent">
@@ -349,7 +349,7 @@ const authStore = useAuthStore()
                       })
                       if (!mapLayer) {
                         agolStore.mapLayers.push(layer)
-                        agolStore.addLayerToMap(layer)
+                        agolStore.addLayerToMap(layer.id)
                       }
                     }
                   "
@@ -511,7 +511,7 @@ const authStore = useAuthStore()
                       })
                       if (!mapLayer) {
                         agolStore.mapLayers.push(layer)
-                        agolStore.addLayerToMap(layer)
+                        agolStore.addLayerToMap(layer.id)
                       }
                     }
                   "
@@ -603,7 +603,7 @@ const authStore = useAuthStore()
                       })
                       if (!mapLayer) {
                         agolStore.mapLayers.push(layer)
-                        agolStore.addLayerToMap(layer)
+                        agolStore.addLayerToMap(layer.id)
                       }
                     }
                   "
@@ -695,7 +695,7 @@ const authStore = useAuthStore()
                       })
                       if (!mapLayer) {
                         agolStore.mapLayers.push(layer)
-                        agolStore.addLayerToMap(layer)
+                        agolStore.addLayerToMap(layer.id)
                       }
                     }
                   "
@@ -764,7 +764,7 @@ const authStore = useAuthStore()
                       })
                       if (!mapLayer) {
                         agolStore.mapLayers.push(layer)
-                        agolStore.addLayerToMap(layer)
+                        agolStore.addLayerToMap(layer.id)
                       }
                     }
                   "
@@ -873,7 +873,7 @@ const authStore = useAuthStore()
 .active {
   background-color: #005f8c !important;
 }
-.q-tab__indicator {
+.custom-dot-tab .q-tab__indicator {
   position: absolute !important;
   bottom: 4px !important; /* Adjust as needed */
   left: 50% !important;
