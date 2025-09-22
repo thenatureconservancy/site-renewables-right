@@ -2,12 +2,17 @@ import { defineStore } from 'pinia';
 import Portal from '@arcgis/core/portal/Portal.js'
 import PortalQueryParams from '@arcgis/core/portal/PortalQueryParams.js'
 import Layer from "@arcgis/core/layers/Layer.js";
+
 export const useAgolStore = defineStore('agolStore', () => ({
     searchResults: [],
     searchTerm: '',
     showTooltip: false,
     userLoggedIn: false,
     tab: 'mycontent',
+    showDialog: false,
+    myContent: [],
+    groupContent: [],
+    orgContent: [],
     recommendedLayers: [
     {
         title: 'USA Flood Hazard Areas',
@@ -106,9 +111,8 @@ export const useAgolStore = defineStore('agolStore', () => ({
             })
         })
     },
-    addLayerToMap: function(layer){
-        console.log(layer)
-        const portalItemId = layer.id; 
+    addLayerToMap: function(id){
+        const portalItemId = id; 
         const arcgisMap = document.querySelector('arcgis-map') 
         // Create a layer from the portal item
         Layer.fromPortalItem({
@@ -167,6 +171,6 @@ export const useAgolStore = defineStore('agolStore', () => ({
             }
         })
         this.mapLayers = [];
-    
+  
     }   
 }))

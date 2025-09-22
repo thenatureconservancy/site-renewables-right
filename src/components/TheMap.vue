@@ -8,9 +8,11 @@ import ArcGISOnline from './ArcGISOnline.vue'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
+import { useAgolStore } from '@/stores/arcGisOnline'
+const agolStore = useAgolStore()
 const mapStore = useMapStore()
 const showResetZoomButton = ref(false)
-const showDialog = ref(false)
+
 
 function zoomHome() {
   const arcgisMap = document.querySelector('arcgis-map')
@@ -199,7 +201,7 @@ onMounted(() => {
       class="text-center bg-white q-pa-xs q-mb-md"
     >
       <q-btn
-        @click="showDialog = true"
+        @click="agolStore.showDialog = true"
         color="primary"
         :ripple="false"
         flat
@@ -214,7 +216,7 @@ onMounted(() => {
     </div>
   </arcgis-map>
   <keep-alive>
-    <q-dialog v-model="showDialog" position="bottom">
+    <q-dialog v-model="agolStore.showDialog" position="bottom">
       <ArcGISOnline></ArcGISOnline>
     </q-dialog>
   </keep-alive>

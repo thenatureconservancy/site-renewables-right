@@ -8,14 +8,31 @@ import { useMapStore } from '../stores/map'
 //import LocalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/LocalBasemapsSource.js'
 import PortalBasemapsSource from "@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource.js";
 import Basemap from '@arcgis/core/Basemap.js'
-import { ref } from 'vue'
-
+import { ref, onMounted } from 'vue'
+import { useAgolStore } from '@/stores/arcGisOnline'
 const mapStore = useMapStore()
 const showDialog = ref(true)
+const agolStore = useAgolStore()
 function openPanel(active) {
   mapStore.panelState = 'open'
   mapStore.activeTool = active
 }
+function dialogControl() {
+  showDialog.value = false
+  localStorage.setItem('showSRRSplash', 'no')
+}
+onMounted(() => {
+  console
+  //set initial active tool to legend
+  if (localStorage.getItem('showSRRSplash') == 'no') {
+    showDialog.value = false
+  } else {
+    showDialog.value = true
+  } 
+  if(localStorage.getItem('SRRUserWantsAuth') == 'yes'){
+    agolStore.showDialog = true
+  }
+})
 
 const portal = new PortalBasemapsSource({
   portal: "https://tnc.maps.arcgis.com",
@@ -85,7 +102,7 @@ const portal = new PortalBasemapsSource({
               square
               label="Enter Site"
               size="lg"
-              v-close-popup
+              @click="dialogControl()"
             />
           </div>
           <div class="absolute-bottom text-caption q-pa-md" style="border-top: 1px solid gainsboro">
