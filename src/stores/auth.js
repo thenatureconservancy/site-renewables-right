@@ -33,18 +33,18 @@ export const useAuthStore = defineStore("auth", () => ({
         );
         console.log(credentials)
         this.buttonLabel = 'Logout of ArcGIS Online'
+        
         //this.userName = credentials.userId
         this.GetMyContent()
         this.GetMyGroupsContent()
         this.GetMyOrgsContent()
-           
+        this.userLoggedIn = true   
       } catch (error) {
         console.log(error);
         alert("There was a problem connecting to the site.");
       }
   },
   GetMyContent() {
-    this.userLoggedIn = true
     const agolStore = useAgolStore()
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
         const portal = new Portal({
@@ -78,6 +78,47 @@ export const useAuthStore = defineStore("auth", () => ({
             }));
             agolStore.myContent = plainItems
 
+          }).catch(error => {
+            console.error("Error querying user content:", error);
+          });
+        });
+      }).catch(error => {
+        console.error("User not signed in:", error);
+    });
+  },
+  SearchMyContent() {
+    const agolStore = useAgolStore()
+    IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
+        const portal = new Portal({
+          url: "https://www.arcgis.com",
+          authMode: "immediate"
+        });
+
+        portal.load().then(() => {
+        const username = portal.user.username;
+
+        const queryParams = new PortalQueryParams({
+          query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND owner:${username} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+          sortField: "title",
+          sortOrder: "asc",
+          num: 100
+          });
+          portal.queryItems(queryParams).then((results) => {
+             
+            const plainItems = results.results.map(item => ({
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              url: item.url,
+              snippet: item.snippet,
+              owner: item.owner,
+              description: item.description,
+              visible: true,
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName
+            }));
+            agolStore.searchResults = plainItems
           }).catch(error => {
             console.error("Error querying user content:", error);
           });
@@ -144,6 +185,62 @@ export const useAuthStore = defineStore("auth", () => ({
     });
     
   },
+  SearchMyGroupsContent(){
+    
+    IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
+      const portal = new Portal({
+        url: "https://www.arcgis.com",
+        authMode: "immediate"
+      });
+
+      portal.load().then(() => {
+        const user = portal.user;
+        let groupContent = []
+        const agolStore = useAgolStore()
+        user.fetchGroups().then((groups) => {
+
+          for (let i=0; i<groups.length; i++){
+            const queryParams = new PortalQueryParams({
+              query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND group:${groups[i].id} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+              sortField: "title",
+              sortOrder: "asc",
+              num: 50
+            });
+            
+            portal.queryItems(queryParams).then((results) => {
+              if(results.results.length>0){
+              const plainItems = results.results.map(item => (
+              {
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              url: item.url,
+              snippet: item.snippet,
+              owner: item.owner,
+              description: item.description,
+              visible: true,
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName,
+              group: groups[i].title
+            }));
+            console.log(plainItems)
+            groupContent = [...groupContent, ...plainItems]
+          }          
+          agolStore.searchResults = groupContent
+            }).catch(error => {
+              console.error(`Error querying group "${groups[i].title}":`, error);
+            });
+          }
+
+        });
+
+        }).catch(error => {
+          console.error("User not signed in:", error);
+        });
+    });
+    
+  },
   GetMyOrgsContent(){
     const agolStore = useAgolStore()
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
@@ -177,6 +274,48 @@ export const useAuthStore = defineStore("auth", () => ({
               displayName: item.displayName
             }));
             agolStore.orgContent = plainItems
+        }).catch(error => {
+          console.error("Error querying organization content:", error);
+        });
+      });
+    }).catch(error => {
+      console.error("User not signed in:", error);
+    });
+  },
+  SearchMyOrgsContent(){
+
+   const agolStore = useAgolStore()
+    IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
+      const portal = new Portal({
+        url: "https://www.arcgis.com",
+        authMode: "immediate"
+      });
+
+      portal.load().then(() => {
+        const orgId = portal.id;
+
+        const queryParams = new PortalQueryParams({
+          query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND orgid:${orgId} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+          sortField: "title",
+          sortOrder: "asc",
+          num: 100
+        });
+
+        portal.queryItems(queryParams).then((results) => {
+            const plainItems = results.results.map(item => ({
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              url: item.url,
+              snippet: item.snippet,
+              owner: item.owner,
+              description: item.description,
+              visible: true,
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName
+            }));
+            agolStore.searchResults = plainItems
         }).catch(error => {
           console.error("Error querying organization content:", error);
         });
