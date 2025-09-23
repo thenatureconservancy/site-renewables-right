@@ -9,6 +9,7 @@ import { useAgolStore } from "./arcGisOnline";
 
 
 export const useAuthStore = defineStore("auth", () => ({
+  
   buttonLabel: ref('Log in to ArcGIS Online'),
   userName: ref(''),
   userLoggedIn: false,
@@ -34,15 +35,14 @@ export const useAuthStore = defineStore("auth", () => ({
         this.buttonLabel = 'Logout of ArcGIS Online'
         //this.userName = credentials.userId
         this.GetMyContent()
-        //this.GetMyGroupsContent()
-        //this.GetMyOrgsContent()
+        this.GetMyGroupsContent()
+        this.GetMyOrgsContent()
            
       } catch (error) {
         console.log(error);
         alert("There was a problem connecting to the site.");
       }
   },
-  //id: '9de47e18a68743ff9beb0be82bc5c545', access
   GetMyContent() {
     this.userLoggedIn = true
     const agolStore = useAgolStore()
@@ -72,8 +72,9 @@ export const useAuthStore = defineStore("auth", () => ({
               owner: item.owner,
               description: item.description,
               visible: true,
-              opacity: 1
-
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName
             }));
             agolStore.myContent = plainItems
 
@@ -86,6 +87,7 @@ export const useAuthStore = defineStore("auth", () => ({
     });
   },
   GetMyGroupsContent(){
+    
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
       const portal = new Portal({
         url: "https://www.arcgis.com",
@@ -94,34 +96,56 @@ export const useAuthStore = defineStore("auth", () => ({
 
       portal.load().then(() => {
         const user = portal.user;
-
+        let groupList = []
+        let allGroupContent = []
+        let groupContent = []
+        const agolStore = useAgolStore()
         user.fetchGroups().then((groups) => {
           console.log("User Groups:", groups);
 
           groups.forEach(group => {
             console.log(`Fetching content for group: ${group.title} (ID: ${group.id})`);
+            groupList.push(group.title)
             const queryParams = new PortalQueryParams({
               query: `group:${group.id} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
               sortField: "title",
               sortOrder: "asc",
               num: 50
             });
-
-
+            
             portal.queryItems(queryParams).then((results) => {
-              console.log(`Content from group "${group.title}":`, results.results);
+              const plainItems = results.results.map(item => (
+              {
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              url: item.url,
+              snippet: item.snippet,
+              owner: item.owner,
+              description: item.description,
+              visible: true,
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName
+            }));
+            groupContent[group.title] = plainItems
             }).catch(error => {
               console.error(`Error querying group "${group.title}":`, error);
             });
           });
+          agolStore.allGroupContent = groupContent
+          agolStore.groups = groupList
+          agolStore.selectedGroup = groupList[0]
         });
 
-    }).catch(error => {
-      console.error("User not signed in:", error);
+        }).catch(error => {
+          console.error("User not signed in:", error);
+        });
     });
-    });
+    
   },
   GetMyOrgsContent(){
+    const agolStore = useAgolStore()
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
       const portal = new Portal({
         url: "https://www.arcgis.com",
@@ -139,7 +163,20 @@ export const useAuthStore = defineStore("auth", () => ({
         });
 
         portal.queryItems(queryParams).then((results) => {
-          console.log("Organization Content:", results.results);
+            const plainItems = results.results.map(item => ({
+              id: item.id,
+              title: item.title,
+              type: item.type,
+              url: item.url,
+              snippet: item.snippet,
+              owner: item.owner,
+              description: item.description,
+              visible: true,
+              opacity: 1,
+              iconUrl: item.iconUrl,
+              displayName: item.displayName
+            }));
+            agolStore.orgContent = plainItems
         }).catch(error => {
           console.error("Error querying organization content:", error);
         });

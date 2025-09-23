@@ -2,196 +2,58 @@
 import { useAgolStore } from '@/stores/arcGisOnline.js'
 import { useAuthStore } from '@/stores/auth.js'
 import SignInButton from './SignInButton.vue'
+import { computed } from 'vue'
 
 const agolStore = useAgolStore()
 const authStore = useAuthStore()
+
+// Computed function to format options
+const selectedGroupContent = computed(() => agolStore.allGroupContent[agolStore.selectedGroup])
 </script>
 <template>
   <q-card rounded style="width: 600px" v-if="!authStore.userLoggedIn">
-    <q-card-section>
-      <div class="text-h6">Search ArcGIS Online</div>
-    </q-card-section>
-    <q-card-section class="q-pt-none">
-      <q-input
-        filled
-        label="Search"
-        color="blue-grey-9"
-        debounce="500"
-        v-model="agolStore.searchTerm"
-        @update:model-value="agolStore.searchPortal()"
-        ><template v-slot:prepend> <q-icon name="search" /> </template
-      ></q-input>
-    </q-card-section>
-    <q-card-section class="q-pt-none" v-if="agolStore.searchResults.length > 0">
-      <div class="row items-center justify-center q-mb-sm">
-        <div>
-          <p class="text-body1 text-weight-medium q-mb-none">Search Results</p>
+    <div style="height: calc(100vh - 50px)">
+      <q-card-section>
+        <div class="text-h6">Search ArcGIS Online</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <q-input
+          filled
+          label="Search"
+          color="blue-grey-9"
+          debounce="500"
+          v-model="agolStore.searchTerm"
+          @update:model-value="agolStore.searchPortal()"
+          ><template v-slot:prepend> <q-icon name="search" /> </template
+        ></q-input>
+      </q-card-section>
+      <q-card-section class="q-pt-none" v-if="agolStore.searchResults.length > 0">
+        <div class="row items-center justify-center q-mb-sm">
+          <div>
+            <p class="text-body1 text-weight-medium q-mb-none">Search Results</p>
+          </div>
+          <q-space></q-space>
+          <q-btn
+            flat
+            no-caps
+            padding="none"
+            label="clear search results"
+            color="blue"
+            @click="agolStore.searchResults = []"
+          />
         </div>
-        <q-space></q-space>
-        <q-btn
-          flat
-          no-caps
-          padding="none"
-          label="clear search results"
-          color="blue"
-          @click="agolStore.searchResults = []"
-        />
-      </div>
-      <q-list bordered padding class="bg-white rounded">
-        <q-item v-for="layer in agolStore.searchResults" :key="layer.title">
-          <q-item-section>
-            <q-item-label>{{ layer.title }}</q-item-label>
-            <q-item-label caption class="text-weight-medium">
-              {{ layer.org }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              v-if="layer.description"
-              outline
-              size="sm"
-              color="primary"
-              round
-              icon="description"
-              @click="showTooltip = true"
-              ><q-tooltip
-                v-html="layer.description"
-                class="text-body2 bg-white text-blue-grey-9"
-                style="width: 300px; border: 1px solid #49aa43"
-              >
-              </q-tooltip>
-              <q-menu
-                ><div
-                  v-html="layer.longDescription"
-                  class="text-body2 bg-white text-blue-grey-9 q-ma-md"
-                  style="width: 300px"
-                ></div
-              ></q-menu>
-            </q-btn>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              outline
-              size="sm"
-              color="primary"
-              round
-              icon="add"
-              @click="
-                () => {
-                  const mapLayer = agolStore.mapLayers.find((newlayer) => {
-                    return newlayer.id === layer.id
-                  })
-                  if (!mapLayer) {
-                    agolStore.mapLayers.push(layer)
-                    agolStore.addLayerToMap(layer.id)
-                  }
-                }
-              "
-            >
-              <q-tooltip
-                class="text-body2 bg-white text-blue-grey-9"
-                style="width: 140px; border: 1px solid #49aa43"
-                >Add layer to map
-              </q-tooltip></q-btn
-            >
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card-section>
-    <q-card-section class="q-pt-none">
-      <p class="text-body1 text-weight-medium q-mb-sm">
-        Suggested Layers
-        <span class="text-caption text-grey-7">Click + to add to map</span>
-      </p>
-      <q-list bordered padding class="bg-white rounded">
-        <q-item v-for="layer in agolStore.recommendedLayers" :key="layer.title" class="q-mb-sm">
-          <q-item-section avatar>
-            <q-icon :name="layer.icon" color="grey-5" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{ layer.title }}</q-item-label>
-            <q-item-label caption class="text-grey-7">
-              {{ layer.author }}
-            </q-item-label>
-          </q-item-section>
-
-          <q-item-section side>
-            <q-btn
-              v-if="layer.description"
-              outline
-              size="sm"
-              color="primary"
-              round
-              icon="description"
-              ><q-tooltip
-                v-html="layer.description"
-                class="text-body2 bg-white text-blue-grey-9"
-                style="width: 300px; border: 1px solid #49aa43"
-              >
-              </q-tooltip>
-              <q-menu
-                ><div
-                  v-html="layer.longDescription"
-                  class="text-body2 bg-white text-blue-grey-9 q-ma-md"
-                  style="width: 300px"
-                ></div></q-menu
-            ></q-btn>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              outline
-              size="sm"
-              color="primary"
-              round
-              icon="add"
-              @click="
-                () => {
-                  const mapLayer = agolStore.mapLayers.find((newlayer) => {
-                    return newlayer.id === layer.id
-                  })
-                  if (!mapLayer) {
-                    agolStore.mapLayers.push(layer)
-                    agolStore.addLayerToMap(layer.id)
-                  }
-                }
-              "
-            >
-              <q-tooltip
-                class="text-body2 bg-white text-blue-grey-9"
-                style="width: 140px; border: 1px solid #49aa43"
-                >Add layer to map
-              </q-tooltip></q-btn
-            >
-          </q-item-section>
-        
-        </q-item>
-      </q-list>
-    </q-card-section>
-
-    <q-card-section class="q-pt-none" v-if="agolStore.mapLayers.length > 0">
-      <p class="text-body1 q-mb-sm text-weight-medium">Manage Layers</p>
-      <q-list bordered padding class="bg-white rounded">
-        <q-item v-for="(layer, index) in agolStore.mapLayers" :key="layer.title">
-          <q-item-section avatar>
-            <q-checkbox
-              v-model="layer.visible"
-              @update:model-value="agolStore.toggleVisibility(layer)"
-              color="primary"
-              size="xs"
-            />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ layer.title }}</q-item-label>
-            <q-item-label caption class="text-grey-7">
-              {{ layer.author }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section class="q-pt-none" side>
-            <div class="row">
+        <q-list bordered padding class="bg-white rounded">
+          <q-item v-for="layer in agolStore.searchResults" :key="layer.title">
+            <q-item-section>
+              <q-item-label>{{ layer.title }}</q-item-label>
+              <q-item-label caption class="text-weight-medium">
+                {{ layer.org }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section side>
               <q-btn
                 v-if="layer.description"
-                flat
+                outline
                 size="sm"
                 color="primary"
                 round
@@ -211,50 +73,192 @@ const authStore = useAuthStore()
                   ></div
                 ></q-menu>
               </q-btn>
-              <q-btn flat round icon="opacity" color="primary" @click="" size="sm">
-                <q-menu>
-                  <div class="q-pa-lg q-pt-xl" style="width: 200px">
-                    <q-slider
-                      v-model="layer.opacity"
-                      label-always
-                      color="primary"
-                      :min="0"
-                      :max="1"
-                      :step="0.1"
-                      @update:model-value="agolStore.changeLayerOpacity(layer)"
-                    >
-                    </q-slider>
-                    <div class="text-blue-grey-9">Opacity: {{ layer.opacity * 100 }}%</div>
-                  </div>
-                </q-menu>
-              </q-btn>
-
+            </q-item-section>
+            <q-item-section side>
               <q-btn
-                bordered
-                round
-                flat
-                icon="delete"
-                color="negative"
-                @click="agolStore.removeLayer(layer, index)"
+                outline
                 size="sm"
-                ><q-tooltip
+                color="primary"
+                round
+                icon="add"
+                @click="
+                  () => {
+                    const mapLayer = agolStore.mapLayers.find((newlayer) => {
+                      return newlayer.id === layer.id
+                    })
+                    if (!mapLayer) {
+                      agolStore.mapLayers.push(layer)
+                      agolStore.addLayerToMap(layer.id)
+                    }
+                  }
+                "
+              >
+                <q-tooltip
                   class="text-body2 bg-white text-blue-grey-9"
-                  style="width: 175px; border: 1px solid #49aa43"
-                  >remove layer from map</q-tooltip
+                  style="width: 140px; border: 1px solid #49aa43"
+                  >Add layer to map
+                </q-tooltip></q-btn
+              >
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <p class="text-body1 text-weight-medium q-mb-sm">
+          Suggested Layers
+          <span class="text-caption text-grey-7">Click + to add to map</span>
+        </p>
+        <q-list bordered padding class="bg-white rounded">
+          <q-item v-for="layer in agolStore.recommendedLayers" :key="layer.title" class="q-mb-sm">
+            <q-item-section avatar>
+              <q-icon :name="layer.icon" color="grey-5" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>{{ layer.title }}</q-item-label>
+              <q-item-label caption class="text-grey-7">
+                {{ layer.author }}
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+              <q-btn
+                v-if="layer.description"
+                outline
+                size="sm"
+                color="primary"
+                round
+                icon="description"
+                ><q-tooltip
+                  v-html="layer.description"
+                  class="text-body2 bg-white text-blue-grey-9"
+                  style="width: 300px; border: 1px solid #49aa43"
                 >
-              </q-btn>
-            </div>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card-section>
-    <q-card-section class="q-pt-none">
-      <p class="text-caption text-grey-7 q-pt-sm text-center">
-        Log in to ArcGIS online to access private data and saved content
-      </p>
-      <sign-in-button></sign-in-button>
-    </q-card-section>
-    <q-card-actions align="right"> </q-card-actions>
+                </q-tooltip>
+                <q-menu
+                  ><div
+                    v-html="layer.longDescription"
+                    class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                    style="width: 300px"
+                  ></div></q-menu
+              ></q-btn>
+            </q-item-section>
+            <q-item-section side>
+              <q-btn
+                outline
+                size="sm"
+                color="primary"
+                round
+                icon="add"
+                @click="
+                  () => {
+                    const mapLayer = agolStore.mapLayers.find((newlayer) => {
+                      return newlayer.id === layer.id
+                    })
+                    if (!mapLayer) {
+                      agolStore.mapLayers.push(layer)
+                      agolStore.addLayerToMap(layer.id)
+                    }
+                  }
+                "
+              >
+                <q-tooltip
+                  class="text-body2 bg-white text-blue-grey-9"
+                  style="width: 140px; border: 1px solid #49aa43"
+                  >Add layer to map
+                </q-tooltip></q-btn
+              >
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none" v-if="agolStore.mapLayers.length > 0">
+        <p class="text-body1 q-mb-sm text-weight-medium">Manage Layers</p>
+        <q-list bordered padding class="bg-white rounded">
+          <q-item v-for="(layer, index) in agolStore.mapLayers" :key="layer.title">
+            <q-item-section avatar>
+              <q-checkbox
+                v-model="layer.visible"
+                @update:model-value="agolStore.toggleVisibility(layer)"
+                color="primary"
+                size="xs"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ layer.title }}</q-item-label>
+              <q-item-label caption class="text-grey-7">
+                {{ layer.author }}
+              </q-item-label>
+            </q-item-section>
+            <q-item-section class="q-pt-none" side>
+              <div class="row">
+                <q-btn
+                  v-if="layer.description"
+                  flat
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="description"
+                  @click="showTooltip = true"
+                  ><q-tooltip
+                    v-html="layer.description"
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 300px; border: 1px solid #49aa43"
+                  >
+                  </q-tooltip>
+                  <q-menu
+                    ><div
+                      v-html="layer.longDescription"
+                      class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                      style="width: 300px"
+                    ></div
+                  ></q-menu>
+                </q-btn>
+                <q-btn flat round icon="opacity" color="primary" @click="" size="sm">
+                  <q-menu>
+                    <div class="q-pa-lg q-pt-xl" style="width: 200px">
+                      <q-slider
+                        v-model="layer.opacity"
+                        label-always
+                        color="primary"
+                        :min="0"
+                        :max="1"
+                        :step="0.1"
+                        @update:model-value="agolStore.changeLayerOpacity(layer)"
+                      >
+                      </q-slider>
+                      <div class="text-blue-grey-9">Opacity: {{ layer.opacity * 100 }}%</div>
+                    </div>
+                  </q-menu>
+                </q-btn>
+
+                <q-btn
+                  bordered
+                  round
+                  flat
+                  icon="delete"
+                  color="negative"
+                  @click="agolStore.removeLayer(layer, index)"
+                  size="sm"
+                  ><q-tooltip
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 175px; border: 1px solid #49aa43"
+                    >remove layer from map</q-tooltip
+                  >
+                </q-btn>
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        <p class="text-caption text-grey-7 q-pt-sm text-center">
+          Log in to ArcGIS online to access private data and saved content
+        </p>
+        <sign-in-button></sign-in-button>
+      </q-card-section>
+    </div>
   </q-card>
 
   <q-card rounded style="width: 600px" v-if="authStore.userLoggedIn">
@@ -267,10 +271,10 @@ const authStore = useAuthStore()
     >
       <q-tab name="mycontent" label="My Content" class="custom-dot-tab" />
       <q-tab name="mygroups" label="My Groups" class="custom-dot-tab" />
-      <q-tab name="myorganization" label="My Organization" class="custom-dot-tab"/>
+      <q-tab name="myorganization" label="My Organization" class="custom-dot-tab" />
       <q-tab name="public" label="Living Atlas" class="custom-dot-tab" />
     </q-tabs>
-    <q-tab-panels v-model="agolStore.tab" animated>
+    <q-tab-panels v-model="agolStore.tab" animated style="height: calc(100vh - 166px)">
       <q-tab-panel name="mycontent">
         <q-card-section>
           <div class="text-h6">My Content</div>
@@ -321,14 +325,14 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
                   <q-menu
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
@@ -364,26 +368,29 @@ const authStore = useAuthStore()
             </q-item>
           </q-list>
         </q-card-section>
-         <q-card-section class="q-pt-none" >
+        <q-card-section class="q-pt-none">
           <div class="row items-center justify-start q-mb-sm">
             <div>
               <p class="text-body1 text-weight-medium q-mb-none">Feature and Image layers</p>
             </div>
-           
           </div>
-         
+
           <q-list bordered padding class="bg-white rounded">
-            <q-item v-for="layer,index in agolStore.myContent" :key="index">
-            
+            <q-item v-for="(layer, index) in agolStore.myContent" :key="index">
               <q-item-section>
                 <q-item-label>{{ layer.title }}</q-item-label>
                 <q-item-label caption class="text-weight-medium">
+                  <q-img :src="layer.iconUrl" style="width: 15px; height: 15px"
+                    ><q-tooltip class="bg-white text-black">{{
+                      layer.displayName
+                    }}</q-tooltip></q-img
+                  >
                   {{ layer.owner }}
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   outline
                   size="sm"
                   color="primary"
@@ -391,14 +398,14 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
@@ -475,7 +482,7 @@ const authStore = useAuthStore()
               </q-item-section>
               <q-item-section side>
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   outline
                   size="sm"
                   color="primary"
@@ -483,14 +490,14 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
@@ -524,6 +531,88 @@ const authStore = useAuthStore()
                 >
               </q-item-section>
             </q-item>
+          </q-list>
+        </q-card-section>
+        <q-card-section>
+          <div class="row items-center justify-start q-mb-sm">
+            <div>
+              <p class="text-body1 text-weight-medium q-mb-none">Select group to display layers</p>
+            </div>
+          </div>
+          <q-select
+            outlined
+            dense
+            options-dense
+            :options="agolStore.groups"
+            v-model="agolStore.selectedGroup"
+          ></q-select>
+          <q-list bordered padding class="bg-white rounded" v-if="selectedGroupContent.length > 0">
+            <q-item v-for="(layer, index) in selectedGroupContent" :key="index">
+              <q-item-section>
+                <q-item-label>{{ layer.title }}</q-item-label>
+                <q-item-label caption class="text-weight-medium">
+                  <q-img :src="layer.iconUrl" style="width: 15px; height: 15px"
+                    ><q-tooltip class="bg-white text-black">{{
+                      layer.displayName
+                    }}</q-tooltip></q-img
+                  >
+                  {{ layer.owner }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
+                  v-if="layer.snippet"
+                  outline
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="description"
+                  @click="showTooltip = true"
+                  ><q-tooltip
+                    v-html="layer.snippet"
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 300px; border: 1px solid #49aa43"
+                  >
+                  </q-tooltip>
+                  <q-menu v-if="layer.description"
+                    ><div
+                      v-html="layer.description"
+                      class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                      style="width: 300px"
+                    ></div
+                  ></q-menu>
+                </q-btn>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
+                  outline
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="add"
+                  @click="
+                    () => {
+                      const mapLayer = agolStore.mapLayers.find((newlayer) => {
+                        return newlayer.id === layer.id
+                      })
+                      if (!mapLayer) {
+                        agolStore.mapLayers.push(layer)
+                        agolStore.addLayerToMap(layer.id)
+                      }
+                    }
+                  "
+                >
+                  <q-tooltip
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 140px; border: 1px solid #49aa43"
+                    >Add layer to map
+                  </q-tooltip></q-btn
+                >
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-list bordered class="bg-white rounded" v-if="selectedGroupContent.length == 0">
+            <q-item class="q-pa-lg text-grey-7"> No feature or image layers to display </q-item>
           </q-list>
         </q-card-section>
       </q-tab-panel>
@@ -567,7 +656,7 @@ const authStore = useAuthStore()
               </q-item-section>
               <q-item-section side>
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   outline
                   size="sm"
                   color="primary"
@@ -575,14 +664,87 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
+                      class="text-body2 bg-white text-blue-grey-9 q-ma-md"
+                      style="width: 300px"
+                    ></div
+                  ></q-menu>
+                </q-btn>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
+                  outline
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="add"
+                  @click="
+                    () => {
+                      const mapLayer = agolStore.mapLayers.find((newlayer) => {
+                        return newlayer.id === layer.id
+                      })
+                      if (!mapLayer) {
+                        agolStore.mapLayers.push(layer)
+                        agolStore.addLayerToMap(layer.id)
+                      }
+                    }
+                  "
+                >
+                  <q-tooltip
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 140px; border: 1px solid #49aa43"
+                    >Add layer to map
+                  </q-tooltip></q-btn
+                >
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="row items-center justify-start q-mb-sm">
+            <div>
+              <p class="text-body1 text-weight-medium q-mb-none">Feature and Image layers</p>
+            </div>
+          </div>
+
+          <q-list bordered padding class="bg-white rounded">
+            <q-item v-for="(layer, index) in agolStore.orgContent" :key="index">
+              <q-item-section>
+                <q-item-label>{{ layer.title }}</q-item-label>
+                <q-item-label caption class="text-weight-medium">
+                  <q-img :src="layer.iconUrl" style="width: 15px; height: 15px"
+                    ><q-tooltip class="bg-white text-black">{{
+                      layer.displayName
+                    }}</q-tooltip></q-img
+                  >
+                  {{ layer.owner }}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-btn
+                  v-if="layer.snippet"
+                  outline
+                  size="sm"
+                  color="primary"
+                  round
+                  icon="description"
+                  @click="showTooltip = true"
+                  ><q-tooltip
+                    v-html="layer.snippet"
+                    class="text-body2 bg-white text-blue-grey-9"
+                    style="width: 300px; border: 1px solid #49aa43"
+                  >
+                  </q-tooltip>
+                  <q-menu v-if="layer.description"
+                    ><div
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
@@ -659,7 +821,7 @@ const authStore = useAuthStore()
               </q-item-section>
               <q-item-section side>
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   outline
                   size="sm"
                   color="primary"
@@ -667,14 +829,14 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
@@ -730,21 +892,21 @@ const authStore = useAuthStore()
 
               <q-item-section side>
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   outline
                   size="sm"
                   color="primary"
                   round
                   icon="description"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div></q-menu
@@ -805,7 +967,7 @@ const authStore = useAuthStore()
             <q-item-section class="q-pt-none" side>
               <div class="row">
                 <q-btn
-                  v-if="layer.description"
+                  v-if="layer.snippet"
                   flat
                   size="sm"
                   color="primary"
@@ -813,14 +975,14 @@ const authStore = useAuthStore()
                   icon="description"
                   @click="showTooltip = true"
                   ><q-tooltip
-                    v-html="layer.description"
+                    v-html="layer.snippet"
                     class="text-body2 bg-white text-blue-grey-9"
                     style="width: 300px; border: 1px solid #49aa43"
                   >
                   </q-tooltip>
-                  <q-menu
+                  <q-menu v-if="layer.description"
                     ><div
-                      v-html="layer.longDescription"
+                      v-html="layer.description"
                       class="text-body2 bg-white text-blue-grey-9 q-ma-md"
                       style="width: 300px"
                     ></div
