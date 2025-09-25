@@ -19,7 +19,7 @@ export const useAgolStore = defineStore('agolStore', () => ({
     recommendedLayers: [
     {
         title: 'USA Flood Hazard Areas',
-        author: "CA Governor's Office of Emergency Services",
+        owner: "CA Governor's Office of Emergency Services",
         icon: 'flood',
         snippet:
         'This feature layer displays Flood Hazard Areas from the Flood Insurance Rate Map created by the Federal Emergency Management Agency.',
@@ -28,11 +28,13 @@ export const useAgolStore = defineStore('agolStore', () => ({
         id: '527151eb840d46f3aa5dcfa5ac13d561',
         visible: true,
         opacity: 1,
+        iconUrl: "https://js.arcgis.com/4.32/@arcgis/core/assets/esri/images/portal/features16.png",
+        displayName: 'Feature Layer'
      
     },
     {
         title: 'Wildfire Hazard Potential, Version 2020 Classified (Image Service)',
-        author: 'U.S. Forest Service',
+        owner: 'U.S. Forest Service',
         icon: 'local_fire_department',
         snippet:
         'This dataset is the wildfire hazard potential (WHP), version 2020, classified into 5 classes: very low, low, moderate, high, and very high. It is intended for use in strategic wildland fuels and land management planning at broad scales.',
@@ -41,33 +43,38 @@ export const useAgolStore = defineStore('agolStore', () => ({
         id: '55226e8547f84aae8965210a9801c357',
         visible: true,
         opacity: 1,
-
+        iconUrl: 'https://js.arcgis.com/4.32/@arcgis/core/assets/esri/images/portal/imagery16.png',
+        displayName: 'Imagery Layer'
         },
     {
         title: 'CEQ_CEJScreen_Tool',
-        author: 'HARC',
+        owner: 'HARC',
         icon: 'gavel',
         snippet: 'The Climate and Economic Justice Screening Tool provides important information by identifying communities that experience high burdens. These communities are considered disadvantaged. This information will be used for the Justice40 Initiative. The current version of the tool is 1.0. The tool will be regularly updated based on research, feedback, and the availability of new datasets.  This tool utilizes the census tract boundaries from 2010 because they match the datasets used in the tool. Last Update: 11/22/2022.',
         description: "<div style='text-align:Left;'><div><div><p><span>The Climate and Economic Justice Screening Tool (“CEJST” or “tool”) is a critical component of the Biden- Harris Administration’s historic commitment to advancing environmental justice. In Executive Order 14008 on Tackling the Climate Crisis at Home and Abroad, President Biden directed the White House Council on Environmental Quality (CEQ) to develop a geospatial mapping tool to identify disadvantaged communities that face burdens. These communities have been marginalized by society, overburdened by pollution, and underserved by infrastructure and other basic services.Federal agencies will use the CEJST for the Justice40 Initiative. It will help them identify disadvantaged communities that should benefit from the Justice40 Initiative. The Justice40 Initiative seeks to deliver 40% of the overall benefits of certain Federal investments to disadvantaged communities. These investments relate to seven areas: climate change; clean energy and energy efficiency; clean transit; affordable and sustainable housing; the remediation and reduction of legacy pollution; the development of critical clean water and wastewater infrastructure; and training and workforce development. This task of delivering the benefits of hundreds of Federal programs to disadvantaged communities is challenging. It requires fundamental and sweeping changes to the ways in which the whole Federal government operates.On November 22, 2022, CEQ launched version 1.0 of the CEJST. Version 1.0 incorporates feedback that CEQ received on the beta—or draft—version of the tool. CEQ had previously launched the beta version of the tool on February 18, 2022 with support from the U.S. Digital Service, and in collaboration with other Federal agencies and departments. The tool was released in a beta version in order to solicit feedback from Federal agencies, Tribal Nations, state and local governments, the White House Environmental Justice Advisory Council (WHEJAC), key stakeholders, and the public. By the end of the public comment period, CEQ/USDS had received almost 3,000 comments on the tool. Feedback was gathered through a variety of methods during the beta period, including: a Request for Information posted in the Federal Register, which had a 90 day comment period; an email support inbox; a survey accessible via the CEJST; census tract level feedback that could be provided via the map, and listening sessions. CEQ and USDS also conducted three public trainings and two agency-only trainings on the tool. They also met one-on-one with nearly 20 agencies with Justice40 covered programs. In addition, CEQ held two Tribal consultations on the tool to provide Tribal Nations with meaningful opportunities for input, consistent with CEQ’s Action Plan for Consultation and Coordination with Tribal Nations, President Biden’s Memorandum on Tribal Consultation and Strengthening Nation-to-Nation Relationships, and Executive Order 13175 on Consultation and Coordination With Indian Tribal Governments.The CEJST is available at https://screeningtool.geoplatform.gov. The tool uses publicly-available, nationally-consistent datasets to identify disadvantaged communities. The datasets are indicators of burdens that disadvantaged communities face. These burdens are related to climate change, environment, health, and economic opportunity. Communities are considered disadvantaged if they are in census tracts that meet the thresholds for at least one of the tool’s categories of burden, or if they are on the lands of Federally Recognized Tribes. The CEJST features a user-friendly, searchable map of all 50 states, the District of Columbia, and the U.S. territories. The CEJST website also has data files, such as spreadsheets and shapefiles, available for download.This technical support document describes the data and methodology used in version 1.0 of the CEJST. It is organized as follows: Section II describes the methodology; Section III describes the data sources; Section IV describes changes to the user interface; and Section V concludes with next steps.</span></p></div></div></div>",
         id: '64fae3f01548437e81a04bfce1cdc0b8',
         visible: true,
         opacity: 1,
+        iconUrl: "https://js.arcgis.com/4.32/@arcgis/core/assets/esri/images/portal/features16.png",
+        displayName: 'Feature Layer'
 
     },
     {
         title: 'HIFLD_US_Electric_Power_Transmission_Lines',
-        author: 'HARC',
+        owner: 'HARC',
         icon: 'power',
         snippet: 'This feature class/shapefile is for the Homeland Infrastructure Foundation Level Database (HIFLD)  and the Energy modelling and simulation community.',
         description: "This feature class/shapefile represents electric power transmission lines. Transmission Lines are the system of structures, wires, insulators and associated hardware that carry electric energy from one point to another in an electric power system. Lines are operated at relatively high voltages varying from 69 kV up to 765 kV, and are capable of transmitting large quantities of electricity over long distances. Underground transmission lines are included where sources were available. The following updates have been made since the previous release: 7,935 features added, geographic coverage expanded to include Alaska and Hawaii, the METHOD and DATE fields renamed to VAL_METHOD and VAL_DATE respectively, and new fields have been included, namely, TYPE, NAICS_CODE, NAICS_DESC, and SOURCEDATE. Disclaimer: This product is for informational purposes only and may not be suitable for legal, engineering, or surveying purposes. It does not represent an official survey and represents only the approximate relative location of features and boundaries. Mapping may not necessarily reflect on-the-ground conditions. This product and those involved in its production make no claims as to the accuracy or reliability of the data, and neither assumes, nor will accept liability for their use.",
         id: '13b4728b7403404cb72b52b5367a1ad6',
         visible: true,
         opacity: 1,
+        iconUrl: "https://js.arcgis.com/4.32/@arcgis/core/assets/esri/images/portal/features16.png",
+        displayName: 'Feature Layer'
      
     },
     ],
     mapLayers: [],
-    getOrganizationName: function(orgId, token = null) {
+    /*getOrganizationName: function(orgId, token = null) {
         const baseUrl = `https://www.arcgis.com/sharing/rest/portals/${orgId}`
         const params = new URLSearchParams({ f: 'json' })
         if (token) params.append('token', token)
@@ -113,7 +120,7 @@ export const useAgolStore = defineStore('agolStore', () => ({
             })
             })
         })
-    },
+    },*/
     addLayerToMap: function(id){
         const portalItemId = id; 
         const arcgisMap = document.querySelector('arcgis-map') 

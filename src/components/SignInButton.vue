@@ -1,21 +1,6 @@
-<template>
-  <q-btn
-   id="sign-in-button"
-    :ripple="false"
-    icon="img:globe.png"
-    no-caps=""
-    :label=" authStore.buttonLabel"
-    style="width: 100%; background: #0079c1; color: white"
-    unelevated=""
-    @click="authenticate()"
-  > 
-  </q-btn>
-
-</template>
-
 <script setup>
 import { useAuthStore } from '../stores/auth.js'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
 const authStore = useAuthStore()
 
@@ -44,3 +29,20 @@ onMounted(() => {
   }
 })
 </script>
+
+<template>
+  <q-btn
+   id="sign-in-button"
+    :ripple="false"
+    icon="img:globe.png"
+    no-caps=""
+    :label=" authStore.buttonLabel"
+    style="width: 100%; background: #0079c1; color: white"
+    unelevated=""
+    @click="authenticate()"
+  > 
+  </q-btn>
+
+</template>
+
+

@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import OAuthInfo from "@arcgis/core/identity/OAuthInfo";
 import IdentityManager from "@arcgis/core/identity/IdentityManager";
 import Portal from "@arcgis/core/portal/Portal"
-import PortalItem from "@arcgis/core/portal/PortalItem.js";
 import PortalQueryParams from "@arcgis/core/portal/PortalQueryParams.js";
 import { ref } from 'vue'
 import { useAgolStore } from "./arcGisOnline";
+import { useSearchStore } from "./searchbar"
 
 
 export const useAuthStore = defineStore("auth", () => ({
@@ -87,7 +87,7 @@ export const useAuthStore = defineStore("auth", () => ({
     });
   },
   SearchMyContent() {
-    const agolStore = useAgolStore()
+    const searchStore = useSearchStore()
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
         const portal = new Portal({
           url: "https://www.arcgis.com",
@@ -98,13 +98,13 @@ export const useAuthStore = defineStore("auth", () => ({
         const username = portal.user.username;
 
         const queryParams = new PortalQueryParams({
-          query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND owner:${username} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+          query: `(title:"${searchStore.searchTerm}" OR tags:"${searchStore.searchTerm}*" OR description:"${searchStore.searchTerm}") AND owner:${username} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
           sortField: "title",
           sortOrder: "asc",
-          num: 100
+          num: 10
           });
           portal.queryItems(queryParams).then((results) => {
-             
+            searchStore.searchResults.total = results.total 
             const plainItems = results.results.map(item => ({
               id: item.id,
               title: item.title,
@@ -118,7 +118,7 @@ export const useAuthStore = defineStore("auth", () => ({
               iconUrl: item.iconUrl,
               displayName: item.displayName
             }));
-            agolStore.searchResults = plainItems
+            searchStore.searchResults.results = plainItems
           }).catch(error => {
             console.error("Error querying user content:", error);
           });
@@ -196,18 +196,19 @@ export const useAuthStore = defineStore("auth", () => ({
       portal.load().then(() => {
         const user = portal.user;
         let groupContent = []
-        const agolStore = useAgolStore()
+        const searchStore = useSearchStore()
         user.fetchGroups().then((groups) => {
 
           for (let i=0; i<groups.length; i++){
             const queryParams = new PortalQueryParams({
-              query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND group:${groups[i].id} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+              query: `(title:"${searchStore.searchTerm}" OR tags:"${searchStore.searchTerm}*" OR description:"${searchStore.searchTerm}") AND group:${groups[i].id} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
               sortField: "title",
               sortOrder: "asc",
-              num: 50
+              num: 10
             });
             
             portal.queryItems(queryParams).then((results) => {
+              searchStore.searchResults.total = results.total 
               if(results.results.length>0){
               const plainItems = results.results.map(item => (
               {
@@ -227,7 +228,7 @@ export const useAuthStore = defineStore("auth", () => ({
             console.log(plainItems)
             groupContent = [...groupContent, ...plainItems]
           }          
-          agolStore.searchResults = groupContent
+          searchStore.searchResults.results = groupContent
             }).catch(error => {
               console.error(`Error querying group "${groups[i].title}":`, error);
             });
@@ -283,8 +284,7 @@ export const useAuthStore = defineStore("auth", () => ({
     });
   },
   SearchMyOrgsContent(){
-
-   const agolStore = useAgolStore()
+   const searchStore = useSearchStore()
     IdentityManager.checkSignInStatus("https://www.arcgis.com/sharing").then(() => {
       const portal = new Portal({
         url: "https://www.arcgis.com",
@@ -295,13 +295,14 @@ export const useAuthStore = defineStore("auth", () => ({
         const orgId = portal.id;
 
         const queryParams = new PortalQueryParams({
-          query: `(title:"${agolStore.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND orgid:${orgId} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
+          query: `(title:"${searchStore.searchTerm}" OR tags:"${searchStore.searchTerm}*" OR description:"${searchStore.searchTerm}") AND orgid:${orgId} AND (type:"Feature Layer" OR type:"Feature Service" OR type:"Hosted Feature Layer" OR type:"Image Service")`,
           sortField: "title",
           sortOrder: "asc",
-          num: 100
+          num: 10
         });
 
         portal.queryItems(queryParams).then((results) => {
+          searchStore.searchResults.total = results.total 
             const plainItems = results.results.map(item => ({
               id: item.id,
               title: item.title,
@@ -315,7 +316,7 @@ export const useAuthStore = defineStore("auth", () => ({
               iconUrl: item.iconUrl,
               displayName: item.displayName
             }));
-            agolStore.searchResults = plainItems
+            searchStore.searchResults.results = plainItems
         }).catch(error => {
           console.error("Error querying organization content:", error);
         });
