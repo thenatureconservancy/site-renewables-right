@@ -1,6 +1,6 @@
 <script setup>
-import { useSearchStore } from '@/stores/searchBar'
-const searchStore = useSearchStore()
+import { useAgolStore } from '@/stores/arcGisOnline'
+const agolStore = useAgolStore()
 
 const props = defineProps({
   searchFunction: {
@@ -17,10 +17,10 @@ const props = defineProps({
     label="Search"
     color="blue-grey-9"
     debounce="500"
-    v-model="searchStore.searchTerm"
-    @update:model-value="searchStore.searchTerm? props.searchFunction(): ''"
+    v-model="agolStore.searchTerm"
+    @update:model-value="agolStore.searchTerm? props.searchFunction(1): ''"
     @clear="function(){
-      searchStore.searchResults.results = []
+      agolStore.searchResults.results = []
     }"
     ><template v-slot:prepend> <q-icon name="search" /> </template
   ></q-input>

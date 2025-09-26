@@ -1,10 +1,37 @@
 <script setup>
-import { useSearchStore } from '@/stores/searchbar'
+import { useAgolStore } from '@/stores/arcGisOnline'
 import { ref, computed } from 'vue'
 
-const searchStore = useSearchStore()
-const totalPages = computed(() => (props.total >= 10 ? Math.ceil(props.total / 10) : 1))
+const agolStore = useAgolStore()
 const page = ref('1')
+const totalPages = computed(()=>(Math.ceil(props.total / 10 )))
+const resultsPages = ref([])
+
+function getStart(){
+    let pg = this.page
+    let start = (parseInt(pg)-1) * 10 + 1
+    return start
+}
+
+function createPages(start) {
+  for (let i = start; i <= start + 4; i++) {
+    this.resultsPages.push(i)
+  }
+}
+
+function handleTabChange() {
+    console.log(this.page)
+  if (this.page == 'more') {
+    this.createPages(this.resultsPages.length + 6)
+    // Optionally reset page to something else
+  } else {
+    let start = this.getStart()
+    console.log(start)
+    props.fetchFunction(start)
+    this.tab
+  }
+}
+
 const props = defineProps({
   items: {
     type: Array,
@@ -19,11 +46,15 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  fetchFunction: {
+    type: Function,
+    required: true,
+  },
 })
 </script>
 
 <template>
-  <div class="row bg-white">
+  <div class="row bg-white" v-if="props.title !== ''">
     <p class="text-body1 text-weight-medium q-mb-sm q-mt-md">{{ props.title }}</p>
     <q-space></q-space>
     <p class="text-caption q-mb-sm q-mt-md" v-if="totalPages > 1">
@@ -100,29 +131,18 @@ const props = defineProps({
       indicator-color="transparent"
       dense
       outside-arrows=""
-      style="width: 100%"
+      style="max-width: 100%"
       class="smaller-tabs"
+      @update:model-value="handleTabChange(v-modelValue)"
     >
       <q-tab class="q-pa-none q-ma-none" name="1" label="1" />
       <q-tab class="q-pa-none q-ma-none" name="2" label="2" />
       <q-tab class="q-pa-none q-ma-none" name="3" label="3" />
       <q-tab class="q-pa-none q-ma-none" name="4" label="4" />
       <q-tab class="q-pa-none q-ma-none" name="5" label="5" />
-      <q-tab class="q-pa-none q-ma-none" name="6" label="6" />
-      <q-tab class="q-pa-none q-ma-none" name="7" label="7" />
-      <q-tab class="q-pa-none q-ma-none" name="8" label="8" />
-      <q-tab class="q-pa-none q-ma-none" name="9" label="9" />
-      <q-tab class="q-pa-none q-ma-none" name="10" label="10" />
-      <q-tab class="q-pa-none q-ma-none" name="11" label="11" />
-      <q-tab class="q-pa-none q-ma-none" name="12" label="12" />
-      <q-tab class="q-pa-none q-ma-none" name="13" label="13" />
-      <q-tab class="q-pa-none q-ma-none" name="14" label="14" />
-      <q-tab class="q-pa-none q-ma-none" name="15" label="15" />
-      <q-tab class="q-pa-none q-ma-none" name="16" label="16" />
-      <q-tab class="q-pa-none q-ma-none" name="17" label="17" />
-      <q-tab class="q-pa-none q-ma-none" name="18" label="18" />
-      <q-tab class="q-pa-none q-ma-none" name="19" label="19" />
-      <q-tab class="q-pa-none q-ma-none" name="20" label="20" />
+      <q-tab class="q-pa-none q-ma-none" v-for="(pg, index) in resultsPages" :key="index" :name="pg"
+       :label="pg"></q-tab>
+      <q-tab class="q-pa-none q-ma-none" name="more" label="..." @click="createPages(resultsPages.length + 6)"/>
     </q-tabs>
   </div>
 </template>

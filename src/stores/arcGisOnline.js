@@ -1,21 +1,19 @@
 import { defineStore } from 'pinia';
-import Portal from '@arcgis/core/portal/Portal.js'
-import PortalQueryParams from '@arcgis/core/portal/PortalQueryParams.js'
 import Layer from "@arcgis/core/layers/Layer.js";
-import {computed} from 'vue';
+
 
 export const useAgolStore = defineStore('agolStore', () => ({
-    searchResults: [],
+    searchResults: {results: [], total: 0},
     searchTerm: '',
     showTooltip: false,
     userLoggedIn: false,
     tab: 'mycontent',
     showDialog: false,
-    myContent: [],
+    myContent: {results: [],total:0},
     groups: [],
     selectedGroup: '',
-    allGroupContent: [],
-    orgContent: [],
+    selectedGroupContent: {results: [],total:0},
+    orgContent: {results: [],total:0},
     recommendedLayers: [
     {
         title: 'USA Flood Hazard Areas',
@@ -74,53 +72,7 @@ export const useAgolStore = defineStore('agolStore', () => ({
     },
     ],
     mapLayers: [],
-    /*getOrganizationName: function(orgId, token = null) {
-        const baseUrl = `https://www.arcgis.com/sharing/rest/portals/${orgId}`
-        const params = new URLSearchParams({ f: 'json' })
-        if (token) params.append('token', token)
-
-        const url = `${baseUrl}?${params.toString()}`
-
-        return fetch(url)
-            .then((response) => {
-            if (!response.ok) throw new Error('Failed to fetch portal info')
-            return response.json()
-            })
-            .then((data) => {
-            if (data.name) {
-                return data.name
-            }
-        })
-    },
-    searchPortal: function() {
-        const portal = new Portal()
-        portal.load().then(() => {
-            const queryParams = new PortalQueryParams({
-            query: `(title:"${this.searchTerm}" OR tags:"${this.searchTerm}*" OR description:"${this.searchTerm}") AND (type:"Feature Service" OR type:"Image Service") AND access:public AND contentstatus:public_authoritative`,
-            sortField: 'num_views',
-            sortOrder: 'asc',
-            num: 10,
-            })
-            portal.queryItems(queryParams).then((results) => {
-            this.searchResults = [] // Clear previous results
-            results.results.forEach((item) => {
-                const orgId = item.sourceJSON.orgId
-                this.getOrganizationName(orgId).then((orgName) => {
-                console.log(item)
-                this.searchResults.push({
-                    id: item.id,
-                    title: item.title,
-                    snippet: item.snippet,
-                    description: item.description,
-                    org: orgName || 'Unknown',
-                    visible: true,
-                    opacity: 1.0
-                })
-                })
-            })
-            })
-        })
-    },*/
+   
     addLayerToMap: function(id){
         const portalItemId = id; 
         const arcgisMap = document.querySelector('arcgis-map') 
