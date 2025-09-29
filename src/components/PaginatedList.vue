@@ -19,9 +19,9 @@ function createPages(start) {
   }
 }
 
-function handleTabChange() {
-    console.log(this.page)
-  if (this.page == 'more') {
+function handleTabChange(page) {
+    console.log(page)
+  if (page == 'more') {
     this.createPages(this.resultsPages.length + 6)
     // Optionally reset page to something else
   } else {
@@ -133,16 +133,16 @@ const props = defineProps({
       outside-arrows=""
       style="max-width: 100%"
       class="smaller-tabs"
-      @update:model-value="handleTabChange(v-modelValue)"
+      @update:model-value="handleTabChange(page)"
     >
-      <q-tab class="q-pa-none q-ma-none" name="1" label="1" />
-      <q-tab class="q-pa-none q-ma-none" name="2" label="2" />
-      <q-tab class="q-pa-none q-ma-none" name="3" label="3" />
-      <q-tab class="q-pa-none q-ma-none" name="4" label="4" />
-      <q-tab class="q-pa-none q-ma-none" name="5" label="5" />
-      <q-tab class="q-pa-none q-ma-none" v-for="(pg, index) in resultsPages" :key="index" :name="pg"
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="1" label="1" />
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="2" label="2" />
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="3" label="3" />
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="4" label="4" />
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="5" label="5" />
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" v-for="(pg, index) in resultsPages" :key="index" :name="pg"
        :label="pg"></q-tab>
-      <q-tab class="q-pa-none q-ma-none" name="more" label="..." @click="createPages(resultsPages.length + 6)"/>
+      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="more" label="..." @click="createPages(resultsPages.length + 6)"/>
     </q-tabs>
   </div>
 </template>
