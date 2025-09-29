@@ -5,10 +5,10 @@ import { ref, computed } from 'vue'
 const agolStore = useAgolStore()
 const page = ref('1')
 const totalPages = computed(()=>(Math.ceil(props.total / 10 )))
-const resultsPages = ref([])
+const resultsPages = ref()
 
 function getStart(){
-    let pg = this.page
+    let pg = page.value
     let start = (parseInt(pg)-1) * 10 + 1
     return start
 }
@@ -19,16 +19,13 @@ function createPages(start) {
   }
 }
 
-function handleTabChange(page) {
-    console.log(page)
-  if (page == 'more') {
-    this.createPages(this.resultsPages.length + 6)
+function handleTabChange() {
+  if (page.value == 'more') {
+    createPages(resultsPages.value.length + 6)
     // Optionally reset page to something else
   } else {
-    let start = this.getStart()
-    console.log(start)
+    let start = getStart()
     props.fetchFunction(start)
-    this.tab
   }
 }
 
@@ -133,16 +130,16 @@ const props = defineProps({
       outside-arrows=""
       style="max-width: 100%"
       class="smaller-tabs"
-      @update:model-value="handleTabChange(page)"
+      @update:model-value="handleTabChange(v-modelValue)"
     >
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="1" label="1" />
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="2" label="2" />
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="3" label="3" />
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="4" label="4" />
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="5" label="5" />
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" v-for="(pg, index) in resultsPages" :key="index" :name="pg"
+      <q-tab class="q-pa-none q-ma-none" name="1" label="1" />
+      <q-tab class="q-pa-none q-ma-none" name="2" label="2" />
+      <q-tab class="q-pa-none q-ma-none" name="3" label="3" />
+      <q-tab class="q-pa-none q-ma-none" name="4" label="4" />
+      <q-tab class="q-pa-none q-ma-none" name="5" label="5" />
+      <q-tab class="q-pa-none q-ma-none" v-for="(pg, index) in resultsPages" :key="index" :name="pg"
        :label="pg"></q-tab>
-      <q-tab class="q-pa-none q-ma-none" v-ripple="false" name="more" label="..." @click="createPages(resultsPages.length + 6)"/>
+      <q-tab class="q-pa-none q-ma-none" name="more" label="..." @click="createPages(resultsPages.length + 6)"/>
     </q-tabs>
   </div>
 </template>
