@@ -2,13 +2,11 @@
 import { useAgolStore } from '@/stores/arcGisOnline.js'
 import { useAuthStore } from '@/stores/auth.js'
 import SignInButton from './SignInButton.vue'
-import SearchBar from './Searchbar.vue'
+import SearchBar from './SearchBar.vue'
 import PaginatedList from './PaginatedList.vue'
-
 
 const agolStore = useAgolStore()
 const authStore = useAuthStore()
-
 </script>
 <template>
   <!-- show if user not logged in -->
@@ -21,10 +19,19 @@ const authStore = useAuthStore()
         <search-bar :search-function="authStore.searchPortal"></search-bar>
       </q-card-section>
       <q-card-section class="q-pt-none" v-show="agolStore.searchResults.results.length > 0">
-        <paginated-list :fetch-function="authStore.searchPortal" :items="agolStore.searchResults.results" :total="agolStore.searchResults.total" title="Search Results"></paginated-list>
+        <paginated-list
+          :fetch-function="authStore.searchPortal"
+          :items="agolStore.searchResults.results"
+          :total="agolStore.searchResults.total"
+          title="Search Results"
+        ></paginated-list>
       </q-card-section>
       <q-card-section class="q-pt-none">
-         <paginated-list :items="agolStore.recommendedLayers" :total="agolStore.recommendedLayers.length" title="Suggested Layers"></paginated-list>
+        <paginated-list
+          :items="agolStore.recommendedLayers"
+          :total="agolStore.recommendedLayers.length"
+          title="Suggested Layers"
+        ></paginated-list>
       </q-card-section>
 
       <!--manage layers section-->
@@ -123,11 +130,13 @@ const authStore = useAuthStore()
       class="text-white"
       active-class="active"
       indicator-color="#007ac2"
-      @update:model-value="(()=>{
-        agolStore.searchResults.results = [];
-        agolStore.searchTerm = ''
-      })"
-      >
+      @update:model-value="
+        () => {
+          agolStore.searchResults.results = []
+          agolStore.searchTerm = ''
+        }
+      "
+    >
       <q-tab name="mycontent" label="My Content" class="custom-dot-tab" />
       <q-tab name="mygroups" label="My Groups" class="custom-dot-tab" />
       <q-tab name="myorganization" label="My Organization" class="custom-dot-tab" />
@@ -142,10 +151,20 @@ const authStore = useAuthStore()
           <search-bar :search-function="authStore.SearchMyContent"></search-bar>
         </q-card-section>
         <q-card-section class="q-pt-none" v-if="agolStore.searchResults.results.length > 0">
-          <paginated-list :fetch-function="authStore.SearchMyContent" title="Search Results" :items="agolStore.searchResults.results" :total="agolStore.searchResults.total"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.SearchMyContent"
+            title="Search Results"
+            :items="agolStore.searchResults.results"
+            :total="agolStore.searchResults.total"
+          ></paginated-list>
         </q-card-section>
         <q-card-section class="q-pt-none">
-           <paginated-list :fetch-function="authStore.GetMyContent" title="Feature and Image layers" :items="agolStore.myContent.results" :total="agolStore.myContent.total"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.GetMyContent"
+            title="Feature and Image layers"
+            :items="agolStore.myContent.results"
+            :total="agolStore.myContent.total"
+          ></paginated-list>
         </q-card-section>
       </q-tab-panel>
       <q-tab-panel name="mygroups">
@@ -156,12 +175,19 @@ const authStore = useAuthStore()
           <search-bar :search-function="authStore.SearchMyGroupsContent"></search-bar>
         </q-card-section>
         <q-card-section class="q-pt-none" v-if="agolStore.searchResults.results.length > 0">
-          <paginated-list :fetch-function="authStore.SearchMyGroupsContent" title='Search Results' :items="agolStore.searchResults.results" :total="agolStore.searchResults.total"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.SearchMyGroupsContent"
+            title="Search Results"
+            :items="agolStore.searchResults.results"
+            :total="agolStore.searchResults.total"
+          ></paginated-list>
         </q-card-section>
         <q-card-section>
           <div class="row items-center justify-start q-mb-sm">
             <div>
-              <p class="text-body1 text-weight-medium q-mb-none">Select group to display feature and image layers</p>
+              <p class="text-body1 text-weight-medium q-mb-none">
+                Select group to display feature and image layers
+              </p>
             </div>
           </div>
           <q-select
@@ -172,7 +198,13 @@ const authStore = useAuthStore()
             v-model="agolStore.selectedGroup"
             @update:model-value="authStore.GetMyGroupsContent()"
           ></q-select>
-          <paginated-list :fetch-function="authStore.GetMyGroupsContent"  title="" :items="agolStore.selectedGroupContent.results" :total="agolStore.selectedGroupContent.total" v-if="agolStore.selectedGroupContent.results.length > 0"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.GetMyGroupsContent"
+            title=""
+            :items="agolStore.selectedGroupContent.results"
+            :total="agolStore.selectedGroupContent.total"
+            v-if="agolStore.selectedGroupContent.results.length > 0"
+          ></paginated-list>
         </q-card-section>
       </q-tab-panel>
       <q-tab-panel name="myorganization">
@@ -183,10 +215,21 @@ const authStore = useAuthStore()
           <search-bar :search-function="authStore.SearchMyOrgsContent"></search-bar>
         </q-card-section>
         <q-card-section class="q-pt-none" v-if="agolStore.searchResults.results.length > 0">
-          <paginated-list :fetch-function="authStore.SearchMyOrgsContent" title="Search Results" :items="agolStore.searchResults.results" :total="agolStore.searchResults.total"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.SearchMyOrgsContent"
+            title="Search Results"
+            :items="agolStore.searchResults.results"
+            :total="agolStore.searchResults.total"
+          ></paginated-list>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <paginated-list :fetch-function="authStore.GetMyOrgsContent" title="Feature and Image Layers" :items="agolStore.orgContent.results" :total="agolStore.orgContent.total" v-if="agolStore.orgContent.results.length > 0"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.GetMyOrgsContent"
+            title="Feature and Image Layers"
+            :items="agolStore.orgContent.results"
+            :total="agolStore.orgContent.total"
+            v-if="agolStore.orgContent.results.length > 0"
+          ></paginated-list>
         </q-card-section>
       </q-tab-panel>
       <q-tab-panel name="public">
@@ -197,11 +240,20 @@ const authStore = useAuthStore()
           <search-bar :search-function="authStore.searchPortal"></search-bar>
         </q-card-section>
         <q-card-section class="q-pt-none" v-show="agolStore.searchResults.results.length > 0">
-          <paginated-list :fetch-function="authStore.searchPortal" :items="agolStore.searchResults.results" :total="agolStore.searchResults.total" title="Search Results"></paginated-list>
+          <paginated-list
+            :fetch-function="authStore.searchPortal"
+            :items="agolStore.searchResults.results"
+            :total="agolStore.searchResults.total"
+            title="Search Results"
+          ></paginated-list>
         </q-card-section>
-         <q-card-section class="q-pt-none">
-         <paginated-list :items="agolStore.recommendedLayers" :total="agolStore.recommendedLayers.length" title="Suggested Layers"></paginated-list>
-      </q-card-section>
+        <q-card-section class="q-pt-none">
+          <paginated-list
+            :items="agolStore.recommendedLayers"
+            :total="agolStore.recommendedLayers.length"
+            title="Suggested Layers"
+          ></paginated-list>
+        </q-card-section>
       </q-tab-panel>
     </q-tab-panels>
     <!--manage layers section-->
