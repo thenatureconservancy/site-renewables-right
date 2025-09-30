@@ -15,7 +15,7 @@ function getStart(){
 
 function createPages(start) {
   for (let i = start; i <= start + 4; i++) {
-    this.resultsPages.push(i)
+    resultsPages.value.push(i)
   }
 }
 
