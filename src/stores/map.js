@@ -44,18 +44,18 @@ export const useMapStore = defineStore('mapStore', () => ({
  
   splash: true,
 
- layers: [
+  layers: [
   {header: 'Conservation Lands' , id: 'avoid', expanded: true,
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
     sublayers: [
     {index: 0, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBM459/0+JQRlWnIwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAADq8gT9+4JlcgAAAABJRU5ErkJggg=="},
-    {index: 6, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'High Quality Watersheds', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: ''},
+    {index: 6, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
     {index: 1, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBvVNv/6fEoOJsVUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAJMAVV3tayLwAAAABJRU5ErkJggg=="},
     {index: 2, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBzx9l/KfEIEm5GYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAD2dAUhr2Ob1QAAAABJRU5ErkJggg=="},
     {index: 3, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBHUsL/1NiUEV0PyOKgdQCLKMGUgxYKDcCFYwaSDlgoYIZKGDUQMoBPAxh5RnVDKQWAAApcwW0EGndgwAAAABJRU5ErkJggg=="},
     {index: 4, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
-    {index: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
+    {index: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
    
      ]
     },
@@ -64,10 +64,10 @@ export const useMapStore = defineStore('mapStore', () => ({
       {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBE25M+0+JQQUaWYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAAIkAVU/br7OgAAAABJRU5ErkJggg=="},
     ]
     },
-    {title: 'Degraded and Disturbed Lands', id: 'degraded', visible: false, visibleModel: false, 
+    {title: 'Degraded and Disturbed Lands', id: 'degraded', visible: true, visibleModel: true, 
       sublayers: [
-        {index: 0, elid: 'abandonedmines', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Abandoned Mine Lands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-        {index: 1, elid: 'brownfields', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Brownfields over 10 acres ', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
+        {index: 0, elid: 'abandonedmines', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Abandoned Mine Lands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFESURBVDhP5ZI9S8NQFIbffmCrBCSNiIuli4E4iUMIOEgSnP0D+WP9F9kcs0lTsuqsGSSDkCWgqdaP93KLaXobFDsIPsu999zLw7nnnNb7J9ggbblujH8obGwKr5IkQZqmKMsShmHAsiwMh0P5YpW1wizLEIYh8jyXkS8cx4HruvK0jFLI0Hg8FrL9ziGOuqfot3aQze9x83It3vi+D9u2xb6Ksob85kJ20Q8w6h7joDPCydY5znqX4k0cx2KtoxSyZoSZ1aF8t72HoihkZBmlkA0g/KaKXmtb7lZRCtlNwprVKfGEx/mDPK2iFHI0CBtw93or9oSy+PkKb5jDNE0ZXWbt2ERRhMlkIvasGb/JzCjTNA1BEEDXdXFfpXGwp9Op6Ga1AczM8zyljDQKF3DIZ7MZBoOByK6Jbwl/grIpv+GvC4EP052FsE/F/fEAAAAASUVORK5CYII="},
+        {index: 1, elid: 'brownfields', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Brownfields over 10 acres ', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFASURBVDhP5ZO9SsNQGIZfNbWCuNVFIuZnEXSIi0M2Bzch5hrc7W5uIrcQSL0D76AOQoaAo4MEMlR0qjQQrGje4wmScNoiduuzJPly8vCd7z1Z+6rAElmX16WxgsKFoeR5jiRJUBQFDMOA67ryjZq5wjAMEcexuNc6XUw/SpimhSC4geM4ot5mprCWWacX2Dt0saF18f6a4Tm5Qzke4XYwgK7rcvUvyhlym7Vs//hMyMjO7gGOzq+qrzYRRZGotVEKOTPCztpQ3jMdDIf3stJEKWQAnFndWRttaxuTYiKfmiiFTJMBcGYqxi8ZbNuWT02UQh4NwzBFAJ/TUlZ/GD094C17xKXnyUqTmSmnaYrrfr9a0UHPOhHbZGeU+b5fHZ1Armwy9xwybabJADgzbpOdeTO6Iwv/lL+inOF/WDkh8A3IyX8fH/JMOAAAAABJRU5ErkJggg=="},
       ]   
     },
   ]},
@@ -86,7 +86,7 @@ export const useMapStore = defineStore('mapStore', () => ({
 	   ]
   },
   ]}
- ],
+  ],
 
   
   //map loads sublayers in reverse order from the list in the ui which causes confusion about 
@@ -121,6 +121,9 @@ export const useMapStore = defineStore('mapStore', () => ({
       mapLayer2.sublayers=  this.agLayersReverse()
     }
   },
+  setGroupVisibility(group){
+
+  },
   //sets overall group layer visibility
   setLayerVisibility(layer) {
     console.log(layer)
@@ -143,72 +146,43 @@ export const useMapStore = defineStore('mapStore', () => ({
     console.log(layer)
     layer.visible = checked
   },
-
-  //function to reset layers or filter layers
-  updateLayerList(category) {
-    this.category = category
-    if(this.category == 'both'){
-      //this.layers[0].subheaders[0].sublayers = this.sourceLayers[0].subheaders[0].sublayers
-      //this.layers[0].subheaders[1].sublayers = this.sourceLayers[0].subheaders[1].sublayers
-      //this.layers[1].subheaders[0].sublayers = this.sourceLayers[1].subheaders[0].sublayers
-      this.layers[0].subheaders[0].sublayers.forEach((layer)=>{
-        layer.filter = true
-      })
-      this.layers[0].subheaders[1].sublayers.forEach((layer)=>{ 
-        layer.filter = true
-      })
-      this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
-        layer.filter = true
-      })      
-      this.layers[0].subheaders[0].sublayers.forEach((layer)=>{
-        let map = document.querySelector("arcgis-map").map;
-        let mapLayer = map.findLayerById('avoid');
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.visible = true
-        sub.visible = true
-      })
-      this.layers[0].subheaders[1].sublayers.forEach((layer)=>{
-        let map = document.querySelector("arcgis-map").map;
-        let mapLayer = map.findLayerById('minimize');
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.visible = true
-        sub.visible = true
-      })
-      this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
-        let map = document.querySelector("arcgis-map").map;
-        let mapLayer = map.findLayerById('opportunities');
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.visible = true
-        if (layer.id !== 0 ){
-          sub.visible = true
-        }
-     
-      })
-    
-    }else{
-     
-      this.filterLayers()
-    }
-  },
-  //filters layers
-  filterLayers(){
+ 
+  filterLayers(cat){
+    this.category = cat
     let map = document.querySelector("arcgis-map").map;
-    let avoid = this.layers[0].subheaders[0].sublayers
-    const f_avoid = avoid.filter((layer, index) => {
+  
+    this.layers.forEach(layer => {
+      layer.subheaders.forEach(subheader => {
+        subheader.sublayers.forEach(layer => {
+          if(layer.category !== this.category && layer.category !== 'both'){
+            //turn off those layers so they are not visibl ein the map
+            let mapLayer = map.findLayerById(layer.elid);
+            layer.filter = false
+            mapLayer.visible = false
+          }
+          if (layer.category == this.category || layer.category == 'both'){
+            //turn on those layers
+            let mapLayer = map.findLayerById(layer.elid);
+            layer.filter = true
+            if(layer.visibleModel){mapLayer.visible = true}
+          }
+        })
+      });
+    });
+  
+/*
+    const h = highly.filter((layer, index) => {
       if(layer.category !== this.category && layer.category !== 'both'){
         //turn off those layers so they are not visibl ein the map
-        let mapLayer = map.findLayerById('avoid');
-        let sub = mapLayer.findSublayerById(layer.id);
+        let mapLayer = map.findLayerById(layer.elid);
         layer.filter = false
-        sub.visible = false
+        mapLayer.visible = false
       }
       if (layer.category == this.category || layer.category == 'both'){
         //turn on those layers
-        let mapLayer = map.findLayerById('avoid');
-        let sub = mapLayer.findSublayerById(layer.id);
-   
+        let mapLayer = map.findLayerById(layer.elid);
         layer.filter = true
-        sub.visible = true
+        mapLayer.visible = true
       }
     })
    
@@ -263,34 +237,13 @@ export const useMapStore = defineStore('mapStore', () => ({
     if(this.category !==  'solar'){
       let sub2 = map.findLayerById('brownfields')
       sub2.visible = false
-    }
+    }*/
     
       
   },
-  //gets legend img from the service when app starts after map loads
-  getLegendData(){
-    let url = 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer/legend?f=pjson';
-    let _this = this;
-    fetch(url).then(function(response) {
-      return response.json();
-    }).then(function(data) {
-      _this.legend = data.layers
-      console.log(data.layers)
-    })
-  },
-  findLegendImage(id){
-    console.log(id)
-    if (!this.legend) return '';
-     console.log(this.legend)
-    let obj = this.legend.find(u => u.layerId === id);
-    console.log(obj)
-    if (!obj) return '';
-    return obj.legend[obj.legend.length-1].imageData
-  },
-
+  
   //function to create the buffer
   createBuffer(e){
-
     const polySymbol = {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [255, 255, 255, 0.3],

@@ -82,13 +82,13 @@ onMounted(() => {
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
     id: 'abandonedmines',
-    visible: false,
+    visible: true,
     opacity: .8
   })
    let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
-    visible: false,
+    visible: true,
     opacity: .8
   })
   // agriculture
@@ -136,8 +136,8 @@ onMounted(() => {
 
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [ wetlands, protectedL, resilient, qualitywater, 
-    prairie, whoopsolar, whoopwind, landscape, abandonedmines, brownfields, 
+    layers: [ abandonedmines, brownfields, wetlands, protectedL, resilient, qualitywater, 
+    prairie, whoopsolar, whoopwind, landscape,  
     highestag,abandonedag, bufferLayer, pointLayer],
     
   })
@@ -179,24 +179,25 @@ arcgisMap.when(() => {
 
   //add legend symbols to toc layers list
   //mapStore.getLegendData()
-    let url = 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer/legend?f=pjson';
+  /*  let url = 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8/legend?f=pjson';
     let _this = this;
     fetch(url).then(function(response) {
       return response.json();
     }).then(function(data) {
-      //_this.legend = data.layers
       console.log(data.layers)
-    })
+    })*/
 })
 </script>
 
 <template>
+
   <arcgis-map  id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
     <arcgis-search
       position="top-left"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
+
  
     <q-btn
       square
