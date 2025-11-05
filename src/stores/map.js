@@ -49,19 +49,19 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
     sublayers: [
-    {index: 0, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
+    {index: 0, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBM459/0+JQRlWnIwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAADq8gT9+4JlcgAAAABJRU5ErkJggg=="},
     {index: 6, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'High Quality Watersheds', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: ''},
-    {index: 1, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-    {index: 2, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-    {index: 3, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-    {index: 4, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-    {index: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
+    {index: 1, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBvVNv/6fEoOJsVUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAJMAVV3tayLwAAAABJRU5ErkJggg=="},
+    {index: 2, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBzx9l/KfEIEm5GYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAD2dAUhr2Ob1QAAAABJRU5ErkJggg=="},
+    {index: 3, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBHUsL/1NiUEV0PyOKgdQCLKMGUgxYKDcCFYwaSDlgoYIZKGDUQMoBPAxh5RnVDKQWAAApcwW0EGndgwAAAABJRU5ErkJggg=="},
+    {index: 4, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
+    {index: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
    
      ]
     },
     {title: 'Moderate', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
-      {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
+      {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBE25M+0+JQQUaWYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAAIkAVU/br7OgAAAABJRU5ErkJggg=="},
     ]
     },
     {title: 'Degraded and Disturbed Lands', id: 'degraded', visible: false, visibleModel: false, 
@@ -75,8 +75,8 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: ' Agricultural Lands - solar only', id: 'ag', visible: false, visibleModel: false, 
       sublayers: [
-	  {index: 0, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'solar', title: 'Abandoned Cropland', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''},
-	  {index: 1, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'solar', title: 'Highest Quality Farmland', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: ''}]}
+	  {index: 0, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'solar', title: 'Abandoned Cropland', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
+	  {index: 1, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'solar', title: 'Highest Quality Farmland', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBLp0F/ykxaE/5BEYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAABLDgYV9UASiQAAAABJRU5ErkJggg=="}]}
    ]
   },
   {header: 'Community Lands' , id: 'community', expanded: false, 
@@ -275,11 +275,13 @@ export const useMapStore = defineStore('mapStore', () => ({
       return response.json();
     }).then(function(data) {
       _this.legend = data.layers
+      console.log(data.layers)
     })
   },
   findLegendImage(id){
     console.log(id)
     if (!this.legend) return '';
+     console.log(this.legend)
     let obj = this.legend.find(u => u.layerId === id);
     console.log(obj)
     if (!obj) return '';

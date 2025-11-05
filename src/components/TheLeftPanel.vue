@@ -280,7 +280,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
+                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -703,7 +703,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
+                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -771,7 +771,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
+                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -830,7 +830,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' +mapStore.findLegendImage(sublayer.id)" />
+                              <img :src="'data:image/gif;base64,' +sublayer.legendImg" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">

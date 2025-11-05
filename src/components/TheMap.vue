@@ -154,8 +154,39 @@ onMounted(() => {
       mapStore.createBuffer(e)
     }
   })
+
+  
+arcgisMap.when(() => {
+  // Map is fully loaded
+  mapStore.getLegendData();
+
+  // Add other listeners after map is ready
+  arcgisMap.addEventListener('arcgisViewChange', (e) => {
+    if (arcgisMap.extent) {
+      mapStore.currentMapExtent = markRaw(arcgisMap.extent);
+    }
+    showResetZoomButton.value = arcgisMap.zoom > 3;
+  });
+
+  arcgisMap.addEventListener('arcgisViewClick', (e) => {
+    if (mapStore.tab === 'sketch') {
+      bufferLayer.visible = true;
+      pointLayer.visible = true;
+      mapStore.createBuffer(e);
+    }
+  });
+});
+
   //add legend symbols to toc layers list
-  mapStore.getLegendData()
+  //mapStore.getLegendData()
+    let url = 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer/legend?f=pjson';
+    let _this = this;
+    fetch(url).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      //_this.legend = data.layers
+      console.log(data.layers)
+    })
 })
 </script>
 
