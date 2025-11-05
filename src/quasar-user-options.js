@@ -9,7 +9,7 @@ export default {
     dark: false,
     animations: 'all',
     brand: {
-      primary: '#49aa43',
+      primary: '#2e7d32',
       secondary: '#CFCFCF', //'#01c1e3',
       accent: '#ff004d',
       dark: '#1a1a1a',

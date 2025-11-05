@@ -65,6 +65,12 @@ function openPanel() {
   mapStore.activeTool = 'Site Report'
   mapStore.panelState = 'open'
 }
+function toggleGroups(group){
+  mapStore.layers.forEach((group) => {
+    group.headerGroupVisible = false
+  })
+  group.headerGroupVisible = true
+}
 
 computed(() => {
   return {
@@ -171,6 +177,27 @@ computed(() => {
                 >
                 &nbsp;Solar
               </q-btn>
+                  <q-btn
+                square
+                size="sm"
+                stack
+                unelevated=""
+                @click="mapStore.updateLayerList('solar')"
+                :class="
+                  mapStore.category == 'solar' ? 'bg-blue-grey-9 text-white q-ml-sm' : 'q-ml-sm'
+                "
+              >
+                <span
+                  :class="
+                    mapStore.category == 'solar'
+                      ? 'material-symbols-outlined text-white'
+                      : 'material-symbols-outlined text-blue-grey-9'
+                  "
+                  style="font-size: 28px"
+                  >water_lux</span
+                >
+                &nbsp;Floating Solar
+              </q-btn>
               <q-space></q-space>
               <q-separator inset spaced class="" vertical=""></q-separator>
               <q-btn square padding="xs" flat size="sm" stack color="blue-grey-9" class="q-ml-md">
@@ -194,33 +221,39 @@ computed(() => {
             </div>
 
             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
-              <div>
+              <q-expansion-item 
+              :label="item.header"
+              v-model="item.expanded"
+              :header-class="item.expanded ? 'expandedHeaderClass text-h6 text-weight-light': 'headerClass text-h6 text-weight-light'"
+              expanded-icon="visibility"
+              :expand-icon-class="item.expanded? 'text-primary' : 'text-grey-9'"
+              expand-icon="visibility_off"
+              :group="item.header == 'Conservation Lands' ?  '' : 'myaccordion'">
+              <div class="q-mx-sm q-mb-md" >
                 <q-expansion-item
                   label=""
                   caption=""
                   v-for="(layer, index) in item.subheaders"
                   :key="index"
-                  header-class="bg-grey-2"
+                  header-class=""
                   expand="true"
-                  style="border-bottom: 1px solid gainsboro"
+                  dense
                 >
                   <template v-slot:header>
                     <div class="self-center">
                       <q-checkbox
-                        size="sm"
+                        size="xs"
                         v-model="layer.visible"
                         @update:model-value="mapStore.setLayerVisibility(layer)"
                       >
                       </q-checkbox>
                     </div>
-                    <q-item-section>
-                      <q-item-label class="text-body1">{{ layer.title }} </q-item-label>
+                    <q-item-section >
+                      <q-item-label class="text-subtitle1">{{ layer.title }} </q-item-label>
                     </q-item-section>
                   </template>
-                  <q-list dense class="q-ma-md q-pb-md bg-white">
-                    <p v-if="layer.title == 'Highly Sensitive'" class="text-caption text-italic">
-                      *Drag handle to re-order layers
-                    </p>
+                  <q-list dense class="q-mx-md q-pb-md">
+                  
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
@@ -239,8 +272,6 @@ computed(() => {
                               @click.stop="
                                 mapStore.setSublayerVisibility(
                                   sublayer.elid,
-                                  layer.id,
-                                  sublayer.id,
                                   sublayer.visibleModel,
                                 )
                               "
@@ -249,7 +280,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -268,6 +299,7 @@ computed(() => {
                   </q-list>
                 </q-expansion-item>
               </div>
+              </q-expansion-item>
             </div>
             <div class="text-center">
               <q-btn
@@ -663,8 +695,6 @@ computed(() => {
                               @click.stop="
                                 mapStore.setSublayerVisibility(
                                   sublayer.elid,
-                                  layer.id,
-                                  sublayer.id,
                                   sublayer.visibleModel,
                                 )
                               "
@@ -673,7 +703,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -730,8 +760,6 @@ computed(() => {
                               @click.stop="
                                 mapStore.setSublayerVisibility(
                                   sublayer.elid,
-                                  layer.id,
-                                  sublayer.id,
                                   sublayer.visibleModel,
                                 )
                               "
@@ -743,7 +771,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                              <img :src="'data:image/gif;base64,' + mapStore.findLegendImage(sublayer.id)" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -792,8 +820,6 @@ computed(() => {
                               @click.stop="
                                 mapStore.setSublayerVisibility(
                                   sublayer.elid,
-                                  layer.id,
-                                  sublayer.id,
                                   sublayer.visibleModel,
                                 )
                               "
@@ -804,7 +830,7 @@ computed(() => {
                           </q-item-section>
                           <q-item-section side>
                             <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
+                              <img :src="'data:image/gif;base64,' +mapStore.findLegendImage(sublayer.id)" />
                             </div>
                           </q-item-section>
                           <q-item-section side class="">
@@ -832,6 +858,25 @@ computed(() => {
   </div>
 </template>
 <style>
+.headerClass{
+background: #ffffff;
+border: 1px solid #e0e0e0;
+border-radius: 4px;
+box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+margin-bottom: 4px;
+padding: 14px 16px;
+color: #1a1a1a;
+}
+
+.expandedHeaderClass{
+border-left: 3px solid rgb(46, 125, 50);  /* Deep green accent */
+border-right: 3px solid rgb(46, 125, 50);  /* Deep green accent */
+border-radius: 8px;
+box-shadow: 0 1px 3px rgba(46, 125, 50,0.06);
+margin-bottom: 4px;
+padding: 12px 16px;
+color: #1a1a1a;
+}
 .button {
   margin-top: 35px;
 }

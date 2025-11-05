@@ -1,5 +1,5 @@
 <script setup>
-import { markRaw, ref, onMounted, computed, watch, reactive } from 'vue'
+import { markRaw, ref, onMounted } from 'vue'
 import MapImageLayer from '@arcgis/core/layers/MapImageLayer'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
@@ -21,46 +21,93 @@ function zoomHome() {
 }
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
-
-  /**WATCH */
-
-  let avoid = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
-    sublayers: mapStore.avoidLayersReverse(),
-    title: 'Avoid Development',
-    id: 'avoid',
+  // highly sensitive
+  let wetlands = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'wetlands',
+    sublayers: [{id: 3}],
+    visible: true,
+    opacity: .8
   })
-  let minimize = new MapImageLayer({
-    // URL to the service
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
-    sublayers: mapStore.layers[0].subheaders[1].sublayers,
-    title: 'Minimize Development',
-    id: 'minimize',
+  let protectedL = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'protected',
+    sublayers: [{id: 6}],
+    visible: true,
+    opacity: .8
   })
-  let develop = new MapImageLayer({
-    // URL to the service
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
-    sublayers: mapStore.opportunitiesLayersReverse(),
-    title: 'Opportunities for Development',
-    id: 'opportunities',
+  let resilient = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'resilient',
+    sublayers: [{id: 7}],
+    visible: true,
+    opacity: .8
   })
-  let brownfields = new FeatureLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer/0',
-    renderer: {
-      type: 'simple',
-      symbol: {
-        type: 'simple-marker',
-        size: 4,
-        color: '#FDFD96',
-        outline: {
-          color: 'white',
-          width: 0.5,
-        },
-      },
-    },
+  let prairie = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'prairie',
+    sublayers: [{id: 5}],
+    visible: true,
+    opacity: .8
+  })
+  let whoopwind = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'whoopwind',
+    sublayers: [{id: 8}],
+    visible: true,
+    opacity: .8
+  })
+   let whoopsolar = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'whoopsolar',
+    sublayers: [{id: 9}],
+    visible: true,
+    opacity: .8
+  })
+  let qualitywater = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
+    id: 'qualitywater',
+    visible: true,
+    opacity: .8
+  })
+  // moderate sensitive
+  let landscape = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'landscape',
+    sublayers: [{id: 4}],
+    visible: true,
+    opacity: .8
+  })
+  // degraded and disturbed lands
+  let abandonedmines = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
+    id: 'abandonedmines',
     visible: false,
-    id: 'brownfields',
+    opacity: .8
   })
+   let brownfields = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
+    id: 'brownfields',
+    visible: false,
+    opacity: .8
+  })
+  // agriculture
+  let abandonedag = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'abandonedag',
+    sublayers: [{id: 1}],
+    visible: false,
+    opacity: .8
+  })
+
+  let highestag = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'highestag',
+    sublayers: [{id: 2}],
+    visible: false,
+    opacity: .8
+  })
+  
 
   //these layers will be used for the reporting.  The viewable map layers are raster. These
   //are polygons
@@ -89,7 +136,10 @@ onMounted(() => {
 
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [brownfields, develop, minimize, avoid, bufferLayer, pointLayer, intersectingFeatures],
+    layers: [ wetlands, protectedL, resilient, qualitywater, 
+    prairie, whoopsolar, whoopwind, landscape, abandonedmines, brownfields, 
+    highestag,abandonedag, bufferLayer, pointLayer],
+    
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
@@ -110,13 +160,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
+  <arcgis-map  id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
     <arcgis-search
       position="top-left"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
-
+ 
     <q-btn
       square
       padding="xs"
