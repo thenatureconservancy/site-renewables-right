@@ -5,29 +5,30 @@ import TheHelp from '@/components/TheHelp.vue'
 import TheLegend from '@/components/TheLegend.vue'
 import TheReport from '@/components/TheReport.vue'
 import { useMapStore } from '../stores/map'
+import { useHelpStore } from '@/stores/help'
 //import LocalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/LocalBasemapsSource.js'
 import PortalBasemapsSource from "@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource.js";
 import Basemap from '@arcgis/core/Basemap.js'
 import { ref, onMounted } from 'vue'
 import { useAgolStore } from '@/stores/arcGisOnline'
 const mapStore = useMapStore()
-const showDialog = ref(true)
+const helpStore = useHelpStore()
+
 const agolStore = useAgolStore()
 function openPanel(active) {
   mapStore.panelState = 'open'
   mapStore.activeTool = active
 }
 function dialogControl() {
-  showDialog.value = false
+  helpStore.showDialog = false
   localStorage.setItem('showSRRSplash', 'no')
 }
 onMounted(() => {
-  console
   //set initial active tool to legend
   if (localStorage.getItem('showSRRSplash') == 'no') {
-    showDialog.value = false
+    helpStore.showDialog = false
   } else {
-    showDialog.value = true
+    helpStore.showDialog = true
   } 
   if(localStorage.getItem('SRRUserWantsAuth') == 'yes'){
     agolStore.showDialog = true
@@ -72,7 +73,7 @@ const portal = new PortalBasemapsSource({
 </script>
 
 <template>
-  <q-dialog v-model="showDialog" backdrop-filter="blur(4px)" full-width="">
+  <q-dialog v-model="helpStore.showDialog" backdrop-filter="blur(4px)" full-width="">
     <q-card class="q-pa-none q-ma-none">
       <div class="row q-pa-none q-ma-none">
         <q-card-section class="col-5 q-pa-none q-ma-none">

@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useMapStore } from '@/stores/map'
+import { useHelpStore } from './stores/help'
 
 //import esri component libs globally so they are available in multiple components
 import '@arcgis/map-components/components/arcgis-map'
@@ -14,7 +15,7 @@ import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-legend'
 
 const mapStore = useMapStore()
-const showDialog = ref(true)
+const helpStore = useHelpStore()
 
 const $q = useQuasar()
 const mobile = computed(() => {
@@ -36,6 +37,7 @@ const mobile = computed(() => {
           Site Renewables Right</span
         >
         <q-space></q-space>
+        <q-btn  outline color="blue-grey-9" label="About" no-caps @click="helpStore.showDialog = true"></q-btn>
       </q-toolbar>
     </q-header>
 
