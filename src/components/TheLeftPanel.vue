@@ -249,7 +249,7 @@ computed(() => {
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer.id)"
+                      @end="mapStore.updateLayerOrder(layer)"
                       item-key="index"
                     >
                       <template #item="{ element: sublayer }">
@@ -666,7 +666,7 @@ computed(() => {
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer.id)"
+                      @end="mapStore.updateLayerOrder(layer)"
                       item-key="index"
                     >
                       <template #item="{ element: sublayer }">
@@ -729,7 +729,7 @@ computed(() => {
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer.id)"
+                      @end="mapStore.updateLayerOrder(layer)"
                       item-key="index"
                     >
                       <template #item="{ element: sublayer }">
@@ -789,7 +789,7 @@ computed(() => {
                     <draggable
                       v-model="layer.sublayers"
                       ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer.id)"
+                      @end="mapStore.updateLayerOrder(layer)"
                       item-key="index"
                       
                     >

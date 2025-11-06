@@ -27,43 +27,42 @@ onMounted(() => {
     id: 'wetlands',
     sublayers: [{id: 3}],
     visible: true,
-    opacity: .8
+    opacity: 1
   })
   let protectedL = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'protected',
     sublayers: [{id: 6}],
     visible: true,
-    opacity: .8
+    opacity: 1
   })
   let resilient = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'resilient',
     sublayers: [{id: 7}],
     visible: true,
-    opacity: .8
+    opacity: 1
   })
   let prairie = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'prairie',
     sublayers: [{id: 5}],
     visible: true,
-    opacity: .8
+    opacity: 1
   })
   let whoopwind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopwind',
     sublayers: [{id: 8}],
     visible: true,
-    opacity: .8
+    opacity: 1
   })
    let whoopsolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopsolar',
     sublayers: [{id: 9}],
     visible: true,
-    opacity: .8
-  })
+    opacity: 1 })
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
@@ -136,10 +135,9 @@ onMounted(() => {
 
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [ abandonedmines, brownfields, wetlands, protectedL, resilient, qualitywater, 
-    prairie, whoopsolar, whoopwind, landscape,  
-    highestag,abandonedag, bufferLayer, pointLayer],
-    
+    layers: [ highestag,abandonedag,brownfields,abandonedmines,landscape,whoopsolar, whoopwind,
+    prairie, resilient, protectedL, qualitywater, wetlands,
+    bufferLayer, pointLayer],
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {

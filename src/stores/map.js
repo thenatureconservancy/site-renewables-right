@@ -49,15 +49,14 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
     sublayers: [
-    {index: 0, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBM459/0+JQRlWnIwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAADq8gT9+4JlcgAAAABJRU5ErkJggg=="},
-    {index: 6, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
-    {index: 1, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBvVNv/6fEoOJsVUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAJMAVV3tayLwAAAABJRU5ErkJggg=="},
-    {index: 2, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBzx9l/KfEIEm5GYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAD2dAUhr2Ob1QAAAABJRU5ErkJggg=="},
-    {index: 3, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBHUsL/1NiUEV0PyOKgdQCLKMGUgxYKDcCFYwaSDlgoYIZKGDUQMoBPAxh5RnVDKQWAAApcwW0EGndgwAAAABJRU5ErkJggg=="},
-    {index: 4, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
-    {index: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
-   
-     ]
+    {index: 0, mapIndex: 11, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBM459/0+JQRlWnIwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAADq8gT9+4JlcgAAAABJRU5ErkJggg=="},
+    {index: 1, mapIndex: 10, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
+    {index: 2, mapIndex: 9, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBvVNv/6fEoOJsVUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAJMAVV3tayLwAAAABJRU5ErkJggg=="},
+    {index: 3, mapIndex: 8, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBzx9l/KfEIEm5GYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAD2dAUhr2Ob1QAAAABJRU5ErkJggg=="},
+    {index: 4, mapIndex: 7, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBHUsL/1NiUEV0PyOKgdQCLKMGUgxYKDcCFYwaSDlgoYIZKGDUQMoBPAxh5RnVDKQWAAApcwW0EGndgwAAAABJRU5ErkJggg=="},
+    {index: 5, mapIndex: 6, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane (wind)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
+    {index: 6, mapIndex: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
+    ]
     },
     {title: 'Moderate', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
@@ -108,18 +107,39 @@ export const useMapStore = defineStore('mapStore', () => ({
   //this function updates the layer order in the map when the user drags to reorder layers
   //on the UI
   updateLayerOrder(layer){
-  
     let map = document.querySelector("arcgis-map").map;
-    if(layer == 'avoid'){
-      let mapLayer = map.findLayerById(layer);
-      mapLayer.sublayers = this.consLayersReverse()
-    }
-    if(layer == 'opportunities' || layer =='swipeLayers'){
-      let mapLayer = map.findLayerById('opportunities');
-      mapLayer.sublayers = this.agLayersReverse()
-      let mapLayer2 = map.findLayerById('swipeLayers');
-      mapLayer2.sublayers=  this.agLayersReverse()
-    }
+    //update index in layers list
+    layer.sublayers.forEach((sublayer,index) => { 
+      //get dif
+      
+      let dif = sublayer.index - index
+     
+      //update new index
+      sublayer.index = index
+      let currMapIndex = sublayer.mapIndex
+      let newMapIndex = ''
+      if (dif > 0 ){
+        newMapIndex = currMapIndex + dif
+      }
+      if (dif > 0 ){
+        newMapIndex = currMapIndex - dif
+      }
+      
+      sublayer.mapIndex = newMapIndex
+     // console.log('currMapIndex:' + currMapIndex)
+     // console.log('newMapIndex:' + newMapIndex)
+     let mapLayer = map.findLayerById(sublayer.elid);
+     map.reorder(mapLayer,newMapIndex);
+    
+     // 
+
+    })
+      let resetlayers = ['highestag','abandonedag','brownfields','abandonedmines','landscape']
+      resetlayers.forEach((layer, index) => {
+        let mapLayer = map.findLayerById(layer);
+        map.reorder(mapLayer,index);
+      })
+   
   },
   setGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;
