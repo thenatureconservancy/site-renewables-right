@@ -150,10 +150,20 @@ export const useMapStore = defineStore('mapStore', () => ({
   filterLayers(cat){
     this.category = cat
     let map = document.querySelector("arcgis-map").map;
-  
+    if(this.category == 'both'){
+        this.layers.forEach(layer => {
+        layer.subheaders.forEach(subheader => {
+        subheader.sublayers.forEach(layer => {
+          layer.filter = true
+        })
+      })
+    })
+   }
+   else{
     this.layers.forEach(layer => {
       layer.subheaders.forEach(subheader => {
         subheader.sublayers.forEach(layer => {
+        
           if(layer.category !== this.category && layer.category !== 'both'){
             //turn off those layers so they are not visibl ein the map
             let mapLayer = map.findLayerById(layer.elid);
@@ -169,6 +179,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         })
       });
     });
+  }
   
 /*
     const h = highly.filter((layer, index) => {
