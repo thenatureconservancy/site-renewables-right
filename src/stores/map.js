@@ -122,17 +122,21 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
   },
   setGroupVisibility(group){
-
+    let map = document.querySelector("arcgis-map").map;
+    group.subheaders.forEach(subheader => {
+      let visible = !group.expanded
+      subheader.visible = visible
+      subheader.sublayers.forEach(layer => {
+        let sublayer = map.findLayerById(layer.elid);
+        sublayer.visible = visible
+        layer.visibleModel = visible
+      })
+    })
   },
   //sets overall group layer visibility
   setLayerVisibility(layer) {
-    console.log(layer)
     let map = document.querySelector("arcgis-map").map;
-    //let mapLayer = map.findLayerById(layer.id);
-    //console.log(mapLayer)
     let sublayers = layer.sublayers
-    //console.log(mapLayer)
-
     for(var i=0;i<sublayers.length;i++){
       let sublayer = map.findLayerById(sublayers[i].elid);
       sublayer.visible = layer.visible

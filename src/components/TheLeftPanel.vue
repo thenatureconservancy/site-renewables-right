@@ -61,16 +61,7 @@ function countResults(list, query){
   }
 
 }
-function openPanel() {
-  mapStore.activeTool = 'Site Report'
-  mapStore.panelState = 'open'
-}
-function toggleGroups(group){
-  mapStore.layers.forEach((group) => {
-    group.headerGroupVisible = false
-  })
-  group.headerGroupVisible = true
-}
+
 
 computed(() => {
   return {
@@ -222,6 +213,7 @@ computed(() => {
 
             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
               <q-expansion-item 
+              @update:model-value="mapStore.setGroupVisibility(item)"
               :label="item.header"
               v-model="item.expanded"
               :header-class="item.expanded ? 'expandedHeaderClass text-h6 text-weight-light': 'headerClass text-h6 text-weight-light'"
