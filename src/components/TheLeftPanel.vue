@@ -40,28 +40,26 @@ function scrollToElement(elid) {
     inline: 'nearest', // Optional: 'start', 'center', 'end', or 'nearest'
   })
 }
-function countResults(list, query){
-  if(query == 'inBuffer'){
+function countResults(list, query) {
+  if (query == 'inBuffer') {
     let newList = list.filter((sublayer) => {
       return sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)
     })
     return newList.length
   }
-  if(query == 'inExtent'){
+  if (query == 'inExtent') {
     let newList = list.filter((sublayer) => {
       return sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
     })
     return newList.length
   }
-   if(query == 'outExtent'){
+  if (query == 'outExtent') {
     let newList = list.filter((sublayer) => {
       return sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
     })
     return newList.length
   }
-
 }
-
 
 computed(() => {
   return {
@@ -168,7 +166,7 @@ computed(() => {
                 >
                 &nbsp;Solar
               </q-btn>
-                  <q-btn
+              <q-btn
                 square
                 size="sm"
                 stack
@@ -187,13 +185,14 @@ computed(() => {
                   style="font-size: 28px"
                   >water_lux</span
                 >
-                &nbsp;Floating <br/>Solar
+                &nbsp;Floating <br />Solar
               </q-btn>
               <q-space></q-space>
               <q-separator inset spaced class="" vertical=""></q-separator>
               <q-btn square padding="xs" flat size="sm" stack color="blue-grey-9" class="q-ml-md">
                 <q-tooltip>Download data</q-tooltip>
-                <calcite-icon class="q-mb-xs" icon="download" scale="m"></calcite-icon>Download <br/>Data
+                <calcite-icon class="q-mb-xs" icon="download" scale="m"></calcite-icon>Download
+                <br />Data
               </q-btn>
               <!--q-btn
                 square
@@ -212,85 +211,89 @@ computed(() => {
             </div>
 
             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
-              <q-expansion-item 
-              @update:model-value="mapStore.setGroupVisibility(item)"
-              :label="item.header"
-              v-model="item.expanded"
-              :header-class="item.expanded ? 'expandedHeaderClass text-h6 text-weight-light': 'headerClass text-h6 text-weight-light'"
-              expanded-icon="visibility"
-              :expand-icon-class="item.expanded? 'text-primary' : 'text-grey-9'"
-              expand-icon="visibility_off"
-              :group="item.header == 'Conservation Lands' ?  '' : 'myaccordion'">
-              <div class="q-mx-sm q-mb-md" >
-                <q-expansion-item
-                  label=""
-                  caption=""
-                  v-for="(layer, index) in item.subheaders"
-                  :key="index"
-                  header-class=""
-                  expand="true"
-                  dense
-                >
-                  <template v-slot:header>
-                    <div class="self-center">
-                      <q-checkbox
-                        size="xs"
-                        v-model="layer.visible"
-                        @update:model-value="mapStore.setLayerVisibility(layer)"
+              <q-expansion-item
+                @update:model-value="mapStore.setGroupVisibility(item)"
+                :label="item.header"
+                v-model="item.expanded"
+                :header-class="
+                  item.expanded
+                    ? 'expandedHeaderClass text-h6 text-weight-light'
+                    : 'headerClass text-h6 text-weight-light'
+                "
+                expanded-icon="visibility"
+                :expand-icon-class="item.expanded ? 'text-primary' : 'text-grey-9'"
+                expand-icon="visibility_off"
+                :group="item.header == 'Conservation Lands' ? '' : 'myaccordion'"
+              >
+                <div class="q-mx-sm q-mb-md">
+                  <q-expansion-item
+                    label=""
+                    caption=""
+                    v-for="(layer, index) in item.subheaders"
+                    :key="index"
+                    header-class=""
+                    expand="true"
+                    dense
+                  >
+                    <template v-slot:header>
+                      <div class="self-center">
+                        <q-checkbox
+                          size="xs"
+                          v-model="layer.visible"
+                          @update:model-value="mapStore.setLayerVisibility(layer)"
+                        >
+                        </q-checkbox>
+                      </div>
+                      <q-item-section>
+                        <q-item-label class="text-subtitle1">{{ layer.title }} </q-item-label>
+                      </q-item-section>
+                    </template>
+                    <q-list dense class="q-mx-md q-pb-md">
+                      <draggable
+                        v-model="layer.sublayers"
+                        ghostClass="ghost"
+                        @end="mapStore.updateLayerOrder(layer)"
+                        item-key="index"
                       >
-                      </q-checkbox>
-                    </div>
-                    <q-item-section >
-                      <q-item-label class="text-subtitle1">{{ layer.title }} </q-item-label>
-                    </q-item-section>
-                  </template>
-                  <q-list dense class="q-mx-md q-pb-md">
-                  
-                    <draggable
-                      v-model="layer.sublayers"
-                      ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer)"
-                      item-key="index"
-                    >
-                      <template #item="{ element: sublayer }">
-                        <q-item dense class="" style="" v-if="sublayer.filter">
-                          <q-item-section side>
-                            <q-icon size="xs" name="drag_indicator"> </q-icon
-                          ></q-item-section>
-                          <q-item-section>
-                            <q-checkbox
-                              size="xs"
-                              v-model="sublayer.visibleModel"
-                              @click.stop="
-                                mapStore.setSublayerVisibility(
-                                  sublayer.elid,
-                                  sublayer.visibleModel,
-                                )
-                              "
-                              >{{ sublayer.title }}</q-checkbox
-                            >
-                          </q-item-section>
-                          <q-item-section side>
-                            <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
-                            </div>
-                          </q-item-section>
-                          <q-item-section side class="">
-                            <q-btn
-                              size="sm"
-                              flat
-                              padding="none"
-                              icon="o_info"
-                              @click="scrollToElement(sublayer.elid)"
-                              ><q-tooltip> more info </q-tooltip></q-btn
-                            >
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </draggable>
-                  </q-list>
-                </q-expansion-item>
-              </div>
+                        <template #item="{ element: sublayer }">
+                          <q-item dense class="" style="" v-if="sublayer.filter">
+                            <q-item-section side>
+                              <q-icon size="xs" name="drag_indicator"> </q-icon
+                            ></q-item-section>
+                            <q-item-section>
+                              <q-checkbox
+                                size="xs"
+                                v-model="sublayer.visibleModel"
+                                @click.stop="
+                                  mapStore.setSublayerVisibility(
+                                    sublayer.elid,
+                                    sublayer.visibleModel,
+                                  )
+                                "
+                                >{{ sublayer.title }}</q-checkbox
+                              >
+                            </q-item-section>
+                            <q-item-section side>
+                              <div style="width: 20px; height: 20px">
+                                <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                              </div>
+                            </q-item-section>
+                            <q-item-section side class="">
+                              <q-btn
+                                size="sm"
+                                flat
+                                padding="none"
+                                icon="o_info"
+                                @click="scrollToElement(sublayer.elid)"
+                                ><q-tooltip> more info </q-tooltip></q-btn
+                              >
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </draggable>
+                    </q-list>
+                  </q-expansion-item>
+                </div>
               </q-expansion-item>
             </div>
             <div class="text-center">
@@ -564,7 +567,7 @@ computed(() => {
             <div class="row q-mb-md">
               <div
                 class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
-                style="border-top: 4px solid #FFD580"
+                style="border-top: 4px solid #ffd580"
               >
                 <div class="bg-grey-1">
                   <p class="col text-body1 text-weight-medium">
@@ -651,198 +654,202 @@ computed(() => {
               </div>
             </div>
             <p class="text-bold q-mb-none">Report Layers</p>
-            
+
             <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers inside buffer</p>
-           
+
             <div class="" v-for="(item, index) in mapStore.layers" :key="index">
-             
-                  <div v-for="(layer, index) in item.subheaders" :key="index">
-                  <q-list
-                    v-if="countResults(layer.sublayers, 'inBuffer') > 0"
-                    dense
-                    class="q-ma-none bg-white"
-                    
+              <div v-for="(layer, index) in item.subheaders" :key="index">
+                <q-list
+                  v-if="countResults(layer.sublayers, 'inBuffer') > 0"
+                  dense
+                  class="q-ma-none bg-white"
+                >
+                  <draggable
+                    v-model="layer.sublayers"
+                    ghostClass="ghost"
+                    @end="mapStore.updateLayerOrder(layer)"
+                    item-key="index"
                   >
-                    <draggable
-                      v-model="layer.sublayers"
-                      ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer)"
-                      item-key="index"
-                    >
-                      <template #item="{ element: sublayer }">
-                        <q-item
-                          dense
-                          class="q-mb-xs q-mx-sm"
-                          style=""
-                          v-if="sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)"
-                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
-                        >
-                          <q-item-section side>
-                            <q-icon size="xs" name="drag_indicator"> </q-icon
-                          ></q-item-section>
-                          <q-item-section>
-                            <q-checkbox
-                              size="xs"
-                              v-model="sublayer.visibleModel"
-                              @click.stop="
-                                mapStore.setSublayerVisibility(
-                                  sublayer.elid,
-                                  sublayer.visibleModel,
-                                )
-                              "
-                              >{{ sublayer.title }}
-                            </q-checkbox>
-                          </q-item-section>
-                          <q-item-section side>
-                            <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
-                            </div>
-                          </q-item-section>
-                          <q-item-section side class="">
-                            <q-btn
-                              size="sm"
-                              flat
-                              padding="none"
-                              icon="o_info"
-                              @click="scrollToElement(sublayer.elid)"
-                              ><q-tooltip> more info </q-tooltip></q-btn
-                            >
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </draggable>
-                  </q-list>
-                  </div>
-               
+                    <template #item="{ element: sublayer }">
+                      <q-item
+                        dense
+                        class="q-mb-xs q-mx-sm"
+                        style=""
+                        v-if="sublayer.filter && (sublayer.totalArea > 0 || sublayer.count > 0)"
+                        :style="
+                          layer.id == 'avoid'
+                            ? 'border-left: 4px solid lightcoral'
+                            : layer.id == 'minimize'
+                              ? 'border-left: 4px solid #FFD580'
+                              : 'border-left: 4px solid green'
+                        "
+                      >
+                        <q-item-section side>
+                          <q-icon size="xs" name="drag_indicator"> </q-icon
+                        ></q-item-section>
+                        <q-item-section>
+                          <q-checkbox
+                            size="xs"
+                            v-model="sublayer.visibleModel"
+                            @click.stop="
+                              mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)
+                            "
+                            >{{ sublayer.title }}
+                          </q-checkbox>
+                        </q-item-section>
+                        <q-item-section side>
+                          <div style="width: 20px; height: 20px">
+                            <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                          </div>
+                        </q-item-section>
+                        <q-item-section side class="">
+                          <q-btn
+                            size="sm"
+                            flat
+                            padding="none"
+                            icon="o_info"
+                            @click="scrollToElement(sublayer.elid)"
+                            ><q-tooltip> more info </q-tooltip></q-btn
+                          >
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </draggable>
+                </q-list>
+              </div>
             </div>
             <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers in map view</p>
             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
-                
-                   <!-- layers intersecting extent-->
-                  <div v-for="(layer, index) in item.subheaders" :key="index">
-                  <q-list
-                   v-if="countResults(layer.sublayers, 'inExtent') > 0"
-                    dense
-                    class="q-ma-none bg-white"
-                   
+              <!-- layers intersecting extent-->
+              <div v-for="(layer, index) in item.subheaders" :key="index">
+                <q-list
+                  v-if="countResults(layer.sublayers, 'inExtent') > 0"
+                  dense
+                  class="q-ma-none bg-white"
+                >
+                  <draggable
+                    v-model="layer.sublayers"
+                    ghostClass="ghost"
+                    @end="mapStore.updateLayerOrder(layer)"
+                    item-key="index"
                   >
-                    <draggable
-                      v-model="layer.sublayers"
-                      ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer)"
-                      item-key="index"
-                    >
-                      <template #item="{ element: sublayer }">
-                        <q-item
-                          dense
-                          class="q-mb-xs q-mx-sm"
-                          style=""
-                          v-if="
-                            sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
-                          "
-                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
-                        >
-                          <q-item-section side>
-                            <q-icon size="xs" name="drag_indicator"> </q-icon
-                          ></q-item-section>
-                          <q-item-section>
-                            <q-checkbox
-                              size="xs"
-                              v-model="sublayer.visibleModel"
-                              @click.stop="
-                                mapStore.setSublayerVisibility(
-                                  sublayer.elid,
-                                  sublayer.visibleModel,
-                                )
-                              "
-                              >{{ sublayer.title }}
-                              <span v-if="sublayer.totalArea > 0">
-                                {{ sublayer.totalArea }}SQ MI
-                              </span></q-checkbox
-                            >
-                          </q-item-section>
-                          <q-item-section side>
-                            <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
-                            </div>
-                          </q-item-section>
-                          <q-item-section side class="">
-                            <q-btn
-                              size="sm"
-                              flat
-                              padding="none"
-                              icon="o_info"
-                              @click="scrollToElement(sublayer.elid)"
-                              ><q-tooltip> more info </q-tooltip></q-btn
-                            >
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </draggable>
-                  </q-list>
-                  </div>
-            </div>   
-            <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers outside map view</p>  
-             <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">           <!-- layers not intersecting-->
-               <div v-for="(layer, index) in item.subheaders" :key="index">
-                  <q-list dense class="q-ma-none bg-white" v-if="countResults(layer.sublayers, 'outExtent') > 0" >
-                    <draggable
-                      v-model="layer.sublayers"
-                      ghostClass="ghost"
-                      @end="mapStore.updateLayerOrder(layer)"
-                      item-key="index"
-                      
-                    >
-                      <template #item="{ element: sublayer }">
-                        <q-item
-                          dense
-                          class="q-mb-xs q-mx-sm"
-                          :style="layer.id == 'avoid' ? 'border-left: 4px solid lightcoral' : layer.id == 'minimize' ? 'border-left: 4px solid #FFD580' : 'border-left: 4px solid green'"
-                          v-if="
-                            sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
-                          "
-                        >
-                          <q-item-section side>
-                            <q-icon size="xs" name="drag_indicator"> </q-icon
-                          ></q-item-section>
-                          <q-item-section>
-                            <q-checkbox
-                              size="xs"
-                              v-model="sublayer.visibleModel"
-                              @click.stop="
-                                mapStore.setSublayerVisibility(
-                                  sublayer.elid,
-                                  sublayer.visibleModel,
-                                )
-                              "
-                              >{{ sublayer.title }}
-                             
-                             </q-checkbox
-                            >
-                          </q-item-section>
-                          <q-item-section side>
-                            <div style="width: 20px; height: 20px">
-                              <img :src="'data:image/gif;base64,' +sublayer.legendImg" />
-                            </div>
-                          </q-item-section>
-                          <q-item-section side class="">
-                            <q-btn
-                              size="sm"
-                              flat
-                              padding="none"
-                              icon="o_info"
-                              @click="scrollToElement(sublayer.elid)"
-                              ><q-tooltip> more info </q-tooltip></q-btn
-                            >
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </draggable>
-                  </q-list>
-                  </div>
-                
+                    <template #item="{ element: sublayer }">
+                      <q-item
+                        dense
+                        class="q-mb-xs q-mx-sm"
+                        style=""
+                        v-if="
+                          sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == true
+                        "
+                        :style="
+                          layer.id == 'avoid'
+                            ? 'border-left: 4px solid lightcoral'
+                            : layer.id == 'minimize'
+                              ? 'border-left: 4px solid #FFD580'
+                              : 'border-left: 4px solid green'
+                        "
+                      >
+                        <q-item-section side>
+                          <q-icon size="xs" name="drag_indicator"> </q-icon
+                        ></q-item-section>
+                        <q-item-section>
+                          <q-checkbox
+                            size="xs"
+                            v-model="sublayer.visibleModel"
+                            @click.stop="
+                              mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)
+                            "
+                            >{{ sublayer.title }}
+                            <span v-if="sublayer.totalArea > 0">
+                              {{ sublayer.totalArea }}SQ MI
+                            </span></q-checkbox
+                          >
+                        </q-item-section>
+                        <q-item-section side>
+                          <div style="width: 20px; height: 20px">
+                            <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                          </div>
+                        </q-item-section>
+                        <q-item-section side class="">
+                          <q-btn
+                            size="sm"
+                            flat
+                            padding="none"
+                            icon="o_info"
+                            @click="scrollToElement(sublayer.elid)"
+                            ><q-tooltip> more info </q-tooltip></q-btn
+                          >
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </draggable>
+                </q-list>
+              </div>
             </div>
-           
+            <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers outside map view</p>
+            <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
+              <!-- layers not intersecting-->
+              <div v-for="(layer, index) in item.subheaders" :key="index">
+                <q-list
+                  dense
+                  class="q-ma-none bg-white"
+                  v-if="countResults(layer.sublayers, 'outExtent') > 0"
+                >
+                  <draggable
+                    v-model="layer.sublayers"
+                    ghostClass="ghost"
+                    @end="mapStore.updateLayerOrder(layer)"
+                    item-key="index"
+                  >
+                    <template #item="{ element: sublayer }">
+                      <q-item
+                        dense
+                        class="q-mb-xs q-mx-sm"
+                        :style="
+                          layer.id == 'avoid'
+                            ? 'border-left: 4px solid lightcoral'
+                            : layer.id == 'minimize'
+                              ? 'border-left: 4px solid #FFD580'
+                              : 'border-left: 4px solid green'
+                        "
+                        v-if="
+                          sublayer.filter && sublayer.totalArea == 0 && sublayer.inExtent == false
+                        "
+                      >
+                        <q-item-section side>
+                          <q-icon size="xs" name="drag_indicator"> </q-icon
+                        ></q-item-section>
+                        <q-item-section>
+                          <q-checkbox
+                            size="xs"
+                            v-model="sublayer.visibleModel"
+                            @click.stop="
+                              mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)
+                            "
+                            >{{ sublayer.title }}
+                          </q-checkbox>
+                        </q-item-section>
+                        <q-item-section side>
+                          <div style="width: 20px; height: 20px">
+                            <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                          </div>
+                        </q-item-section>
+                        <q-item-section side class="">
+                          <q-btn
+                            size="sm"
+                            flat
+                            padding="none"
+                            icon="o_info"
+                            @click="scrollToElement(sublayer.elid)"
+                            ><q-tooltip> more info </q-tooltip></q-btn
+                          >
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </draggable>
+                </q-list>
+              </div>
+            </div>
           </div>
         </q-scroll-area>
       </q-tab-panel>
@@ -850,24 +857,24 @@ computed(() => {
   </div>
 </template>
 <style>
-.headerClass{
-background: #ffffff;
-border: 1px solid #e0e0e0;
-border-radius: 4px;
-box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-margin-bottom: 4px;
-padding: 14px 16px;
-color: #1a1a1a;
+.headerClass {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: 4px;
+  padding: 14px 16px;
+  color: #1a1a1a;
 }
 
-.expandedHeaderClass{
-border-left: 3px solid rgb(46, 125, 50);  /* Deep green accent */
-border-right: 3px solid rgb(46, 125, 50);  /* Deep green accent */
-border-radius: 8px;
-box-shadow: 0 1px 3px rgba(46, 125, 50,0.06);
-margin-bottom: 4px;
-padding: 12px 16px;
-color: #1a1a1a;
+.expandedHeaderClass {
+  border-left: 3px solid rgb(46, 125, 50); /* Deep green accent */
+  border-right: 3px solid rgb(46, 125, 50); /* Deep green accent */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(46, 125, 50, 0.06);
+  margin-bottom: 4px;
+  padding: 12px 16px;
+  color: #1a1a1a;
 }
 .button {
   margin-top: 35px;
