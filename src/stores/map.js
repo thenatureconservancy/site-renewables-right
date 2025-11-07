@@ -158,13 +158,25 @@ export const useMapStore = defineStore('mapStore', () => ({
     group.subheaders.forEach(subheader => {
       let visible = !group.expanded
       subheader.visible = visible
-      console.log(subheader.sublayers)
       subheader.sublayers.forEach(layer => {
         let sublayer = map.findLayerById(layer.elid);
         sublayer.visible = visible
         layer.visibleModel = visible
       })
     })
+
+    // Custom behavior for expansion groups
+    if (group.header == 'Community Lands' && group.expanded == false){
+      //when community is open close the other two groups
+      this.layers[0].expanded = false;
+      this.layers[1].expanded = false;
+    }
+    if (group.header == 'Agricultural Lands' && group.expanded == false ||
+      group.header == 'Conservation Lands' && group.expanded == false
+    ){
+      //when the other two are open close community
+      this.layers[2].expanded = false;
+    }
   },
   //sets overall group layer visibility
   setLayerVisibility(layer) {

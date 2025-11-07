@@ -223,7 +223,6 @@ computed(() => {
                 expanded-icon="visibility"
                 :expand-icon-class="item.expanded ? 'text-primary' : 'text-grey-9'"
                 expand-icon="visibility_off"
-                :group="item.header == 'Conservation Lands' ? '' : 'myaccordion'"
               >
                 <div class="q-mx-sm q-mb-md">
                   <q-expansion-item
