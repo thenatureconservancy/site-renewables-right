@@ -154,29 +154,41 @@ export const useMapStore = defineStore('mapStore', () => ({
    
   },
   setGroupVisibility(group){
-    let map = document.querySelector("arcgis-map").map;
-    group.subheaders.forEach(subheader => {
-      let visible = !group.expanded
-      subheader.visible = visible
-      subheader.sublayers.forEach(layer => {
-        let sublayer = map.findLayerById(layer.elid);
-        sublayer.visible = visible
-        layer.visibleModel = visible
-      })
-    })
-
+    group.expanded = !group.expanded
+    this.toggleGroupVisibility(group)
+    
     // Custom behavior for expansion groups
-    if (group.header == 'Community Lands' && group.expanded == false){
+    if (group.header == 'Community Lands' && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
+      this.toggleGroupVisibility(this.layers[0])
+      this.toggleGroupVisibility(this.layers[1])
     }
-    if (group.header == 'Agricultural Lands' && group.expanded == false ||
-      group.header == 'Conservation Lands' && group.expanded == false
+    if (group.header == 'Agricultural Lands' && group.expanded == true ||
+      group.header == 'Conservation Lands' && group.expanded == true
     ){
       //when the other two are open close community
       this.layers[2].expanded = false;
+      this.toggleGroupVisibility(this.layers[2])
     }
+  },
+  toggleGroupVisibility(group){
+    let map = document.querySelector("arcgis-map").map;
+    group.subheaders.forEach(subheader => {
+      let visible = group.expanded
+      subheader.visible = visible
+      subheader.sublayers.forEach(layer => {
+        let sublayer = map.findLayerById(layer.elid);
+        if(layer.filter){
+        sublayer.visible = visible
+        }
+        
+        layer.visibleModel = visible
+        
+      })
+    })
+
   },
   //sets overall group layer visibility
   setLayerVisibility(layer) {
