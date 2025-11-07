@@ -208,6 +208,28 @@ export const useMapStore = defineStore('mapStore', () => ({
       })
     })
    }
+   else if (this.category == 'floating'){
+   this.layers.forEach(layer => {
+      layer.subheaders.forEach(subheader => {
+        subheader.sublayers.forEach(layer => {
+        
+          if(layer.elid == 'qualitywater'){
+            //turn off those layers so they are not visibl ein the map
+           let mapLayer = map.findLayerById(layer.elid);
+           layer.filter = true
+           if(layer.visibleModel){mapLayer.visible = true}
+          }
+          else
+          {
+          let mapLayer = map.findLayerById(layer.elid);
+            layer.filter = false
+            layer.visibleModel = false
+            mapLayer.visible = false
+          }
+         })
+      });
+    });
+   }
    else{
     this.layers.forEach(layer => {
       layer.subheaders.forEach(subheader => {
