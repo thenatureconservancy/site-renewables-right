@@ -1,6 +1,7 @@
 import { ref, computed, markRaw } from 'vue';
 import { defineStore } from 'pinia';
 import Graphic from '@arcgis/core/Graphic.js'
+import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import * as bufferOperator from '@arcgis/core/geometry/operators/bufferOperator.js'
 import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator.js";
 import * as areaOperator from "@arcgis/core/geometry/operators/areaOperator.js";
@@ -31,8 +32,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     highlySensitiveTotalArea: 0,
     highlySensitiveCount: 0,
     moderatelySensitiveTotalArea: 0,
-    minesTotalArea: 0,
-    waterBodies: 0,
+    mines: 0,
     brownfields: 0,
     bufferArea: 0,
     highlySensitiveHabitats: [],
@@ -45,7 +45,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   splash: true,
 
   layers: [
-  {header: 'Conservation Lands' , id: 'avoid', expanded: true,
+  {header: 'Conservation Values' , id: 'avoid', expanded: true,
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
     sublayers: [
@@ -58,7 +58,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     {index: 6, mapIndex: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Whooping Crane (solar)', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
     ]
     },
-    {title: 'Moderate', id: 'moderate', visible: true, visibleModel: true, 
+    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
       {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity', description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBE25M+0+JQQUaWYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAAIkAVU/br7OgAAAABJRU5ErkJggg=="},
     ]
@@ -67,16 +67,16 @@ export const useMapStore = defineStore('mapStore', () => ({
       sublayers: [
         {index: 0, elid: 'abandonedmines', filter: true, visible: true, visibleModel: true, 
           opacity: 0.9, category: 'both', title: 'Abandoned Mine Lands', description: 'short description',
-           longDescription: 'This layer identifies sites that operated as mines between 1886-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines ( <a href="https://mrdata.usgs.gov/usmin/" target="_blank">USGS geospatial database</a>) but the data are incomplete for the western United States. Mines included in the dataset include pits, mines, and quarries.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFESURBVDhP5ZI9S8NQFIbffmCrBCSNiIuli4E4iUMIOEgSnP0D+WP9F9kcs0lTsuqsGSSDkCWgqdaP93KLaXobFDsIPsu999zLw7nnnNb7J9ggbblujH8obGwKr5IkQZqmKMsShmHAsiwMh0P5YpW1wizLEIYh8jyXkS8cx4HruvK0jFLI0Hg8FrL9ziGOuqfot3aQze9x83It3vi+D9u2xb6Ksob85kJ20Q8w6h7joDPCydY5znqX4k0cx2KtoxSyZoSZ1aF8t72HoihkZBmlkA0g/KaKXmtb7lZRCtlNwprVKfGEx/mDPK2iFHI0CBtw93or9oSy+PkKb5jDNE0ZXWbt2ERRhMlkIvasGb/JzCjTNA1BEEDXdXFfpXGwp9Op6Ga1AczM8zyljDQKF3DIZ7MZBoOByK6Jbwl/grIpv+GvC4EP052FsE/F/fEAAAAASUVORK5CYII="},
+           longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines ( <a href="https://mrdata.usgs.gov/usmin/" target="_blank">USGS geospatial database</a>) but the data are incomplete for the western United States. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFESURBVDhP5ZI9S8NQFIbffmCrBCSNiIuli4E4iUMIOEgSnP0D+WP9F9kcs0lTsuqsGSSDkCWgqdaP93KLaXobFDsIPsu999zLw7nnnNb7J9ggbblujH8obGwKr5IkQZqmKMsShmHAsiwMh0P5YpW1wizLEIYh8jyXkS8cx4HruvK0jFLI0Hg8FrL9ziGOuqfot3aQze9x83It3vi+D9u2xb6Ksob85kJ20Q8w6h7joDPCydY5znqX4k0cx2KtoxSyZoSZ1aF8t72HoihkZBmlkA0g/KaKXmtb7lZRCtlNwprVKfGEx/mDPK2iFHI0CBtw93or9oSy+PkKb5jDNE0ZXWbt2ERRhMlkIvasGb/JzCjTNA1BEEDXdXFfpXGwp9Op6Ga1AczM8zyljDQKF3DIZ7MZBoOByK6Jbwl/grIpv+GvC4EP052FsE/F/fEAAAAASUVORK5CYII="},
         {index: 1, elid: 'brownfields', filter: true, visible: true, visibleModel: true, opacity: 0.9,
            category: 'solar', title: 'Brownfields over 10 acres ', description: 'short description',
             longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFASURBVDhP5ZO9SsNQGIZfNbWCuNVFIuZnEXSIi0M2Bzch5hrc7W5uIrcQSL0D76AOQoaAo4MEMlR0qjQQrGje4wmScNoiduuzJPly8vCd7z1Z+6rAElmX16WxgsKFoeR5jiRJUBQFDMOA67ryjZq5wjAMEcexuNc6XUw/SpimhSC4geM4ot5mprCWWacX2Dt0saF18f6a4Tm5Qzke4XYwgK7rcvUvyhlym7Vs//hMyMjO7gGOzq+qrzYRRZGotVEKOTPCztpQ3jMdDIf3stJEKWQAnFndWRttaxuTYiKfmiiFTJMBcGYqxi8ZbNuWT02UQh4NwzBFAJ/TUlZ/GD094C17xKXnyUqTmSmnaYrrfr9a0UHPOhHbZGeU+b5fHZ1Armwy9xwybabJADgzbpOdeTO6Iwv/lL+inOF/WDkh8A3IyX8fH/JMOAAAAABJRU5ErkJggg=="},
       ]   
     },
   ]},
-  {header: 'Agricultural Lands' , id: 'agriculture', expanded: false, 
+  {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Agricultural Lands - solar only', id: 'ag', visible: false, visibleModel: false, 
+    {title: ' Agricultural Lands', id: 'ag', visible: false, visibleModel: false, 
       sublayers: [
         {index: 0, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
        opacity: 0.9, category: 'solar', title: 'Highest Quality Farmland', description: 'short description',
@@ -84,13 +84,13 @@ export const useMapStore = defineStore('mapStore', () => ({
         totalArea: 0, percentOfTotal: 0, inExtent: '',
         legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBLp0F/ykxaE/5BEYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAABLDgYV9UASiQAAAABJRU5ErkJggg=="
       },
- 	  {index: 1, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'solar', title: 'Abandoned Cropland', description: 'short description', 
+ 	  {index: 1, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland', description: 'short description', 
       longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
       totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
 	  ]
   },
 ]},
-  {header: 'Community Lands' , id: 'community', expanded: false, 
+  {header: 'Community Considerations' , id: 'community', expanded: false, 
    subheaders: [
     {title: 'Community', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
@@ -204,7 +204,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   setSublayerVisibility(elid, checked) {
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(elid);
-    console.log(layer)
     layer.visible = checked
   },
  
@@ -392,7 +391,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
     //clear values from previous buffer
     //view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
-    let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
+    /*let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
       {name: 'Whooping Crane (wind)', id: 20, color: '#FF884D', index: 1, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[11]},
       {name: 'Whooping Crane (solar)', id: 21, color: '#FF884D', index: 2, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[10]},
       {name: 'Eagles (wind)', id: 22, color: '#AC8B7C', index: 3, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[2]},
@@ -405,12 +404,72 @@ export const useMapStore = defineStore('mapStore', () => ({
       {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[6]},
       //{name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
       {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
-    ]
-    
-    let countLayers = [
-      {name: 'Brownfields over 50 acres (solar)', id: 0, color: '#FF884D', index: 0, map: 'opportunities', pathToLayer:  this.layers[1].subheaders[0].sublayers[0]},
-      {name: 'Low impact water bodies for floating solar development (solar)', id: 19, color: '#FF884D', index: 2, pathToLayer:  this.layers[1].subheaders[0].sublayers[1], },
-    ] 
+    ]*/
+    let layerList = [{
+        title: 'High Quality Watersheds',
+        layerid: 0,
+        type: 'polygon',
+        group: 'highly sensitive',
+        defquery: '',
+        pathToLayer: this.layers[0].subheaders[0].sublayers[1]
+        },
+
+        {
+        title: 'Landscape Connectivity',
+        layerid: 1,
+        type: 'polygon',
+        group: 'moderately sensitive',
+        defquery: 'gridcode <> 0',
+        pathToLayer: this.layers[0].subheaders[1].sublayers[0]
+        },
+        {
+        title: 'Prairie Grouse',
+        layerid: 2,
+        type: 'polygon',
+        group: 'highly sensitive',
+        defquery: 'gridcode <> 0',
+        pathToLayer: this.layers[0].subheaders[0].sublayers[4]
+        },
+        {
+        title: 'Resilient and Connected Network',
+        layerid: 3,
+        type: 'polygon',
+        group: 'highly sensitive',
+        defquery: 'gridcode <> 0',
+        pathToLayer: this.layers[0].subheaders[0].sublayers[3]
+        },
+        {
+        title: 'Whooping Crane Wind',
+        layerid: 4,
+        type: 'polygon',
+        group: 'highly sensitive',
+        defquery: 'gridcode <> 0',
+        pathToLayer: this.layers[0].subheaders[0].sublayers[5]
+        },
+        {
+        title: 'Whooping Crane Solar',
+        layerid: 5,
+        type: 'polygon',
+        group: 'highly sensitive',
+        defquery: 'gridcode <> 0',
+        pathToLayer: this.layers[0].subheaders[0].sublayers[6]
+        },
+        {
+        title: 'Former Mine Lands',
+        layerid: 7,
+        type: 'point',
+        group: 'degraded lands',
+        defquery: '',
+        pathToLayer: this.layers[0].subheaders[2].sublayers[0]
+        },
+        {
+        title: 'Brownfields over 10 acres',
+        layerid: 8,
+        type: 'point',
+        group: 'degraded lands',
+        defquery: '',
+        pathToLayer: this.layers[0].subheaders[2].sublayers[0]
+            },]
     this.results = []
     this.oppResults = []
       //clear all previous results
@@ -422,48 +481,62 @@ export const useMapStore = defineStore('mapStore', () => ({
       layer.totalArea = 0
       layer.percentOfTotal = 0
     })
+     this.layers[0].subheaders[2].sublayers.forEach((layer)=>{ 
+      layer.totalArea = 0
+      layer.percentOfTotal = 0
+    })
     this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
       layer.totalArea = 0
       layer.percentOfTotal = 0
     })
+   
     this.summary= {
-        highlySensitiveTotalArea: 0,
-        highlySensitiveCount: 0,
-        moderatelySensitiveTotalArea: 0,
-        minesTotalArea: 0,
-        waterBodies: 0,
-        brownfields: 0,
-        bufferArea: 0,
-        highlySensitiveHabitats: [],
-        hsExtentCount: 0,
-        msExtentCount: 0,
-        minesExtentCount: 0,
+         highlySensitiveTotalArea: 0,
+    highlySensitiveCount: 0,
+    moderatelySensitiveTotalArea: 0,
+    mines: 0,
+    brownfields: 0,
+    bufferArea: 0,
+    highlySensitiveHabitats: [],
+    hsExtentCount: 0,
+    minesExtentCount: 0,
+    msExtentCount: 0,
     }      
     for (let i=0;i<layerList.length;i++){
-      this.getIntersectionFeatures(buffer, layerList[i])
-      this.getIntersectionExtent(layerList[i])
+      if(layerList[i].type == 'polygon'){
+        this.getIntersectionFeatures(buffer, layerList[i])
+      }
+      if(layerList[i].type == 'point'){
+        this.getCountFeatures(buffer, layerList[i])
+      }
+      //this.getIntersectionExtent(layerList[i])
     }  
-    for(let i=0;i<countLayers.length;i++){
-      this.getCountFeatures(buffer, countLayers[i])
-    }
+    
   
   },
   //function to clip features and calculate area
   getIntersectionFeatures(buffer, item){
     //first step is to probably query the layer and get geometries
-    let map = document.querySelector("arcgis-map").map;
-    let layer = map.findLayerById(item.map)
+    //let map = document.querySelector("arcgis-map").map;
+    //console.log(item)
+    //let layer = map.findLayerById(item.id)
+    //console.log(layer)
+    
+  // Create a FeatureLayer instance (not added to map)
+      const featureLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/" + item.layerid 
+      });
 
-    let sublayer = layer.findSublayerById(item.id)
      const queryGeom = {
       geometry: buffer,
       spatialRelationship: 'intersects',
       returnGeometry: true,
       outFields: ['*'],
-      where: item.map == 'intersectingFeatures'? 'gridcode <> 0': '1=1'
+      where: item.defquery !== '' ? item.defquery : '1=1',
     }
 
-    sublayer.queryFeatures(queryGeom).then((results) => {
+    featureLayer.queryFeatures(queryGeom).then((results) => {
+      console.log(results)
       //let obj = ''
       let bufferArea = areaOperator.execute(buffer,{unit:'square-miles'})
      
@@ -500,17 +573,14 @@ export const useMapStore = defineStore('mapStore', () => ({
     console.log(this.summary.highlySensitiveTotalArea)
     //console.log(this.results.value.highlySensitiveTotalArea)
     this.summary.bufferArea =bufferArea
-    if (item.id !== 1 && item.id !== 2 && item.id !== 30){ 
+    if (item.group == 'highly sensitive'){ 
       this.summary.highlySensitiveTotalArea = this.summary.highlySensitiveTotalArea + area
       this.summary.highlySensitiveCount = this.summary.highlySensitiveCount + 1
-      this.summary.highlySensitiveHabitats.push({name: item.name, area: area, percentOfTotal: (area/bufferArea)  })
+      this.summary.highlySensitiveHabitats.push({name: item.title, area: area, percentOfTotal: (area/bufferArea)  })
     }
     this.summary.highlySensitiveHabitats.sort((a, b) => b.percentOfTotal - a.percentOfTotal); 
-    if (item.id == 30){     
+    if (item.group == 'moderately sensitive'){     
     this.summary.moderatelySensitiveTotalArea= this.summary.moderatelySensitiveTotalArea + area
-    }
-    if (item.id == 1 || item.id == 2){
-      this.summary.minesTotalArea = this.summary.minesTotalArea + area
     }
     }
    
@@ -518,19 +588,18 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   //function to get count of intersecting points
   getCountFeatures(buffer, item){ 
-    console.log(item)
-    let map = document.querySelector("arcgis-map").map;
-    let layer = map.findLayerById('opportunities')
-   
-    let sublayer = layer.findSublayerById(item.id)
+     const featureLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/" + item.layerid 
+      });
+
      const queryGeom = {
       geometry: buffer,
       spatialRelationship: 'intersects',
       returnGeometry: false,
       outFields: ['*'],
     }
-  
-    sublayer.queryFeatures(queryGeom).then((results) => {
+
+    featureLayer.queryFeatures(queryGeom).then((results) => {
       let count = results.features.length
       console.log(results)
      /* let obj = {
@@ -545,12 +614,13 @@ export const useMapStore = defineStore('mapStore', () => ({
           item.pathToLayer.inExtent = false
        }
      
-      if (item.id == 0){
+      if (item.title == 'Brownfields over 10 acres'){
         this.summary.brownfields = count
         item.pathToLayer.count = count
       }
-      if (item.id == 19){
-        this.summary.waterBodies = count
+      if (item.title == 'Former Mine Lands'){
+        console.log('mines count:' + count)
+        this.summary.mines = count
         item.pathToLayer.count = count
       }
       
@@ -569,7 +639,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       spatialRelationship: 'intersects',
       returnGeometry: false,
       outFields: [],
-      where: item.map == 'intersectingFeatures'? 'gridcode <> 0': '1=1'
+      where: item.defquery !== ''? 'item.defquery': '1=1'
     }
 
     sublayer.queryFeatures(queryGeom).then((results) => {

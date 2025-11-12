@@ -14,7 +14,7 @@ const mapStore = useMapStore()
         <q-item v-for="(sublayer, index) in layer.sublayers" :key="index" :id="sublayer.elid">
           <q-item-section>
             <q-item-label class="text-bold" :style="(mapStore.activeHelpElement == sublayer.elid) ? 'border: 2px solid green; padding: 5px' : ''">{{ sublayer.title }}</q-item-label>
-            <q-item-label>{{ sublayer.longDescription }}</q-item-label>
+            <q-item-label v-html="sublayer.longDescription"></q-item-label>
           </q-item-section>
 
           <!--q-item-section side top>

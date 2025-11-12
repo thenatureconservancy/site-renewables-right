@@ -13,7 +13,6 @@ const agolStore = useAgolStore()
 const mapStore = useMapStore()
 const showResetZoomButton = ref(false)
 
-
 function zoomHome() {
   const arcgisMap = document.querySelector('arcgis-map')
   arcgisMap.zoom = 3
@@ -25,119 +24,160 @@ onMounted(() => {
   let wetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'wetlands',
-    sublayers: [{id: 3}],
+    sublayers: [{ id: 3 }],
     visible: true,
-    opacity: 1
+    opacity: 1,
   })
   let protectedL = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'protected',
-    sublayers: [{id: 6}],
+    sublayers: [{ id: 6 }],
     visible: true,
-    opacity: 1
+    opacity: 1,
   })
   let resilient = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'resilient',
-    sublayers: [{id: 7}],
+    sublayers: [{ id: 7 }],
     visible: true,
-    opacity: 1
+    opacity: 1,
   })
   let prairie = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'prairie',
-    sublayers: [{id: 5}],
+    sublayers: [{ id: 5 }],
     visible: true,
-    opacity: 1
+    opacity: 1,
   })
   let whoopwind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopwind',
-    sublayers: [{id: 8}],
+    sublayers: [{ id: 8 }],
     visible: true,
-    opacity: 1
+    opacity: 1,
   })
-   let whoopsolar = new MapImageLayer({
+  let whoopsolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopsolar',
-    sublayers: [{id: 9}],
+    sublayers: [{ id: 9 }],
     visible: true,
-    opacity: 1 })
+    opacity: 1,
+  })
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
     visible: true,
-    opacity: .8
+    opacity: 0.8,
   })
   // moderate sensitive
   let landscape = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscape',
-    sublayers: [{id: 4}],
+    sublayers: [{ id: 4 }],
     visible: true,
-    opacity: .8
+    opacity: 0.8,
   })
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
     id: 'abandonedmines',
     visible: true,
-    opacity: .8
+    opacity: 0.8,
   })
-   let brownfields = new FeatureLayer({
+  let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
     visible: true,
-    opacity: .8
+    opacity: 0.8,
   })
   // agriculture
   let abandonedag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'abandonedag',
-    sublayers: [{id: 1}],
+    sublayers: [{ id: 1 }],
     visible: false,
-    opacity: .8
+    opacity: 0.8,
   })
-
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
-    sublayers: [{id: 2}],
+    sublayers: [{ id: 2 }],
     visible: false,
-    opacity: .8
+    opacity: 0.8,
   })
-  
+  // reporting layers
+  let hwq_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/0',
+    id: 'hqw_dice',
+    visible: false,
+  })
+  let lc_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/1',
+    id: 'lc_dice',
+    visible: false,
+  })
+  let pg_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/2',
+    id: 'pg_dice',
+    visible: false,
+  })
+  let rcn_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/3',
+    id: 'rcn_dice',
+    visible: false,
+  })
+  let wcw_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/4',
+    id: 'wcw_dice',
+    visible: false,
+  })
+  let wcs_dice = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/5',
+    id: 'wcs_dice',
+    visible: false,
+  })
+  let fml_counts = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
+    id: 'fml_counts',
+    visible: false,
+  })
+  let bf_counts = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
+    id: 'bf_counts',
+    visible: false,
+  })
 
-  //these layers will be used for the reporting.  The viewable map layers are raster. These
-  //are polygons
-  let intersectingFeatures = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Site_Renewables_Right/MapServer',
-    sublayers: [
-      { id: 17 },
-      { id: 20 },
-      { id: 21 },
-      { id: 22 },
-      { id: 23 },
-      { id: 24 },
-      { id: 25 },
-      { id: 26 },
-      { id: 27 },
-      { id: 28 },
-      { id: 30 },
-    ],
-    listMode: 'hide',
-    id: 'intersectingFeatures',
-    visible: false,
-  })
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
 
+  //todo: verify if reporting layers need to be added to map.
   arcgisMap.map = new Map({
     basemap: 'dark-gray',
-    layers: [ highestag,abandonedag,brownfields,abandonedmines,landscape,whoopsolar, whoopwind,
-    prairie, resilient, protectedL, qualitywater, wetlands,
-    bufferLayer, pointLayer],
+    layers: [
+      highestag,
+      abandonedag,
+      brownfields,
+      abandonedmines,
+      landscape,
+      whoopsolar,
+      whoopwind,
+      prairie,
+      resilient,
+      protectedL,
+      qualitywater,
+      wetlands,
+      bufferLayer,
+      pointLayer,
+      hwq_dice,
+      lc_dice,
+      pg_dice,
+      rcn_dice,
+      wcs_dice,
+      wcw_dice,
+      fml_counts,
+      bf_counts,
+    ],
   })
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
@@ -153,27 +193,26 @@ onMounted(() => {
     }
   })
 
-  
-arcgisMap.when(() => {
-  // Map is fully loaded
-  mapStore.getLegendData();
+  arcgisMap.when(() => {
+    // Map is fully loaded
+    mapStore.getLegendData()
 
-  // Add other listeners after map is ready
-  arcgisMap.addEventListener('arcgisViewChange', (e) => {
-    if (arcgisMap.extent) {
-      mapStore.currentMapExtent = markRaw(arcgisMap.extent);
-    }
-    showResetZoomButton.value = arcgisMap.zoom > 3;
-  });
+    // Add other listeners after map is ready
+    arcgisMap.addEventListener('arcgisViewChange', (e) => {
+      if (arcgisMap.extent) {
+        mapStore.currentMapExtent = markRaw(arcgisMap.extent)
+      }
+      showResetZoomButton.value = arcgisMap.zoom > 3
+    })
 
-  arcgisMap.addEventListener('arcgisViewClick', (e) => {
-    if (mapStore.tab === 'sketch') {
-      bufferLayer.visible = true;
-      pointLayer.visible = true;
-      mapStore.createBuffer(e);
-    }
-  });
-});
+    arcgisMap.addEventListener('arcgisViewClick', (e) => {
+      if (mapStore.tab === 'sketch') {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+        mapStore.createBuffer(e)
+      }
+    })
+  })
 
   //add legend symbols to toc layers list
   //mapStore.getLegendData()
@@ -188,15 +227,13 @@ arcgisMap.when(() => {
 </script>
 
 <template>
-
-  <arcgis-map  id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
+  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="bottom-left"></arcgis-zoom>
     <arcgis-search
       position="top-left"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
 
- 
     <q-btn
       square
       padding="xs"

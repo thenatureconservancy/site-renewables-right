@@ -1,6 +1,6 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import TheReport from './TheReport.vue'
 
 const mapStore = useMapStore()
@@ -27,18 +27,49 @@ function getRange(val) {
 }
 
 // takes an element object
-function scrollToElement(elid) {
+async function scrollToElement(elid) {
+  // open the left panel and switch to the help tab
   mapStore.panelState = 'open'
   mapStore.activeTool = 'help'
   mapStore.activeHelpElement = elid
+  // AI did this part! fixed the bug where it wasn't waiting for the DOM
+  // to update.  wondering if there is a shorter bit of code for this. 
+  // leaving it for now.  works beautifully!
+  
+  // wait for Vue to apply DOM updates for the panel/tab change
+  await nextTick()
 
-  let el = document.getElementById(elid)
-  console.log('scrolling to element', elid, el)
-  el.scrollIntoView({
-    behavior: 'smooth', // Optional: smooth scrolling animation
-    block: 'start', // Optional: 'start', 'center', 'end', or 'nearest'
-    inline: 'nearest', // Optional: 'start', 'center', 'end', or 'nearest'
-  })
+  // helper: poll for the element until it exists (short timeout)
+  const waitForElement = (id, timeout = 1500) => {
+    const start = performance.now()
+    return new Promise((resolve) => {
+      const check = () => {
+        const found = document.getElementById(id)
+        if (found) return resolve(found)
+        if (performance.now() - start > timeout) return resolve(null)
+        requestAnimationFrame(check)
+      }
+      check()
+    })
+  }
+
+  const el = await waitForElement(elid, 1500)
+  if (el) {
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    })
+    // try to focus for accessibility (if focusable)
+    try {
+      el.focus && el.focus()
+    } catch {
+      /* ignore focus errors */
+    }
+  } else {
+    // fallback: element not found after waiting
+    console.warn('scrollToElement: could not find element', elid)
+  }
 }
 function countResults(list, query) {
   if (query == 'inBuffer') {
@@ -625,28 +656,10 @@ computed(() => {
                     </p>
                   </li>
                   <li v-if="mapStore.summary.waterBodies > 0">
-                    <p class="text-body2 q-mb-none">
-                      Low impact water bodies: {{ mapStore.summary.waterBodies }}
-                    </p>
+                    <p class="text-body2 q-mb-none">Mines: {{ mapStore.summary.mines }}</p>
                   </li>
-                  <li v-if="mapStore.summary.minesTotalArea > 0">
-                    <p class="text-body2">
-                      Mines:
-                      {{
-                        new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
-                          mapStore.summary.minesTotalArea,
-                        )
-                      }}
-                      sq mi
-                    </p>
-                  </li>
-                  <li
-                    v-if="
-                      mapStore.summary.minesTotalArea == 0 &&
-                      mapStore.summary.waterBodies == 0 &&
-                      mapStore.summary.brownfields == 0
-                    "
-                  >
+
+                  <li v-if="mapStore.summary.mines == 0 && mapStore.summary.brownfields == 0">
                     <p class="text-body2">None intersecting buffer</p>
                   </li>
                 </ul>
