@@ -23,6 +23,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     highlySensitiveTotalArea: 0,
     highlySensitiveCount: 0,
     moderatelySensitiveTotalArea: 0,
+    mines: 0,
     minesTotalArea: 0,
     waterBodies: 0,
     brownfields: 0,
@@ -76,7 +77,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Agricultural Lands', id: 'ag', visible: false, visibleModel: false, 
+    {title: ' Agricultural Values', id: 'ag', visible: false, visibleModel: false, 
       sublayers: [
         {index: 0, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
        opacity: 0.9, category: 'solar', title: 'Highest Quality Farmland', description: 'short description',
@@ -92,7 +93,7 @@ export const useMapStore = defineStore('mapStore', () => ({
 ]},
   {header: 'Community Considerations' , id: 'community', expanded: false, 
    subheaders: [
-    {title: 'Community', id: 'comm', visible: true, visibleModel: true, 
+    {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
 	   ]
   },
@@ -158,15 +159,15 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.toggleGroupVisibility(group)
     
     // Custom behavior for expansion groups
-    if (group.header == 'Community Lands' && group.expanded == true){
+    if (group.header == 'Community Considerations' && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
       this.toggleGroupVisibility(this.layers[0])
       this.toggleGroupVisibility(this.layers[1])
     }
-    if (group.header == 'Agricultural Lands' && group.expanded == true ||
-      group.header == 'Conservation Lands' && group.expanded == true
+    if (group.header == 'Agricultural Values' && group.expanded == true ||
+      group.header == 'Conservation Values' && group.expanded == true
     ){
       //when the other two are open close community
       this.layers[2].expanded = false;

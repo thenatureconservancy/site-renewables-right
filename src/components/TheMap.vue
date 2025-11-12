@@ -105,47 +105,6 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-  // reporting layers
-  let hwq_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/0',
-    id: 'hqw_dice',
-    visible: false,
-  })
-  let lc_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/1',
-    id: 'lc_dice',
-    visible: false,
-  })
-  let pg_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/2',
-    id: 'pg_dice',
-    visible: false,
-  })
-  let rcn_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/3',
-    id: 'rcn_dice',
-    visible: false,
-  })
-  let wcw_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/4',
-    id: 'wcw_dice',
-    visible: false,
-  })
-  let wcs_dice = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/5',
-    id: 'wcs_dice',
-    visible: false,
-  })
-  let fml_counts = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
-    id: 'fml_counts',
-    visible: false,
-  })
-  let bf_counts = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
-    id: 'bf_counts',
-    visible: false,
-  })
 
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
@@ -169,14 +128,6 @@ onMounted(() => {
       wetlands,
       bufferLayer,
       pointLayer,
-      hwq_dice,
-      lc_dice,
-      pg_dice,
-      rcn_dice,
-      wcs_dice,
-      wcw_dice,
-      fml_counts,
-      bf_counts,
     ],
   })
 
@@ -228,12 +179,12 @@ onMounted(() => {
 
 <template>
   <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
-    <arcgis-zoom position="bottom-left"></arcgis-zoom>
+    <arcgis-zoom position="top-right"></arcgis-zoom>
     <arcgis-search
       position="top-left"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
-
+    <!-- help button next to search-->
     <q-btn
       square
       padding="xs"
@@ -251,92 +202,200 @@ onMounted(() => {
         </p></q-tooltip
       >
     </q-btn>
-
-    <!--q-btn
-      v-if="mapStore.panelState == 'open'"
-      size="12px"
-      @click="mapStore.togglePanel()"
-      color="white"
-      padding=""
-      class="text-blue"
-      unelevated
-      square
-      style="z-index: 999; position: absolute; right: 15px; top: 15px"
-    >
-      Close Panel
-    </q-btn>
+    <!-- reset zoom button-->
     <q-btn
-      v-else
-      size="12px"
-      @click="mapStore.togglePanel()"
-      color="white"
-      padding=""
-      class="text-blue"
-      unelevated
-      square
-      style="z-index: 999; position: absolute; right: 15px; top: 15px"
-    >
-      Open Panel
-    </q-btn-->
-    <q-btn
-      v-if="showResetZoomButton"
-      size="12px"
+      size="xl"
       @click="zoomHome()"
       color="white"
-      padding=""
-      class="text-blue"
+      padding="10px"
+      class="text-green-9"
       unelevated
       square
-      style="z-index: 999; position: absolute; right: 15px; top: 15px"
-      >Reset Zoom</q-btn
-    >
+      icon="home"
+      stack
+      style="z-index: 999; position: absolute; left: 64px; bottom: 30px"
+      ><q-tooltip>Reset zoom</q-tooltip>
+    </q-btn>
+    <!-- report summary boxes-->
+      <div class="bg-white" v-if="mapStore.currentPoint !== ''" style="z-index: 999; position: absolute; right: 15px; top: 15px; width: 300px; height:calc(100vh - 100px)" >
+        <p class="text-bold q-mb-none">Report Summary</p>
+        <div class="row q-mb-md">
+          <div
+            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+            style="border-top: 4px solid lightcoral"
+          >
+            <div class="bg-grey-1 q-pa-sm q-mb-sm">
+              <p class="col text-body1 text-weight-medium q-pb-none q-mb-none">
+                Highly Sensitive
+              </p>
+            </div>
+            <!--ul class="q-pl-md text-left">
+              
+            <li><p class="text-body2 text-left">{{ new Intl.NumberFormat('en-US', { notation: 'compact' }).format(mapStore.summary.highlySensitiveTotalArea) }} sq mi</p></li>
+            <li><p class="text-body2">{{(mapStore.summary.highlySensitiveTotalArea/mapStore.summary.bufferArea)*100}}% of total area</p></li>
+            <li-->
+
+            <p class="text-caption">
+              Includes {{ mapStore.summary.highlySensitiveCount }} habitat types
+            </p>
+            <div class="row">
+              <div class="col text-left ellipsis">Name</div>
+              <div class="col text-right">Area (sq mi)</div>
+              <div class="col text-center">Percent of total</div>
+            </div>
+            <q-separator></q-separator>
+            <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
+              <div class="row">
+                <div
+                  class="col-7 text-left"
+                  style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
+                >
+                  {{ item.name }}
+                </div>
+                <div class="col-1 text-right q-pr-sm">
+                  {{
+                    new Intl.NumberFormat('en-US', { notation: 'compact' }).format(item.area)
+                  }}
+                </div>
+                <div class="col text-center q-ml-xs">
+                  <div class="text-body2">
+                    {{ getRange(item.percentOfTotal) }}
+                  </div>
+                  <!--div class="full-width" style="width:100%">
+                      <q-badge
+                        color="blue"
+                        text-color="white"
+                        :label="getRange(item.percentOfTotal)"
+                      />
+                    </div-->
+                  <!--q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
+                    
+                  </q-linear-progress-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row q-mb-md">
+          <div
+            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+            style="border-top: 4px solid #ffd580"
+          >
+            <div class="bg-grey-1">
+              <p class="col text-body1 text-weight-medium">
+                Moderately <br />
+                Sensitive
+              </p>
+            </div>
+            <ul class="q-pl-md text-left">
+              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                <p class="text-body2 q-mb-none">Landscape connectivity</p>
+              </li>
+              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                <p class="text-body2 text-left q-mb-none">
+                  {{
+                    new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
+                      mapStore.summary.moderatelySensitiveTotalArea,
+                    )
+                  }}
+                  sq mi
+                </p>
+              </li>
+              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+                <p class="text-body2">
+                  {{
+                    new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }).format(
+                      mapStore.summary.moderatelySensitiveTotalArea /
+                        mapStore.summary.bufferArea,
+                    )
+                  }}
+                  of total area
+                </p>
+              </li>
+              <li v-if="mapStore.summary.moderatelySensitiveTotalArea == 0">
+                <p class="text-body2">None intersecting buffer</p>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
+            style="border-top: 4px solid green"
+          >
+            <div class="bg-grey-1">
+              <p class="col text-body1 text-weight-medium">
+                Degraded <br />
+                Lands
+              </p>
+            </div>
+            <ul class="q-pl-md text-left">
+              <li v-if="mapStore.summary.brownfields > 0">
+                <p class="text-body2 text-left q-mb-none">
+                  Brownfields: {{ mapStore.summary.brownfields }}
+                </p>
+              </li>
+              <li v-if="mapStore.summary.waterBodies > 0">
+                <p class="text-body2 q-mb-none">Mines: {{ mapStore.summary.mines }}</p>
+              </li>
+
+              <li v-if="mapStore.summary.mines == 0 && mapStore.summary.brownfields == 0">
+                <p class="text-body2">None intersecting buffer</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <!-- opacity control knob-->
     <div
-      style="z-index: 999; position: absolute; right: 15px; bottom: 15px"
-      class="text-center bg-white q-px-sm q-pt-sm q-mb-md"
+      style="z-index: 999; position: absolute; left: 264px; bottom: 30px"
+      class="row text-center bg-white q-pa-xs items-center"
     >
+    <div class="col items-center" style="padding: 1.5px;">
       <q-knob
+    
         show-value
-        font-size="20px"
+        font-size="14px"
         class="text-secondary q-mb-none"
         v-model="mapStore.opacity"
         size="50px"
         :thickness="0.3"
         color="primary"
-        track-color="grey-3"
+        track-color="grey-4"
         @update:model-value="mapStore.changeOpacity()"
       >
-        <q-icon name="opacity" class="text-blue-grey-9">
-          <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
-        </q-icon>
+        <q-icon name="opacity" size="sm" class="text-green-9">
+         
+        </q-icon> <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
       </q-knob>
-      <p class="text-body1 text-blue-grey-9 q-mb-xs" style="text-shadow: 1px 1px 2px lightgray">
-        &nbsp;{{ mapStore.opacity }}%
-      </p>
     </div>
-    <div
-      style="z-index: 999; position: absolute; right: 95px; bottom: 15px; height: 86px"
-      class="text-center bg-white q-pa-xs q-mb-md"
-    >
-      <q-btn
+   
+    </div>
+    <!-- agol login-->
+    <q-btn
+      style="z-index: 999; position: absolute; left: 173px; bottom: 30px;"
         @click="agolStore.showDialog = true"
-        color="primary"
-        :ripple="false"
-        flat
-        padding="xs"
-        stack
-        no-caps=""
         icon="img:globe.png"
         size="xl"
-        class="q-mt-sm"
-        ><p class="text-body2 text-weight-medium">Add Data</p>
-      </q-btn>
-    </div>
+        color="white"
+        padding="10px"
+        class="text-green-9"
+        unelevated
+        square
+        stack
+        ><q-tooltip>Sign in to ArcGIS Online to add your data</q-tooltip>
+    </q-btn>
+   
   </arcgis-map>
+  <!-- agol add data dialog -->
   <keep-alive>
     <q-dialog v-model="agolStore.showDialog" position="bottom">
       <ArcGISOnline></ArcGISOnline>
     </q-dialog>
   </keep-alive>
+  
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

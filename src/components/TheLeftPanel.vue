@@ -535,7 +535,7 @@ computed(() => {
             </div>
           </div>
           <div v-if="mapStore.currentPoint !== ''">
-            <p class="text-bold q-mb-none">Report Summary</p>
+            <!--p class="text-bold q-mb-none">Report Summary</p>
 
             <div class="row q-mb-md">
               <div
@@ -547,12 +547,7 @@ computed(() => {
                     Highly Sensitive
                   </p>
                 </div>
-                <!--ul class="q-pl-md text-left">
-                 
-                <li><p class="text-body2 text-left">{{ new Intl.NumberFormat('en-US', { notation: 'compact' }).format(mapStore.summary.highlySensitiveTotalArea) }} sq mi</p></li>
-                <li><p class="text-body2">{{(mapStore.summary.highlySensitiveTotalArea/mapStore.summary.bufferArea)*100}}% of total area</p></li>
-                <li-->
-
+               
                 <p class="text-caption">
                   Includes {{ mapStore.summary.highlySensitiveCount }} habitat types
                 </p>
@@ -579,16 +574,8 @@ computed(() => {
                       <div class="text-body2">
                         {{ getRange(item.percentOfTotal) }}
                       </div>
-                      <!--div class="full-width" style="width:100%">
-                          <q-badge
-                            color="blue"
-                            text-color="white"
-                            :label="getRange(item.percentOfTotal)"
-                          />
-                        </div-->
-                      <!--q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
-                       
-                      </q-linear-progress-->
+                    
+                     
                     </div>
                   </div>
                 </div>
@@ -664,7 +651,7 @@ computed(() => {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div-->
             <p class="text-bold q-mb-none">Report Layers</p>
 
             <p class="text-body1 q-ma-sm bg-grey-1 q-pa-sm">Layers inside buffer</p>
