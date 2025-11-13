@@ -198,8 +198,8 @@ onMounted(() => {
       style="position: absolute; top: 16px; right: 15px; z-index: 999"
     >
       <q-tooltip
-        ><p class="text-caption text-white">
-          To search by coordinates use the format: longitude, latitude (ie: -75.1652, 39.9526)
+        ><p class="text-body2 text-white q-mb-none">
+          For coordinates, use format: longitude, latitude (ie: -75.16, 39.95)
         </p></q-tooltip
       >
     </q-btn>
@@ -207,9 +207,8 @@ onMounted(() => {
     <q-btn
       size="xl"
       @click="zoomHome()"
-      color="white"
       padding="10px"
-      class="text-green-9 shadow-3 rounded-borders"
+      class="text-primary shadow-3 rounded-borders bg-white"
       unelevated
       square
       icon="home"

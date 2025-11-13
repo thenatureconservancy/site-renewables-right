@@ -41,7 +41,11 @@ function getRange(val) {
           <!--p class="text-caption">
               Includes {{ mapStore.summary.highlySensitiveCount }} habitat types
             </p-->
-
+          <div v-if="mapStore.summary.highlySensitiveTotalArea == 0">
+            <ul>
+              <li><p class="text-body2">None intersecting buffer</p></li>
+            </ul>
+          </div>
           <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
             <q-item class="shadow-2 q-mb-sm">
               <q-item-section>
@@ -55,8 +59,9 @@ function getRange(val) {
                 <q-item-label>
                   <q-badge
                     color="grey-3"
-                    text-color="blue-grey-9"
+                    text-color="black"
                     :label="getRange(item.percentOfTotal) + ' of total area'"
+                    class="text-weight-medium"
                 /></q-item-label>
               </q-item-section>
             </q-item>
@@ -67,42 +72,49 @@ function getRange(val) {
               <q-icon size="xs" color="yellow-8" name="flag"></q-icon> Moderately sensitive
             </p>
           </div>
-          <ul class="q-pl-md text-left">
-            <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-              <p class="text-body2 q-mb-none">Landscape connectivity</p>
-            </li>
-            <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-              <p class="text-body2 text-left q-mb-none">
-                {{
+          <div v-if="mapStore.summary.moderatelySensitiveTotalArea == 0">
+            <ul>
+              <li><p class="text-body2">None intersecting buffer</p></li>
+            </ul>
+          </div>
+          <q-item class="shadow-2 q-mb-sm q-mt-sm" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+            <q-item-section>
+              <q-item-label>Landscape connectivity</q-item-label>
+              <q-item-label caption
+                >{{
                   new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
                     mapStore.summary.moderatelySensitiveTotalArea,
                   )
                 }}
-                sq mi
-              </p>
-            </li>
-            <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-              <p class="text-body2">
-                {{
-                  new Intl.NumberFormat('en-US', {
-                    style: 'percent',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  }).format(
-                    mapStore.summary.moderatelySensitiveTotalArea / mapStore.summary.bufferArea,
-                  )
-                }}
-                of total area
-              </p>
-            </li>
-            <li v-if="mapStore.summary.moderatelySensitiveTotalArea == 0">
-              <p class="text-body2">None intersecting buffer</p>
-            </li>
-          </ul>
+                sq mi</q-item-label
+              >
+              <q-item-label>
+                <q-badge
+                  color="grey-3"
+                  text-color="black"
+                  class="text-weight-medium"
+                  :label="
+                    new Intl.NumberFormat('en-US', {
+                      style: 'percent',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }).format(
+                      mapStore.summary.moderatelySensitiveTotalArea / mapStore.summary.bufferArea,
+                    ) + 'of total area'
+                  "
+              /></q-item-label>
+            </q-item-section>
+          </q-item>
+        
           <div class="bg-grey-3 q-mt-md q-pa-sm">
             <p class="text-body2 text-weight-medium q-mb-none">
               <q-icon size="xs" color="green" name="flag"></q-icon> Degraded and disturbed lands
             </p>
+          </div>
+          <div v-if="mapStore.summary.mines == 0 && mapStore.summary.brownfields == 0">
+            <ul>
+              <li><p class="text-body2">None intersecting buffer</p></li>
+            </ul>
           </div>
           <ul class="q-pl-md text-left">
             <li v-if="mapStore.summary.brownfields > 0">
@@ -112,10 +124,6 @@ function getRange(val) {
             </li>
             <li v-if="mapStore.summary.waterBodies > 0">
               <p class="text-body2 q-mb-none">Mines: {{ mapStore.summary.mines }}</p>
-            </li>
-
-            <li v-if="mapStore.summary.mines == 0 && mapStore.summary.brownfields == 0">
-              <p class="text-body2">None intersecting buffer</p>
             </li>
           </ul>
         </q-scroll-area>
