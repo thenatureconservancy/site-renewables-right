@@ -5,6 +5,7 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import ArcGISOnline from './ArcGISOnline.vue'
+import TheReport from './TheReport.vue'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
@@ -179,22 +180,22 @@ onMounted(() => {
 
 <template>
   <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
-    <arcgis-zoom position="top-right"></arcgis-zoom>
+    <arcgis-zoom position="top-left"></arcgis-zoom>
     <arcgis-search
-      position="top-left"
+      position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
     <!-- help button next to search-->
     <q-btn
       square
-      padding="xs"
+      padding="2px"
       flat
       unelevated=""
-      class="bg-grey-8"
+      class=""
       size="md"
-      color="white"
+      color="grey-9"
       icon="o_info"
-      style="position: absolute; top: 16px; left: 255px; z-index: 999"
+      style="position: absolute; top: 16px; right: 15px; z-index: 999"
     >
       <q-tooltip
         ><p class="text-caption text-white">
@@ -208,150 +209,32 @@ onMounted(() => {
       @click="zoomHome()"
       color="white"
       padding="10px"
-      class="text-green-9"
+      class="text-green-9 shadow-3 rounded-borders"
       unelevated
       square
       icon="home"
       stack
-      style="z-index: 999; position: absolute; left: 64px; bottom: 30px"
-      ><q-tooltip>Reset zoom</q-tooltip>
+      style="z-index: 999; position: absolute; left: 75px; top: 15px"
+      ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
     </q-btn>
-    <!-- report summary boxes-->
-      <div class="bg-white" v-if="mapStore.currentPoint !== ''" style="z-index: 999; position: absolute; right: 15px; top: 15px; width: 300px; height:calc(100vh - 100px)" >
-        <p class="text-bold q-mb-none">Report Summary</p>
-        <div class="row q-mb-md">
-          <div
-            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
-            style="border-top: 4px solid lightcoral"
-          >
-            <div class="bg-grey-1 q-pa-sm q-mb-sm">
-              <p class="col text-body1 text-weight-medium q-pb-none q-mb-none">
-                Highly Sensitive
-              </p>
-            </div>
-            <!--ul class="q-pl-md text-left">
-              
-            <li><p class="text-body2 text-left">{{ new Intl.NumberFormat('en-US', { notation: 'compact' }).format(mapStore.summary.highlySensitiveTotalArea) }} sq mi</p></li>
-            <li><p class="text-body2">{{(mapStore.summary.highlySensitiveTotalArea/mapStore.summary.bufferArea)*100}}% of total area</p></li>
-            <li-->
-
-            <p class="text-caption">
-              Includes {{ mapStore.summary.highlySensitiveCount }} habitat types
-            </p>
-            <div class="row">
-              <div class="col text-left ellipsis">Name</div>
-              <div class="col text-right">Area (sq mi)</div>
-              <div class="col text-center">Percent of total</div>
-            </div>
-            <q-separator></q-separator>
-            <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
-              <div class="row">
-                <div
-                  class="col-7 text-left"
-                  style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
-                >
-                  {{ item.name }}
-                </div>
-                <div class="col-1 text-right q-pr-sm">
-                  {{
-                    new Intl.NumberFormat('en-US', { notation: 'compact' }).format(item.area)
-                  }}
-                </div>
-                <div class="col text-center q-ml-xs">
-                  <div class="text-body2">
-                    {{ getRange(item.percentOfTotal) }}
-                  </div>
-                  <!--div class="full-width" style="width:100%">
-                      <q-badge
-                        color="blue"
-                        text-color="white"
-                        :label="getRange(item.percentOfTotal)"
-                      />
-                    </div-->
-                  <!--q-linear-progress size="20px" :value="item.percentOfTotal" color="blue">
-                    
-                  </q-linear-progress-->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row q-mb-md">
-          <div
-            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
-            style="border-top: 4px solid #ffd580"
-          >
-            <div class="bg-grey-1">
-              <p class="col text-body1 text-weight-medium">
-                Moderately <br />
-                Sensitive
-              </p>
-            </div>
-            <ul class="q-pl-md text-left">
-              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-                <p class="text-body2 q-mb-none">Landscape connectivity</p>
-              </li>
-              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-                <p class="text-body2 text-left q-mb-none">
-                  {{
-                    new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
-                      mapStore.summary.moderatelySensitiveTotalArea,
-                    )
-                  }}
-                  sq mi
-                </p>
-              </li>
-              <li v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
-                <p class="text-body2">
-                  {{
-                    new Intl.NumberFormat('en-US', {
-                      style: 'percent',
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }).format(
-                      mapStore.summary.moderatelySensitiveTotalArea /
-                        mapStore.summary.bufferArea,
-                    )
-                  }}
-                  of total area
-                </p>
-              </li>
-              <li v-if="mapStore.summary.moderatelySensitiveTotalArea == 0">
-                <p class="text-body2">None intersecting buffer</p>
-              </li>
-            </ul>
-          </div>
-          <div
-            class="col text-blue-grey-9 q-pa-sm text-center shadow-3 q-mr-sm"
-            style="border-top: 4px solid green"
-          >
-            <div class="bg-grey-1">
-              <p class="col text-body1 text-weight-medium">
-                Degraded <br />
-                Lands
-              </p>
-            </div>
-            <ul class="q-pl-md text-left">
-              <li v-if="mapStore.summary.brownfields > 0">
-                <p class="text-body2 text-left q-mb-none">
-                  Brownfields: {{ mapStore.summary.brownfields }}
-                </p>
-              </li>
-              <li v-if="mapStore.summary.waterBodies > 0">
-                <p class="text-body2 q-mb-none">Mines: {{ mapStore.summary.mines }}</p>
-              </li>
-
-              <li v-if="mapStore.summary.mines == 0 && mapStore.summary.brownfields == 0">
-                <p class="text-body2">None intersecting buffer</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <!-- agol login-->
+    <q-btn
+      style="z-index: 999; position: absolute; left: 145px; top: 15px;"
+        @click="agolStore.showDialog = true"
+        icon="img:globe.png"
+        size="xl"
+        color="white"
+        padding="10px"
+        class="text-green-9 shadow-3 rounded-borders"
+        unelevated
+        square
+        stack
+        ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
+    </q-btn>
     <!-- opacity control knob-->
     <div
-      style="z-index: 999; position: absolute; left: 264px; bottom: 30px"
-      class="row text-center bg-white q-pa-xs items-center"
+      style="z-index: 999; position: absolute; left: 215px; top: 15px"
+      class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
     >
     <div class="col items-center" style="padding: 1.5px;">
       <q-knob
@@ -368,25 +251,16 @@ onMounted(() => {
       >
         <q-icon name="opacity" size="sm" class="text-green-9">
          
-        </q-icon> <q-tooltip>opacity: {{ mapStore.opacity }}%</q-tooltip>
+        </q-icon> <q-tooltip class="text-body2">Set opacity: {{ mapStore.opacity }}%</q-tooltip>
       </q-knob>
     </div>
    
     </div>
-    <!-- agol login-->
-    <q-btn
-      style="z-index: 999; position: absolute; left: 173px; bottom: 30px;"
-        @click="agolStore.showDialog = true"
-        icon="img:globe.png"
-        size="xl"
-        color="white"
-        padding="10px"
-        class="text-green-9"
-        unelevated
-        square
-        stack
-        ><q-tooltip>Sign in to ArcGIS Online to add your data</q-tooltip>
-    </q-btn>
+    <!-- report summary boxes-->
+    <div class="bg-white shadow-3 rounded-borders" v-if="mapStore.currentPoint !== '' && mapStore.tab == 'sketch'" 
+      style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px;"  >
+      <the-report></the-report>
+    </div>
    
   </arcgis-map>
   <!-- agol add data dialog -->

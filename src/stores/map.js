@@ -10,6 +10,8 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 export const useMapStore = defineStore('mapStore', () => ({
   opacity: 70,
   tab: 'layers',
+  reportTab: 'conservation',
+  showReportDetails: true,
   compare: true, 
   panelState: 'closed',
   activeTool: 'legend',

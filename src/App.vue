@@ -37,7 +37,7 @@ const mobile = computed(() => {
           Site Renewables Right</span
         >
         <q-space></q-space>
-        <q-btn  outline color="blue-grey-9" label="About" no-caps @click="helpStore.showDialog = true"></q-btn>
+        <q-btn  color="blue-grey-9" label="About" unelevated square size="12px" @click="helpStore.showDialog = true"></q-btn>
       </q-toolbar>
     </q-header>
 

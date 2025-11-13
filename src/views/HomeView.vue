@@ -3,11 +3,11 @@ import TheMap from '../components/TheMap.vue'
 import TheLeftPanel from '@/components/TheLeftPanel.vue'
 import TheHelp from '@/components/TheHelp.vue'
 import TheLegend from '@/components/TheLegend.vue'
-import TheReport from '@/components/TheReport.vue'
+import TheReport from '@/components/TheReport_old.vue'
 import { useMapStore } from '../stores/map'
 import { useHelpStore } from '@/stores/help'
 //import LocalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/LocalBasemapsSource.js'
-import PortalBasemapsSource from "@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource.js";
+import PortalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/support/PortalBasemapsSource.js'
 import Basemap from '@arcgis/core/Basemap.js'
 import { ref, onMounted } from 'vue'
 import { useAgolStore } from '@/stores/arcGisOnline'
@@ -29,47 +29,44 @@ onMounted(() => {
     helpStore.showDialog = false
   } else {
     helpStore.showDialog = true
-  } 
-  if(localStorage.getItem('SRRUserWantsAuth') == 'yes'){
+  }
+  if (localStorage.getItem('SRRUserWantsAuth') == 'yes') {
     agolStore.showDialog = true
   }
 })
 
 const portal = new PortalBasemapsSource({
-  portal: "https://tnc.maps.arcgis.com",
+  portal: 'https://tnc.maps.arcgis.com',
   filterFunction: async (item, index, basemaps) => {
-    let bool = true;
+    let bool = true
     await item.load().then((loadedBasemap) => {
       // filter out basemaps - console loadedBasemap.title to get list of names
       const basemaps = [
-        "Enhanced Contrast Dark Map",
-        "Enhanced Contrast Map",
-        "Environment Map",
-        "Human Geography Map",
-        "Imagery (WGS84)",
-        "Light Gray Canvas",
-        "Ocean Basemap",
-        "OpenStreetMap",
-        "Streets",
-        "TNC Dark Gray Map",
-        "TNC Outdoor Map",
-        "USA NAIP Imagery",
-        "USA Topo Maps",
-        "USGS National Map",
-        "World Hillshade",
-        "World Imagery (Firefly)",
-      ];
+        'Enhanced Contrast Dark Map',
+        'Enhanced Contrast Map',
+        'Environment Map',
+        'Human Geography Map',
+        'Imagery (WGS84)',
+        'Light Gray Canvas',
+        'Ocean Basemap',
+        'OpenStreetMap',
+        'Streets',
+        'TNC Dark Gray Map',
+        'TNC Outdoor Map',
+        'USA NAIP Imagery',
+        'USA Topo Maps',
+        'USGS National Map',
+        'World Hillshade',
+        'World Imagery (Firefly)',
+      ]
 
       if (basemaps.includes(loadedBasemap.title)) {
-        bool = false;
+        bool = false
       }
-    });
-    return bool;
+    })
+    return bool
   },
-});
-
-
-
+})
 </script>
 
 <template>
@@ -251,7 +248,10 @@ const portal = new PortalBasemapsSource({
       </div>
       <div v-show="mapStore.activeTool == 'basemaps'" id="basemaps" class="basemaps">
         <q-scroll-area style="height: calc(100vh - 90px)">
-          <arcgis-basemap-gallery reference-element="my-map"  :source="portal" ></arcgis-basemap-gallery>
+          <arcgis-basemap-gallery
+            reference-element="my-map"
+            :source="portal"
+          ></arcgis-basemap-gallery>
         </q-scroll-area>
       </div>
       <div v-if="mapStore.activeTool == 'set opacity'" class="text-center">

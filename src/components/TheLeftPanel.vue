@@ -1,7 +1,7 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
 import { ref, computed, nextTick } from 'vue'
-import TheReport from './TheReport.vue'
+import TheReport from './TheReport_old.vue'
 
 const mapStore = useMapStore()
 import draggable from 'vuedraggable'
@@ -11,20 +11,7 @@ function buffer(size) {
   mapStore.bufferSize = size
   mapStore.createBuffer(mapStore.currentPoint)
 }
-function getRange(val) {
-  let newVal = val * 100
-  let range = ''
-  newVal > 0 && newVal < 26
-    ? (range = '0 - 25%')
-    : newVal > 25 && newVal < 51
-      ? (range = '26 - 50%')
-      : newVal > 50 && newVal < 76
-        ? (range = '51 - 75%')
-        : newVal > 75 && newVal < 101
-          ? (range = '76 - 100%')
-          : (range = '0 - 100%')
-  return range
-}
+
 
 // takes an element object
 async function scrollToElement(elid) {
@@ -33,9 +20,9 @@ async function scrollToElement(elid) {
   mapStore.activeTool = 'help'
   mapStore.activeHelpElement = elid
   // AI did this part! fixed the bug where it wasn't waiting for the DOM
-  // to update.  wondering if there is a shorter bit of code for this. 
+  // to update.  wondering if there is a shorter bit of code for this.
   // leaving it for now.  works beautifully!
-  
+
   // wait for Vue to apply DOM updates for the panel/tab change
   await nextTick()
 
