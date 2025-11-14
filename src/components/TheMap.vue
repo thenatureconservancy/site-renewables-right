@@ -185,6 +185,7 @@ onMounted(() => {
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
+    <arcgis-legend position="top-left"></arcgis-legend>
     <!-- help button next to search-->
     <q-btn
       square

@@ -121,7 +121,7 @@ computed(() => {
               </p>
             </div>
             <div class="q-mt-md q-mb-md bg-white text-left row">
-              <q-btn
+              <!--q-btn
                 square
                 size="sm"
                 stack
@@ -143,7 +143,7 @@ computed(() => {
                   >energy_savings_leaf</span
                 >
                 &nbsp;All</q-btn
-              >
+            -->
               <q-btn
                 square
                 size="sm"
@@ -334,7 +334,7 @@ computed(() => {
             <p>Click anywhere on the map to generate a Site Renewables Right area summary.</p>
           </div>
           <div class="q-mt-md q-mb-md bg-white text-left row q-pr-md">
-            <q-btn
+            <!--q-btn
               square
               size="sm"
               stack
@@ -356,7 +356,7 @@ computed(() => {
                 >energy_savings_leaf</span
               >
               &nbsp;All</q-btn
-            >
+          -->
             <q-btn
               square
               size="sm"
