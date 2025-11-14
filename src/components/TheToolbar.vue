@@ -11,14 +11,10 @@ let mapStore = useMapStore()
       stack
       unelevated=""
       @click="mapStore.filterLayers('wind')"
-      :class="mapStore.category == 'wind' ? 'bg-blue-grey-9 text-white' : ''"
+      :style="mapStore.category == 'wind' ? 'border: 2px solid #536067' : ''"
     >
       <span
-        :class="
-          mapStore.category == 'wind'
-            ? 'material-symbols-outlined text-white'
-            : 'material-symbols-outlined text-blue-grey-9'
-        "
+        class='material-symbols-outlined text-blue-grey-9'
         style="font-size: 28px"
         >wind_power</span
       >
@@ -30,14 +26,11 @@ let mapStore = useMapStore()
       stack
       unelevated=""
       @click="mapStore.filterLayers('solar')"
-      :class="mapStore.category == 'solar' ? 'bg-blue-grey-9 text-white q-ml-sm' : 'q-ml-sm'"
+      :style="mapStore.category == 'solar' ? 'border: 2px solid #536067' : ''"
+      class="q-ml-sm"
     >
       <span
-        :class="
-          mapStore.category == 'solar'
-            ? 'material-symbols-outlined text-white'
-            : 'material-symbols-outlined text-blue-grey-9'
-        "
+        class="material-symbols-outlined text-blue-grey-9"
         style="font-size: 28px"
         >solar_power</span
       >
@@ -49,14 +42,11 @@ let mapStore = useMapStore()
       stack
       unelevated=""
       @click="mapStore.filterLayers('floating')"
-      :class="mapStore.category == 'floating' ? 'bg-blue-grey-9 text-white q-ml-sm' : 'q-ml-sm'"
+      :style="mapStore.category == 'floating' ? 'border: 2px solid #536067' : ''"
+      class='q-ml-sm'
     >
       <span
-        :class="
-          mapStore.category == 'floating'
-            ? 'material-symbols-outlined text-white'
-            : 'material-symbols-outlined text-blue-grey-9'
-        "
+       class='material-symbols-outlined text-blue-grey-9'
         style="font-size: 28px"
         >water_lux</span
       >

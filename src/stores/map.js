@@ -624,6 +624,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       }
       if (item.title == 'Former Mine Lands'){
         console.log('mines count:' + count)
+        console.log(item.pathToLayer)
         this.summary.mines = count
         item.pathToLayer.count = count
       }

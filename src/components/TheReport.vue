@@ -47,10 +47,10 @@ function getRange(val) {
             </ul>
           </div>
           <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
-            <q-item class="shadow-2 q-mb-sm">
+            <q-item class="shadow-2 q-mb-sm bg-blue-grey-9 text-white">
               <q-item-section>
-                <q-item-label>{{ item.name }}</q-item-label>
-                <q-item-label caption
+                <q-item-label class="text-weight-medium">{{ item.name }}</q-item-label>
+                <q-item-label caption class="text-grey-1"
                   >{{
                     new Intl.NumberFormat('en-US', { notation: 'compact' }).format(item.area)
                   }}
@@ -77,10 +77,10 @@ function getRange(val) {
               <li><p class="text-body2">None intersecting buffer</p></li>
             </ul>
           </div>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
             <q-item-section>
-              <q-item-label>Landscape connectivity</q-item-label>
-              <q-item-label caption
+              <q-item-label class="text-weight-medium">Landscape connectivity</q-item-label>
+              <q-item-label caption class="text-grey-1"
                 >{{
                   new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
                     mapStore.summary.moderatelySensitiveTotalArea,
@@ -100,7 +100,7 @@ function getRange(val) {
                       maximumFractionDigits: 0,
                     }).format(
                       mapStore.summary.moderatelySensitiveTotalArea / mapStore.summary.bufferArea,
-                    ) + 'of total area'
+                    ) + ' of total area'
                   "
               /></q-item-label>
             </q-item-section>
@@ -116,16 +116,35 @@ function getRange(val) {
               <li><p class="text-body2">None intersecting buffer</p></li>
             </ul>
           </div>
-          <ul class="q-pl-md text-left">
-            <li v-if="mapStore.summary.brownfields > 0">
-              <p class="text-body2 text-left q-mb-none">
-                Brownfields: {{ mapStore.summary.brownfields }}
-              </p>
-            </li>
-            <li v-if="mapStore.summary.waterBodies > 0">
-              <p class="text-body2 q-mb-none">Mines: {{ mapStore.summary.mines }}</p>
-            </li>
-          </ul>
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white"  v-if="mapStore.summary.brownfields > 0">
+            <q-item-section>
+              <q-item-label class="text-weight-medium">Brownfields Over 10 Acres</q-item-label>
+             
+              <q-item-label>
+                <q-badge
+                  color="grey-3"
+                  text-color="black"
+                  class="text-weight-medium"
+                  :label="'Count: ' + mapStore.summary.brownfields "
+                    
+              /></q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white"  v-if="mapStore.summary.mines > 0">
+            <q-item-section>
+              <q-item-label class="text-weight-medium">Abandoned Mine Lands</q-item-label>
+             
+              <q-item-label>
+                <q-badge
+                  color="grey-3"
+                  text-color="black"
+                  class="text-weight-medium"
+                  :label="'Count: ' + mapStore.summary.mines "
+                    
+              /></q-item-label>
+            </q-item-section>
+          </q-item>
+          
         </q-scroll-area>
       </q-tab-panel>
       <q-tab-panel name="agriculture">AGRICULTURE RESULTS</q-tab-panel>

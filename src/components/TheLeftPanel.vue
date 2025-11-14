@@ -49,7 +49,7 @@ computed(() => {
         dense
         class="text-dark bg-grey-3 q-mx-sm bg-white"
         active-color="white"
-        active-bg-color="blue-grey-9"
+        active-bg-color="primary"
         indicator-color="primary"
         align="justify"
       >
