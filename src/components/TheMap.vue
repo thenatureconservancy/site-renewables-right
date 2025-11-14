@@ -204,36 +204,9 @@ onMounted(() => {
         </p></q-tooltip
       >
     </q-btn>
-    <!-- reset zoom button-->
-    <q-btn
-      size="xl"
-      @click="zoomHome()"
-      padding="10px"
-      class="text-primary shadow-3 rounded-borders bg-white"
-      unelevated
-      square
-      icon="home"
-      stack
-      style="z-index: 999; position: absolute; left: 75px; top: 15px"
-      ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
-    </q-btn>
-    <!-- agol login-->
-    <q-btn
-      style="z-index: 999; position: absolute; left: 145px; top: 15px;"
-        @click="agolStore.showDialog = true"
-        icon="img:globe.png"
-        size="xl"
-        color="white"
-        padding="10px"
-        class="text-green-9 shadow-3 rounded-borders"
-        unelevated
-        square
-        stack
-        ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
-    </q-btn>
     <!-- opacity control knob-->
     <div
-      style="z-index: 999; position: absolute; left: 215px; top: 15px"
+      style="z-index: 999; position: absolute; left: 65px; top: 15px"
       class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
     >
     <div class="col items-center" style="padding: 1.5px;">
@@ -256,6 +229,34 @@ onMounted(() => {
     </div>
    
     </div>
+    <!-- reset zoom button-->
+    <q-btn
+      size="md"
+      @click="zoomHome()"
+      padding="6px"
+      class="text-primary shadow-3 rounded-borders bg-white"
+      unelevated
+      square
+      icon="home"
+      stack
+      style="z-index: 999; position: absolute; left: 179px; top: 15px"
+      ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
+    </q-btn>
+    <!-- agol login-->
+    <q-btn
+      style="z-index: 999; position: absolute; left: 135px; top: 15px;"
+        @click="agolStore.showDialog = true"
+        icon="img:globe.png"
+        size="md"
+        color="white"
+        padding="6px"
+        class="text-green-9 shadow-3 rounded-borders"
+        unelevated
+        square
+        stack
+        ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
+    </q-btn>
+    
     <!-- report summary boxes-->
     <div class="bg-white shadow-3 rounded-borders" v-if="mapStore.currentPoint !== '' && mapStore.tab == 'sketch'" 
       style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px;"  >
