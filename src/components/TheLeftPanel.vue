@@ -186,15 +186,30 @@ computed(() => {
           </div>
           <!-- second toc for report-->
           <div v-if="mapStore.currentPoint !== ''">
-            <p class="text-bold q-pl-md q-mb-sm">Show Data Layers:</p>
-              <p class="q-pb-none q-mb-md q-pl-sm">
+            <p class="text-bold q-pl-md q-mb-sm">
+              Show Layers:
+              <q-btn class="q-ml-sm" flat square padding="none" icon="o_info" size="sm">
+                <q-menu>
+                  <div class="q-pa-md" style="width: 300px">
+                    <p class="">
+                      Use this option to control which layers appear in the list below. It filters
+                      out any layers outside the your chosen area ie; buffer or map view so you only
+                      see relavant layers.
+                    </p>
+                    <q-btn color="blue" size="sm" flat>More info</q-btn>
+                  </div>
+                </q-menu>
+              </q-btn>
+            </p>
+
+            <p class="q-pb-none q-mb-md q-pl-sm">
               <q-btn
                 square
                 size="md"
                 stack
                 unelevated=""
                 @click="mapStore.reportLayerFilter = 'buffer'"
-                :style="mapStore.reportLayerFilter == 'buffer'? 'border: 2px solid #536067' : ''"
+                :style="mapStore.reportLayerFilter == 'buffer' ? 'border: 2px solid #536067' : ''"
                 class="text-weight-light"
                 label="Within Buffer"
               >
@@ -221,7 +236,7 @@ computed(() => {
               >
                 All
               </q-btn>
-              </p>
+            </p>
             <the-layer-list></the-layer-list>
           </div>
           <div

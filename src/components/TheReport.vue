@@ -47,7 +47,7 @@ function getRange(val) {
             </ul>
           </div>
           <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
-            <q-item class="shadow-2 q-mb-sm bg-blue-grey-1 ">
+            <q-item class="shadow-2 q-mb-sm ">
               <q-item-section>
                 <q-item-label class="text-weight-medium">{{ item.name }}</q-item-label>
                 <q-item-label caption class="text-grey-10"
@@ -77,7 +77,7 @@ function getRange(val) {
               <li><p class="text-body2">None intersecting buffer</p></li>
             </ul>
           </div>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-1" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm " v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
             <q-item-section>
               <q-item-label class="text-weight-medium">Landscape connectivity</q-item-label>
               <q-item-label caption class="text-grey-10"
@@ -130,7 +130,7 @@ function getRange(val) {
               /></q-item-label>
             </q-item-section>
           </q-item>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-1"  v-if="mapStore.summary.mines > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm"  v-if="mapStore.summary.mines > 0">
             <q-item-section>
               <q-item-label class="text-weight-medium">Abandoned Mine Lands</q-item-label>
              
