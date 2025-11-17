@@ -32,7 +32,7 @@ function getRange(val) {
         <q-scroll-area style="height: calc(100vh - 265px)">
           <p class="text-weight-medium">Conservation Values Report Summary</p>
 
-          <div class="bg-grey-3 q-pa-sm q-mb-sm">
+          <div class="bg-blue-grey-9 text-white q-pa-sm q-mb-sm">
             <p class="col text-body2 text-weight-medium q-pb-none q-mb-none">
               <q-icon size="xs" color="red" name="flag"></q-icon> Highly sensitive
             </p>
@@ -47,10 +47,10 @@ function getRange(val) {
             </ul>
           </div>
           <div v-for="(item, index) in mapStore.summary.highlySensitiveHabitats" :key="index">
-            <q-item class="shadow-2 q-mb-sm bg-blue-grey-9 text-white">
+            <q-item class="shadow-2 q-mb-sm bg-blue-grey-1 ">
               <q-item-section>
                 <q-item-label class="text-weight-medium">{{ item.name }}</q-item-label>
-                <q-item-label caption class="text-grey-1"
+                <q-item-label caption class="text-grey-10"
                   >{{
                     new Intl.NumberFormat('en-US', { notation: 'compact' }).format(item.area)
                   }}
@@ -58,7 +58,7 @@ function getRange(val) {
                 >
                 <q-item-label>
                   <q-badge
-                    color="grey-3"
+                    color="white"
                     text-color="black"
                     :label="getRange(item.percentOfTotal) + ' of total area'"
                     class="text-weight-medium"
@@ -67,7 +67,7 @@ function getRange(val) {
             </q-item>
           </div>
 
-          <div class="bg-grey-3 q-mt-md q-pa-sm">
+          <div class="bg-blue-grey-9 text-white q-mt-md q-pa-sm">
             <p class="text-body2 text-weight-medium q-mb-none">
               <q-icon size="xs" color="yellow-8" name="flag"></q-icon> Moderately sensitive
             </p>
@@ -77,10 +77,10 @@ function getRange(val) {
               <li><p class="text-body2">None intersecting buffer</p></li>
             </ul>
           </div>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-1" v-if="mapStore.summary.moderatelySensitiveTotalArea > 0">
             <q-item-section>
               <q-item-label class="text-weight-medium">Landscape connectivity</q-item-label>
-              <q-item-label caption class="text-grey-1"
+              <q-item-label caption class="text-grey-10"
                 >{{
                   new Intl.NumberFormat('en-US', { notation: 'compact' }).format(
                     mapStore.summary.moderatelySensitiveTotalArea,
@@ -90,7 +90,7 @@ function getRange(val) {
               >
               <q-item-label>
                 <q-badge
-                  color="grey-3"
+                  color="white"
                   text-color="black"
                   class="text-weight-medium"
                   :label="
@@ -106,7 +106,7 @@ function getRange(val) {
             </q-item-section>
           </q-item>
         
-          <div class="bg-grey-3 q-mt-md q-pa-sm">
+          <div class="bg-blue-grey-9 text-white q-mt-md q-pa-sm">
             <p class="text-body2 text-weight-medium q-mb-none">
               <q-icon size="xs" color="green" name="flag"></q-icon> Degraded and disturbed lands
             </p>
@@ -116,13 +116,13 @@ function getRange(val) {
               <li><p class="text-body2">None intersecting buffer</p></li>
             </ul>
           </div>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white"  v-if="mapStore.summary.brownfields > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-1"  v-if="mapStore.summary.brownfields > 0">
             <q-item-section>
               <q-item-label class="text-weight-medium">Brownfields Over 10 Acres</q-item-label>
              
               <q-item-label>
                 <q-badge
-                  color="grey-3"
+                  color="white"
                   text-color="black"
                   class="text-weight-medium"
                   :label="'Count: ' + mapStore.summary.brownfields "
@@ -130,13 +130,13 @@ function getRange(val) {
               /></q-item-label>
             </q-item-section>
           </q-item>
-          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-9 text-white"  v-if="mapStore.summary.mines > 0">
+          <q-item class="shadow-2 q-mb-sm q-mt-sm bg-blue-grey-1"  v-if="mapStore.summary.mines > 0">
             <q-item-section>
               <q-item-label class="text-weight-medium">Abandoned Mine Lands</q-item-label>
              
               <q-item-label>
                 <q-badge
-                  color="grey-3"
+                  color="white"
                   text-color="black"
                   class="text-weight-medium"
                   :label="'Count: ' + mapStore.summary.mines "
