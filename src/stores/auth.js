@@ -17,7 +17,7 @@ export const useAuthStore = defineStore("auth", () => ({
   async login() {
     console.log('login')
       const info = new OAuthInfo({
-        appId: "7weYTc9WhQGVB7Ju", // update per app
+        appId: "e7NHuTIvSj0dRYPV", // update per app
         popup: false,
         expiration: 20160, // 14 days in mins
       });

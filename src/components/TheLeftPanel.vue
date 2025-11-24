@@ -193,7 +193,7 @@ computed(() => {
                   <div class="q-pa-md" style="width: 300px">
                     <p class="">
                       Use this option to control which layers appear in the list below. It filters
-                      out any layers outside the your chosen area ie; buffer or map view so you only
+                      out any layers outside your chosen area ie; buffer or map view so you only
                       see relavant layers.
                     </p>
                     <q-btn color="blue" size="sm" flat>More info</q-btn>
