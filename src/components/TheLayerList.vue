@@ -1,6 +1,6 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 let mapStore = useMapStore()
 
@@ -49,6 +49,8 @@ async function scrollToElement(elid) {
     console.warn('scrollToElement: could not find element', elid)
   }
 }
+
+
 </script>
 
 <template>
@@ -108,8 +110,17 @@ async function scrollToElement(elid) {
                       @click.stop="
                         mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)
                       "
-                      >{{ sublayer.title }}</q-checkbox
-                    >
+                      >{{ sublayer.title }}<br />
+                      <q-slider
+                        style="width: 100px"
+                        v-if="sublayer.elid == 'nativeLands'"
+                        v-model="sublayer.opacity"
+                        :min="0.1"
+                        :max="1"
+                        :step="0.1"
+                        @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
+                      />
+                    </q-checkbox>
                   </q-item-section>
                   <q-item-section side>
                     <div style="width: 20px; height: 20px">

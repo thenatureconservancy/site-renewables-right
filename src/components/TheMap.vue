@@ -106,6 +106,12 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
+  let nativeLands = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
+    id: 'nativeLands',
+    visible: false,
+    opacity: 1,
+  })
 
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
@@ -127,11 +133,12 @@ onMounted(() => {
       protectedL,
       qualitywater,
       wetlands,
+      nativeLands,
       bufferLayer,
       pointLayer,
     ],
   })
-
+  mapStore.filterLayers('solar')
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
@@ -185,7 +192,7 @@ onMounted(() => {
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
-    
+
     <!-- help button next to search-->
     <q-btn
       square
@@ -209,25 +216,22 @@ onMounted(() => {
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
       class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
     >
-    <div class="col items-center" style="padding: 1.5px;">
-      <q-knob
-    
-        show-value
-        font-size="14px"
-        class="text-secondary q-mb-none"
-        v-model="mapStore.opacity"
-        size="50px"
-        :thickness="0.3"
-        color="primary"
-        track-color="grey-4"
-        @update:model-value="mapStore.changeOpacity()"
-      >
-        <q-icon name="opacity" size="sm" class="text-green-9">
-         
-        </q-icon> <q-tooltip class="text-body2">Set opacity: {{ mapStore.opacity }}%</q-tooltip>
-      </q-knob>
-    </div>
-   
+      <div class="col items-center" style="padding: 1.5px">
+        <q-knob
+          show-value
+          font-size="14px"
+          class="text-secondary q-mb-none"
+          v-model="mapStore.opacity"
+          size="50px"
+          :thickness="0.3"
+          color="primary"
+          track-color="grey-4"
+          @update:model-value="mapStore.changeOpacity()"
+        >
+          <q-icon name="opacity" size="sm" class="text-green-9"> </q-icon>
+          <q-tooltip class="text-body2">Set opacity: {{ mapStore.opacity }}%</q-tooltip>
+        </q-knob>
+      </div>
     </div>
     <!-- reset zoom button-->
     <q-btn
@@ -244,25 +248,27 @@ onMounted(() => {
     </q-btn>
     <!-- agol login-->
     <q-btn
-      style="z-index: 999; position: absolute; left: 135px; top: 15px;"
-        @click="agolStore.showDialog = true"
-        icon="img:globe.png"
-        size="md"
-        color="white"
-        padding="6px"
-        class="text-green-9 shadow-3 rounded-borders"
-        unelevated
-        square
-        stack
-        ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
+      style="z-index: 999; position: absolute; left: 135px; top: 15px"
+      @click="agolStore.showDialog = true"
+      icon="img:globe.png"
+      size="md"
+      color="white"
+      padding="6px"
+      class="text-green-9 shadow-3 rounded-borders"
+      unelevated
+      square
+      stack
+      ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
     </q-btn>
-    
+
     <!-- report summary boxes-->
-    <div class="bg-white shadow-3 rounded-borders" v-if="mapStore.currentPoint !== '' && mapStore.tab == 'sketch'" 
-      style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px;"  >
+    <div
+      class="bg-white shadow-3 rounded-borders"
+      v-if="mapStore.currentPoint !== '' && mapStore.tab == 'sketch'"
+      style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px"
+    >
       <the-report></the-report>
     </div>
-   
   </arcgis-map>
   <!-- agol add data dialog -->
   <keep-alive>
@@ -270,7 +276,6 @@ onMounted(() => {
       <ArcGISOnline></ArcGISOnline>
     </q-dialog>
   </keep-alive>
-  
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
