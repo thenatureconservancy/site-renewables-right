@@ -69,9 +69,9 @@ export const useMapStore = defineStore('mapStore', () => ({
     },
    
   ]},
-  {header: 'Degraded Lands' , id: 'agriculture', expanded: false, 
+  {header: 'Disturbed Lands' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Degraded Lands', id: 'ag', visible: true, visibleModel: true, 
+    {title: ' Disturbed Lands', id: 'ag', visible: true, visibleModel: true, 
       sublayers:  [
         {index: 0, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
@@ -188,7 +188,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
     if (group.header == 'Agricultural Values' && group.expanded == true ||
       group.header == 'Conservation Values' && group.expanded == true ||
-      group.header == 'Degraded Lands' && group.expanded == true
+      group.header == 'Disturbed Lands' && group.expanded == true
     ){
       //when the other two are open close community
       this.layers[3].expanded = false;
