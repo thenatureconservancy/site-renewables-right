@@ -67,24 +67,28 @@ export const useMapStore = defineStore('mapStore', () => ({
       {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBE25M+0+JQQUaWYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAAIkAVU/br7OgAAAABJRU5ErkJggg=="},
     ]
     },
-    {title: 'Degraded and Disturbed Lands', id: 'degraded', visible: true, visibleModel: true, 
-      sublayers: [
-        {index: 0, elid: 'abandonedmines', filter: true, visible: true, visibleModel: true, 
+   
+  ]},
+  {header: 'Degraded Lands' , id: 'agriculture', expanded: false, 
+   subheaders: [
+    {title: ' Degraded Lands', id: 'ag', visible: true, visibleModel: true, 
+      sublayers:  [
+        {index: 0, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
            longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines <a href="https://mrdata.usgs.gov/usmin/" target="_blank">(USGS geospatial database).</a> Users are advised that the data are of inconsistent quality and better data may be available from state mining agencies. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', 
            totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGwSURBVDhP5ZPLbtNQEECPnbhJmgewARaULd+B+AEWfCoLlhVCbVFRIVIqmlRNY6VJareJUz9i+/pF7EYRUR1vyI6zudLM6OjeOzNSsoQdIq/OnbFzYeGT4yRmttCJREJV3qfZbCLLxXfYmo3jGF94jK0BPfOMnv0TP/CyeBFbhVEcYnpzruw2v+xDOs435u6UMApWFflsFVrCZPDQ5bJ8zLD1A63+m75xkcWLyBVGUcRc6FyKU+zGLeEzC2f/jm54hBFMsvw2coWucLj1B1yXzgjrNkoDgppNXzlF81UWnrOqfEqucGRfo4pzzNaQqCyyWFIK8F9MGYs+mjXKYnlsCNMOuq7LTdBlIneh7pPIj11NSglSLUClTV+0s7q8jq+F6TiKwGdq64ziC6YVFXlvOajSYz49pDJolR6q1Obe0nI7vhamH/3gGZwb39HLV4hafjellsBQhnRmJ9jB05r1pqRC3R5zdPOFUaWDU71HLmU1GyyXh6r3nJeLd7x/+5FXzTcb27MWpv9x50z4OviMGc6IpOIB3pOrfDj4xOvGAYqirKJ/CXdF7tj8C/+dEP4AGLv06o7CI14AAAAASUVORK5CYII="},
-        {index: 1, elid: 'brownfields', filter: true, visible: true, visibleModel: true, opacity: 0.9,
+        {index: 1, elid: 'brownfields', filter: true, visible: false, visibleModel: false, opacity: 0.9,
            category: 'both', title: 'Brownfields over 10 acres', inBuffer: false, inExtent: false, description: 'short description',
             longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAC/SURBVDhPY/wPBAxUBExQmmpg1EDKAcFYnjJ5CsOurdsZnr15ySAlIs7g5u3JkJObA5XFBHgNTI1PYpD5w8cQpmzHoMAnwfDg0wuGVXcPMTxh+cQwe+E8qCpUgNNAkMvenrjDUGYYBhVBgK7zqxiELVSwuhRnGIK8CXIZNgASB8ljAzgNBIUZyJvYAEgcJI8N4DQQFAGgMMMGQOIgeWwAp4Gg2ARFADYAEgfJYwP0i2UYoGo6JAdQPeuNOAMZGACQ7mcGtSS9RgAAAABJRU5ErkJggg=="},
-       {index: 2, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
+       {index: 2, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
       longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
       totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
 	          ]   
-    },
+  },
   ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Agricultural Values', id: 'ag', visible: false, visibleModel: false, 
+    {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, 
       sublayers: [
         {index: 0, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
        opacity: 0.9, category: 'solar', title: 'Highest Quality Farmland', description: 'short description',
@@ -94,7 +98,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       },
  	   ]
   },
-]},
+  ]},
   {header: 'Community Considerations' , id: 'community', expanded: false, 
    subheaders: [
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
@@ -102,11 +106,11 @@ export const useMapStore = defineStore('mapStore', () => ({
 	   ]
   },
   ]},
-    {header: 'Native Lands' , id: 'native', expanded: false, 
+    {header: 'Native Lands' , id: 'native', expanded: true, 
    subheaders: [
-     {title: ' Native Lands', id: 'native', visible: false, visibleModel: false, 
+     {title: ' Native Lands', id: 'native', visible: true, visibleModel: true, 
       sublayers: [
-        {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
+        {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true,
        opacity: 0.9, category: 'both', title: 'American Indian, Alaska Native, and Native Hawaiian Areas', description: 'short description',
         longDescription: '',        totalArea: 0, percentOfTotal: 0, inExtent: '',
         legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAMUlEQVR4nGNgGOyAEca4du3af0oM0tLSYmRgYGBgotRF6GDUwFEDRw0cNZA+Bg5+AADqfAQg5jR4QQAAAABJRU5ErkJggg=="      }]
@@ -177,15 +181,18 @@ export const useMapStore = defineStore('mapStore', () => ({
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
+      this.layers[2].expanded = false;
       this.toggleGroupVisibility(this.layers[0])
       this.toggleGroupVisibility(this.layers[1])
+      this.toggleGroupVisibility(this.layers[2])
     }
     if (group.header == 'Agricultural Values' && group.expanded == true ||
-      group.header == 'Conservation Values' && group.expanded == true
+      group.header == 'Conservation Values' && group.expanded == true ||
+      group.header == 'Degraded Lands' && group.expanded == true
     ){
       //when the other two are open close community
-      this.layers[2].expanded = false;
-      this.toggleGroupVisibility(this.layers[2])
+      this.layers[3].expanded = false;
+      this.toggleGroupVisibility(this.layers[3])
     }
   },
   toggleGroupVisibility(group){

@@ -11,6 +11,8 @@ import PortalBasemapsSource from '@arcgis/core/widgets/BasemapGallery/support/Po
 import Basemap from '@arcgis/core/Basemap.js'
 import { ref, onMounted } from 'vue'
 import { useAgolStore } from '@/stores/arcGisOnline'
+import TileLayer from "@arcgis/core/layers/TileLayer";
+
 const mapStore = useMapStore()
 const helpStore = useHelpStore()
 
@@ -40,6 +42,11 @@ const portal = new PortalBasemapsSource({
   filterFunction: async (item, index, basemaps) => {
     let bool = true
     await item.load().then((loadedBasemap) => {
+      // Rename TNC World Topographic Map
+      if (loadedBasemap.title === 'TNC World Topographic Map') {
+        loadedBasemap.title = 'TNC World Topo Political Boundaries'
+      }
+      
       // filter out basemaps - console loadedBasemap.title to get list of names
       const basemaps = [
         'Enhanced Contrast Dark Map',
@@ -51,7 +58,7 @@ const portal = new PortalBasemapsSource({
         'Ocean Basemap',
         'OpenStreetMap',
         'Streets',
-        'TNC Dark Gray Map',
+       // 'TNC Dark Gray Map',
         'TNC Outdoor Map',
         'USA NAIP Imagery',
         'USA Topo Maps',
@@ -63,10 +70,14 @@ const portal = new PortalBasemapsSource({
       if (basemaps.includes(loadedBasemap.title)) {
         bool = false
       }
+  
     })
     return bool
   },
 })
+
+
+
 </script>
 
 <template>

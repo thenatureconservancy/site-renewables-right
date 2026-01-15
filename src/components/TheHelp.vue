@@ -9,8 +9,8 @@ const mapStore = useMapStore()
   <div class="bg-white q-ma-sm" v-for="(item, index1) in mapStore.layers" :key="index1">
     <div v-for="(layer, index2) in item.subheaders" :key="index2">
       <div class="bg-blue-grey-9 text-white text-center">
-        <p v-if="index1 == 0" class="text-body1">{{item.header}} - <br/>{{ layer.title }}</p>
-        <p v-if="index1 !== 0" class="text-body1">{{ layer.title }}</p>
+       
+        <p class="text-body1">{{ layer.title }}</p>
       </div>
       <q-list class="">
         <q-item class="q-pl-sm" v-for="(sublayer, index3) in layer.sublayers" :key="index3" :id="sublayer.elid">

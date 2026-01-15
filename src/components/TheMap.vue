@@ -7,6 +7,9 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import ArcGISOnline from './ArcGISOnline.vue'
 import TheReport from './TheReport.vue'
 
+import Basemap from '@arcgis/core/Basemap'
+import TileLayer from '@arcgis/core/layers/TileLayer'
+
 /**GET STORE */
 import { useMapStore } from '../stores/map'
 import { useAgolStore } from '@/stores/arcGisOnline'
@@ -19,6 +22,7 @@ function zoomHome() {
   arcgisMap.zoom = 3
   arcgisMap.center = '-95.5348, 38.7946'
 }
+
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
   // highly sensitive
@@ -82,13 +86,13 @@ onMounted(() => {
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
     id: 'abandonedmines',
-    visible: true,
+    visible: false,
     opacity: 0.8,
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
-    visible: true,
+    visible: false,
     opacity: 0.8,
   })
   // agriculture
@@ -109,7 +113,7 @@ onMounted(() => {
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
     id: 'nativeLands',
-    visible: false,
+    visible: true,
     opacity: 1,
   })
 
@@ -151,37 +155,6 @@ onMounted(() => {
       mapStore.createBuffer(e)
     }
   })
-
-  arcgisMap.when(() => {
-    // Map is fully loaded
-    mapStore.getLegendData()
-
-    // Add other listeners after map is ready
-    arcgisMap.addEventListener('arcgisViewChange', (e) => {
-      if (arcgisMap.extent) {
-        mapStore.currentMapExtent = markRaw(arcgisMap.extent)
-      }
-      showResetZoomButton.value = arcgisMap.zoom > 3
-    })
-
-    arcgisMap.addEventListener('arcgisViewClick', (e) => {
-      if (mapStore.tab === 'sketch') {
-        bufferLayer.visible = true
-        pointLayer.visible = true
-        mapStore.createBuffer(e)
-      }
-    })
-  })
-
-  //add legend symbols to toc layers list
-  //mapStore.getLegendData()
-  /*  let url = 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8/legend?f=pjson';
-    let _this = this;
-    fetch(url).then(function(response) {
-      return response.json();
-    }).then(function(data) {
-      console.log(data.layers)
-    })*/
 })
 </script>
 
