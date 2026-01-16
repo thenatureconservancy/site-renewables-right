@@ -155,6 +155,8 @@ onMounted(() => {
       mapStore.createBuffer(e)
     }
   })
+
+
 })
 </script>
 
