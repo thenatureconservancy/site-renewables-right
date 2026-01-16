@@ -32,7 +32,7 @@ onMounted(() => {
     sublayers: [{ id: 3 }],
     visible: true,
     opacity: 1,
-    maxScale: 3000000,
+    maxScale: 300000,
   })
   let protectedL = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -40,7 +40,7 @@ onMounted(() => {
     sublayers: [{ id: 6 }],
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let resilient = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -48,7 +48,7 @@ onMounted(() => {
     sublayers: [{ id: 7 }],
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let prairie = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -56,7 +56,7 @@ onMounted(() => {
     sublayers: [{ id: 5 }],
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let whoopwind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -64,7 +64,7 @@ onMounted(() => {
     sublayers: [{ id: 8 }],
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let whoopsolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -72,14 +72,14 @@ onMounted(() => {
     sublayers: [{ id: 9 }],
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
     visible: true,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   // moderate sensitive
   let landscape = new MapImageLayer({
@@ -88,7 +88,7 @@ onMounted(() => {
     sublayers: [{ id: 4 }],
     visible: true,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
@@ -96,14 +96,14 @@ onMounted(() => {
     id: 'abandonedmines',
     visible: false,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
     visible: false,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   // agriculture
   let abandonedag = new MapImageLayer({
@@ -112,7 +112,7 @@ onMounted(() => {
     sublayers: [{ id: 1 }],
     visible: false,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -120,14 +120,14 @@ onMounted(() => {
     sublayers: [{ id: 2 }],
     visible: false,
     opacity: 0.8,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
     id: 'nativeLands',
     visible: true,
     opacity: 1,
-     maxScale: 3000000,
+     maxScale: 300000,
   })
 
   //defining graphic layers to be used with the buffer tool
