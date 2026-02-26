@@ -173,7 +173,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         visibleModel: false,
         opacity: 0.9,
         category: 'both',
-        title: 'Flood Plains and Wetlands',
+        title: 'Floodplains and Wetlands',
         inBuffer: false,
         inExtent: false,
         description: 'short description',
