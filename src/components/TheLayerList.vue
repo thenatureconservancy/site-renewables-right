@@ -49,8 +49,6 @@ async function scrollToElement(elid) {
     console.warn('scrollToElement: could not find element', elid)
   }
 }
-
-
 </script>
 
 <template>

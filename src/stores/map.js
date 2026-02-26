@@ -6,6 +6,8 @@ import * as bufferOperator from '@arcgis/core/geometry/operators/bufferOperator.
 import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator.js";
 import * as areaOperator from "@arcgis/core/geometry/operators/areaOperator.js";
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
+import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
+import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
 
 export const useMapStore = defineStore('mapStore', () => ({
   opacity: 70,
@@ -49,22 +51,217 @@ export const useMapStore = defineStore('mapStore', () => ({
   splash: true,
 
   layers: [
-  {header: 'Conservation Values' , id: 'avoid', expanded: true,
+  {header: 'Conservation Values' , id: 'avoid', expanded: false,
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
-    sublayers: [
-    {index: 0, mapIndex: 11, elid: 'wetlands', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Flood Plains and Wetlands', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBM459/0+JQRlWnIwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAADq8gT9+4JlcgAAAABJRU5ErkJggg=="},
-    {index: 1, mapIndex: 10, elid: 'qualitywater', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
-    {index: 2, mapIndex: 9, elid: 'protected', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Protected Areas', inBuffer: false, inExtent: false, description: 'short description for protected', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBvVNv/6fEoOJsVUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAJMAVV3tayLwAAAABJRU5ErkJggg=="},
-    {index: 3, mapIndex: 8, elid: 'resilient', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Resilient and Connected Network', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBzx9l/KfEIEm5GYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAD2dAUhr2Ob1QAAAABJRU5ErkJggg=="},
-    {index: 4, mapIndex: 7, elid: 'prairie', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Prairie Grouse', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBHUsL/1NiUEV0PyOKgdQCLKMGUgxYKDcCFYwaSDlgoYIZKGDUQMoBPAxh5RnVDKQWAAApcwW0EGndgwAAAABJRU5ErkJggg=="},
-    {index: 5, mapIndex: 6, elid: 'whoopwind', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'wind', title: 'Whooping Crane', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
-    {index: 6, mapIndex: 5, elid: 'whoopsolar', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'solar', title: 'Whooping Crane', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmB/6st/1NiEGPrcUYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAAhjAWff1Dw7QAAAABJRU5ErkJggg=="},
+      sublayers:  [
+      {
+        index: 0,
+        mapIndex: 10,
+        elid: 'bigGameSolar',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'solar',
+        title: 'Big Game',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
+      },
+      {
+        index: 1,
+        mapIndex: 11,
+        elid: 'birdsWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Birds',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
+      },
+        
+      {
+        index: 5,
+        mapIndex: 15,
+        elid: 'prairieGrouse',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Prairie Grouse',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
+      },
+      {
+        index: 6,
+        mapIndex: 6,
+        elid: 'protectedAreas',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Protected Areas',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8cegVAymAiSTVoxpGNQwpDQDjnwKkaYx/0AAAAABJRU5ErkJggg==' // #d8c2ea
+      },
+      {
+        index: 7,
+        mapIndex: 4,
+        elid: 'resilientConnected',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Resilient and Connected',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
+      },
+      {
+        index: 8,
+        mapIndex: 18,
+        elid: 'threatenedEndangeredSpecies',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Threatened and Endangered Species',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
+      },
+      {
+        index: 9,
+        mapIndex: 19,
+        elid: 'floodPlainsWetlands',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Flood Plains and Wetlands',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
+      },
+      {
+        index: 10,
+        mapIndex: 20,
+        elid: 'whoopingCraneSolar',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'solar',
+        title: 'Whooping Crane',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
+      },
+      {
+        index: 11,
+        mapIndex: 21,
+        elid: 'whoopingCraneWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Whooping Crane',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
+      },
+         {index: 12, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
+      
     ]
     },
     {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
-      {index: 0, elid: 'landscape', filter: true, visible: true, visibleModel: true, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBE25M+0+JQQUaWYwoBlILsIwaSDFgodwIVDBqIOWAhQpmoIBRAykH8DCElWdUM5BaAAAIkAVU/br7OgAAAABJRU5ErkJggg=="},
+      {index: 0, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
+   
+        {
+        index: 3,
+        mapIndex: 13,
+        elid: 'migratoryBirdStopoverWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Migratory Bird Stopover',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
+      },
+           {
+        index: 2,
+        mapIndex: 12,
+        elid: 'landscapeIntactness',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Landscape Intactness',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
+      },
     ]
     },
    
@@ -138,6 +335,10 @@ export const useMapStore = defineStore('mapStore', () => ({
   //this function updates the layer order in the map when the user drags to reorder layers
   //on the UI
   updateLayerOrder(layer){
+    console.log(layer)
+    if(layer.id == 'native'){
+      return
+    }
     let map = document.querySelector("arcgis-map").map;
     //update index in layers list
     layer.sublayers.forEach((sublayer,index) => { 
@@ -177,7 +378,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.toggleGroupVisibility(group)
     
     // Custom behavior for expansion groups
-    if (group.header == 'Community Considerations' && group.expanded == true){
+    if (group.header == 'Community Considerations'  && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
@@ -186,12 +387,23 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[2])
     }
-    if (group.header == 'Agricultural Values' && group.expanded == true ||
+      if (group.header == 'Agricultural Values'  && group.expanded == true){
+      //when community is open close the other two groups
+      this.layers[0].expanded = false;
+      this.layers[1].expanded = false;
+      this.layers[3].expanded = false;
+      this.toggleGroupVisibility(this.layers[0])
+      this.toggleGroupVisibility(this.layers[1])
+      this.toggleGroupVisibility(this.layers[3])
+    }
+    if (
       group.header == 'Conservation Values' && group.expanded == true ||
       group.header == 'Disturbed Lands' && group.expanded == true
     ){
       //when the other two are open close community
       this.layers[3].expanded = false;
+      this.layers[2].expanded = false;
+      this.toggleGroupVisibility(this.layers[2])
       this.toggleGroupVisibility(this.layers[3])
     }
   },
@@ -221,6 +433,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       sublayer.visible = layer.visible
       sublayers[i].visibleModel = layer.visible
     }
+    this.filterLayers(this.category)
   },
   //sets individual layer visibility
   setSublayerVisibility(elid, checked) {
@@ -360,6 +573,12 @@ export const useMapStore = defineStore('mapStore', () => ({
   
   //function to create the buffer
   createBuffer(e){
+    if(this.bufferSize > 36){
+      alert ('Buffer size cannot exceed 35 miles')
+      return
+    }
+    
+
     const polySymbol = {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [255, 255, 255, 0.3],
@@ -412,6 +631,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       const graphic = bufferLayer.graphics.getItemAt(0)
       graphic.geometry = buffer
     }
+     this.getHistogram(buffer, 'test')
     //clear values from previous buffer
     //view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
     /*let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
@@ -528,9 +748,13 @@ export const useMapStore = defineStore('mapStore', () => ({
     for (let i=0;i<layerList.length;i++){
       if(layerList[i].type == 'polygon'){
         this.getIntersectionFeatures(buffer, layerList[i])
+        this.getHistogram(buffer, layerList[i])
       }
       if(layerList[i].type == 'point'){
         this.getCountFeatures(buffer, layerList[i])
+      }
+      if(layerList[i].type == 'raster'){
+         this.getHistogram(buffer, layerList[i])
       }
       //this.getIntersectionExtent(layerList[i])
     }  
@@ -690,6 +914,37 @@ export const useMapStore = defineStore('mapStore', () => ({
     })
    
     
+  },
+  getHistogram(buffer, item){
+
+    console.log(item)
+    //ProtectedAreas_project
+    //ResilientAndConnected_COG
+        let mosaicRule = new MosaicRule({
+        method: 'attribute',
+        where: "Name = 'ProtectedAreas_project'",
+        sortValue: 'ResilientAndConnected_COG',
+        sortField: 'Name',
+        ascending: false,
+        operation: 'first',
+      });
+        let params = new ImageHistogramParameters({
+          geometry: buffer,
+          mosaicRule: mosaicRule,
+          pixelSize: {
+            x: 30,
+            y: 30,
+            spatialReference: {
+              wkid: 102100,
+            },
+          },
+        });
+    let map = document.querySelector("arcgis-map").map;
+    let imageLayer = map.findLayerById('imageLayer');
+    console.log(imageLayer)
+    imageLayer.computeHistograms(params).then((results) => {
+	    console.log(results)
+	  })
   },
   changeNativeOpacity(opacity){
       let map = document.querySelector("arcgis-map").map;

@@ -6,6 +6,7 @@ import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import ArcGISOnline from './ArcGISOnline.vue'
 import TheReport from './TheReport.vue'
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
 
 import Basemap from '@arcgis/core/Basemap'
 import TileLayer from '@arcgis/core/layers/TileLayer'
@@ -26,69 +27,120 @@ function zoomHome() {
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
   // highly sensitive
-  let wetlands = new MapImageLayer({
+
+  let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'wetlands',
-    sublayers: [{ id: 3 }],
-    visible: true,
+    id: 'bigGameSolar',
+    sublayers: [{ id: 10 }],
+    visible: false,
     opacity: 1,
     maxScale: 300000,
   })
-  let protectedL = new MapImageLayer({
+
+  let birdsWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'protected',
+    id: 'birdsWind',
+    sublayers: [{ id: 11 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
+  })
+
+  let prairieGrouse = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'prairieGrouse',
+    sublayers: [{ id: 15 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
+  })
+
+  let protectedAreas = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'protectedAreas',
     sublayers: [{ id: 6 }],
-    visible: true,
+    visible: false,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
-  let resilient = new MapImageLayer({
+
+  let resilientConnected = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'resilient',
-    sublayers: [{ id: 7 }],
-    visible: true,
+    id: 'resilientConnected',
+    sublayers: [{ id: 4 }],
+    visible: false,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
-  let prairie = new MapImageLayer({
+
+  let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'prairie',
-    sublayers: [{ id: 5 }],
-    visible: true,
+    id: 'threatenedEndangeredSpecies',
+    sublayers: [{ id: 18 }],
+    visible: false,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
-  let whoopwind = new MapImageLayer({
+
+  let floodPlainsWetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'whoopwind',
-    sublayers: [{ id: 8 }],
-    visible: true,
+    id: 'floodPlainsWetlands',
+    sublayers: [{ id: 3 }],
+    visible: false,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
-  let whoopsolar = new MapImageLayer({
+
+  let whoopingCraneSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'whoopsolar',
-    sublayers: [{ id: 9 }],
-    visible: true,
+    id: 'whoopingCraneSolar',
+    sublayers: [{ id: 20 }],
+    visible: false,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
+
+  let whoopingCraneWind = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'whoopingCraneWind',
+    sublayers: [{ id: 21 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
+  })
+
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
-    visible: true,
+    visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
   })
   // moderate sensitive
   let landscape = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscape',
-    sublayers: [{ id: 4 }],
-    visible: true,
+    sublayers: [{ id: 16 }],
+    visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
+  })
+  let landscapeIntactness = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'landscapeIntactness',
+    sublayers: [{ id: 12 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
+  })
+
+  let migratoryBirdStopoverWind = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'migratoryBirdStopoverWind',
+    sublayers: [{ id: 13 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
   })
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
@@ -96,14 +148,14 @@ onMounted(() => {
     id: 'abandonedmines',
     visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
     visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
   })
   // agriculture
   let abandonedag = new MapImageLayer({
@@ -112,7 +164,7 @@ onMounted(() => {
     sublayers: [{ id: 1 }],
     visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
   })
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -120,39 +172,55 @@ onMounted(() => {
     sublayers: [{ id: 2 }],
     visible: false,
     opacity: 0.8,
-     maxScale: 300000,
+    maxScale: 300000,
   })
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
     id: 'nativeLands',
     visible: true,
     opacity: 1,
-     maxScale: 300000,
+    maxScale: 300000,
   })
-
+  let imageLayer = new ImageryLayer({
+    // URL to the imagery service
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer',
+    visible: false,
+    id: 'imageLayer',
+  })
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
+  const basemap = new Basemap({
+    portalItem: {
+      id: '1f48b2b2456c44ad9c58d6741378c2ba', // Replace with your desired basemap item ID (e.g., "668f436dc2dc4f2c83ceb0c064380590" for Topo US worldview)
+    },
+  })
 
   //todo: verify if reporting layers need to be added to map.
   arcgisMap.map = new Map({
-    basemap: 'dark-gray',
+    basemap: basemap,
     layers: [
       highestag,
       abandonedag,
       brownfields,
       abandonedmines,
+      landscapeIntactness,
       landscape,
-      whoopsolar,
-      whoopwind,
-      prairie,
-      resilient,
-      protectedL,
+      migratoryBirdStopoverWind,
       qualitywater,
-      wetlands,
+      bigGameSolar,
+      birdsWind,
+      prairieGrouse,
+      protectedAreas,
+      resilientConnected,
+      threatenedEndangeredSpecies,
+      floodPlainsWetlands,
+      whoopingCraneSolar,
+      whoopingCraneWind,
       nativeLands,
       bufferLayer,
       pointLayer,
+      imageLayer,
     ],
   })
   mapStore.filterLayers('solar')
@@ -168,8 +236,6 @@ onMounted(() => {
       mapStore.createBuffer(e)
     }
   })
-
-
 })
 </script>
 
