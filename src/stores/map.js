@@ -446,32 +446,23 @@ export const useMapStore = defineStore('mapStore', () => ({
     console.log(cat)
     this.category = cat
     let map = document.querySelector("arcgis-map").map;
-    if(this.category == 'both'){
-        this.layers.forEach(layer => {
-        layer.subheaders.forEach(subheader => {
-        subheader.sublayers.forEach(layer => {
-          layer.filter = true
-        })
-      })
-    })
-   }
-   else if (this.category == 'floating'){
+ 
+   if (this.category == 'floating'){
    this.layers.forEach(layer => {
       layer.subheaders.forEach(subheader => {
         subheader.sublayers.forEach(layer => {
         
-          if(layer.elid == 'qualitywater'){
+          if(layer.category !== this.category || layer.category == 'both'){
             //turn off those layers so they are not visibl ein the map
-           let mapLayer = map.findLayerById(layer.elid);
-           layer.filter = true
-           if(layer.visibleModel){mapLayer.visible = true}
-          }
-          else
-          {
-          let mapLayer = map.findLayerById(layer.elid);
+            let mapLayer = map.findLayerById(layer.elid);
             layer.filter = false
-            layer.visibleModel = false
             mapLayer.visible = false
+          }
+          if (layer.category == this.category ){
+            //turn on those layers
+            let mapLayer = map.findLayerById(layer.elid);
+            layer.filter = true
+            if(layer.visibleModel){mapLayer.visible = true}
           }
          })
       });
