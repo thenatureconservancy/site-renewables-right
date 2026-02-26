@@ -451,14 +451,14 @@ export const useMapStore = defineStore('mapStore', () => ({
    this.layers.forEach(layer => {
       layer.subheaders.forEach(subheader => {
         subheader.sublayers.forEach(layer => {
-        
-          if(layer.category !== this.category || layer.category == 'both'){
+          
+          if(layer.category !== this.category || layer.category == 'both' ){
             //turn off those layers so they are not visibl ein the map
             let mapLayer = map.findLayerById(layer.elid);
             layer.filter = false
             mapLayer.visible = false
           }
-          if (layer.category == this.category ){
+          if (layer.category == this.category || (layer.elid == 'nativeLands' && layer.visibleModel == true)){
             //turn on those layers
             let mapLayer = map.findLayerById(layer.elid);
             layer.filter = true
