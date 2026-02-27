@@ -128,7 +128,7 @@ onMounted(() => {
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscapeIntactness',
-    sublayers: [{ id: 12 }],
+    sublayers: [{ id: 23 }],
     visible: false,
     opacity: 1,
     maxScale: 300000,
