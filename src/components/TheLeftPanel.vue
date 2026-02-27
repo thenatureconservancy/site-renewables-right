@@ -66,7 +66,7 @@ computed(() => {
     </div>
     <q-tab-panels v-model="mapStore.tab" animated class="bg-white">
       <q-tab-panel name="layers" class="q-mt-sm q-pt-none q-px-sm">
-        <q-scroll-area style="height: calc(100vh - 150px)">
+        <q-scroll-area style="height: calc(100vh - 120px)">
           <div class="bg-white q-pr-md">
             <!--div class="q-ma-sm">
               <p class="text-body2 text-bold q-mb-none q-mt-md">VIEW LAYERS</p>
