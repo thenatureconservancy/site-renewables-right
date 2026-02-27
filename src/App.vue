@@ -1,9 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { ref, computed } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useMapStore } from '@/stores/map'
 import { useHelpStore } from './stores/help'
+import { useShepherd } from 'vue-shepherd'
+const tour = useShepherd({
+  useModalOverlay: true,
+})
 
 //import esri component libs globally so they are available in multiple components
 import '@arcgis/map-components/components/arcgis-map'
@@ -21,6 +25,42 @@ const $q = useQuasar()
 const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
+
+onMounted(async () => {
+  tour.addStep({
+    attachTo: { element: '#energyType', on: 'right' },
+    title: '1: Select energy type',
+    text: 'This will filter the layers to show only those relevant to the energy type you want to develop on your site.',
+    cancelIcon: {
+      enabled: true,
+      label: '✖',
+      className: 'shepherd-cancel-icon',
+    },
+    buttons: [
+      {
+        text: 'Next',
+        action: tour.next,
+      },
+    ],
+  })
+
+  tour.addStep({
+    attachTo: { element: '#dataDownload', on: 'right' },
+    title: '2: Download data & report',
+    text: 'Download all data as a .zip file and a report summarizing potential risks and considerations for your site.  The report button becomes active after you have selected a site on the map.',
+    cancelIcon: {
+      enabled: true,
+      label: '✖',
+      className: 'shepherd-cancel-icon',
+    },
+    buttons: [
+      {
+        text: 'Finish',
+        action: tour.cancel,
+      },
+    ],
+  })
+})
 </script>
 
 <template>
@@ -37,9 +77,30 @@ const mobile = computed(() => {
           Site Renewables Right</span
         >
         <q-space></q-space>
-        <div style="border: 1.5px solid red " ><p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px;">Draft - Internal use only</p></div>
+        <div style="border: 1.5px solid red">
+          <p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px">
+            Draft - Internal use only
+          </p>
+        </div>
         <q-space></q-space>
-        <q-btn  color="primary" label="About" unelevated square size="12px" @click="helpStore.showDialog = true"></q-btn>
+        <q-btn
+          color="primary"
+          class="q-mr-sm"
+          label="Start Tour"
+          outline
+          unelevated
+          square
+          size="12px"
+          @click="tour.start()"
+        ></q-btn>
+        <q-btn
+          color="primary"
+          label="About"
+          unelevated
+          square
+          size="12px"
+          @click="helpStore.showDialog = true"
+        ></q-btn>
       </q-toolbar>
     </q-header>
 
@@ -48,5 +109,3 @@ const mobile = computed(() => {
     </q-page-container>
   </q-layout>
 </template>
-
-<style scoped></style>

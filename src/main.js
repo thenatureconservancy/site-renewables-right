@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import { Quasar } from 'quasar';
 import App from './App.vue'
 import router from './router'
+import 'shepherd.js/dist/css/shepherd.css'
 import quasarUserOptions from './quasar-user-options';
 const app = createApp(App)
 

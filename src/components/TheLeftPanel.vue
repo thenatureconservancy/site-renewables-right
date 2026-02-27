@@ -46,28 +46,36 @@ computed(() => {
     <div class="">
       <q-tabs
         v-model="mapStore.tab"
-        dense
-        class="text-dark bg-grey-3 q-mx-sm bg-white"
-        active-color="white"
-        active-bg-color="primary"
+        class="text-grey-6 q-mx-sm bg-white"
+        active-color="primary"
         indicator-color="primary"
         align="justify"
+        style="border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey"
       >
-        <q-tab name="layers" label="View Layers" icon="layers" />
-        <q-tab name="sketch" label="Site Report" icon="search" />
+        <q-tab name="layers"
+          ><p class="text-bold q-mb-none">
+            <span><q-icon size="xs" name="layers"></q-icon></span>&nbsp; View Layers
+          </p></q-tab
+        >
+        <q-tab name="sketch"
+          ><p class="text-bold q-mb-none">
+            <span><q-icon size="xs" name="search"></q-icon></span>&nbsp; Site Report
+          </p></q-tab
+        >
       </q-tabs>
     </div>
     <q-tab-panels v-model="mapStore.tab" animated class="bg-white">
       <q-tab-panel name="layers" class="q-mt-sm q-pt-none q-px-sm">
         <q-scroll-area style="height: calc(100vh - 150px)">
           <div class="bg-white q-pr-md">
-            <div class="q-ma-sm">
+            <!--div class="q-ma-sm">
               <p class="text-body2 text-bold q-mb-none q-mt-md">VIEW LAYERS</p>
               <p>
                 Expand layer groups to customize map and use check boxes to toggle visibility.
                 Filter data by interest using the buttons below.
               </p>
-            </div>
+            </div-->
+
             <the-toolbar></the-toolbar>
 
             <the-layer-list></the-layer-list>
@@ -77,7 +85,7 @@ computed(() => {
                 size="lg"
                 square
                 unelevated
-                color="blue-grey-9"
+                color="primary"
                 class="q-mt-xl q-mb-md q-ml-md q-mr-md"
                 label="Get Site Report"
                 @click="mapStore.tab = 'sketch'"
@@ -193,8 +201,8 @@ computed(() => {
                   <div class="q-pa-md" style="width: 300px">
                     <p class="">
                       Use this option to control which layers appear in the list below. It filters
-                      out any layers outside your chosen area ie; buffer or map view so you only
-                      see relavant layers.
+                      out any layers outside your chosen area ie; buffer or map view so you only see
+                      relavant layers.
                     </p>
                     <q-btn color="blue" size="sm" flat>More info</q-btn>
                   </div>
@@ -459,7 +467,6 @@ computed(() => {
 <style>
 .headerClass {
   background: #ffffff;
-  border: 1px solid #e0e0e0;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   margin-bottom: 4px;

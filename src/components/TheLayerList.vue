@@ -52,7 +52,7 @@ async function scrollToElement(elid) {
 </script>
 
 <template>
-  <div class="bg-white" v-for="(item, index) in mapStore.layers" :key="index">
+  <div class="bg-grey-1" v-for="(item, index) in mapStore.layers" :key="index">
     <q-expansion-item
       @update:model-value="mapStore.setGroupVisibility(item)"
       :label="item.header"
