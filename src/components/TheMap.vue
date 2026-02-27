@@ -142,6 +142,14 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
+  let hundredYear = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'hundredYear',
+    sublayers: [{ id: 24 }],
+    visible: false,
+    opacity: 0.9,
+    maxScale: 300000,
+  })
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
@@ -207,6 +215,7 @@ onMounted(() => {
       landscapeIntactness,
       landscape,
       migratoryBirdStopoverWind,
+      hundredYear,
       qualitywater,
       bigGameSolar,
       birdsWind,
@@ -266,7 +275,19 @@ onMounted(() => {
       >
     </q-btn>
     <!-- opacity control knob-->
-    <div
+    <q-btn
+      size="md"
+      @click="mapStore.changeOpacity()"
+      padding="6px"
+      class="text-primary shadow-3 rounded-borders bg-white"
+      unelevated
+      square
+      icon="opacity"
+      stack
+      style="z-index: 999; position: absolute; left: 65px; top: 15px"
+      ><q-tooltip class="text-body2">Set opacity</q-tooltip>
+    </q-btn>
+    <!--div
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
       class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
     >
@@ -286,7 +307,7 @@ onMounted(() => {
           <q-tooltip class="text-body2">Set opacity: {{ mapStore.opacity }}%</q-tooltip>
         </q-knob>
       </div>
-    </div>
+    </div-->
     <!-- reset zoom button-->
     <q-btn
       size="md"
@@ -297,12 +318,12 @@ onMounted(() => {
       square
       icon="home"
       stack
-      style="z-index: 999; position: absolute; left: 179px; top: 15px"
+      style="z-index: 999; position: absolute; left: 145px; top: 15px"
       ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
     </q-btn>
     <!-- agol login-->
     <q-btn
-      style="z-index: 999; position: absolute; left: 135px; top: 15px"
+      style="z-index: 999; position: absolute; left: 105px; top: 15px"
       @click="agolStore.showDialog = true"
       icon="img:globe.png"
       size="md"

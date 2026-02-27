@@ -82,7 +82,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         visibleModel: false,
         opacity: 0.9,
         category: 'wind',
-        title: 'Birds',
+        title: 'Birds at Risk from Wind',
         inBuffer: false,
         inExtent: false,
         description: 'short description',
@@ -261,6 +261,24 @@ export const useMapStore = defineStore('mapStore', () => ({
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
+      },
+          {
+        index: 3,
+        mapIndex: 24,
+        elid: 'hundredYear',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: '100-year Floodplain',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO0mbmRgRTARJLqUQ2jGoaUBgDbKwGmOZvL7gAAAABJRU5ErkJggg==' 
       },
     ]
     },
