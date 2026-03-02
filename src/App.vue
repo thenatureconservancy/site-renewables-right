@@ -7,6 +7,11 @@ import { useHelpStore } from './stores/help'
 import { useShepherd } from 'vue-shepherd'
 const tour = useShepherd({
   useModalOverlay: true,
+  defaultStepOptions: {
+    classes: 'shepherd-theme-bright',
+    scrollTo: { behavior: 'smooth', block: 'center' },
+    cancelIcon: { enabled: true },
+  },
 })
 
 //import esri component libs globally so they are available in multiple components
@@ -27,6 +32,7 @@ const mobile = computed(() => {
 })
 
 onMounted(async () => {
+
   tour.addStep({
     attachTo: { element: '#energyType', on: 'right' },
     title: '1: Select energy type',

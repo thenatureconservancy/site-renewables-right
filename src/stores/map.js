@@ -93,7 +93,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       },
         
       {
-        index: 5,
+        index: 2,
         mapIndex: 15,
         elid: 'prairieGrouse',
         filter: true,
@@ -111,7 +111,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
       },
       {
-        index: 6,
+        index: 3,
         mapIndex: 6,
         elid: 'protectedAreas',
         filter: true,
@@ -126,10 +126,10 @@ export const useMapStore = defineStore('mapStore', () => ({
         longDescription: 'long description',
         totalArea: 0,
         percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8cegVAymAiSTVoxpGNQwpDQDjnwKkaYx/0AAAAABJRU5ErkJggg==' // #d8c2ea
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPsmHyHgRTARJLqUQ2jGoaUBgA0mAIXWenGNAAAAABJRU5ErkJggg==' // #c8c8c8
       },
       {
-        index: 7,
+        index: 4,
         mapIndex: 4,
         elid: 'resilientConnected',
         filter: true,
@@ -147,7 +147,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
       },
       {
-        index: 8,
+        index: 5,
         mapIndex: 18,
         elid: 'threatenedEndangeredSpecies',
         filter: true,
@@ -165,7 +165,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
       },
       {
-        index: 9,
+        index: 6,
         mapIndex: 19,
         elid: 'floodPlainsWetlands',
         filter: true,
@@ -183,7 +183,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
       },
       {
-        index: 10,
+        index: 7,
         mapIndex: 20,
         elid: 'whoopingCraneSolar',
         filter: true,
@@ -201,7 +201,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
       },
       {
-        index: 11,
+        index: 8,
         mapIndex: 21,
         elid: 'whoopingCraneWind',
         filter: true,
@@ -218,16 +218,34 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
       },
-         {index: 12, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
+      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
       
     ]
     },
     {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
-      {index: 0, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
+        {
+        index: 0,
+        mapIndex: 24,
+        elid: 'hundredYear',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: '100-year Floodplain',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'long description',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO0mbmRgRTARJLqUQ2jGoaUBgDbKwGmOZvL7gAAAABJRU5ErkJggg==' 
+      },
+      {index: 1, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
    
         {
-        index: 3,
+        index: 2,
         mapIndex: 13,
         elid: 'migratoryBirdStopoverWind',
         filter: true,
@@ -245,7 +263,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
       },
            {
-        index: 2,
+        index: 3,
         mapIndex: 23,
         elid: 'landscapeIntactness',
         filter: true,
@@ -262,24 +280,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
       },
-          {
-        index: 3,
-        mapIndex: 24,
-        elid: 'hundredYear',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: '100-year Floodplain',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'long description',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO0mbmRgRTARJLqUQ2jGoaUBgDbKwGmOZvL7gAAAABJRU5ErkJggg==' 
-      },
+        
     ]
     },
    
@@ -384,7 +385,8 @@ export const useMapStore = defineStore('mapStore', () => ({
      // 
 
     })
-      let resetlayers = ['highestag','abandonedag','brownfields','abandonedmines','landscape']
+      let resetlayers = ['highestag','abandonedag','brownfields','abandonedmines',
+      'hundredYear']
       resetlayers.forEach((layer, index) => {
         let mapLayer = map.findLayerById(layer);
         map.reorder(mapLayer,index);
