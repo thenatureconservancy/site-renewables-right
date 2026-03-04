@@ -1,0 +1,65 @@
+{
+  "version": 8,
+  "sprite": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/resources/sprites/sprite",
+  "glyphs": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "CJEST_SRR_VTL": {
+      "type": "vector",
+      "bounds": [
+        -179.231,
+        -14.6018,
+        179.86,
+        71.4411
+      ],
+      "minzoom": 0,
+      "maxzoom": 23,
+      "scheme": "xyz",
+      "url": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer",
+      "tiles": [
+        "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/tile/{z}/{y}/{x}.pbf"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "usa_project/0",
+      "type": "fill",
+      "source": "CJEST_SRR_VTL",
+      "source-layer": "usa_project",
+      "filter": [
+        "==",
+        [
+          "get",
+          "N_CLT_EOMI"
+        ],
+        0
+      ],
+      "layout": {},
+      "paint": {
+        "fill-color": "#ffffff",
+        "fill-opacity": 0.1,
+        "fill-outline-color": "#000000"
+      }
+    },
+    {
+      "id": "usa_project/1",
+      "type": "fill",
+      "source": "CJEST_SRR_VTL",
+      "source-layer": "usa_project",
+      "filter": [
+        "==",
+        [
+          "get",
+          "N_CLT_EOMI"
+        ],
+        1
+      ],
+      "layout": {},
+      "paint": {
+        "fill-color": "#21C8C5",
+        "fill-opacity": 0.9,
+        "fill-outline-color": "#6E6E6E"
+      }
+    }
+  ]
+}

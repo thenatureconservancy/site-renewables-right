@@ -193,10 +193,12 @@ onMounted(() => {
   // CJEST
 
   // Add your vector tile layer
-  /* let cjest = new VectorTileLayer({
+  let cjest = new VectorTileLayer({
     url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
-    visible: true,
-  })*/
+    style: "styles/N_CLT_EOMI.json",
+    id: 'cjest',
+    visible: false,
+  })
 
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
@@ -215,6 +217,7 @@ onMounted(() => {
       abandonedag,
       brownfields,
       abandonedmines,
+      cjest,
       migratoryBirdStopoverWind,
       landscapeIntactness,
       landscape,

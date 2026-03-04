@@ -295,7 +295,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, 
       sublayers: [
         {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'cjest', description: 'short description',
+       opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'The American Farmland Trust recommends these areas not be converted to non-agrivoltaic solar development, particularly large-scale solar. This layer identifies the top half of farm and ranchland in each state – that is, the lands with PVR (productivity, versatility, and resiliency) values above each states’ median. PVR data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>).',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
         legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBLp0F/ykxaE/5BEYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAABLDgYV9UASiQAAAABJRU5ErkJggg=="
@@ -307,10 +307,96 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
-         {index: 15, elid: 'cjest', serviceId: 'vectorLayer',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
-      longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
-      totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
-	     
+        
+{
+    index: 15, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Climate Disadvantaged', style: '/styles/N_CLT_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 16, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Energy Disadvantaged', style: '/styles/N_ENY_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 17, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Transportation Disadvantaged', style: '/styles/N_TRN_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 18, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Housing Disadvantaged', style: '/styles/N_HSG_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 19, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Pollution Disadvantaged', style: '/styles/N_PLN_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 20, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Water Disadvantaged', style: '/styles/N_WTR_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 21, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Health Disadvantaged', style: '/styles/N_HLTH_90.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 22, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Workforce Disadvantaged', style: '/styles/N_WKFC_91.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+  }
+
 	   ]
   },
   ]},
