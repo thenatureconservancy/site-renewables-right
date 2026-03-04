@@ -68,7 +68,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: "Energy development may alter the movement of big game animals and increase rates of mortality, particularly along migration routes and in winter ranges. This layer includes migration areas for elk, mule deer, and pronghorn antelope across the Western United States, including annual ranges, corridors, stopovers, and winter ranges <a href='https://westernmigrations.net/' target='_blank'>(US Geological Survey Western Migrations)</a>, supplemented with state-specific data from North Dakota, Montana, and New Mexico state wildlife agency data.",
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
@@ -86,7 +86,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
@@ -105,7 +105,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Grouse species in the central U.S. have experienced substantial population declines since the early 20th century and may be further threatened by improperly sited energy development. To prevent grouse displacement, we mapped important habitat for the following species: Attwater’s prairie-chicken (Tympanuchus cupido attwateri), Columbian sharp-tailed grouse (T. phasianellus columbianus), greater prairie-chicken (T. cupido), greater sage-grouse (Centrocercus urophasianus), Gunnison sage-grouse (C. minimus), lesser prairie-chicken (T. pallidicinctus), and plains sharp-tailed grouse (T. phasianellus jamesi).',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
@@ -123,7 +123,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPsmHyHgRTARJLqUQ2jGoaUBgA0mAIXWenGNAAAAABJRU5ErkJggg==' // #c8c8c8
@@ -141,7 +141,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Over the next century, climate change is expected to drive shifts in species ranges and increase stressors to natural ecosystems. To identify areas important to sustaining species and natural communities in a changing climate, we mapped Resilient and Connected Landscapes with recognized biodiversity value. These sites include representative geophysical environments and microclimates with relatively low levels of human modification, which comprise a network of lands most likely to retain biodiversity and ecosystem function in altered climate conditions <a href="https://www.pnas.org/doi/10.1073/pnas.2204434119" target="_blank">(Anderson et al. 2023)</a>.',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
@@ -159,7 +159,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Energy and infrastructure development are among the most significant threats to imperiled species in the U.S. To prevent impacts to at-risk wildlife, we included terrestrial federally listed threatened and endangered species habitat as renewable energy avoidance areas. Mapped sites included <a href="https://ecos.fws.gov/ecp/report/critical-habitat" target="_blank"> critical habitat</a> delineated by state and federal agencies, current/recent species distributions, modeled priority habitats, and occurrence records.',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
@@ -177,7 +177,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Renewable energy development near wetland complexes and riparian corridors may cause adverse impacts to wildlife and fragile wetland ecosystems. This layer identifies floodplains, rivers, open water, and wetlands (Fathom-US 1-in-20 year fluvial and 1-in-20-year pluvial flood model tiles; <a href="https://www.fws.gov/program/national-wetlands-inventory" target="_blank"> US Fish & Wildlife Service National Wetlands Inventory </a>). Groundwater-dependent ecosystem data in Nevada and Arizona and vernal pools in California were also included.',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
@@ -195,7 +195,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'The federally endangered whooping crane (Grus americana), which has a current population of approximately 500 individuals, depends on wetlands in the central Great Plains during migration. Whooping cranes exhibit aversion to wind turbines and may be displaced from suitable habitats near wind and solar energy infrastructure. In addition, whooping cranes may be at risk of turbine collisions in low light conditions when ascending or descending from high altitude migration flights, or when travelling between roost and foraging areas. To address these concerns, we delineated areas within 400 meters and 5 km of whooping crane critical habitats and stopover sites to be avoided by solar and wind development, respectively. ',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
@@ -213,7 +213,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'The federally endangered whooping crane (Grus americana), which has a current population of approximately 500 individuals, depends on wetlands in the central Great Plains during migration. Whooping cranes exhibit aversion to wind turbines and may be displaced from suitable habitats near wind and solar energy infrastructure. In addition, whooping cranes may be at risk of turbine collisions in low light conditions when ascending or descending from high altitude migration flights, or when travelling between roost and foraging areas. To address these concerns, we delineated areas within 400 meters and 5 km of whooping crane critical habitats and stopover sites to be avoided by solar and wind development, respectively.  ',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
@@ -225,7 +225,9 @@ export const useMapStore = defineStore('mapStore', () => ({
     {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
       
-      {index: 10, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Landscape Connectivity',  inBuffer: false, inExtent: false,description: 'short description', longDescription: 'long description', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
+      {index: 10, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Connectivity',
+          inBuffer: false, inExtent: false,description: 'short description',
+           longDescription: 'Wildlife movement is critical for animals to escape development and move to more optimal habitat in the face of a shifting climate. This layer identifies wildlife corridors that were modeled between “large protected areas” in the U.S. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154223" target="_blank"> Belote et al. 2016</a>, highest 40% of modeled values). In addition, we included state-specific corridor data in Arizona, California, and Florida.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
    
         {
         index: 11,
@@ -240,7 +242,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Billions of migratory birds cross North America twice a year, putting them at risk for wind collision. Stopover habitat—places the birds feed and rest on their journey—help delineate these migratory routes. This layer highlights high-density distributions of migratory landbirds in stopover habitat across the U.S. (<a href="https://www.nature.com/articles/s41467-023-43046-z" target="_blank">Horton et al. 2023</a>). ',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
@@ -258,7 +260,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'long description',
+        longDescription: 'Remaining intact landscapes provide the basis for long-term viability of many species of conservation concern. To delineate discrete patches of relatively undisturbed natural landcover for renewable energy avoidance, we used a human modification model (<a href="https://www.nature.com/articles/s41597-025-04892-2" target="_blank">Theobald 2022</a> data using a 1 km radius moving window and selected areas with HM index values less than 0.2). We then eliminated areas fragmented by oil and natural gas development, defined as sites with 1.5 active wells per km2 or greater.  <br/><br/> We also excluded lands in the Great Plains bioregion altered by past tillage or other landscape disturbances (Ostlie 2003). Finally, we added core forest and core wetland areas to capture additional, functionally intact habitats in Illinois, Indiana, Iowa, Michigan, Minnesota, Missouri, and Ohio.',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
