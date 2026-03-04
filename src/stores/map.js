@@ -8,7 +8,7 @@ import * as areaOperator from "@arcgis/core/geometry/operators/areaOperator.js";
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
-
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 export const useMapStore = defineStore('mapStore', () => ({
   opacity: 70,
   tab: 'layers',
@@ -20,6 +20,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   activeTool: 'legend',
   activeHelpElement: '',  
   category: 'solar',
+  communitySelection: 'Climate Disadvantaged',
   legend: '',
   bufferSize: 1,
   currentPoint: '',
@@ -311,57 +312,57 @@ export const useMapStore = defineStore('mapStore', () => ({
 {
     index: 15, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Climate Disadvantaged', style: '/styles/N_CLT_EOMI.json',
+    title: 'Climate Disadvantaged', style: 'styles/N_CLT_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 16, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Energy Disadvantaged', style: '/styles/N_ENY_EOMI.json',
+    title: 'Energy Disadvantaged', style: 'styles/N_ENY_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 17, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Transportation Disadvantaged', style: '/styles/N_TRN_EOMI.json',
+    title: 'Transportation Disadvantaged', style: 'styles/N_TRN_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 18, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Housing Disadvantaged', style: '/styles/N_HSG_EOMI.json',
+    title: 'Housing Disadvantaged', style: 'styles/N_HSG_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 19, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Pollution Disadvantaged', style: '/styles/N_PLN_EOMI.json',
+    title: 'Pollution Disadvantaged', style: 'styles/N_PLN_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 20, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -372,29 +373,29 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 21, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Health Disadvantaged', style: '/styles/N_HLTH_90.json',
+    title: 'Health Disadvantaged', style: 'styles/N_HLTH_90.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   },
   {
     index: 22, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Workforce Disadvantaged', style: '/styles/N_WKFC_91.json',
+    title: 'Workforce Disadvantaged', style: 'styles/N_WKFC_91.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
   }
 
 	   ]
@@ -1049,6 +1050,22 @@ export const useMapStore = defineStore('mapStore', () => ({
   avoid.opacity = this.opacity / 100;
   minimize.opacity = this.opacity / 100;  
   opportunities.opacity = this.opacity / 100;
+  },
+  changeCommunityStyle(style){
+    let map = document.querySelector("arcgis-map").map;
+    let layer = map.findLayerById('cjest');
+    map.remove(layer)
+
+    let cjest = new VectorTileLayer({
+    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
+    style:style,
+    id: 'cjest',
+    visible: true,
+    })
+    map.add(cjest)
+    let native = map.findLayerById('nativeLands');
+    map.reorder(native,0);
+
   }
 
     /* not being used? 

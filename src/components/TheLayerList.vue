@@ -89,7 +89,7 @@ async function scrollToElement(elid) {
               <q-item-label class="text-subtitle1">{{ layer.title }} </q-item-label>
             </q-item-section>
           </template>
-          <q-list dense class="q-mx-md q-pb-md">
+          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title !== 'Community Considerations'">
             <draggable
               v-model="layer.sublayers"
               ghostClass="ghost"
@@ -138,6 +138,66 @@ async function scrollToElement(elid) {
                 </q-item>
               </template>
             </draggable>
+          </q-list>
+          <!-- Community Considerations (no draggable, single-select via radio) -->
+          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title === 'Community Considerations'">
+            <q-item
+              v-for="sublayer in layer.sublayers"
+              :key="sublayer.index"
+              dense
+              clickable
+              v-ripple
+              @click="
+                mapStore.communitySelection = sublayer.title;
+                mapStore.changeCommunityStyle(sublayer.style)
+              "
+            >
+              <!-- Radio column (no drag icon) -->
+              <q-item-section side>
+                <q-radio
+                  size="sm"
+                  v-model="mapStore.communitySelection"
+                  :val="sublayer.title"
+                  @update:model-value="mapStore.changeCommunityStyle(sublayer.style)"
+                />
+              </q-item-section>
+
+              <!-- Title + optional per-item controls -->
+              <q-item-section>
+                <div class="text-body2">{{ sublayer.title }}</div>
+
+                <!-- Example: optional slider just for a specific id (kept from your pattern) -->
+                <q-slider
+                  v-if="sublayer.elid === 'nativeLands'"
+                  style="max-width: 140px"
+                  v-model="sublayer.opacity"
+                  :min="0.1"
+                  :max="1"
+                  :step="0.1"
+                  @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
+                />
+              </q-item-section>
+
+              <!-- Legend image -->
+              <q-item-section side>
+                <div style="width: 20px; height: 20px">
+                  <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                </div>
+              </q-item-section>
+
+              <!-- Info button -->
+              <q-item-section side>
+                <q-btn
+                  size="sm"
+                  flat
+                  padding="none"
+                  icon="o_info"
+                  @click.stop="scrollToElement(sublayer.elid)"
+                >
+                  <q-tooltip> more info </q-tooltip>
+                </q-btn>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-expansion-item>
       </div>
