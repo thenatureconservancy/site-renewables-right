@@ -7,9 +7,9 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import ArcGISOnline from './ArcGISOnline.vue'
 import TheReport from './TheReport.vue'
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
+import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 
 import Basemap from '@arcgis/core/Basemap'
-import TileLayer from '@arcgis/core/layers/TileLayer'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
@@ -142,14 +142,7 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-  let hundredYear = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'hundredYear',
-    sublayers: [{ id: 24 }],
-    visible: false,
-    opacity: 0.9,
-    maxScale: 300000,
-  })
+
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
@@ -174,6 +167,7 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
+
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
@@ -182,6 +176,7 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
+  // native lands
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
     id: 'nativeLands',
@@ -195,6 +190,14 @@ onMounted(() => {
     visible: false,
     id: 'imageLayer',
   })
+  // CJEST
+
+  // Add your vector tile layer
+  /* let cjest = new VectorTileLayer({
+    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
+    visible: true,
+  })*/
+
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
@@ -215,7 +218,6 @@ onMounted(() => {
       landscapeIntactness,
       landscape,
       migratoryBirdStopoverWind,
-      hundredYear,
       qualitywater,
       whoopingCraneSolar,
       whoopingCraneWind,
