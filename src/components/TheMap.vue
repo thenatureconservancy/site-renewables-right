@@ -120,7 +120,7 @@ onMounted(() => {
   let landscape = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscape',
-    sublayers: [{ id: 16 }],
+    sublayers: [{ id: 24 }],
     visible: false,
     opacity: 0.8,
     maxScale: 300000,

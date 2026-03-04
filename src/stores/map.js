@@ -234,7 +234,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       
            {
         index: 12,
-        mapIndex: 23,
+        mapIndex: 24,
         elid: 'landscapeIntactness',
         filter: true,
         visible: false,
