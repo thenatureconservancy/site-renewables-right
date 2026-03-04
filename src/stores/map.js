@@ -91,9 +91,27 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
       },
+         {
+        index: 2,
+        mapIndex: 19,
+        elid: 'floodPlainsWetlands',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Floodplains and Wetlands',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'Renewable energy development near wetland complexes and riparian corridors may cause adverse impacts to wildlife and fragile wetland ecosystems. This layer identifies floodplains, rivers, open water, and wetlands (Fathom-US 1-in-20 year fluvial and 1-in-20-year pluvial flood model tiles; <a href="https://www.fws.gov/program/national-wetlands-inventory" target="_blank"> US Fish & Wildlife Service National Wetlands Inventory </a>). Groundwater-dependent ecosystem data in Nevada and Arizona and vernal pools in California were also included.',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
+      },
         
       {
-        index: 2,
+        index: 3,
         mapIndex: 15,
         elid: 'prairieGrouse',
         filter: true,
@@ -111,7 +129,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
       },
       {
-        index: 3,
+        index: 4,
         mapIndex: 6,
         elid: 'protectedAreas',
         filter: true,
@@ -129,7 +147,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPsmHyHgRTARJLqUQ2jGoaUBgA0mAIXWenGNAAAAABJRU5ErkJggg==' // #c8c8c8
       },
       {
-        index: 4,
+        index: 5,
         mapIndex: 4,
         elid: 'resilientConnected',
         filter: true,
@@ -147,7 +165,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
       },
       {
-        index: 5,
+        index: 6,
         mapIndex: 18,
         elid: 'threatenedEndangeredSpecies',
         filter: true,
@@ -164,24 +182,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
       },
-      {
-        index: 6,
-        mapIndex: 19,
-        elid: 'floodPlainsWetlands',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Floodplains and Wetlands',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Renewable energy development near wetland complexes and riparian corridors may cause adverse impacts to wildlife and fragile wetland ecosystems. This layer identifies floodplains, rivers, open water, and wetlands (Fathom-US 1-in-20 year fluvial and 1-in-20-year pluvial flood model tiles; <a href="https://www.fws.gov/program/national-wetlands-inventory" target="_blank"> US Fish & Wildlife Service National Wetlands Inventory </a>). Groundwater-dependent ecosystem data in Nevada and Arizona and vernal pools in California were also included.',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
-      },
+   
       {
         index: 7,
         mapIndex: 20,
@@ -225,28 +226,12 @@ export const useMapStore = defineStore('mapStore', () => ({
     {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
       sublayers:  [
       
-      {index: 10, elid: 'landscape', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Connectivity',
+      {index: 10, elid: 'landscape', filter: true, visible: false, 
+        visibleModel: false, opacity: 0.9, category: 'both', 
+        title: 'Connectivity',
           inBuffer: false, inExtent: false,description: 'short description',
            longDescription: 'Wildlife movement is critical for animals to escape development and move to more optimal habitat in the face of a shifting climate. This layer identifies wildlife corridors that were modeled between “large protected areas” in the U.S. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0154223" target="_blank"> Belote et al. 2016</a>, highest 40% of modeled values). In addition, we included state-specific corridor data in Arizona, California, and Florida.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8/eIYAymAiSTVoxpGNQwpDQDzDAKp3ffyNAAAAABJRU5ErkJggg==' },
-   
-        {
-        index: 11,
-        mapIndex: 13,
-        elid: 'migratoryBirdStopoverWind',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Migratory Bird Stopover',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Billions of migratory birds cross North America twice a year, putting them at risk for wind collision. Stopover habitat—places the birds feed and rest on their journey—help delineate these migratory routes. This layer highlights high-density distributions of migratory landbirds in stopover habitat across the U.S. (<a href="https://www.nature.com/articles/s41467-023-43046-z" target="_blank">Horton et al. 2023</a>). ',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
-      },
+      
            {
         index: 12,
         mapIndex: 23,
@@ -264,6 +249,24 @@ export const useMapStore = defineStore('mapStore', () => ({
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
+      },
+        {
+        index: 11,
+        mapIndex: 13,
+        elid: 'migratoryBirdStopoverWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Migratory Bird Stopover',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'Billions of migratory birds cross North America twice a year, putting them at risk for wind collision. Stopover habitat—places the birds feed and rest on their journey—help delineate these migratory routes. This layer highlights high-density distributions of migratory landbirds in stopover habitat across the U.S. (<a href="https://www.nature.com/articles/s41467-023-43046-z" target="_blank">Horton et al. 2023</a>). ',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
       },
         
     ]
