@@ -540,7 +540,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     let layer = map.findLayerById(elid);
     layer.visible = checked
   },
- 
+  //filter layers
   filterLayers(cat){
     console.log(cat)
     this.category = cat
@@ -660,7 +660,6 @@ export const useMapStore = defineStore('mapStore', () => ({
     
       
   },
-  
   //function to create the buffer
   createBuffer(e){
     if(this.bufferSize > 36){
@@ -964,7 +963,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       
     })
   },
-    //function to clip features and calculate area
+  //function to clip features and calculate area
   getIntersectionExtent(item){
     //first step is to probably query the layer and get geometries
     let map = document.querySelector("arcgis-map").map;
@@ -1051,69 +1050,32 @@ export const useMapStore = defineStore('mapStore', () => ({
   minimize.opacity = this.opacity / 100;  
   opportunities.opacity = this.opacity / 100;
   },
+  fadeLayer(layer, start, end, duration = 300) {
+  return new Promise(resolve => {
+    const startTime = performance.now();
+
+    function animate(time) {
+      const t = Math.min((time - startTime) / duration, 1);
+      layer.opacity = start + (end - start) * t;
+
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        resolve();
+      }
+    }
+
+    requestAnimationFrame(animate);
+  });
+},
+
   changeCommunityStyle(style){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('cjest');
-    map.remove(layer)
-
-    let cjest = new VectorTileLayer({
-    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
-    style:style,
-    id: 'cjest',
-    visible: true,
-    })
-    map.add(cjest)
-    let native = map.findLayerById('nativeLands');
-    map.reorder(native,0);
-
+    layer.loadStyle(style)
+   
   }
-
-    /* not being used? 
-  reportLayers: function(){
-    return this.layers.map((layer) => {
-      return {
-        header: layer.header,
-        id: layer.id,
-        subheaders: layer.subheaders.map((subheader) => {
-          return {
-            title: subheader.title,
-            id: subheader.id,
-            visible: subheader.visible
-          }
-        })
-      }
-    })
-  },*/
-   /* not in use currently?
-  getCounts(){
-    let counts = {avoid: 0, develop: 0, review: 0, minimize: 0}
-    let avoid = this.results.filter((item)=>{
-    return item.totalArea !== 0 && item.map !== 'opportunities' && item.layerName !== 'Landscape Connectivity'
-    })
-    counts.avoid = avoid.length
-    let review = this.results.filter((item)=>{
-      return item.totalArea == 0 && item.map !== 'opportunities'&& item.layerName !== 'Landscape Connectivity'
-      })
-      counts.review = review.length
-
-    let minimize = this.results.filter((item)=>{
-      return item.totalArea !== 0 && item.map !== 'opportunities'&& item.layerName == 'Landscape Connectivity'
-      }
-    )
-    counts.minimize = minimize.length
-
-    let develop = this.oppResults.filter((item)=>{
-      return item.count > 0
-    })
-    counts.develop = develop.length
-
-    let developPoly = this.results.filter((item)=>{
-      return item.map == 'opportunities' && item.totalArea > 0
-    })
-    counts.develop = counts.develop + developPoly.length
-    return counts
   
-  },*/ 
 
 }
 ));
