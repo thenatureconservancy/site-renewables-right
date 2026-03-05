@@ -5,12 +5,7 @@
   "sources": {
     "CJEST_SRR_VTL": {
       "type": "vector",
-      "bounds": [
-        -179.231,
-        -14.6018,
-        179.86,
-        71.4411
-      ],
+      "bounds": [-179.231, -14.6018, 179.86, 71.4411],
       "minzoom": 0,
       "maxzoom": 23,
       "scheme": "xyz",
@@ -22,41 +17,26 @@
   },
   "layers": [
     {
-      "id": "usa_project/0",
+      "id": "usa_project_deciles",
       "type": "fill",
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
-      "filter": [
-        "==",
-        [
-          "get",
-          "N_WKFC_91"
-        ],
-        0
-      ],
       "layout": {},
       "paint": {
-        "fill-color": "#ffffff",
-        "fill-opacity": 0.1,
-        "fill-outline-color": "#000000"
-      }
-    },
-    {
-      "id": "usa_project/1",
-      "type": "fill",
-      "source": "CJEST_SRR_VTL",
-      "source-layer": "usa_project",
-      "filter": [
-        "==",
-        [
-          "get",
-          "N_WKFC_91"
+        "fill-color": [
+          "step",
+          ["coalesce", ["to-number", ["get", "P200_I_PFS"]], -9999],
+          "#f3e8f7",
+          0.1, "#ead6f2",
+          0.2, "#dec0ec",
+          0.3, "#d0abe5",
+          0.4, "#c195de",
+          0.5, "#b17fd6",
+          0.6, "#a169cf",
+          0.7, "#9253c8",
+          0.8, "#843dbf",
+          0.9, "#773F87"   
         ],
-        1
-      ],
-      "layout": {},
-      "paint": {
-        "fill-color": "#7E3F8F",
         "fill-opacity": 0.9,
         "fill-outline-color": "#6E6E6E"
       }

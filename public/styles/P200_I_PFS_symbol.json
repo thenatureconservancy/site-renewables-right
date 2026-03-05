@@ -1,0 +1,109 @@
+{
+  "version": 8,
+  "sprite": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/resources/sprites/sprite",
+  "glyphs": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "CJEST_SRR_VTL": {
+      "type": "vector",
+      "bounds": [-179.231, -14.6018, 179.86, 71.4411],
+      "minzoom": 0,
+      "maxzoom": 23,
+      "scheme": "xyz",
+      "url": "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer",
+      "tiles": [
+        "https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer/tile/{z}/{y}/{x}.pbf"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "diag_symbol_test",
+      "type": "symbol",
+      "source": "CJEST_SRR_VTL",
+      "source-layer": "usa_project",
+      "minzoom": 0,
+      "layout": {
+        "symbol-placement": "point",
+        "text-field": "\\u2022",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": 18
+      },
+      "paint": {
+        "text-color": "#ff0033",
+        "text-halo-color": "rgba(255,255,255,0.9)",
+        "text-halo-width": 1
+      }
+    },
+
+    {
+      "id": "pfs_symbol_from_polygons_text_vA",
+      "type": "symbol",
+      "source": "CJEST_SRR_VTL",
+      "source-layer": "usa_project",
+      "minzoom": 0,
+      "layout": {
+        "symbol-placement": "point",
+        "text-field": "\\u25CF",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          0, 10,
+          10, 14,
+          13, 18
+        ]
+      },
+      "paint": {
+        "text-color": [
+          "step",
+          ["to-number", ["get", "P200_I_PFS"]],
+          "#F3E6F7",
+          0.1, "#EAD4F2",
+          0.2, "#DDBFEA",
+          0.3, "#D0A9E2",
+          0.4, "#C293DA",
+          0.5, "#B47DD2",
+          0.6, "#A566CA",
+          0.7, "#954FC2",
+          0.8, "#8538BA",
+          0.9, "#773F87"
+        ],
+        "text-halo-color": "rgba(255,255,255,0.9)",
+        "text-halo-width": 1,
+        "text-opacity": 0.95
+      }
+    },
+
+    {
+      "id": "pfs_top10_ring_from_polygons_text",
+      "type": "symbol",
+      "source": "CJEST_SRR_VTL",
+      "source-layer": "usa_project",
+      "filter": [">=", ["to-number", ["get", "P200_I_PFS"]], 0.9],
+      "minzoom": 0,
+      "layout": {
+        "symbol-placement": "point",
+        "text-field": "\\u25CF",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          0, 16,
+          10, 22,
+          13, 26
+        ]
+      },
+      "paint": {
+        "text-color": "rgba(0,0,0,0)",
+        "text-halo-color": "#000000",
+        "text-halo-width": [
+          "interpolate", ["linear"], ["zoom"],
+          0, 1.25,
+          13, 2
+        ],
+        "text-halo-blur": 0.2
+      }
+    }
+  ]
+}

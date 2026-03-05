@@ -309,6 +309,28 @@ export const useMapStore = defineStore('mapStore', () => ({
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
         
+  {
+    index: 13, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Low Income (dots)', style: 'styles/P200_I_PFS_symbol.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
+  },      
+  {
+    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true,
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Low Income', style: 'styles/P200_I_PFS.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: '',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
+  },      
 {
     index: 15, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
@@ -318,7 +340,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 16, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -329,7 +351,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 17, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -340,7 +362,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 18, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -351,7 +373,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 19, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -362,7 +384,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 20, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -373,7 +395,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 21, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -384,7 +406,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
     index: 22, elid: 'cjest', serviceId: 'vtl', filter: true,
@@ -395,7 +417,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNUPHGUgRTARJLqUQ2jGoaUBgBVOwHOs240WwAAAABJRU5ErkJggg=='
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   }
 
 	   ]
