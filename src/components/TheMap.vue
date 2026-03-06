@@ -203,13 +203,12 @@ onMounted(() => {
   // import Map from "@arcgis/core/Map";
   // import MapView from "@arcgis/core/views/MapView";
   // import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
-
- /* const cjestDots = new FeatureLayer({
+  /*
+  const cjestDots = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
     title: 'PFS (size-only circles)',
     id: 'cjestDots',
-    visible: true,
-    definitionExpression: 'N_CLT_EOMI > 0',
+    visible: false,
     renderer: {
       type: 'simple',
       symbol: {

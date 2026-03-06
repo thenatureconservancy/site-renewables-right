@@ -155,11 +155,19 @@ async function scrollToElement(elid) {
               <!-- Radio column (no drag icon) -->
               <q-item-section side>
                 <q-radio
+                  v-if="sublayer.type == 'radio'"
                   size="sm"
                   v-model="mapStore.communitySelection"
                   :val="sublayer.title"
                   @update:model-value="mapStore.changeCommunityStyle(sublayer.style)"
                 />
+                <q-checkbox
+                v-if="sublayer.type == 'checkbox'"
+                  size="xs"
+                  v-model="sublayer.visibleModel"
+                  @click.stop="mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)"
+                  >
+                </q-checkbox>
               </q-item-section>
 
               <!-- Title + optional per-item controls -->

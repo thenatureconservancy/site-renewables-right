@@ -310,7 +310,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       sublayers: [
         /*
   {
-    index: 13, elid: 'cjest_dots', serviceId: 'vtl', filter: true,
+    index: 13, elid: 'cjest_dots', serviceId: 'vtl', filter: true, type: 'checkbox',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Low Income (dots)', style: '',
     inBuffer: false, inExtent: false,
@@ -319,9 +319,9 @@ export const useMapStore = defineStore('mapStore', () => ({
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },      */
+  },      
   {
-    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'checkbox',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Low Income', style: 'styles/P200_I_PFS.json',
     inBuffer: false, inExtent: false,
@@ -330,9 +330,9 @@ export const useMapStore = defineStore('mapStore', () => ({
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },      
+  },      */
 {
-    index: 15, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 15, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Climate Disadvantaged', style: 'styles/N_CLT_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -343,7 +343,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 16, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 16, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Energy Disadvantaged', style: 'styles/N_ENY_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -354,7 +354,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 17, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 17, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Transportation Disadvantaged', style: 'styles/N_TRN_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -365,7 +365,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 18, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 18, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Housing Disadvantaged', style: 'styles/N_HSG_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -376,7 +376,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 19, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 19, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Pollution Disadvantaged', style: 'styles/N_PLN_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -387,7 +387,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 20, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 20, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Water Disadvantaged', style: '/styles/N_WTR_EOMI.json',
     inBuffer: false, inExtent: false,
@@ -398,7 +398,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 21, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 21, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Health Disadvantaged', style: 'styles/N_HLTH_90.json',
     inBuffer: false, inExtent: false,
@@ -409,7 +409,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 22, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 22, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Workforce Disadvantaged', style: 'styles/N_WKFC_91.json',
     inBuffer: false, inExtent: false,
