@@ -195,10 +195,42 @@ onMounted(() => {
   // Add your vector tile layer
   let cjest = new VectorTileLayer({
     url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
-    style: "styles/N_CLT_EOMI.json",
+    style: 'styles/N_CLT_EOMI.json',
     id: 'cjest',
     visible: false,
   })
+
+  // import Map from "@arcgis/core/Map";
+  // import MapView from "@arcgis/core/views/MapView";
+  // import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
+
+ /* const cjestDots = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
+    title: 'PFS (size-only circles)',
+    id: 'cjestDots',
+    visible: true,
+    definitionExpression: 'N_CLT_EOMI > 0',
+    renderer: {
+      type: 'simple',
+      symbol: {
+        type: 'simple-marker',
+        style: 'circle',
+        size: 8,
+        color: '#000000', // your signature purple
+        outline: { color: '#FFFFFF', width: 0.75 },
+      },
+      visualVariables: [
+        {
+          type: 'size',
+          field: 'P200_I_PFS',
+          stops: [
+            { value: 0.0, size: 3 },
+            { value: 1.0, size: 13 },
+          ],
+        },
+      ],
+    },
+  })*/
 
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })

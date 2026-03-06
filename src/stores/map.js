@@ -101,7 +101,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         visibleModel: false,
         opacity: 0.9,
         category: 'both',
-        title: 'Floodplains and Wetlands',
+        title: 'Floodplains, Wetlands, and Groundwater-fed Ecosystems',
         inBuffer: false,
         inExtent: false,
         description: 'short description',
@@ -160,7 +160,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'Over the next century, climate change is expected to drive shifts in species ranges and increase stressors to natural ecosystems. To identify areas important to sustaining species and natural communities in a changing climate, we mapped Resilient and Connected Landscapes with recognized biodiversity value. These sites include representative geophysical environments and microclimates with relatively low levels of human modification, which comprise a network of lands most likely to retain biodiversity and ecosystem function in altered climate conditions <a href="https://www.pnas.org/doi/10.1073/pnas.2204434119" target="_blank">(Anderson et al. 2023)</a>.',
+        longDescription: 'Over the next century, climate change is expected to drive shifts in species ranges and increase stressors to natural ecosystems. To identify areas important to sustaining species and natural communities in a changing climate, we mapped the Resilient and Connected Network, including all areas with resilience and concentrated or diffuse flow, with or without recognized biodiversity. These sites include representative geophysical environments and microclimates with relatively low levels of human modification, which comprise a network of lands most likely to retain biodiversity and ecosystem function in altered climate conditions (<a href="https://www.pnas.org/doi/10.1073/pnas.2204434119" target="_blank">Anderson et al. 2023</a>).',
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
@@ -178,7 +178,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'Energy and infrastructure development are among the most significant threats to imperiled species in the U.S. To prevent impacts to at-risk wildlife, we included terrestrial federally listed threatened and endangered species habitat as renewable energy avoidance areas. Mapped sites included <a href="https://ecos.fws.gov/ecp/report/critical-habitat" target="_blank"> critical habitat</a> delineated by state and federal agencies, current/recent species distributions, modeled priority habitats, and occurrence records.',
+        longDescription: "Energy and infrastructure development are among the most significant threats to imperiled species in the U.S. We identified federally listed threatened and endangered species that are at-risk from renewable energy development due to their habitat and life history requirements (e.g., gopher and desert tortoise, golden-cheeked warbler, Preble's jumping mouse; full species list available in methods paper.), and then mapped locations of current/recent distributions, modeled priority habitats, and occurrence records. We also included <a href=\"https://ecos.fws.gov/ecp/report/critical-habitat\" target=\"_blank\">critical habitat</a> delineated by the U.S. Fish and Wildlife Service.",
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
@@ -308,18 +308,18 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
-        
+        /*
   {
-    index: 13, elid: 'cjest', serviceId: 'vtl', filter: true,
+    index: 13, elid: 'cjest_dots', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Low Income (dots)', style: 'styles/P200_I_PFS_symbol.json',
+    title: 'Low Income (dots)', style: '',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },      
+  },      */
   {
     index: 14, elid: 'cjest', serviceId: 'vtl', filter: true,
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
