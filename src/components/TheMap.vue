@@ -192,12 +192,38 @@ onMounted(() => {
   })
   // CJEST
 
-  // Add your vector tile layer
+  // vector tile layer
   let cjest = new VectorTileLayer({
     url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
     style: 'styles/N_CLT_EOMI.json',
     id: 'cjest',
     visible: false,
+  })
+
+  let states = new FeatureLayer({
+    url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
+    id: 'states',
+    visible: true,
+    definitionExpression: "STATE_NAME = 'California'",
+    renderer: {
+      type: 'simple',
+      symbol: {
+        type: 'simple-fill',
+        color: [51, 51, 51, 0.9], // white fill, 0.9 opacity
+        outline: {
+          color: [0, 0, 0, 0], // fully transparent outline
+          width: 6,
+        },
+      },
+    },
+    popupTemplate: {
+      content: `
+      <div>
+        <p>Some information about this state.</p>
+        <button onclick="myPopupAction()">Click Me</button>
+      </div>
+    `,
+    },
   })
 
   // import Map from "@arcgis/core/Map";
@@ -263,15 +289,25 @@ onMounted(() => {
       bigGameSolar,
       birdsWind,
       nativeLands,
+      states,
       bufferLayer,
       pointLayer,
       imageLayer,
     ],
   })
+
   mapStore.filterLayers('solar')
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
+
+    const view = e.target.view
+
+    // Now you can control the popup
+    view.popup.visibleElements = {
+      title: false,
+      closeButton: false,
+    }
   })
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
@@ -387,10 +423,28 @@ onMounted(() => {
       <ArcGISOnline></ArcGISOnline>
     </q-dialog>
   </keep-alive>
+  <div
+    id="hover-tooltip"
+    style="
+      position: absolute;
+      pointer-events: auto;
+      background: white;
+      border-radius: 4px;
+      padding: 8px 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      font-family: sans-serif;
+      font-size: 12px;
+      display: none;
+      z-index: 999;
+    "
+  >
+    <div id="tooltip-content"></div>
+    <button id="tooltip-button">Click me</button>
+  </div>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 @import 'https://js.arcgis.com/4.32/esri/themes/light/main.css';
 
 #my-map {
@@ -398,5 +452,12 @@ onMounted(() => {
   height: 100%;
   width: 100%;
   position: relative;
+}
+.header {
+  display: none !important;
+}
+
+.esri-popup__header {
+  display: none !important;
 }
 </style>

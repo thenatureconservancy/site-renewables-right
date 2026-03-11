@@ -308,20 +308,20 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
-        /*
+        
   {
-    index: 13, elid: 'cjest_dots', serviceId: 'vtl', filter: true, type: 'checkbox',
+    index: 13, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Low Income (dots)', style: '',
+    title: 'Low Income greater than 8oth percentile', style: 'styles/P200_I_PFS_80th.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: '',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },      
+  },     
   {
-    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'checkbox',
+    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Low Income', style: 'styles/P200_I_PFS.json',
     inBuffer: false, inExtent: false,
@@ -330,7 +330,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },      */
+  },      
 {
     index: 15, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
