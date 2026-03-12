@@ -185,7 +185,7 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
     popupTemplate: {
-      title: 'Federally Recognized Tribal Entity',
+      title: '{NAME}',
       content:
         "This federally recognized tribal entity's functional status is defined as a(n) {FUNC_D}. The Census type is classified as: {AIANNHType}.",
     },
@@ -205,7 +205,7 @@ onMounted(() => {
     id: 'cjest',
     visible: false,
   })
-
+  //states for ca
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
     id: 'states',
@@ -224,7 +224,7 @@ onMounted(() => {
       },
     },
   })
-
+  //button overlay
   const centroidGraphic = new Graphic({
     geometry: {
       type: 'point',
@@ -257,37 +257,6 @@ onMounted(() => {
     listMode: 'hide',
   })
   buttonLayer.add(centroidGraphic)
-
-  // import Map from "@arcgis/core/Map";
-  // import MapView from "@arcgis/core/views/MapView";
-  // import FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
-  /*
-  const cjestDots = new FeatureLayer({
-    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
-    title: 'PFS (size-only circles)',
-    id: 'cjestDots',
-    visible: false,
-    renderer: {
-      type: 'simple',
-      symbol: {
-        type: 'simple-marker',
-        style: 'circle',
-        size: 8,
-        color: '#000000', // your signature purple
-        outline: { color: '#FFFFFF', width: 0.75 },
-      },
-      visualVariables: [
-        {
-          type: 'size',
-          field: 'P200_I_PFS',
-          stops: [
-            { value: 0.0, size: 3 },
-            { value: 1.0, size: 13 },
-          ],
-        },
-      ],
-    },
-  })*/
 
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
@@ -338,11 +307,6 @@ onMounted(() => {
     arcgisMap.zoom > 3 && mapStore.layers[0].expanded
       ? (buttonLayer.visible = true)
       : (buttonLayer.visible = false)
-    // Now you can control the popup
-    view.popup.visibleElements = {
-      title: false,
-      closeButton: false,
-    }
   })
 
   arcgisMap.addEventListener('arcgisViewClick', (e) => {
@@ -493,7 +457,7 @@ onMounted(() => {
 }
 
 h2.esri-widget__heading {
-  font-size: 12px !important;
+  font-size: 14px !important;
   line-height: 1 !important;
 }
 </style>
