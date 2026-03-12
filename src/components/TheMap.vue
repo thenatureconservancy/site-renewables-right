@@ -184,6 +184,11 @@ onMounted(() => {
     visible: true,
     opacity: 1,
     maxScale: 300000,
+    popupTemplate: {
+      title: 'Federally Recognized Tribal Entity',
+      content:
+        "This federally recognized tribal entity's functional status is defined as a(n) {FUNC_D}. The Census type is classified as: {AIANNHType}.",
+    },
   })
   let imageLayer = new ImageryLayer({
     // URL to the imagery service
@@ -487,7 +492,8 @@ onMounted(() => {
   display: none !important;
 }
 
-.esri-popup__header {
-  display: none !important;
+h2.esri-widget__heading {
+  font-size: 12px !important;
+  line-height: 1 !important;
 }
 </style>
