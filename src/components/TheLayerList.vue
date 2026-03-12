@@ -161,13 +161,7 @@ async function scrollToElement(elid) {
                   :val="sublayer.title"
                   @update:model-value="mapStore.changeCommunityStyle(sublayer.style)"
                 />
-                <q-checkbox
-                v-if="sublayer.type == 'checkbox'"
-                  size="xs"
-                  v-model="sublayer.visibleModel"
-                  @click.stop="mapStore.setSublayerVisibility(sublayer.elid, sublayer.visibleModel)"
-                  >
-                </q-checkbox>
+              
               </q-item-section>
 
               <!-- Title + optional per-item controls -->

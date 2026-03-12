@@ -32,7 +32,6 @@ const mobile = computed(() => {
 })
 
 onMounted(async () => {
-
   tour.addStep({
     attachTo: { element: '#energyType', on: 'right' },
     title: '1: Select energy type',

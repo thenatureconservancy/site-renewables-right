@@ -309,112 +309,105 @@ export const useMapStore = defineStore('mapStore', () => ({
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
       sublayers: [
         
+ 
   {
-    index: 13, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Low Income greater than 8oth percentile', style: 'styles/P200_I_PFS_80th.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: '',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
-  },     
-  {
-    index: 14, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
+    index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Low Income', style: 'styles/P200_I_PFS.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: '',
+    longDescription: 'Percent of a census tract’s population in households where household income is at or below 200% of the Federal poverty level, not including students enrolled in higher education.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
   },      
 {
-    index: 15, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
+    index: 15, elid: 'cjest_climate', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Climate Disadvantaged', style: 'styles/N_CLT_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: '',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for expected agriculture loss rate OR expected building loss rate OR expected population loss rate OR projected flood risk OR projected wildfire risk AND are at or above the 65th percentile for low income.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 16, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
+    index: 16, elid: 'cjest_energy', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Energy Disadvantaged', style: 'styles/N_ENY_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: '',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for energy cost OR PM2.5 in the air AND are at or above the 65th percentile for low income.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
-  {
-    index: 17, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Transportation Disadvantaged', style: 'styles/N_TRN_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: '',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 18, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Housing Disadvantaged', style: 'styles/N_HSG_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: '',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 19, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Pollution Disadvantaged', style: 'styles/N_PLN_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: '',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 20, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Water Disadvantaged', style: '/styles/N_WTR_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: '',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 21, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
+   {
+    index: 21, elid: 'cjest_health', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Health Disadvantaged', style: 'styles/N_HLTH_90.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: '',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for asthma OR diabetes OR heart disease OR low life expectancy AND are at or above the 65th percentile for low income.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
   },
   {
-    index: 22, elid: 'cjest', serviceId: 'vtl', filter: true, type: 'radio',
+    index: 18, elid: 'cjest_housing', serviceId: 'vtl', filter: true, type: 'radio',
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Housing Disadvantaged', style: 'styles/N_HSG_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that experienced historic underinvestment OR are at or above the 90th percentile for housing cost OR lack of green space OR lack of indoor plumbing OR lead paint AND are at or above the 65th percentile for low income.',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
+  },
+   {
+    index: 19, elid: 'cjest_pollution', serviceId: 'vtl', filter: true, type: 'radio',
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Pollution Disadvantaged', style: 'styles/N_PLN_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that have at least one abandoned mine land OR Formerly Used Defense Sites OR are at or above the 90th percentile for proximity to hazardous waste facilities OR proximity to Superfund sites (National Priorities List (NPL)) OR proximity to Risk Management Plan (RMP) facilities AND are at or above the 65th percentile for low income.',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
+  },
+  {
+    index: 17, elid: 'cjest_transportation', serviceId: 'vtl', filter: true, type: 'radio',
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Transportation Disadvantaged', style: 'styles/N_TRN_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for diesel particulate matter exposure OR transportation barriers OR traffic proximity and volume AND are at or above the 65th percentile for low income.',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
+  },
+  
+ 
+  {
+    index: 20, elid: 'cjest_water', serviceId: 'vtl', filter: true, type: 'radio',
+    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
+    title: 'Water Disadvantaged', style: '/styles/N_WTR_EOMI.json',
+    inBuffer: false, inExtent: false,
+    description: 'short description',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for underground storage tanks and releases OR wastewater discharge AND are at or above the 65th percentile for low income.',
+    totalArea: 0,
+    percentOfTotal: 0,
+    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
+  },
+ 
+  {
+    index: 22, elid: 'cjest_workforce', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
     title: 'Workforce Disadvantaged', style: 'styles/N_WKFC_91.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: '',
+    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for linguistic isolation OR low median income OR poverty OR unemployment AND more than 10% of people ages 25 years or older whose high school education is less than a high school diploma.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
@@ -429,7 +422,8 @@ export const useMapStore = defineStore('mapStore', () => ({
       sublayers: [
         {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true,
        opacity: 0.9, category: 'both', title: 'American Indian, Alaska Native, and Native Hawaiian Areas', description: 'short description',
-        longDescription: '',        totalArea: 0, percentOfTotal: 0, inExtent: '',
+        longDescription: 
+'This layer displays locations of the Federally Recognized Tribal entities in the contiguous U.S. and Alaska (<a href="https://www.arcgis.com/home/item.html?id=1d6231f4358c4e3781557e702c319d9a" target="_blank">National Geospatial Data Asset data from the U.S. Census Bureau</a>). Categories included are:<br/> <ul><li>American Indian Reservations (AIR). The Bureau of Indian Affairs (BIA) defines AIRs as "areas of land reserved for a tribe or tribes under treaty or other agreement with the United States, executive order, or federal statute or administrative action as permanent tribal homelands, and where the federal government holds title to the land in trust on behalf of the tribe".</li><br/><li>Federally Recognized Tribal Entities (FRTE). According to the BIA, an FRTE is "an American Indian or Alaska Native tribal entity that is recognized as having a government-to-government relationship with the United States, with the responsibilities, powers, limitations, and obligations attached to that designation."</li></ul>',        totalArea: 0, percentOfTotal: 0, inExtent: '',
         legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAMUlEQVR4nGNgGOyAEca4du3af0oM0tLSYmRgYGBgotRF6GDUwFEDRw0cNZA+Bg5+AADqfAQg5jR4QQAAAABJRU5ErkJggg=="      }]
   },
   ]}
@@ -535,6 +529,10 @@ export const useMapStore = defineStore('mapStore', () => ({
       subheader.visible = visible
       subheader.sublayers.forEach(layer => {
         let sublayer = map.findLayerById(layer.elid);
+        if(layer.elid.slice(0, 5) === 'cjest'){
+          sublayer = map.findLayerById('cjest')
+        }
+        
         if(layer.filter){
         sublayer.visible = visible
         }

@@ -8,6 +8,7 @@ import ArcGISOnline from './ArcGISOnline.vue'
 import TheReport from './TheReport.vue'
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
+import Graphic from '@arcgis/core/Graphic'
 
 import Basemap from '@arcgis/core/Basemap'
 
@@ -205,6 +206,7 @@ onMounted(() => {
     id: 'states',
     visible: true,
     definitionExpression: "STATE_NAME = 'California'",
+    minScale: 18489297.737236,
     renderer: {
       type: 'simple',
       symbol: {
@@ -216,15 +218,40 @@ onMounted(() => {
         },
       },
     },
+  })
+
+  const centroidGraphic = new Graphic({
+    geometry: {
+      type: 'point',
+      latitude: 35.71698590073627,
+      longitude: -119.0476256315448,
+    },
+    symbol: {
+      type: 'picture-marker',
+      url: 'moreinfo.png', // your icon here
+      width: '65px',
+      height: '25px',
+      backgroundColor: [255, 255, 255, 0.9], // soft white plate
+      outline: {
+        color: [0, 0, 0, 0.15],
+        width: 1,
+      },
+    },
     popupTemplate: {
       content: `
       <div>
-        <p>Some information about this state.</p>
+        <h6>California Policy Details</h6>
+        <p>Link to CA Details</p>
         <button onclick="myPopupAction()">Click Me</button>
       </div>
     `,
     },
   })
+  const buttonLayer = new GraphicsLayer({
+    id: 'buttonLayer',
+    listMode: 'hide',
+  })
+  buttonLayer.add(centroidGraphic)
 
   // import Map from "@arcgis/core/Map";
   // import MapView from "@arcgis/core/views/MapView";
@@ -293,6 +320,7 @@ onMounted(() => {
       bufferLayer,
       pointLayer,
       imageLayer,
+      buttonLayer,
     ],
   })
 
@@ -302,7 +330,9 @@ onMounted(() => {
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
 
     const view = e.target.view
-
+    arcgisMap.zoom > 3 && mapStore.layers[0].expanded
+      ? (buttonLayer.visible = true)
+      : (buttonLayer.visible = false)
     // Now you can control the popup
     view.popup.visibleElements = {
       title: false,
