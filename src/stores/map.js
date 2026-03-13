@@ -54,7 +54,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   layers: [
   {header: 'Conservation Values' , id: 'avoid', expanded: false,
    subheaders: [
-    {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, 
+    {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
       {
         index: 0,
@@ -224,7 +224,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       
     ]
     },
-    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, 
+    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
       
       {index: 10, elid: 'landscape', filter: true, visible: false, 
@@ -276,7 +276,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Disturbed Lands' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Disturbed Lands', id: 'ag', visible: true, visibleModel: true, 
+    {title: ' Disturbed Lands', id: 'ag', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
         {index: 13, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
@@ -293,7 +293,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, 
+    {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, expanded: false,
       sublayers: [
         {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
@@ -306,7 +306,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Community Considerations' , id: 'community', expanded: false, 
    subheaders: [
-    {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, 
+    {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, expanded: false,
       sublayers: [
         
  
@@ -418,7 +418,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
     {header: 'Native Lands' , id: 'native', expanded: true, 
    subheaders: [
-     {title: ' Native Lands', id: 'native', visible: true, visibleModel: true, 
+     {title: ' Native Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
       sublayers: [
         {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true,
        opacity: 0.9, category: 'both', title: 'American Indian, Alaska Native, and Native Hawaiian Areas', description: 'short description',
@@ -527,6 +527,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     group.subheaders.forEach(subheader => {
       let visible = group.expanded
       subheader.visible = visible
+      subheader.expanded = true
       subheader.sublayers.forEach(layer => {
         let sublayer = map.findLayerById(layer.elid);
         if(layer.elid.slice(0, 5) === 'cjest'){

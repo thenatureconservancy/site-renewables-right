@@ -74,6 +74,7 @@ async function scrollToElement(elid) {
           :key="index"
           header-class=""
           expand="true"
+          v-model = layer.expanded
           dense
         >
           <template v-slot:header>
