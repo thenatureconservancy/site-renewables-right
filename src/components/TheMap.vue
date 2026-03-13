@@ -205,6 +205,14 @@ onMounted(() => {
     id: 'cjest',
     visible: false,
   })
+  //feature layer for vector tile
+  let cjestFL = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
+    id: 'cjestFL',
+    visible: false,
+    opacity: 0.8,
+    maxScale: 300000,
+  })
   //states for ca
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
@@ -276,6 +284,7 @@ onMounted(() => {
       brownfields,
       abandonedmines,
       cjest,
+      cjestFL,
       migratoryBirdStopoverWind,
       landscapeIntactness,
       landscape,
@@ -303,17 +312,221 @@ onMounted(() => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
 
-    const view = e.target.view
     arcgisMap.zoom > 3 && mapStore.layers[0].expanded
       ? (buttonLayer.visible = true)
       : (buttonLayer.visible = false)
   })
 
-  arcgisMap.addEventListener('arcgisViewClick', (e) => {
-    if (mapStore.tab == 'sketch') {
-      bufferLayer.visible = true
-      pointLayer.visible = true
-      mapStore.createBuffer(e)
+  arcgisMap.addEventListener('arcgisViewClick', async (e) => {
+    try {
+      if (mapStore.tab == 'sketch') {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+        mapStore.createBuffer(e)
+      }
+
+      // Ensure a selection layer exists and clear prior selections
+      let selectionLayer = arcgisMap.view.map.layers.find((l) => l.title === 'Selection')
+      if (!selectionLayer) {
+        selectionLayer = new GraphicsLayer({ title: 'Selection' })
+        arcgisMap.view.map.add(selectionLayer)
+      } else {
+        selectionLayer.removeAll()
+      }
+
+      const mapPoint = e.detail.mapPoint
+
+      // --- HIT TEST GUARD ---
+      // Convert to screen coords for hitTest, then check topmost result
+      const screenPoint = arcgisMap.view.toScreen(mapPoint)
+      const hit = await arcgisMap.view.hitTest(screenPoint)
+      console.log(hit)
+      if (!hit.results || hit.results.length === 0) {
+        // No visible layer was hit at this location — skip the polygon query
+        console.log('No layer was hit; skipping polygon query.')
+        return
+      }
+
+      const top = hit.results[0]
+      if (top.layer.id !== 'cjest') {
+        // Something else is on top; do not query cjestFL
+        console.log('Topmost hit is not cjestFL; skipping polygon query.')
+        return
+      }
+      // --- END HIT TEST GUARD ---
+
+      // Proceed with spatial query on cjestFL
+      const query = cjestFL.createQuery()
+      query.geometry = mapPoint
+      query.spatialRelationship = 'intersects'
+      query.returnGeometry = true // needed to build polygon graphics
+      query.outFields = ['*'] // tighten to specific fields if desired
+
+      const featureSet = await cjestFL.queryFeatures(query)
+      const features = featureSet.features
+
+      if (!features.length) {
+        console.log('No polygon contains that point.')
+        return
+      }
+
+      // Create graphics from returned polygon features
+      const polygonGraphics = features.map((f) => {
+        return new Graphic({
+          geometry: f.geometry,
+          attributes: f.attributes,
+          symbol: {
+            type: 'simple-fill',
+            color: [0, 0, 0, 0],
+            outline: {
+              color: [0, 255, 255, 1],
+              width: 1,
+            },
+          },
+          popupTemplate: {
+            title: 'Community Details', // adjust to your field name
+            content: (event) => {
+              const a = event.graphic.attributes
+
+              // Define the fields and human-friendly labels
+              const fields = [
+                { label: 'Climate Disadvantaged', field: 'N_CLT_EOMI' },
+                { label: 'Energy Disadvantaged', field: 'N_ENY_EOMI' },
+                { label: 'Transportation Disadvantaged', field: 'N_TRN_EOMI' },
+                { label: 'Housing Disadvantaged', field: 'N_HSG_EOMI' },
+                { label: 'Pollution Disadvantaged', field: 'N_PLN_EOMI' },
+                { label: 'Water Disadvantaged', field: 'N_WTR_EOMI' },
+                { label: 'Health Disadvantaged', field: 'N_HLTH_90' },
+                { label: 'Workforce Disadvantaged', field: 'N_WKFC_91' },
+              ]
+
+              // Keep only the 'Yes' ones (value === 1), then sort by label A→Z
+              const yesOnly = fields
+                .filter(({ field }) => Number(a[field]) === 1)
+                .sort((x, y) => x.label.localeCompare(y.label))
+
+              // Chip renderer (green "Yes" pill)
+              const yesChip = `
+      <span style="
+        padding:2px 10px;border-radius:999px;
+        font:600 12px system-ui,-apple-system,'Segoe UI',Roboto,Arial;
+        color:#0a7a0a;background:rgba(10,122,10,.12);
+        border:1px solid rgba(10,122,10,.35);
+        white-space:nowrap;
+      ">✓ Yes</span>`
+
+              // Rows for each 'Yes' category
+              const rows = yesOnly
+                .map(
+                  ({ label }) => `
+      <div style="
+        display:grid;grid-template-columns:1fr auto;
+        align-items:center;padding:6px 8px;
+        border-bottom:1px dashed rgba(0,0,0,.08)
+      ">
+        <div style="font:500 13px/1.3 system-ui">${label}</div>
+        ${yesChip}
+      </div>
+    `,
+                )
+                .join('')
+
+              // If no categories are 'Yes', show an empty state
+              const yesSection = yesOnly.length
+                ? `
+        <div style="border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden">
+          ${rows}
+        </div>`
+                : `
+        <div style="
+          padding:10px;border:1px solid rgba(0,0,0,.08);
+          border-radius:8px;background:rgba(120,120,120,.06);
+          font:500 13px system-ui;color:#555
+        ">
+          No disadvantaged categories flagged for this feature.
+        </div>`
+
+              // ---- Decile (1–10) computation from P200_I_PFS ----
+              const raw = a['P200_I_PFS']
+              let decileDisplay = '—'
+
+              if (raw !== null && raw !== undefined && raw !== '') {
+                const num = Number(raw)
+                if (!Number.isNaN(num)) {
+                  let decile = null
+
+                  if (num > 0 && num <= 1) {
+                    // 0–1 decimal -> scale to 0–100 then decile
+                    const pct = num * 100
+                    decile = Math.ceil(pct / 10)
+                  } else if (num > 10 && num <= 100) {
+                    // 0–100 percent -> decile
+                    decile = Math.ceil(num / 10)
+                  } else if (num >= 1 && num <= 10 && Number.isInteger(num)) {
+                    // Already provided as a decile 1–10
+                    decile = num
+                  } else if (num === 0) {
+                    // Edge case: exactly 0% -> decile 1
+                    decile = 1
+                  }
+
+                  if (decile !== null) {
+                    // Clamp to 1..10
+                    decile = Math.min(10, Math.max(1, decile))
+                    decileDisplay = `${decile} / 10`
+                  }
+                }
+              }
+              // -----------------------------------------------
+
+              // Build final HTML
+              const container = document.createElement('div')
+              container.innerHTML = `
+      <div style="max-width:520px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+          <div style="font:600 14px/1.2 system-ui;color:#1b5eab;letter-spacing:.2px">
+            Disadvantaged Categories
+          </div>
+          <div style="font:12px/1 system-ui;color:#333">
+            ${yesOnly.length} selected
+          </div>
+        </div>
+
+        ${yesSection}
+
+        <!-- Decile card -->
+        <div style="
+          display:flex;justify-content:space-between;align-items:center;
+          margin-top:.75rem;padding:.6rem .7rem;
+          border:1px solid rgba(0,0,0,.08);border-radius:8px;
+          background:linear-gradient(180deg, rgba(27,94,171,0.06), rgba(27,94,171,0.02))
+        ">
+          <div style="font:600 13px/1.2 system-ui;color:#1b5eab">
+            Low Income Decile (1–10)
+          </div>
+          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div>
+        </div>
+      </div>
+    `
+              return container
+            },
+          },
+        })
+      })
+
+      // Add to selection layer
+      selectionLayer.addMany(polygonGraphics)
+
+      // Optional: open popup at click with all returned features
+      arcgisMap.view.popup.open({
+        location: mapPoint,
+        features: polygonGraphics,
+      })
+
+      console.log(`Added ${polygonGraphics.length} polygon graphic(s) to Selection layer.`)
+    } catch (err) {
+      console.error('Guarded query error:', err)
     }
   })
 })
