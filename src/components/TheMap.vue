@@ -529,6 +529,11 @@ onMounted(() => {
       console.error('Guarded query error:', err)
     }
   })
+  const slider = document.querySelector('calcite-slider')
+  slider.addEventListener('calciteSliderChange', (event) => {
+    mapStore.opacity = event.target.value / 100
+    mapStore.changeOpacity()
+  })
 })
 </script>
 
@@ -561,7 +566,7 @@ onMounted(() => {
     <!-- opacity control knob-->
     <q-btn
       size="md"
-      @click="mapStore.changeOpacity()"
+      @click="mapStore.showOpacity = !mapStore.showOpacity"
       padding="6px"
       class="text-primary shadow-3 rounded-borders bg-white"
       unelevated
@@ -569,8 +574,28 @@ onMounted(() => {
       icon="opacity"
       stack
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
-      ><q-tooltip class="text-body2">Set opacity</q-tooltip>
+      ><q-tooltip class="text-body2">Set layers opacity</q-tooltip>
     </q-btn>
+    <q-slide-transition>
+      <div
+        class="bg-white q-pt-md q-px-md"
+        v-show="mapStore.showOpacity"
+        style="z-index: 999; position: absolute; left: 65px; top: 60px; width: 200px"
+      >
+        <calcite-label>
+          Layers Opacity (%)
+          <calcite-slider
+            value="90"
+            label-handles
+            label-ticks
+            max-label="100"
+            min-label="0"
+            ticks="100"
+            class="green-slider"
+          ></calcite-slider>
+        </calcite-label>
+      </div>
+    </q-slide-transition>
     <!--div
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
       class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
@@ -672,5 +697,9 @@ onMounted(() => {
 h2.esri-widget__heading {
   font-size: 14px !important;
   line-height: 1 !important;
+}
+
+calcite-slider {
+  --calcite-color-brand: #49a942;
 }
 </style>

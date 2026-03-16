@@ -10,7 +10,8 @@ import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 export const useMapStore = defineStore('mapStore', () => ({
-  opacity: 70,
+  opacity: 90,
+  showOpacity: false,
   tab: 'layers',
   reportTab: 'conservation',
   showReportDetails: true,
@@ -289,6 +290,20 @@ export const useMapStore = defineStore('mapStore', () => ({
       longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
       totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
 	          ]   
+  },
+  ]},
+    {header: 'Potential Renewable Energy Buildout', id: 'renewable', expanded: false, 
+   subheaders: [
+    {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
+      sublayers:  [
+        {index: 13, elid: 'buildout_solar', filter: true, visible: false, visibleModel: false, 
+          opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
+           longDescription: '', 
+           totalArea: 0, percentOfTotal: 0, legendImg: ""},
+        {index: 14, elid: 'buildout_wind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
+           category: 'both', title: 'Potential Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
+            longDescription: ''},
+        ]   
   },
   ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
@@ -1063,13 +1078,8 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   changeOpacity(){
   let map = document.querySelector("arcgis-map").map;
-  let avoid = map.findLayerById('avoid');
-  let minimize = map.findLayerById('minimize');
-  let opportunities = map.findLayerById('opportunities');
   //let layersList = [avoid, minimize, opportunities]
-  avoid.opacity = this.opacity / 100;
-  minimize.opacity = this.opacity / 100;  
-  opportunities.opacity = this.opacity / 100;
+  map.layers.forEach(layer => layer.opacity = this.opacity)
   },
   fadeLayer(layer, start, end, duration = 300) {
   return new Promise(resolve => {
