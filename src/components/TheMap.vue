@@ -332,6 +332,7 @@ onMounted(() => {
       } else {
         selectionLayer.removeAll()
       }
+      //set a watch for popup
 
       const mapPoint = e.detail.mapPoint
 
@@ -379,7 +380,7 @@ onMounted(() => {
             color: [0, 0, 0, 0],
             outline: {
               color: [0, 255, 255, 1],
-              width: 1,
+              width: 0,
             },
           },
           popupTemplate: {
@@ -444,39 +445,35 @@ onMounted(() => {
         ">
           No disadvantaged categories flagged for this feature.
         </div>`
-
-              // ---- Decile (1–10) computation from P200_I_PFS ----
+              // ---- Percent (rounded to nearest 10) from P200_I_PFS ----
               const raw = a['P200_I_PFS']
+              
               let decileDisplay = '—'
 
               if (raw !== null && raw !== undefined && raw !== '') {
                 const num = Number(raw)
                 if (!Number.isNaN(num)) {
-                  let decile = null
+                  let pct = null
 
                   if (num > 0 && num <= 1) {
-                    // 0–1 decimal -> scale to 0–100 then decile
-                    const pct = num * 100
-                    decile = Math.ceil(pct / 10)
-                  } else if (num > 10 && num <= 100) {
-                    // 0–100 percent -> decile
-                    decile = Math.ceil(num / 10)
+                    // Value is 0–1 (fraction) → convert to percent
+                    pct = num * 100
+                  } else if (num >= 0 && num <= 100) {
+                    // Value is already 0–100 (percent)
+                    pct = num
                   } else if (num >= 1 && num <= 10 && Number.isInteger(num)) {
-                    // Already provided as a decile 1–10
-                    decile = num
-                  } else if (num === 0) {
-                    // Edge case: exactly 0% -> decile 1
-                    decile = 1
+                    // Value is a decile 1–10 → convert to percent
+                    pct = (num / 10) * 100
                   }
 
-                  if (decile !== null) {
-                    // Clamp to 1..10
-                    decile = Math.min(10, Math.max(1, decile))
-                    decileDisplay = `${decile} / 10`
+                  if (pct !== null) {
+                    // Round to nearest 10 and clamp to 0..100
+                    const rounded = Math.min(100, Math.max(0, Math.round(pct / 10) * 10))
+                    decileDisplay = `${rounded}%`
                   }
                 }
               }
-              // -----------------------------------------------
+              // ---------------------------------------
 
               // Build final HTML
               const container = document.createElement('div')
@@ -502,9 +499,9 @@ onMounted(() => {
           background:linear-gradient(180deg, rgba(27,94,171,0.06), rgba(27,94,171,0.02))
         ">
           <div style="font:600 13px/1.2 system-ui;color:#1b5eab">
-            Low Income Decile (1–10)
+            Household Income Percentile
           </div>
-          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div>
+          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay} - ${raw}</div>
         </div>
       </div>
     `
@@ -528,6 +525,7 @@ onMounted(() => {
       console.error('Guarded query error:', err)
     }
   })
+
   const slider = document.querySelector('calcite-slider')
   slider.addEventListener('calciteSliderChange', (event) => {
     mapStore.opacity = event.target.value / 100

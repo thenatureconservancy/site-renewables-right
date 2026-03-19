@@ -75,24 +75,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
       },
-      {
-        index: 1,
-        mapIndex: 11,
-        elid: 'birdsWind',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Birds at Risk from Wind',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
-      },
+    
          {
         index: 2,
         mapIndex: 19,
@@ -227,6 +210,24 @@ export const useMapStore = defineStore('mapStore', () => ({
     },
     {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
+          {
+        index: 1,
+        mapIndex: 11,
+        elid: 'birdsWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Birds at Risk from Wind',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
+      },
       
       {index: 10, elid: 'landscape', filter: true, visible: false, 
         visibleModel: false, opacity: 0.9, category: 'both', 
@@ -314,7 +315,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Low Income', style: 'styles/P200_I_PFS.json',
+    title: 'Household Income', style: 'styles/P200_I_PFS.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Percent of a census tract’s population in households where household income is at or below 200% of the Federal poverty level, not including students enrolled in higher education.',
