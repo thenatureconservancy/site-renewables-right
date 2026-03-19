@@ -172,7 +172,7 @@ onMounted(() => {
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
-    sublayers: [{ id: 2 }],
+    sublayers: [{ id: 12 }],
     visible: false,
     opacity: 0.8,
     maxScale: 300000,
@@ -217,7 +217,7 @@ onMounted(() => {
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
     id: 'states',
-    visible: true,
+    visible: false,
     definitionExpression: "STATE_NAME = 'California'",
     minScale: 18489297.737236,
     renderer: {
@@ -255,7 +255,8 @@ onMounted(() => {
       <div>
         <h6>California Policy Details</h6>
         <p>Link to CA Details</p>
-        <button onclick="myPopupAction()">Click Me</button>
+        <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+       
       </div>
     `,
     },
@@ -263,6 +264,8 @@ onMounted(() => {
   const buttonLayer = new GraphicsLayer({
     id: 'buttonLayer',
     listMode: 'hide',
+    visible: false,
+    minScale: 18489297.737236,
   })
   buttonLayer.add(centroidGraphic)
 
@@ -311,10 +314,6 @@ onMounted(() => {
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
-
-    arcgisMap.zoom > 3 && mapStore.layers[0].expanded
-      ? (buttonLayer.visible = true)
-      : (buttonLayer.visible = false)
   })
 
   arcgisMap.addEventListener('arcgisViewClick', async (e) => {
@@ -648,10 +647,26 @@ onMounted(() => {
     <!-- report summary boxes-->
     <div
       class="bg-white shadow-3 rounded-borders"
-      v-if="mapStore.currentPoint !== '' && mapStore.tab == 'sketch'"
+      v-if="mapStore.tab == 'sketch'"
       style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px"
     >
       <the-report></the-report>
+    </div>
+    <div>
+      <q-btn
+        v-if="mapStore.tab !== 'sketch'"
+        style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px"
+        size="md"
+        color="primary"
+        class="q-mb-md q-ml-sm"
+        label="Get site report"
+        icon="article"
+        square
+        unelevated=""
+        @click="mapStore.tab = 'sketch'"
+      >
+        <q-tooltip>Click to start site report</q-tooltip>
+      </q-btn>
     </div>
   </arcgis-map>
   <!-- agol add data dialog -->

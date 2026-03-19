@@ -292,29 +292,15 @@ export const useMapStore = defineStore('mapStore', () => ({
 	          ]   
   },
   ]},
-    {header: 'Potential Renewable Energy Buildout', id: 'renewable', expanded: false, 
-   subheaders: [
-    {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
-      sublayers:  [
-        {index: 13, elid: 'buildout_solar', filter: true, visible: false, visibleModel: false, 
-          opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
-           longDescription: '', 
-           totalArea: 0, percentOfTotal: 0, legendImg: ""},
-        {index: 14, elid: 'buildout_wind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
-           category: 'both', title: 'Potential Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
-            longDescription: ''},
-        ]   
-  },
-  ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
     {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, expanded: false,
       sublayers: [
-        {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false,
+        {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'The American Farmland Trust recommends these areas not be converted to non-agrivoltaic solar development, particularly large-scale solar. This layer identifies the top half of farm and ranchland in each state – that is, the lands with PVR (productivity, versatility, and resiliency) values above each states’ median. PVR data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>).',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBLp0F/ykxaE/5BEYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAABLDgYV9UASiQAAAABJRU5ErkJggg=="
+        legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAQ0lEQVR4nO3OMQ7AMAhD0d/ef85lcXCWLI2UuYtZEBag98w57C7cghbu2l3wyQW+7R2zj7vbf4uXnyuAAAIIIIAAAljvpVDf51/0MAAAAABJRU5ErkJggg=="
       },
  	   ]
   },
@@ -431,7 +417,21 @@ export const useMapStore = defineStore('mapStore', () => ({
 	   ]
   },
   ]},
-    {header: 'Native Lands' , id: 'native', expanded: true, 
+  {header: 'Potential Renewable Energy Buildout', id: 'renewable', expanded: false, 
+   subheaders: [
+    {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
+      sublayers:  [
+        {index: 13, elid: 'buildout_solar', filter: true, visible: false, visibleModel: false, 
+          opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
+           longDescription: '', 
+           totalArea: 0, percentOfTotal: 0, legendImg: ""},
+        {index: 14, elid: 'buildout_wind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
+           category: 'both', title: 'Potential Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
+            longDescription: ''},
+        ]   
+  },
+  ]},
+  {header: 'Native Lands' , id: 'native', expanded: true, 
    subheaders: [
      {title: ' Native Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
       sublayers: [
@@ -506,6 +506,18 @@ export const useMapStore = defineStore('mapStore', () => ({
   setGroupVisibility(group){
     group.expanded = !group.expanded
     this.toggleGroupVisibility(group)
+      // Custom behavior for expansion groups
+    if (group.header == 'Potential Renewable Energy Buildout'  && group.expanded == true){
+      //when community is open close the other two groups
+      this.layers[0].expanded = false;
+      this.layers[1].expanded = false;
+      this.layers[2].expanded = false;
+      this.layers[3].expanded = false;
+      this.toggleGroupVisibility(this.layers[0])
+      this.toggleGroupVisibility(this.layers[1])
+      this.toggleGroupVisibility(this.layers[2])
+      this.toggleGroupVisibility(this.layers[4])
+    }
     
     // Custom behavior for expansion groups
     if (group.header == 'Community Considerations'  && group.expanded == true){
@@ -513,29 +525,49 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
       this.layers[2].expanded = false;
+      this.layers[4].expanded = false;
       this.toggleGroupVisibility(this.layers[0])
       this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[2])
+      this.toggleGroupVisibility(this.layers[4])
     }
       if (group.header == 'Agricultural Values'  && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
       this.layers[3].expanded = false;
+      this.layers[4].expanded = false;
       this.toggleGroupVisibility(this.layers[0])
       this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[3])
+      this.toggleGroupVisibility(this.layers[4])
     }
     if (
       group.header == 'Conservation Values' && group.expanded == true ||
       group.header == 'Disturbed Lands' && group.expanded == true
     ){
+      //this turns on the CA overlay
+       if (
+      group.header == 'Conservation Values' && group.expanded == true){
+       let map = document.querySelector("arcgis-map").map;
+       map.findLayerById('states').visible = true
+       map.findLayerById('buttonLayer').visible = true
+      }
       //when the other two are open close community
       this.layers[3].expanded = false;
       this.layers[2].expanded = false;
+      this.layers[4].expanded = false;
       this.toggleGroupVisibility(this.layers[2])
       this.toggleGroupVisibility(this.layers[3])
+      this.toggleGroupVisibility(this.layers[4])
     }
+    //this turns off CA overlay and button
+     if (
+      group.header == 'Conservation Values' && group.expanded == false){
+       let map = document.querySelector("arcgis-map").map;
+       map.findLayerById('states').visible = false
+       map.findLayerById('buttonLayer').visible = false
+      }
   },
   toggleGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;

@@ -7,7 +7,7 @@ let mapStore = useMapStore()
   <div id="energyType" class="q-mb-md">
     <p class="text-overline q-ml-sm q-mb-none">ENERGY TYPE</p>
 
-    <div id="" class="bg-white text-left row q-ml-sm">
+    <div id="" class="bg-white text-left row">
       <q-btn
         square
         size="md"
@@ -68,28 +68,19 @@ let mapStore = useMapStore()
     class="q-mb-md"
     style="border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey"
   >
-    <p class="text-overline q-ml-sm q-mb-none">SAVE DATA & REPORT</p>
-
+    
+    <p class="text-overline q-ml-sm q-mb-none q-pb-none">GET DATA</p>
     <q-btn
       size="md"
       outline
       color="primary"
-      class="q-ml-sm q-mb-md"
+      class="q-mb-md"
       label="Download Data"
       icon="download"
+      square
     >
       <q-tooltip>Download Data</q-tooltip>
     </q-btn>
-    <q-btn
-      size="md"
-      outline
-      disable=""
-      color="grey-5"
-      class="q-ml-md q-mb-md"
-      label="Save Report"
-      icon="article"
-    >
-      <q-tooltip>Create site report to save</q-tooltip>
-    </q-btn>
+  
   </div>
 </template>
