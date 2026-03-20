@@ -24,11 +24,17 @@ function openPanel(active) {
 }
 function dialogControl() {
   helpStore.showDialog = false
-  localStorage.setItem('showSRRSplash', 'no')
+  if (mapStore.checkboxHideSplash) {
+    localStorage.setItem('showSRRSplash', 'hide')
+  } else {
+    localStorage.setItem('showSRRSplash', 'show')
+  }
 }
+
 onMounted(() => {
   //set initial active tool to legend
-  if (localStorage.getItem('showSRRSplash') == 'no') {
+  if (localStorage.getItem('showSRRSplash') == 'hide') {
+    mapStore.checkboxHideSplash = true
     helpStore.showDialog = false
   } else {
     helpStore.showDialog = true
@@ -47,7 +53,7 @@ const portal = new PortalBasemapsSource({
     let bool = true
     await item.load().then((loadedBasemap) => {
       console.log(loadedBasemap.title, loadedBasemap.portal)
-     
+
       // filter out basemaps - console loadedBasemap.title to get list of names
       const basemaps = [
         'Enhanced Contrast Dark Map',
@@ -74,14 +80,18 @@ const portal = new PortalBasemapsSource({
 
     return bool
   },
- 
 })
-
-
 </script>
 
 <template>
-  <q-dialog v-model="helpStore.showDialog" backdrop-filter="blur(4px)" full-width="">
+  <q-dialog
+    transition-show="slide-right"
+    transition-hide="slide-left"
+    transition-duration="250"
+    v-model="helpStore.showDialog"
+    backdrop-filter="blur(4px)"
+    full-width=""
+  >
     <q-card class="q-pa-none q-ma-none">
       <div class="row q-pa-none q-ma-none">
         <q-card-section class="col-5 q-pa-none q-ma-none">
@@ -93,36 +103,54 @@ const portal = new PortalBasemapsSource({
           </q-img>
         </q-card-section>
 
-        <q-card-section class="q-pa-lg col-7">
-          <p class="text-body1 q-ma-md">
-            The Site Renewables Right tool identifies where renewable energy can be developed in the
-            continental U.S. while considering the needs of communities, conservation, and climate.
-            Site Renewables Right is an early screening tool meant to identify potential conflicts
-            before they develop. The tool does not include technical feasibility specifications and
-            is not to be used as a primary resource in siting wind or solar facilities. Instead,
-            Site Renewables Right provides a basis for companies and communities to engage in the
-            right conversations to avoid project delays and prevent impacts to the same communities
-            and natural areas we aim to protect from climate change.
-          </p>
-          <div class="text-center q-pt-lg">
-            <q-btn
-              unelevated=""
-              color="blue-grey-9"
-              square
-              label="Enter Site"
-              size="lg"
-              @click="dialogControl()"
-            />
+        <q-card-section class="col-7 q-pa-lg column self-stretch" style="min-height: 0">
+          <div id="topdiv">
+            <a href="https://www.nature.org/en-us/">
+              <img
+                src="../assets/logo.svg"
+                :style="mobile ? 'width: 100px;' : 'width: 150px; padding-top: 5px; margin: 5px'"
+            /></a>
+            <p class="text-overline text-green-9 text-weight-bold">EARLY SCREENING TOOL</p>
+            <p class="text-h5">Where can renewables work for nature?</p>
+            <p class="text-body2">
+              The Site Renewables Right tool identifies where renewable energy can be developed in
+              the continental U.S. while considering the needs of communities, conservation, and
+              climate. Site Renewables Right is an early screening tool meant to identify potential
+              conflicts before they develop. <br /><br />The tool does not include technical
+              feasibility specifications and is not to be used as a primary resource in siting wind
+              or solar facilities. Instead, Site Renewables Right provides a basis for companies and
+              communities to engage in the right conversations to avoid project delays and prevent
+              impacts to the same communities and natural areas we aim to protect from climate
+              change.
+            </p>
+            <div class="text-center q-pt-lg">
+              <q-btn
+                unelevated=""
+                color="primary"
+                square
+                label="Enter Tool"
+                icon-right="arrow_forward_ios"
+                size="md"
+                @click="dialogControl()"
+              />
+            </div>
           </div>
-          <div class="absolute-bottom text-caption q-pa-md" style="border-top: 1px solid gainsboro">
-            TNC is advancing energy solutions that reduce carbon emissions, protect natural lands
-            and support livelihoods worldwide. Visit us at
-            <a
-              href="https://www.nature.org/en-us/what-we-do/our-priorities/tackle-climate-change/clean-energy-transition/"
-              target="_blank"
-              >nature.org</a
+          <q-space></q-space>
+          <div id="bottom-div">
+            <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash">
+              <span class="text-body2"> Hide splash screen at startup</span></q-checkbox
             >
-            to learn more.
+
+            <div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
+              TNC is advancing energy solutions that reduce carbon emissions, protect natural lands
+              and support livelihoods worldwide. Visit us at
+              <a
+                href="https://www.nature.org/en-us/what-we-do/our-priorities/tackle-climate-change/clean-energy-transition/"
+                target="_blank"
+                >nature.org</a
+              >
+              to learn more.
+            </div>
           </div>
         </q-card-section>
       </div>

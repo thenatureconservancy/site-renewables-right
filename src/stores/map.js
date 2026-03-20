@@ -26,6 +26,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   bufferSize: 1,
   currentPoint: '',
   currentMapExtent: '',
+  checkboxHideSplash: false,
   results: {
     highlySensitiveTotalArea: 0,
     highlySensitiveCount: 0,

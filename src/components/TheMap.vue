@@ -565,9 +565,10 @@ onMounted(() => {
       size="md"
       @click="mapStore.showOpacity = !mapStore.showOpacity"
       padding="6px"
-      class="text-primary shadow-3 rounded-borders bg-white"
+      class="text-primary shadow-3 bg-white"
       unelevated
       square
+      
       icon="opacity"
       stack
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
@@ -619,7 +620,7 @@ onMounted(() => {
       size="md"
       @click="zoomHome()"
       padding="6px"
-      class="text-primary shadow-3 rounded-borders bg-white"
+      class="text-primary shadow-3  bg-white"
       unelevated
       square
       icon="home"
@@ -635,7 +636,7 @@ onMounted(() => {
       size="md"
       color="white"
       padding="6px"
-      class="text-green-9 shadow-3 rounded-borders"
+      class="text-green-9 shadow-3 "
       unelevated
       square
       stack
