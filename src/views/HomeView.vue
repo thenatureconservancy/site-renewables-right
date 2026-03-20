@@ -85,6 +85,7 @@ const portal = new PortalBasemapsSource({
 
 <template>
   <q-dialog
+  persistent=""
     transition-show="slide-right"
     transition-hide="slide-left"
     transition-duration="250"
@@ -97,7 +98,7 @@ const portal = new PortalBasemapsSource({
         <q-card-section class="col-5 q-pa-none q-ma-none">
           <q-img
             src="/srr.png"
-            style="object-fit: contain; max-width: 100%; max-height: auto; margin-bottom: 0px"
+            style="object-fit:contain; max-width: 50vw; max-height: auto; margin-bottom: 0px"
             alt="windmills"
           >
           </q-img>
