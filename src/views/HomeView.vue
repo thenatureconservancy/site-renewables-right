@@ -85,7 +85,7 @@ const portal = new PortalBasemapsSource({
 
 <template>
   <q-dialog
-  persistent=""
+    persistent=""
     transition-show="slide-right"
     transition-hide="slide-left"
     transition-duration="250"
@@ -93,66 +93,107 @@ const portal = new PortalBasemapsSource({
     backdrop-filter="blur(4px)"
     full-width=""
   >
-    <q-card class="q-pa-none q-ma-none">
+    <q-card class="q-pa-none q-ma-none no-scrollbar" style="overflow: hidden">
       <div class="row q-pa-none q-ma-none">
-        <q-card-section class="col-5 q-pa-none q-ma-none">
+        <q-card-section class="col-sm-5 col-md-6 col-lg-6 q-pa-none q-ma-none">
           <q-img
             src="/srr.png"
-            style="object-fit:contain; max-width: 50vw; max-height: auto; margin-bottom: 0px"
+            style="object-fit: contain; max-width: 100%; max-height: 100%; margin-bottom: 0px"
             alt="windmills"
           >
           </q-img>
         </q-card-section>
 
-        <q-card-section class="col-7 q-pa-lg column self-stretch" style="min-height: 0">
-          <div id="topdiv">
-            <a href="https://www.nature.org/en-us/">
-              <img
-                src="../assets/logo.svg"
-                :style="mobile ? 'width: 100px;' : 'width: 150px; padding-top: 5px; margin: 5px'"
-            /></a>
-            <p class="text-overline text-green-9 text-weight-bold">EARLY SCREENING TOOL</p>
-            <p class="text-h5">Where can renewables work for nature?</p>
-            <p class="text-body2">
-              The Site Renewables Right tool identifies where renewable energy can be developed in
-              the continental U.S. while considering the needs of communities, conservation, and
-              climate. Site Renewables Right is an early screening tool meant to identify potential
-              conflicts before they develop. <br /><br />The tool does not include technical
-              feasibility specifications and is not to be used as a primary resource in siting wind
-              or solar facilities. Instead, Site Renewables Right provides a basis for companies and
-              communities to engage in the right conversations to avoid project delays and prevent
-              impacts to the same communities and natural areas we aim to protect from climate
-              change.
-            </p>
-            <div class="text-center q-pt-lg">
-              <q-btn
-                unelevated=""
-                color="primary"
-                square
-                label="Enter Tool"
-                icon-right="arrow_forward_ios"
-                size="md"
-                @click="dialogControl()"
-              />
-            </div>
-          </div>
-          <q-space></q-space>
-          <div id="bottom-div">
-            <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash">
-              <span class="text-body2"> Hide splash screen at startup</span></q-checkbox
-            >
+        <q-card-section
+          class="col-sm-7 col-md-6 col-lg-6 q-pa-lg column self-stretch"
+          style="min-height: 0"
+        >
+          <q-scroll-area style="height: calc(100vh - 100px)" class="q-pa-lg">
+            <div id="topdiv">
+              <a href="https://www.nature.org/en-us/">
+                <img
+                  src="../assets/logo.svg"
+                  :style="mobile ? 'width: 100px;' : 'width: 150px; padding-top: 5px; margin: 5px'"
+              /></a>
+              <p class="text-overline text-green-9 text-weight-bold">
+                CLEAN ENERGY TOOL (NAME COMING SOON)
+              </p>
+              <p class="text-h6">
+                Accelerating clean energy that works in harmony with nature and people
+              </p>
+              <p class="text-body2 text-italic">
+                For a clean energy project to come together, developers need the right land
+                topography, a nearby grid connection, willing landowners and more. Finding locations
+                that fulfill all these requirements is a challenge unto itself.
 
-            <div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
-              TNC is advancing energy solutions that reduce carbon emissions, protect natural lands
-              and support livelihoods worldwide. Visit us at
-              <a
-                href="https://www.nature.org/en-us/what-we-do/our-priorities/tackle-climate-change/clean-energy-transition/"
-                target="_blank"
-                >nature.org</a
-              >
-              to learn more.
+                <br />
+                <br />
+
+                When projects are proposed in places that are important to communities and the
+                environment, they can be met with opposition—at times amplified by
+                misinformation—that leads to project delays, cost increases and cancelations. These
+                challenges slow the clean energy transition at a time when pace and scale are
+                critical.
+
+                <br />
+                <br />
+
+                With energy demand rising, clean energy plays an important role in quickly
+                delivering affordable, reliable power. This tool helps inform the development of
+                projects with benefits for climate, conservation and communities—the “3Cs”—with the
+                goal of building public support for rapid clean energy deployment.
+
+                <br />
+                <br />
+
+                This tool is a first-stop, early screening tool for planning, siting and procuring
+                renewable energy projects. It can be used for high-level information gathering about
+                sensitive wildlife and habitat as well as best practices for engaging communities
+                and Tribes. It can help with identifying potential risks and late-stage surprises.
+
+                <br />
+                <br />
+
+                This tool is not intended to be used on its own to determine where clean energy
+                should or should not be sited. The datasets are high-quality, but they are also
+                coarse. They serve to complement—not replace—site-level assessments, community input
+                and consultations with local, state and federal agencies.
+              </p>
             </div>
-          </div>
+            <div class="row q-mt-xl">
+               <div id="bottom-div" class="text-left col-6 self-center ">
+                <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash">
+                  <span class="text-body2 text-weight-medium">
+                    Hide splash screen at startup</span
+                  ></q-checkbox
+                >
+              </div>
+              <div class="text-right q-pt-lg col-6">
+                <q-btn
+                  unelevated=""
+                  color="primary"
+                  square
+                  label="Enter Tool"
+                  icon-right="arrow_forward_ios"
+                  size="md"
+                  class="q-mb-md"
+                  @click="dialogControl()"
+                />
+              </div>
+
+             
+              <!--div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
+                TNC is advancing energy solutions that reduce carbon emissions, protect natural
+                lands and support livelihoods worldwide. Visit us at
+                <a
+                  href="https://www.nature.org/en-us/what-we-do/our-priorities/tackle-climate-change/clean-energy-transition/"
+                  target="_blank"
+                  >nature.org</a
+                >
+                to learn more.
+              </div-->
+            </div>
+          </q-scroll-area>
         </q-card-section>
       </div>
     </q-card>
@@ -323,3 +364,18 @@ const portal = new PortalBasemapsSource({
     </div>
   </div>
 </template>
+<style>
+.q-dialog__inner {
+  overflow-y: auto; /* still lets it scroll if needed */
+  -ms-overflow-style: none; /* Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.q-dialog__inner::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.q-dialog__inner--standard .q-dialog__inner::-web {
+  display: none;
+}
+</style>

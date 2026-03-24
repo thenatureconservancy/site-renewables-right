@@ -4,7 +4,23 @@ let mapStore = useMapStore()
 </script>
 
 <template>
-  <div id="energyType" class="q-mb-md">
+  <div id="dataDownload" class="q-mb-md row" style="border-bottom: 1px solid lightgrey">
+    <div class="col"><p class="text-overline q-ml-sm q-mb-none q-pb-none">GET DATA</p></div>
+    <div class="col">
+      <q-btn
+        size="md"
+        outline
+        color="primary"
+        class="q-mb-md"
+        label="Download Data"
+        icon="download"
+        square
+      >
+        <q-tooltip>Download Data</q-tooltip>
+      </q-btn>
+    </div>
+  </div>
+  <div id="energyType" class="q-mb-md q-pb-md" style="border-bottom: 1px solid lightgrey">
     <p class="text-overline q-ml-sm q-mb-none">ENERGY TYPE</p>
 
     <div id="" class="bg-white text-left row">
@@ -62,25 +78,5 @@ let mapStore = useMapStore()
         &nbsp;Floating <br />Solar
       </q-btn>
     </div>
-  </div>
-  <div
-    id="dataDownload"
-    class="q-mb-md"
-    style="border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey"
-  >
-    
-    <p class="text-overline q-ml-sm q-mb-none q-pb-none">GET DATA</p>
-    <q-btn
-      size="md"
-      outline
-      color="primary"
-      class="q-mb-md"
-      label="Download Data"
-      icon="download"
-      square
-    >
-      <q-tooltip>Download Data</q-tooltip>
-    </q-btn>
-  
   </div>
 </template>

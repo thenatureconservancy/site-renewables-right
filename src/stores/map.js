@@ -302,7 +302,7 @@ export const useMapStore = defineStore('mapStore', () => ({
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'The American Farmland Trust recommends these areas not be converted to non-agrivoltaic solar development, particularly large-scale solar. This layer identifies the top half of farm and ranchland in each state – that is, the lands with PVR (productivity, versatility, and resiliency) values above each states’ median. PVR data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>).',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAAQ0lEQVR4nO3OMQ7AMAhD0d/ef85lcXCWLI2UuYtZEBag98w57C7cghbu2l3wyQW+7R2zj7vbf4uXnyuAAAIIIIAAAljvpVDf51/0MAAAAABJRU5ErkJggg=="
+        legendImg: ""
       },
  	   ]
   },

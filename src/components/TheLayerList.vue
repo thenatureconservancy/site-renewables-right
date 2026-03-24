@@ -119,10 +119,15 @@ async function scrollToElement(elid) {
                         :step="0.1"
                         @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
                       />
+                      <q-img
+                      v-if="sublayer.elid == 'highestag'"
+                      src="\legend.png"
+                      style="width: 200px; height: auto"
+                      ></q-img>
                     </q-checkbox>
                   </q-item-section>
                   <q-item-section side>
-                    <div style="width: 20px; height: 20px">
+                    <div style="width: 20px; height: 20px" v-if="sublayer.legendImg">
                       <img :src="'data:image/png;base64,' + sublayer.legendImg" />
                     </div>
                   </q-item-section>

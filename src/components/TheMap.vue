@@ -501,7 +501,7 @@ onMounted(() => {
           <div style="font:600 13px/1.2 system-ui;color:#1b5eab">
             Household Income Percentile
           </div>
-          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay} - ${raw}</div>
+          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div> 
         </div>
       </div>
     `

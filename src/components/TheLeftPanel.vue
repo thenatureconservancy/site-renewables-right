@@ -42,7 +42,7 @@ computed(() => {
 })
 </script>
 <template>
-  <div class="q-ma-md">
+  <div class="q-mx-md" style="border-top: 1px solid lightgray">
     <p class="text-body2 text-bold q-mb-none q-mt-md">Explore the Data</p>
 
     <p>
