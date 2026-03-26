@@ -9,9 +9,14 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
+
+import Query from "@arcgis/core/rest/support/Query";
+import * as query from "@arcgis/core/rest/query";
+
 export const useMapStore = defineStore('mapStore', () => ({
   opacity: 90,
   showOpacity: false,
+  showDemo: false,
   tab: 'layers',
   reportTab: 'conservation',
   showReportDetails: true,
@@ -790,9 +795,13 @@ export const useMapStore = defineStore('mapStore', () => ({
       const graphic = bufferLayer.graphics.getItemAt(0)
       graphic.geometry = buffer
     }
-     this.getHistogram(buffer, 'test')
-    //clear values from previous buffer
-    //view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
+   // this.getHistogram(buffer, 'test')
+  this.fetchRasterIds()
+  
+  },
+  oldExtras(){
+        //clear values from previous buffer
+    view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
     /*let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
       {name: 'Whooping Crane (wind)', id: 20, color: '#FF884D', index: 1, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[11]},
       {name: 'Whooping Crane (solar)', id: 21, color: '#FF884D', index: 2, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[10]},
@@ -918,7 +927,6 @@ export const useMapStore = defineStore('mapStore', () => ({
       //this.getIntersectionExtent(layerList[i])
     }  
     
-  
   },
   //function to clip features and calculate area
   getIntersectionFeatures(buffer, item){
@@ -1074,37 +1082,97 @@ export const useMapStore = defineStore('mapStore', () => ({
    
     
   },
-  getHistogram(buffer, item){
 
-    console.log(item)
-    //ProtectedAreas_project
-    //ResilientAndConnected_COG
-        let mosaicRule = new MosaicRule({
-        method: 'attribute',
-        where: "Name = 'ProtectedAreas_project'",
-        sortValue: 'ResilientAndConnected_COG',
-        sortField: 'Name',
-        ascending: false,
-        operation: 'first',
+
+  getHistogram(buffer, item) {
+    const rasters = [
+      'pvr_pctls_merged_FINAL',
+      'birds_COG',
+      'Connectivity_04_20260304',
+      'BigGame_08',
+      'IntactHabitats_04',
+      'Migratory_Bird_Stopover',
+      'OtherBiodiversity_09',
+      'PrairieGrouseAndSageGrouse_Hise',
+      'ProtectedAreas_COG_NEW',
+      'ResilientAndConnected_COG2',
+      'WhoopingCraneSolar_Hise',
+      'WhoopingCraneWind_Hise',
+      'TE_Species_03',
+      'FloodPlainsAndWetlands2'
+    ];
+
+    const map = document.querySelector("arcgis-map").map;
+    const imageLayer = map.findLayerById("imageLayer");
+
+    rasters.forEach((rasterName) => {
+      const mosaicRule = new MosaicRule({
+        method: "attribute",
+        where: `Name = '${rasterName}'`,
+        operation: "first"
       });
-        let params = new ImageHistogramParameters({
-          geometry: buffer,
-          mosaicRule: mosaicRule,
-          pixelSize: {
-            x: 30,
-            y: 30,
-            spatialReference: {
-              wkid: 102100,
-            },
-          },
+
+      const params = new ImageHistogramParameters({
+        geometry: buffer,
+        mosaicRule,
+        pixelSize: 30,
+        renderingRule: null,
+        bandIds: [0]
+      });
+
+      imageLayer.computeHistograms(params)
+        .then((results) => {
+          console.log(rasterName, results);
+        })
+        .catch((err) => {
+          console.error(`Histogram failed for ${rasterName}`, err);
         });
-    let map = document.querySelector("arcgis-map").map;
-    let imageLayer = map.findLayerById('imageLayer');
-    console.log(imageLayer)
-    imageLayer.computeHistograms(params).then((results) => {
-	    console.log(results)
-	  })
+    });
   },
+
+  fetchRasterIds() {
+    const imageServerUrl =
+      'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer'
+
+
+    const rasterNames = [
+      'pvr_pctls_merged_FINAL',
+      'birds_COG',
+      'Connectivity_04_20260304',
+      'BigGame_08',
+      'IntactHabitats_04',
+      'Migratory_Bird_Stopover',
+      'OtherBiodiversity_09',
+      'PrairieGrouseAndSageGrouse_Hise',
+      'ProtectedAreas_COG_NEW',
+      'ResilientAndConnected_COG2',
+      'WhoopingCraneSolar_Hise',
+      'WhoopingCraneWind_Hise',
+      'TE_Species_03',
+      'FloodPlainsAndWetlands2'
+    ];
+
+   
+ const q = new Query({
+    where: "1=1",                 // or filter by Name
+    outFields: ["Name", "OBJECTID"],
+    returnGeometry: false
+  });
+
+  return query.executeQueryJSON(imageServerUrl, q)
+    .then(res => {
+      const map = {};
+      res.features.forEach(f => {
+        map[f.attributes.Name] = f.attributes.OBJECTID;
+      });
+      console.log(map)
+      return map;
+    });
+
+  },
+
+
+
   changeNativeOpacity(opacity){
       let map = document.querySelector("arcgis-map").map;
       let native = map.findLayerById('nativeLands');

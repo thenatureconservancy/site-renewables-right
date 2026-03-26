@@ -11,6 +11,7 @@ import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 import Graphic from '@arcgis/core/Graphic'
 
 import Basemap from '@arcgis/core/Basemap'
+import TheIntersectionResults from '@/components/TheIntersectionResults.vue'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
@@ -28,7 +29,6 @@ function zoomHome() {
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
   // highly sensitive
-
   let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'bigGameSolar',
@@ -37,7 +37,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let birdsWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'birdsWind',
@@ -46,7 +45,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let prairieGrouse = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'prairieGrouse',
@@ -55,7 +53,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let protectedAreas = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'protectedAreas',
@@ -64,7 +61,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let resilientConnected = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'resilientConnected',
@@ -73,7 +69,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'threatenedEndangeredSpecies',
@@ -82,7 +77,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let floodPlainsWetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'floodPlainsWetlands',
@@ -91,7 +85,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let whoopingCraneSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopingCraneSolar',
@@ -100,7 +93,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let whoopingCraneWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopingCraneWind',
@@ -109,7 +101,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
@@ -134,7 +125,6 @@ onMounted(() => {
     opacity: 1,
     maxScale: 300000,
   })
-
   let migratoryBirdStopoverWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'migratoryBirdStopoverWind',
@@ -168,7 +158,6 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
-
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
@@ -190,6 +179,7 @@ onMounted(() => {
         "This federally recognized tribal entity's functional status is defined as a(n) {FUNC_D}. The Census type is classified as: {AIANNHType}.",
     },
   })
+  //mosaic layer for in
   let imageLayer = new ImageryLayer({
     // URL to the imagery service
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer',
@@ -197,7 +187,6 @@ onMounted(() => {
     id: 'imageLayer',
   })
   // CJEST
-
   // vector tile layer
   let cjest = new VectorTileLayer({
     url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
@@ -256,7 +245,7 @@ onMounted(() => {
         <h6>California Policy Details</h6>
         <p>Link to CA Details</p>
         <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
-       
+
       </div>
     `,
     },
@@ -315,23 +304,27 @@ onMounted(() => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
-
-  arcgisMap.addEventListener('arcgisViewClick', async (e) => {
+  arcgisMap.addEventListener('arcgisViewDoubleClick', async (e) => {
+    mapStore.showDemo = true;
     try {
-      if (mapStore.tab == 'sketch') {
-        bufferLayer.visible = true
-        pointLayer.visible = true
-        mapStore.createBuffer(e)
-      }
-
+      bufferLayer.visible = true
+      pointLayer.visible = true
+      mapStore.createBuffer(e)
       // Ensure a selection layer exists and clear prior selections
-      let selectionLayer = arcgisMap.view.map.layers.find((l) => l.title === 'Selection')
+      let selectionLayer = arcgisMap.map.findLayerById('Selection')
       if (!selectionLayer) {
         selectionLayer = new GraphicsLayer({ title: 'Selection' })
         arcgisMap.view.map.add(selectionLayer)
       } else {
         selectionLayer.removeAll()
       }
+    } catch (err) {
+      console.error('Guarded query error:', err)
+    }
+  })
+
+  arcgisMap.addEventListener('arcgisViewClick', async (e) => {
+    try {
       //set a watch for popup
 
       const mapPoint = e.detail.mapPoint
@@ -447,7 +440,7 @@ onMounted(() => {
         </div>`
               // ---- Percent (rounded to nearest 10) from P200_I_PFS ----
               const raw = a['P200_I_PFS']
-              
+
               let decileDisplay = '—'
 
               if (raw !== null && raw !== undefined && raw !== '') {
@@ -501,7 +494,7 @@ onMounted(() => {
           <div style="font:600 13px/1.2 system-ui;color:#1b5eab">
             Household Income Percentile
           </div>
-          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div> 
+          <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div>
         </div>
       </div>
     `
@@ -568,7 +561,6 @@ onMounted(() => {
       class="text-primary shadow-3 bg-white"
       unelevated
       square
-      
       icon="opacity"
       stack
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
@@ -620,7 +612,7 @@ onMounted(() => {
       size="md"
       @click="zoomHome()"
       padding="6px"
-      class="text-primary shadow-3  bg-white"
+      class="text-primary shadow-3 bg-white"
       unelevated
       square
       icon="home"
@@ -636,7 +628,7 @@ onMounted(() => {
       size="md"
       color="white"
       padding="6px"
-      class="text-green-9 shadow-3 "
+      class="text-green-9 shadow-3"
       unelevated
       square
       stack
@@ -644,29 +636,9 @@ onMounted(() => {
     </q-btn>
 
     <!-- report summary boxes-->
-    <div
-      class="bg-white shadow-3 rounded-borders"
-      v-if="mapStore.tab == 'sketch'"
-      style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px"
-    >
-      <the-report></the-report>
-    </div>
-    <div>
-      <q-btn
-        v-if="mapStore.tab !== 'sketch'"
-        style="z-index: 999; position: absolute; right: 15px; bottom: 30px; width: 300px"
-        size="md"
-        color="primary"
-        class="q-mb-md q-ml-sm"
-        label="Get site report"
-        icon="article"
-        square
-        unelevated=""
-        @click="mapStore.tab = 'sketch'"
-      >
-        <q-tooltip>Click to start site report</q-tooltip>
-      </q-btn>
-    </div>
+   
+      <TheIntersectionResults />
+
   </arcgis-map>
   <!-- agol add data dialog -->
   <keep-alive>

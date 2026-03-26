@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intersection Results Panel Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .results-panel {
+            width: 380px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #64B45B 0%, #5aa54d 100%);
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #4a8c3a;
+        }
+
+        .results-header h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .total-area {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .total-area-label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .buffer-section {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .buffer-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: help;
+            font-weight: bold;
+        }
+
+        .buffer-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .buffer-btn {
+            flex: 1;
+            padding: 8px 6px;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .buffer-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .buffer-btn.active {
+            background: white;
+            color: #64B45B;
+            border-color: white;
+        }
+
+        .custom-input-wrapper {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .custom-input-wrapper.show {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .custom-input-wrapper input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .custom-input-wrapper input::placeholder {
+            color: #999;
+        }
+
+        .custom-input-label {
+            font-size: 11px;
+            white-space: nowrap;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .results-body {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .result-category {
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border-left: 4px solid #64B45B;
+            margin-bottom: 8px;
+            border-radius: 2px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            background: #fafafa;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .result-item:hover {
+            background: #f0f7ec;
+            transform: translateX(4px);
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .result-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #666;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #999;
+        }
+
+        .results-footer {
+            border-top: 1px solid #e0e0e0;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: #64B45B;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5aa54d;
+            box-shadow: 0 2px 8px rgba(100, 180, 91, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        /* Color swatches matching your legend */
+        .color-big-game { background-color: #E6D4C3; }
+        .color-flood { background-color: #FF6B6B; }
+        .color-prairie { background-color: #90EE90; }
+        .color-protected { background-color: #87CEEB; }
+        .color-resilient { background-color: #DDA0DD; }
+        .color-threatened { background-color: #FFB6C1; }
+        .color-whooping { background-color: #FFA500; }
+
+        .color-connectivity { background-color: #B0C4DE; }
+        .color-landscape { background-color: #D3D3D3; }
+
+        .color-disturbed { background-color: #8B7355; }
+        .color-former-mine { background-color: #A0522D; }
+        .color-brownfields { background-color: #CD853F; }
+        .color-abandoned { background-color: #9370DB; }
+
+        .color-highest-ag { background-color: #FFD700; }
+
+        .color-household { background-color: #808080; }
+        .color-climate { background-color: #8B008B; }
+        .color-energy { background-color: #4B0082; }
+        .color-health { background-color: #9932CC; }
+        .color-housing { background-color: #BA55D3; }
+        .color-pollution { background-color: #9370DB; }
+        .color-transportation { background-color: #8A2BE2; }
+        .color-water { background-color: #4169E1; }
+        .color-workforce { background-color: #6A5ACD; }
+
+        .color-native-lands { background-color: #90EE90; }
+
+        /* Scrollbar styling */
+        .results-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .results-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .results-body::-webkit-scrollbar-thumb {
+            background: #c4c4c4;
+            border-radius: 3px;
+        }
+
+        .results-body::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        .demo-note {
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    function initBufferControls() {
+        const bufferButtons = document.querySelectorAll('.buffer-btn');
+        const customInputWrapper = document.getElementById('customBufferInput');
+        const customInput = document.getElementById('customBufferValue');
+
+        bufferButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                bufferButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                // Show/hide custom input
+                if (this.dataset.buffer === 'custom') {
+                    customInputWrapper.classList.add('show');
+                    customInput.focus();
+                } else {
+                    customInputWrapper.classList.remove('show');
+                    // Update intersection results (you'd call API here)
+                    console.log('Buffer size set to:', this.dataset.buffer, 'mi');
+                }
+            });
+        });
+
+        // Handle custom input changes
+        customInput.addEventListener('change', function() {
+            if (this.value) {
+                console.log('Custom buffer size set to:', this.value, 'mi');
+                // Update intersection results (you'd call API here)
+            }
+        });
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initBufferControls);
+</script>
+
+<div class="results-panel">
+    <!-- Header -->
+    <div class="results-header">
+        <h2>🎯 Intersection Results</h2>
+        <div class="total-area-label">Total Area</div>
+        <div class="total-area">24,586 ha</div>
+        <div style="font-size: 11px; opacity: 0.85;">Selected Location Coordinates: 53.45, -114.23</div>
+
+        <!-- Buffer Size Control -->
+        <div class="buffer-section">
+            <div class="buffer-label">
+                Buffer Size:
+                <div class="info-icon" title="Expand the search area around your selected point">?</div>
+            </div>
+            <div class="buffer-buttons">
+                <button class="buffer-btn" data-buffer="0.5">0.5 mi</button>
+                <button class="buffer-btn" data-buffer="1">1 mi</button>
+                <button class="buffer-btn active" data-buffer="5">5 mi</button>
+                <button class="buffer-btn" data-buffer="custom">Custom</button>
+            </div>
+            <div class="custom-input-wrapper" id="customBufferInput">
+                <input type="number" id="customBufferValue" placeholder="Enter size" min="0.1" step="0.1" />
+                <span class="custom-input-label">mi</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Body -->
+    <div class="results-body">
+
+        <!-- Conservation Values -->
+        <div class="result-category">
+            <div class="category-title">🌿 Conservation Values</div>
+            
+            <div class="result-item">
+                <div class="color-swatch color-big-game"></div>
+                <div class="result-info">
+                    <div class="result-name">Big Game</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 4,234 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 17.2%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-flood"></div>
+                <div class="result-info">
+                    <div class="result-name">Floodplains & Wetlands</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 1,892 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 7.7%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-prairie"></div>
+                <div class="result-info">
+                    <div class="result-name">Prairie Grouse</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 3,456 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 14.1%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-resilient"></div>
+                <div class="result-info">
+                    <div class="result-name">Resilient & Connected Network</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 2,123 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 8.6%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disturbed Lands -->
+        <div class="result-category">
+            <div class="category-title">⚠️ Disturbed Lands</div>
+            
+            <div class="result-item">
+                <div class="color-swatch color-former-mine"></div>
+                <div class="result-info">
+                    <div class="result-name">Former Mine Lands</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 876 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 3.6%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-brownfields"></div>
+                <div class="result-info">
+                    <div class="result-name">Brownfields</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 234 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 0.9%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agricultural Values -->
+        <div class="result-category">
+            <div class="category-title">🌾 Agricultural Values</div>
+            
+            <div class="result-item">
+                <div class="color-swatch color-highest-ag"></div>
+                <div class="result-info">
+                    <div class="result-name">Highest Quality Farmland</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 5,678 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 23.1%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Considerations -->
+        <div class="result-category">
+            <div class="category-title">👥 Community Considerations</div>
+            
+            <div class="result-item">
+                <div class="color-swatch color-climate"></div>
+                <div class="result-info">
+                    <div class="result-name">Climate Disadvantaged</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 1,234 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 5.0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-energy"></div>
+                <div class="result-info">
+                    <div class="result-name">Energy Disadvantaged</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 2,345 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 9.5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-item">
+                <div class="color-swatch color-workforce"></div>
+                <div class="result-info">
+                    <div class="result-name">Workforce Disadvantaged</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 789 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 3.2%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Native Lands -->
+        <div class="result-category">
+            <div class="category-title">🗺️ Potential Renewable Buildout</div>
+            
+            <div class="result-item">
+                <div class="color-swatch color-native-lands"></div>
+                <div class="result-info">
+                    <div class="result-name">Native Lands</div>
+                    <div class="result-stats">
+                        <span class="stat"><span class="stat-label">Area:</span> 456 ha</span>
+                        <span class="stat"><span class="stat-label">%:</span> 1.9%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="results-footer">
+        <button class="btn btn-secondary">📊 Export CSV</button>
+        <button class="btn btn-primary">Get Site Report</button>
+    </div>
+</div>
+
+<div class="demo-note">
+    <strong>Notes for implementation:</strong><br>
+    • Results expand/collapse by clicking category titles<br>
+    • Hover on items to highlight them on the map<br>
+    • Panel can be dragged/resized<br>
+    • "Get Site Report" opens full analysis download<br>
+    • Color swatches match your existing legend
+</div>
+
+</body>
+</html>
