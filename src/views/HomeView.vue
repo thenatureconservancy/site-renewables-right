@@ -161,7 +161,7 @@ const portal = new PortalBasemapsSource({
               </p>
             </div>
             <div class="row q-mt-xl">
-               <div id="bottom-div" class="text-left col-6 self-center ">
+              <div id="bottom-div" class="text-left col-6 self-center">
                 <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash">
                   <span class="text-body2 text-weight-medium">
                     Hide splash screen at startup</span
@@ -181,7 +181,6 @@ const portal = new PortalBasemapsSource({
                 />
               </div>
 
-             
               <!--div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
                 TNC is advancing energy solutions that reduce carbon emissions, protect natural
                 lands and support livelihoods worldwide. Visit us at

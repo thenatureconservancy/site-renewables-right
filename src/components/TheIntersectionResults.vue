@@ -220,9 +220,13 @@ onMounted(() => {
 
         <!-- Buffer Size Control -->
         <div class="buffer-section">
+            <div class="row">
           <div class="buffer-label">
             Buffer Size:
             <div class="info-icon" title="Expand the search area around your selected point">?</div>
+          </div>
+          <q-space></q-space>
+          <div class="text-caption text-bold">**Sample Data - Demo Only**</div>
           </div>
           <div class="buffer-buttons">
             <q-btn
