@@ -174,6 +174,24 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
+  //wind and solar best locations
+    let lassoWind = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'lassoWind',
+    sublayers: [{ id: 2 }],
+    visible: false,
+    opacity: 0.8,
+    maxScale: 300000,
+  })
+    let lassoSolar = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'lassoSolar',
+    sublayers: [{ id: 1 }],
+    visible: false,
+    opacity: 0.8,
+    maxScale: 300000,
+  })
+
   // native lands
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
@@ -285,6 +303,8 @@ onMounted(() => {
       abandonedmines,
       cjest,
       cjestFL,
+      lassoSolar,
+      lassoWind,
       migratoryBirdStopoverWind,
       landscapeIntactness,
       landscape,

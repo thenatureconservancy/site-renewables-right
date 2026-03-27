@@ -27,6 +27,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   activeHelpElement: '',  
   category: 'solar',
   communitySelection: 'Climate Disadvantaged',
+  buildoutSelection: 'Potential Solar Buildout',
   legend: '',
   bufferSize: 1,
   currentPoint: '',
@@ -303,19 +304,19 @@ export const useMapStore = defineStore('mapStore', () => ({
   {header: 'Disturbed Lands' , id: 'agriculture', expanded: false, 
    subheaders: [
     {title: ' Disturbed Lands', id: 'ag', visible: true, visibleModel: true, expanded: false,
-      sublayers:  [
+      sublayers:[
         {index: 13, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
-           longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines <a href="https://mrdata.usgs.gov/usmin/" target="_blank">(USGS geospatial database).</a> Users are advised that the data are of inconsistent quality and better data may be available from state mining agencies. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', 
-           totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGwSURBVDhP5ZPLbtNQEECPnbhJmgewARaULd+B+AEWfCoLlhVCbVFRIVIqmlRNY6VJareJUz9i+/pF7EYRUR1vyI6zudLM6OjeOzNSsoQdIq/OnbFzYeGT4yRmttCJREJV3qfZbCLLxXfYmo3jGF94jK0BPfOMnv0TP/CyeBFbhVEcYnpzruw2v+xDOs435u6UMApWFflsFVrCZPDQ5bJ8zLD1A63+m75xkcWLyBVGUcRc6FyKU+zGLeEzC2f/jm54hBFMsvw2coWucLj1B1yXzgjrNkoDgppNXzlF81UWnrOqfEqucGRfo4pzzNaQqCyyWFIK8F9MGYs+mjXKYnlsCNMOuq7LTdBlIneh7pPIj11NSglSLUClTV+0s7q8jq+F6TiKwGdq64ziC6YVFXlvOajSYz49pDJolR6q1Obe0nI7vhamH/3gGZwb39HLV4hafjellsBQhnRmJ9jB05r1pqRC3R5zdPOFUaWDU71HLmU1GyyXh6r3nJeLd7x/+5FXzTcb27MWpv9x50z4OviMGc6IpOIB3pOrfDj4xOvGAYqirKJ/CXdF7tj8C/+dEP4AGLv06o7CI14AAAAASUVORK5CYII="},
+          longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines <a href="https://mrdata.usgs.gov/usmin/" target="_blank">(USGS geospatial database).</a> Users are advised that the data are of inconsistent quality and better data may be available from state mining agencies. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', 
+          totalArea: 0, percentOfTotal: 0, legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGwSURBVDhP5ZPLbtNQEECPnbhJmgewARaULd+B+AEWfCoLlhVCbVFRIVIqmlRNY6VJareJUz9i+/pF7EYRUR1vyI6zudLM6OjeOzNSsoQdIq/OnbFzYeGT4yRmttCJREJV3qfZbCLLxXfYmo3jGF94jK0BPfOMnv0TP/CyeBFbhVEcYnpzruw2v+xDOs435u6UMApWFflsFVrCZPDQ5bJ8zLD1A63+m75xkcWLyBVGUcRc6FyKU+zGLeEzC2f/jm54hBFMsvw2coWucLj1B1yXzgjrNkoDgppNXzlF81UWnrOqfEqucGRfo4pzzNaQqCyyWFIK8F9MGYs+mjXKYnlsCNMOuq7LTdBlIneh7pPIj11NSglSLUClTV+0s7q8jq+F6TiKwGdq64ziC6YVFXlvOajSYz49pDJolR6q1Obe0nI7vhamH/3gGZwb39HLV4hafjellsBQhnRmJ9jB05r1pqRC3R5zdPOFUaWDU71HLmU1GyyXh6r3nJeLd7x/+5FXzTcb27MWpv9x50z4OviMGc6IpOIB3pOrfDj4xOvGAYqirKJ/CXdF7tj8C/+dEP4AGLv06o7CI14AAAAASUVORK5CYII="},
         {index: 14, elid: 'brownfields', filter: true, visible: false, visibleModel: false, opacity: 0.9,
-           category: 'both', title: 'Brownfields over 10 acres', inBuffer: false, inExtent: false, description: 'short description',
-            longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAC/SURBVDhPY/wPBAxUBExQmmpg1EDKAcFYnjJ5CsOurdsZnr15ySAlIs7g5u3JkJObA5XFBHgNTI1PYpD5w8cQpmzHoMAnwfDg0wuGVXcPMTxh+cQwe+E8qCpUgNNAkMvenrjDUGYYBhVBgK7zqxiELVSwuhRnGIK8CXIZNgASB8ljAzgNBIUZyJvYAEgcJI8N4DQQFAGgMMMGQOIgeWwAp4Gg2ARFADYAEgfJYwP0i2UYoGo6JAdQPeuNOAMZGACQ7mcGtSS9RgAAAABJRU5ErkJggg=="},
-       {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
-      longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
-      totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
-	          ]   
-  },
+          category: 'both', title: 'Brownfields over 10 acres', inBuffer: false, inExtent: false, description: 'short description',
+          longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAC/SURBVDhPY/wPBAxUBExQmmpg1EDKAcFYnjJ5CsOurdsZnr15ySAlIs7g5u3JkJObA5XFBHgNTI1PYpD5w8cQpmzHoMAnwfDg0wuGVXcPMTxh+cQwe+E8qCpUgNNAkMvenrjDUGYYBhVBgK7zqxiELVSwuhRnGIK8CXIZNgASB8ljAzgNBIUZyJvYAEgcJI8N4DQQFAGgMMMGQOIgeWwAp4Gg2ARFADYAEgfJYwP0i2UYoGo6JAdQPeuNOAMZGACQ7mcGtSS9RgAAAABJRU5ErkJggg=="},
+        {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
+          longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
+          totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
+	      ]   
+    },
   ]},
   {header: 'Agricultural Values' , id: 'agriculture', expanded: false, 
    subheaders: [
@@ -334,8 +335,6 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, expanded: false,
       sublayers: [
-        
- 
   {
     index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
@@ -446,13 +445,13 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
-        {index: 13, elid: 'buildout_solar', filter: true, visible: false, visibleModel: false, 
+        {index: 13, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
-           longDescription: '', 
-           totalArea: 0, percentOfTotal: 0, legendImg: ""},
-        {index: 14, elid: 'buildout_wind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
+           longDescription: '', type: 'radio', 
+           totalArea: 0, percentOfTotal: 0, legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAAh0lEQVR4nO3OQQqCQBSA4V+ncEQxwhmQ2rRpHXS5ztEV2xgVgZsCnfemY7R53wm+4nq65NV+ixsCZQjQ9+Q+kkIkbTq0zmSvaCUkL4hPiBeWSljWX+b8ZtYHszz56ItJ7kw6MukNdOTgao4usnMdg2uIriUWLbFs6DhT8mcWsIAFLGABC1jgB636LcCTL6F/AAAAAElFTkSuQmC"},
+        {index: 14, elid: 'lassoWind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
            category: 'both', title: 'Potential Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
-            longDescription: ''},
+            longDescription: '', type: 'radio', legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAAh0lEQVR4nO3OQQqCQBSA4V+ncEQxwhmQ2rRpHXS5ztEV2xgVgZsCnfemY7R53wm+4nq65NV+ixsCZQjQ9+Q+kkIkbTq0zmSvaCUkL4hPiBeWSljWX+b8ZtYHszz56ItJ7kw6MukNdOTgao4usnMdg2uIriUWLbFs6DhT8mcWsIAFLGABC1jgB636LcCTL6F/AAAAAElFTkSuQmC"},
         ]   
   },
   ]},
@@ -1218,13 +1217,30 @@ export const useMapStore = defineStore('mapStore', () => ({
 
     requestAnimationFrame(animate);
   });
-},
+  },
 
   changeCommunityStyle(style){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('cjest');
     layer.loadStyle(style)
    
+  },
+  changeBuildoutLayer(elid){
+    if(elid == 'lassoSolar'){
+      let map = document.querySelector("arcgis-map").map;
+      let layer = map.findLayerById(elid);
+      layer.visible = true
+
+      let layer2 = map.findLayerById('lassoWind');
+      layer2.visible = false
+    }
+    if(elid == 'lassoWind'){
+      let map = document.querySelector("arcgis-map").map;
+      let layer = map.findLayerById(elid);
+      layer.visible = true
+      let layer2 = map.findLayerById('lassoSolar');
+      layer2.visible = false
+    }
   }
   
 

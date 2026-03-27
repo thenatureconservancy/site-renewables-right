@@ -74,7 +74,7 @@ async function scrollToElement(elid) {
           :key="index"
           header-class=""
           expand="true"
-          v-model = layer.expanded
+          v-model="layer.expanded"
           dense
         >
           <template v-slot:header>
@@ -90,7 +90,14 @@ async function scrollToElement(elid) {
               <q-item-label class="text-subtitle1">{{ layer.title }} </q-item-label>
             </q-item-section>
           </template>
-          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title !== 'Community Considerations'">
+          <q-list
+            dense
+            class="q-mx-md q-pb-md"
+            v-if="
+              layer.title !== 'Community Considerations' &&
+              layer.title !== 'Potential Renewable Energy Buildout'
+            "
+          >
             <draggable
               v-model="layer.sublayers"
               ghostClass="ghost"
@@ -120,11 +127,10 @@ async function scrollToElement(elid) {
                         @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
                       />
                       <q-img
-                      v-if="sublayer.pngLegend"
-                      :src="sublayer.pngLegend"
-                      style="width: 200px; height: auto"
+                        v-if="sublayer.pngLegend"
+                        :src="sublayer.pngLegend"
+                        style="width: 200px; height: auto"
                       ></q-img>
-
                     </q-checkbox>
                   </q-item-section>
                   <q-item-section side>
@@ -168,7 +174,6 @@ async function scrollToElement(elid) {
                   :val="sublayer.title"
                   @update:model-value="mapStore.changeCommunityStyle(sublayer.style)"
                 />
-              
               </q-item-section>
 
               <!-- Title + optional per-item controls -->
@@ -185,6 +190,59 @@ async function scrollToElement(elid) {
                   :step="0.1"
                   @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
                 />
+              </q-item-section>
+
+              <!-- Legend image -->
+              <q-item-section side>
+                <div style="width: 20px; height: 20px">
+                  <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
+                </div>
+              </q-item-section>
+
+              <!-- Info button -->
+              <q-item-section side>
+                <q-btn
+                  size="sm"
+                  flat
+                  padding="none"
+                  icon="o_info"
+                  @click.stop="scrollToElement(sublayer.elid)"
+                >
+                  <q-tooltip> more info </q-tooltip>
+                </q-btn>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <!-- Potential renewable energy buildout (no draggable, single-select via radio) -->
+          <q-list
+            dense
+            class="q-mx-md q-pb-md"
+            v-if="layer.title === 'Potential Renewable Energy Buildout'"
+          >
+            <q-item
+              v-for="sublayer in layer.sublayers"
+              :key="sublayer.index"
+              dense
+              clickable
+              v-ripple
+              @click="
+                mapStore.changeBuildoutLayer(sublayer.elid);
+                mapStore.buildoutSelection = sublayer.title
+              "
+            >
+              <!-- Radio column (no drag icon) -->
+              <q-item-section side>
+                <q-radio
+                  size="sm"
+                  v-model="mapStore.buildoutSelection"
+                  :val="sublayer.title"
+                  @update:model-value="mapStore.changeBuildoutLayer(sublayer.elid)"
+                />
+              </q-item-section>
+
+              <!-- Title + optional per-item controls -->
+              <q-item-section>
+                <div class="text-body2">{{ sublayer.title }}</div>
               </q-item-section>
 
               <!-- Legend image -->
