@@ -63,6 +63,27 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
+         {
+        index: 10,
+        mapIndex: 25,
+        elid: 'bats',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'solar',
+        title: 'Bats',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: "",
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: '',
+        pngLegend: '\\bat.png',
+        pngWidth: '220'
+
+      },
       {
         index: 0,
         mapIndex: 10,
@@ -81,8 +102,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
       },
-    
-         {
+      {
         index: 2,
         mapIndex: 19,
         elid: 'floodPlainsWetlands',
@@ -100,7 +120,6 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
       },
-        
       {
         index: 3,
         mapIndex: 15,
@@ -173,7 +192,6 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
       },
-   
       {
         index: 7,
         mapIndex: 20,
@@ -307,7 +325,7 @@ export const useMapStore = defineStore('mapStore', () => ({
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'The American Farmland Trust recommends these areas not be converted to non-agrivoltaic solar development, particularly large-scale solar. This layer identifies the top half of farm and ranchland in each state – that is, the lands with PVR (productivity, versatility, and resiliency) values above each states’ median. PVR data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>).',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: ""
+        legendImg: "", pngLegend: '\\ag.png', pngWidth: '200'
       },
  	   ]
   },

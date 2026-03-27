@@ -29,6 +29,14 @@ function zoomHome() {
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
   // highly sensitive
+  let bats = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'bats',
+    sublayers: [{ id: 25 }],
+    visible: false,
+    opacity: 1,
+    maxScale: 300000,
+  })
   let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'bigGameSolar',
@@ -290,6 +298,7 @@ onMounted(() => {
       floodPlainsWetlands,
       bigGameSolar,
       birdsWind,
+      bats,
       nativeLands,
       states,
       bufferLayer,
