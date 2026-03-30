@@ -216,7 +216,7 @@ onMounted(() => {
   // vector tile layer
   let cjest = new VectorTileLayer({
     url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/VectorTileServer',
-    style: 'styles/N_CLT_EOMI.json',
+    style: 'styles/P200_I_PFS.json',
     id: 'cjest',
     visible: false,
   })
@@ -355,7 +355,13 @@ onMounted(() => {
   arcgisMap.addEventListener('arcgisViewClick', async (e) => {
     try {
       //set a watch for popup
-
+      let selectionLayer = arcgisMap.map.findLayerById('Selection')
+      if (!selectionLayer) {
+        selectionLayer = new GraphicsLayer({ title: 'Selection' })
+        arcgisMap.view.map.add(selectionLayer)
+      } else {
+        selectionLayer.removeAll()
+      }
       const mapPoint = e.detail.mapPoint
 
       // --- HIT TEST GUARD ---
@@ -480,13 +486,7 @@ onMounted(() => {
                   if (num > 0 && num <= 1) {
                     // Value is 0–1 (fraction) → convert to percent
                     pct = num * 100
-                  } else if (num >= 0 && num <= 100) {
-                    // Value is already 0–100 (percent)
-                    pct = num
-                  } else if (num >= 1 && num <= 10 && Number.isInteger(num)) {
-                    // Value is a decile 1–10 → convert to percent
-                    pct = (num / 10) * 100
-                  }
+                  } 
 
                   if (pct !== null) {
                     // Round to nearest 10 and clamp to 0..100

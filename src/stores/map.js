@@ -26,7 +26,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   activeTool: 'legend',
   activeHelpElement: '',  
   category: 'solar',
-  communitySelection: 'Climate Disadvantaged',
+  communitySelection: 'Low Income Percentile',
   buildoutSelection: 'Potential Solar Buildout',
   legend: '',
   bufferSize: 1,
@@ -344,10 +344,10 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Household Income', style: 'styles/P200_I_PFS.json',
+    title: 'Low Income Percentile', style: 'styles/P200_I_PFS.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
-    longDescription: 'Percent of a census tract’s population in households where household income is at or below 200% of the Federal poverty level, not including students enrolled in higher education.',
+    longDescription: 'The percentage of a census tract’s population living in households with incomes at or below 200% of the federal poverty level, excluding students enrolled in higher education.',
     totalArea: 0,
     percentOfTotal: 0,
     legendImg: 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAIAAAD4YuoOAAAAT0lEQVR4nO3NsRGAMAwDQMj+c9IDRc6ypFAQ7hgAOquS5eLXc+uClcNp5SAkmDBhQYQZ96lnNEOEc77EmD3ffXS2ne1oy88poIACCijgi1zvDVxsJV53JAAAAABJRU5ErkJggg=='
