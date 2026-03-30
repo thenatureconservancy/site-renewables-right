@@ -175,7 +175,7 @@ onMounted(() => {
     maxScale: 300000,
   })
   //wind and solar best locations
-    let lassoWind = new MapImageLayer({
+  let lassoWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'lassoWind',
     sublayers: [{ id: 2 }],
@@ -183,7 +183,7 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
-    let lassoSolar = new MapImageLayer({
+  let lassoSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'lassoSolar',
     sublayers: [{ id: 1 }],
@@ -269,8 +269,8 @@ onMounted(() => {
       content: `
       <div>
         <h6>California Policy Details</h6>
-        <p>Link to CA Details</p>
-        <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+        <p>TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders, the California Energy Commission’s (CEC) Land Use Screens: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a></p>
+        
 
       </div>
     `,
@@ -334,7 +334,7 @@ onMounted(() => {
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
   arcgisMap.addEventListener('arcgisViewDoubleClick', async (e) => {
-    mapStore.showDemo = true;
+    mapStore.showDemo = true
     try {
       bufferLayer.visible = true
       pointLayer.visible = true
@@ -665,9 +665,8 @@ onMounted(() => {
     </q-btn>
 
     <!-- report summary boxes-->
-   
-      <TheIntersectionResults />
 
+    <TheIntersectionResults />
   </arcgis-map>
   <!-- agol add data dialog -->
   <keep-alive>
