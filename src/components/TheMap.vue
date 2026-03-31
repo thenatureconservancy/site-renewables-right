@@ -212,6 +212,12 @@ onMounted(() => {
     visible: false,
     id: 'imageLayer',
   })
+  //water limited areas
+  let waterLimited = new VectorTileLayer({
+    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_SurfaceWaterLimiteLands_VTL/VectorTileServer',
+    id: 'waterLimited',
+    visible: false,
+  })
   // CJEST
   // vector tile layer
   let cjest = new VectorTileLayer({
@@ -220,6 +226,7 @@ onMounted(() => {
     id: 'cjest',
     visible: false,
   })
+
   //feature layer for vector tile
   let cjestFL = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
@@ -228,6 +235,7 @@ onMounted(() => {
     opacity: 0.8,
     maxScale: 300000,
   })
+
   //states for ca
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
@@ -297,6 +305,7 @@ onMounted(() => {
   arcgisMap.map = new Map({
     basemap: basemap,
     layers: [
+      waterLimited,
       highestag,
       abandonedag,
       brownfields,
@@ -486,7 +495,7 @@ onMounted(() => {
                   if (num > 0 && num <= 1) {
                     // Value is 0–1 (fraction) → convert to percent
                     pct = num * 100
-                  } 
+                  }
 
                   if (pct !== null) {
                     // Round to nearest 10 and clamp to 0..100

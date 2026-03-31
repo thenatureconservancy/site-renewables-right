@@ -153,7 +153,7 @@ async function scrollToElement(elid) {
             </draggable>
           </q-list>
           <!-- Community Considerations (no draggable, single-select via radio) -->
-          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title === 'Community Considerations'">
+          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title === 'Community Considerations' ">
             <q-item
               v-for="sublayer in layer.sublayers"
               :key="sublayer.index"

@@ -81,7 +81,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: '',
-        pngLegend: '\\bat.png',
+        pngLegend: '\\legend\\bat.png',
         pngWidth: '220'
 
       },
@@ -326,13 +326,13 @@ export const useMapStore = defineStore('mapStore', () => ({
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'It is anticipated that 90% of utility-scale solar capacity will be installed in rural communities, much of that on farmland (<a href="https://www.energy.gov/sites/default/files/2021-09/Solar%20Futures%20Study.pdf" target="_blank">U.S. Department of Energy 2021 </a>). This layer identifies the top 90%, 75%, and 50% of farm and ranchland in each state based on the land’s productivity, versatility, and resiliency (PVR) values, as defined by the American Farmland Trust. These data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>). The American Farmland Trust recommends that high quality agricultural lands are maintained as farmland and not converted to large-scale solar development. However, agrivoltaics (co-location of solar and agriculture) are considered compatible with farmland (<a href="https://farmland.org/smart-solar" target="_blank">Smart Solar Principles</a>) as is wind development. <br/><br/>As with any large-scale analysis, local and on-the-ground verification is required. Sites mapped as high quality based on current crop production and soil characteristics might become unproductive if they are water-stressed or contain highly erodible soils. In these areas, renewable energy projects, if designed intentionally, can reduce water use, improve soil stability, and promote ecosystem recovery over time. For example, the California Energy Commission (CEC) developed a Cropland Index Model to identify low quality or water-limited agricultural lands (cropland suitability score < 7.7), which the CEC promotes as better suited for renewable energy development (<a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC Land-use Screens</a>). For this reason, we removed cropland with a CEC suitability score below 7.7 from the layer.',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "", pngLegend: '\\ag.png', pngWidth: '200'
+        legendImg: "", pngLegend: '\\legend\\ag.png', pngWidth: '200'
       },
-       {index: 17, elid: 'surfacewaterlimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
+       {index: 17, elid: 'waterLimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
        opacity: 0.9, category: 'both', title: 'Surface Water-limited Lands', description: 'short description',
         longDescription: 'Surface water-limited lands are areas where water demand is approaching available supply. These water shortages may make farming infeasible, such that solar development may be more appropriate than agriculture. Renewable energy projects, if well-designed, could result in reduced water use and ecosystem stability over time. Water limitation across the lower 48 United States is shown as the average from 2010 to 2020 for each watershed (HUC12) from the <a href="https://water.usgs.gov/vizlab/water-availability/01-water-limitation" target="_blank">U.S. Geological Survey.</a> Only high and severe levels of water limitation are shown.',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: ""
+        legendImg: "", pngLegend: '\\legend\\waterLimited.png', pngWidth: '100'
       }
  	   ]
   },
