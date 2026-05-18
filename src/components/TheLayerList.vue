@@ -153,7 +153,7 @@ async function scrollToElement(elid) {
             </draggable>
           </q-list>
           <!-- Community Considerations (no draggable, single-select via radio) -->
-          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title === 'Community Considerations' ">
+          <q-list dense class="q-mx-md q-pb-md" v-if="layer.title === 'Community Considerations'">
             <q-item
               v-for="sublayer in layer.sublayers"
               :key="sublayer.index"
@@ -194,9 +194,14 @@ async function scrollToElement(elid) {
 
               <!-- Legend image -->
               <q-item-section side>
-                <div style="width: 20px; height: 20px">
+                <div style="width: 20px; height: 20px" v-if="sublayer.legendImg">
                   <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
                 </div>
+                  <q-img
+                  v-if="sublayer.pngLegend"
+                  :src="sublayer.pngLegend"
+                  style="width: 130px; height: auto"
+                ></q-img>
               </q-item-section>
 
               <!-- Info button -->
@@ -238,6 +243,7 @@ async function scrollToElement(elid) {
                   :val="sublayer.title"
                   @update:model-value="mapStore.changeBuildoutLayer(sublayer.elid)"
                 />
+              
               </q-item-section>
 
               <!-- Title + optional per-item controls -->
@@ -247,9 +253,12 @@ async function scrollToElement(elid) {
 
               <!-- Legend image -->
               <q-item-section side>
-                <div style="width: 20px; height: 20px">
-                  <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
-                </div>
+               
+                  <q-img
+                  v-if="sublayer.pngLegend"
+                  :src="sublayer.pngLegend"
+                  style="width: 120px; height: auto"
+                ></q-img>
               </q-item-section>
 
               <!-- Info button -->

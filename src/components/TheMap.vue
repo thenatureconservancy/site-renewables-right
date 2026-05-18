@@ -530,7 +530,7 @@ onMounted(() => {
           background:linear-gradient(180deg, rgba(27,94,171,0.06), rgba(27,94,171,0.02))
         ">
           <div style="font:600 13px/1.2 system-ui;color:#1b5eab">
-            Household Income Percentile
+            Low Income Percentile
           </div>
           <div style="font:700 14px/1.2 system-ui;color:#1f2937">${decileDisplay}</div>
         </div>
@@ -568,6 +568,7 @@ onMounted(() => {
 <template>
   <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
     <arcgis-zoom position="top-left"></arcgis-zoom>
+    <!--arcgis-legend position="bottom-left"></arcgis-legend-->
     <arcgis-search
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
