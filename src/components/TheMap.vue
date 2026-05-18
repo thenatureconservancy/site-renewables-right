@@ -35,7 +35,7 @@ onMounted(() => {
     sublayers: [{ id: 25 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -43,7 +43,7 @@ onMounted(() => {
     sublayers: [{ id: 10 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let birdsWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -51,7 +51,7 @@ onMounted(() => {
     sublayers: [{ id: 11 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let prairieGrouse = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -59,7 +59,7 @@ onMounted(() => {
     sublayers: [{ id: 15 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let protectedAreas = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -67,7 +67,7 @@ onMounted(() => {
     sublayers: [{ id: 6 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let resilientConnected = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -75,7 +75,7 @@ onMounted(() => {
     sublayers: [{ id: 4 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -83,7 +83,7 @@ onMounted(() => {
     sublayers: [{ id: 18 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let floodPlainsWetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -91,7 +91,7 @@ onMounted(() => {
     sublayers: [{ id: 3 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let whoopingCraneSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -99,7 +99,7 @@ onMounted(() => {
     sublayers: [{ id: 20 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let whoopingCraneWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -107,14 +107,14 @@ onMounted(() => {
     sublayers: [{ id: 21 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   // moderate sensitive
   let landscape = new MapImageLayer({
@@ -123,7 +123,7 @@ onMounted(() => {
     sublayers: [{ id: 24 }],
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -131,7 +131,7 @@ onMounted(() => {
     sublayers: [{ id: 23 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
   let migratoryBirdStopoverWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -139,7 +139,7 @@ onMounted(() => {
     sublayers: [{ id: 13 }],
     visible: false,
     opacity: 1,
-    maxScale: 300000,
+    
   })
 
   // degraded and disturbed lands
@@ -148,14 +148,14 @@ onMounted(() => {
     id: 'abandonedmines',
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   // agriculture
   let abandonedag = new MapImageLayer({
@@ -164,7 +164,7 @@ onMounted(() => {
     sublayers: [{ id: 1 }],
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -172,7 +172,7 @@ onMounted(() => {
     sublayers: [{ id: 12 }],
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   //wind and solar best locations
   let lassoWind = new MapImageLayer({
@@ -181,7 +181,7 @@ onMounted(() => {
     sublayers: [{ id: 2 }],
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
   let lassoSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -189,7 +189,7 @@ onMounted(() => {
     sublayers: [{ id: 1 }],
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
 
   // native lands
@@ -198,7 +198,7 @@ onMounted(() => {
     id: 'nativeLands',
     visible: true,
     opacity: 1,
-    maxScale: 300000,
+    
     popupTemplate: {
       title: '{NAME}',
       content:
@@ -233,7 +233,7 @@ onMounted(() => {
     id: 'cjestFL',
     visible: false,
     opacity: 0.8,
-    maxScale: 300000,
+    
   })
 
   //states for ca
@@ -566,7 +566,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2 }">
+  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2, maxZoom: 15 }">
     <arcgis-zoom position="top-left"></arcgis-zoom>
     <!--arcgis-legend position="bottom-left"></arcgis-legend-->
     <arcgis-search
