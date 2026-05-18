@@ -297,7 +297,7 @@ onMounted(() => {
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
   const basemap = new Basemap({
     portalItem: {
-      id: '1f48b2b2456c44ad9c58d6741378c2ba', // Replace with your desired basemap item ID (e.g., "668f436dc2dc4f2c83ceb0c064380590" for Topo US worldview)
+      id: 'd22aed9a4acb4bc8ae8f2141732af496', // Replace with your desired basemap item ID (e.g., "668f436dc2dc4f2c83ceb0c064380590" for Topo US worldview)
     },
   })
 
