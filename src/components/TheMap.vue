@@ -9,7 +9,7 @@ import TheReport from './TheReport.vue'
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 import Graphic from '@arcgis/core/Graphic'
-
+import TileLayer from '@arcgis/core/layers/TileLayer'
 import Basemap from '@arcgis/core/Basemap'
 import TheIntersectionResults from '@/components/TheIntersectionResults.vue'
 
@@ -213,8 +213,8 @@ onMounted(() => {
     id: 'imageLayer',
   })
   //water limited areas
-  let waterLimited = new VectorTileLayer({
-    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_SurfaceWaterLimiteLands_VTL/VectorTileServer',
+  let waterLimited = new TileLayer({
+    url: 'https://tiles.arcgis.com/tiles/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLand/MapServer',
     id: 'waterLimited',
     visible: false,
   })
@@ -305,8 +305,8 @@ onMounted(() => {
   arcgisMap.map = new Map({
     basemap: basemap,
     layers: [
-      waterLimited,
       highestag,
+      waterLimited,
       abandonedag,
       brownfields,
       abandonedmines,

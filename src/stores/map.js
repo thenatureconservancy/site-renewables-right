@@ -322,18 +322,18 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: ' Agricultural Values', id: 'ag', visible: true, visibleModel: true, expanded: false,
       sublayers: [
-        {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
+     
+       {index: 17, elid: 'waterLimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
+       opacity: 0.9, category: 'both', title: 'Surface Water-limited Lands', description: 'short description',
+        longDescription: 'Surface water-limited lands are areas where water demand is approaching available supply. These water shortages may make farming infeasible, such that solar development may be more appropriate than agriculture. Renewable energy projects, if well-designed, could result in reduced water use and ecosystem stability over time. Water limitation across the lower 48 United States is shown as the average from 2010 to 2020 for each watershed (HUC12) from the <a href="https://water.usgs.gov/vizlab/water-availability/01-water-limitation" target="_blank">U.S. Geological Survey.</a> Only high and severe levels of water limitation are shown.',
+        totalArea: 0, percentOfTotal: 0, inExtent: '',
+        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAA9UlEQVQ4T52TIa6EMBBAHyCp2ASHqyQVOAQn4MSEEyBAN8g6MJAgQBK+YNkU8pcsPNnpzLy2U6fv+5U3xhiMMQBIKZFS7qED8zyjtWaaJlyAZVkYhgFjDF3XEcfxZXLbtjRNgxBiKzCOI0VRAJBlGa/X65z3QWtNWZakaYpSCqeu6/WuthACpRS+7+M+0U6SBN/3AbYj3NW2caWUBEGA53mHAO/OVVUxTRNRFBGG4afzjvtE28Y9L+xcads49iBxcdvfOBj8qr0zz/OxwK/aO1rr7Qh3tQ9/4Ym2vd/J83xtmoY0Tf995zNVVWHvd6+GxObbUP0B1TfSIusLipIAAAAASUVORK5CYII=", pngWidth: '100'
+      },   {index: 16, elid: 'highestag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
        opacity: 0.9, category: 'both', title: 'Highest Quality Farmland', description: 'short description',
         longDescription: 'It is anticipated that 90% of utility-scale solar capacity will be installed in rural communities, much of that on farmland (<a href="https://www.energy.gov/sites/default/files/2021-09/Solar%20Futures%20Study.pdf" target="_blank">U.S. Department of Energy 2021 </a>). This layer identifies the top 90%, 75%, and 50% of farm and ranchland in each state based on the land’s productivity, versatility, and resiliency (PVR) values, as defined by the American Farmland Trust. These data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>). The American Farmland Trust recommends that high quality agricultural lands are maintained as farmland and not converted to large-scale solar development. However, agrivoltaics (co-location of solar and agriculture) are considered compatible with farmland (<a href="https://farmland.org/smart-solar" target="_blank">Smart Solar Principles</a>) as is wind development. <br/><br/>As with any large-scale analysis, local and on-the-ground verification is required. Sites mapped as high quality based on current crop production and soil characteristics might become unproductive if they are water-stressed or contain highly erodible soils. In these areas, renewable energy projects, if designed intentionally, can reduce water use, improve soil stability, and promote ecosystem recovery over time. For example, the California Energy Commission (CEC) developed a Cropland Index Model to identify low quality or water-limited agricultural lands (cropland suitability score < 7.7), which the CEC promotes as better suited for renewable energy development (<a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC Land-use Screens</a>). For this reason, we removed cropland with a CEC suitability score below 7.7 from the layer.',
         totalArea: 0, percentOfTotal: 0, inExtent: '',
         legendImg: "", pngLegend: '\\legend\\ag.png', pngWidth: '200'
       },
-       {index: 17, elid: 'waterLimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'Surface Water-limited Lands', description: 'short description',
-        longDescription: 'Surface water-limited lands are areas where water demand is approaching available supply. These water shortages may make farming infeasible, such that solar development may be more appropriate than agriculture. Renewable energy projects, if well-designed, could result in reduced water use and ecosystem stability over time. Water limitation across the lower 48 United States is shown as the average from 2010 to 2020 for each watershed (HUC12) from the <a href="https://water.usgs.gov/vizlab/water-availability/01-water-limitation" target="_blank">U.S. Geological Survey.</a> Only high and severe levels of water limitation are shown.',
-        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "", pngLegend: '\\legend\\waterLimited.png', pngWidth: '100'
-      }
  	   ]
   },
   ]},
@@ -451,11 +451,11 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
-        {index: 13, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
+        {index: 0, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
            longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see solar development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that solar projects are more likely to be developed in areas with high infrastructure accessibility, closer to load centers, and lower environmental impacts (e.g., ecological sensitivities and forested land). ', type: 'radio', 
            totalArea: 0, percentOfTotal: 0, legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAAh0lEQVR4nO3OQQqCQBSA4V+ncEQxwhmQ2rRpHXS5ztEV2xgVgZsCnfemY7R53wm+4nq65NV+ixsCZQjQ9+Q+kkIkbTq0zmSvaCUkL4hPiBeWSljWX+b8ZtYHszz56ItJ7kw6MukNdOTgao4usnMdg2uIriUWLbFs6DhT8mcWsIAFLGABC1jgB636LcCTL6F/AAAAAElFTkSuQmC"},
-        {index: 14, elid: 'lassoWind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
+        {index: 1, elid: 'lassoWind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
            category: 'both', title: 'Potential Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
             longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see wind development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that wind projects are more likely to be developed in areas that are windier, have favorable land cover (agricultural and non-forested), closer to transmission lines, on more sloped terrain, and with lower land acquisition costs. ', type: 'radio', legendImg: "iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAAh0lEQVR4nO3OQQqCQBSA4V+ncEQxwhmQ2rRpHXS5ztEV2xgVgZsCnfemY7R53wm+4nq65NV+ixsCZQjQ9+Q+kkIkbTq0zmSvaCUkL4hPiBeWSljWX+b8ZtYHszz56ItJ7kw6MukNdOTgao4usnMdg2uIriUWLbFs6DhT8mcWsIAFLGABC1jgB636LcCTL6F/AAAAAElFTkSuQmC"},
         ]   
@@ -602,6 +602,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   toggleGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;
     group.subheaders.forEach(subheader => {
+      console.log(group)
       let visible = group.expanded
       subheader.visible = visible
       subheader.expanded = true
@@ -614,8 +615,9 @@ export const useMapStore = defineStore('mapStore', () => ({
         if(layer.filter){
         sublayer.visible = visible
         }
-        
+
         layer.visibleModel = visible
+        layer.visible = visible
         
       })
     })
