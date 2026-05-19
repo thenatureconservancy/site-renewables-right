@@ -55,6 +55,7 @@ const portal = new PortalBasemapsSource({
       console.log(loadedBasemap.title, loadedBasemap.portal)
 
       // filter out basemaps - console loadedBasemap.title to get list of names
+      console.log(loadedBasemap.title, loadedBasemap)
       const basemaps = [
         'Enhanced Contrast Dark Map',
         'Enhanced Contrast Map',

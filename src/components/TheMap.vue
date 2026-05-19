@@ -12,6 +12,7 @@ import Graphic from '@arcgis/core/Graphic'
 import TileLayer from '@arcgis/core/layers/TileLayer'
 import Basemap from '@arcgis/core/Basemap'
 import TheIntersectionResults from '@/components/TheIntersectionResults.vue'
+import BasemapSwitcher from '@/components/BasemapSwitcher.vue'
 
 /**GET STORE */
 import { useMapStore } from '../stores/map'
@@ -35,7 +36,6 @@ onMounted(() => {
     sublayers: [{ id: 25 }],
     visible: false,
     opacity: 1,
-    
   })
   let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -43,7 +43,6 @@ onMounted(() => {
     sublayers: [{ id: 10 }],
     visible: false,
     opacity: 1,
-    
   })
   let birdsWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -51,7 +50,6 @@ onMounted(() => {
     sublayers: [{ id: 11 }],
     visible: false,
     opacity: 1,
-    
   })
   let prairieGrouse = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -59,7 +57,6 @@ onMounted(() => {
     sublayers: [{ id: 15 }],
     visible: false,
     opacity: 1,
-    
   })
   let protectedAreas = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -67,7 +64,6 @@ onMounted(() => {
     sublayers: [{ id: 6 }],
     visible: false,
     opacity: 1,
-    
   })
   let resilientConnected = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -75,7 +71,6 @@ onMounted(() => {
     sublayers: [{ id: 4 }],
     visible: false,
     opacity: 1,
-    
   })
   let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -83,7 +78,6 @@ onMounted(() => {
     sublayers: [{ id: 18 }],
     visible: false,
     opacity: 1,
-    
   })
   let floodPlainsWetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -91,7 +85,6 @@ onMounted(() => {
     sublayers: [{ id: 3 }],
     visible: false,
     opacity: 1,
-    
   })
   let whoopingCraneSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -99,7 +92,6 @@ onMounted(() => {
     sublayers: [{ id: 20 }],
     visible: false,
     opacity: 1,
-    
   })
   let whoopingCraneWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -107,14 +99,12 @@ onMounted(() => {
     sublayers: [{ id: 21 }],
     visible: false,
     opacity: 1,
-    
   })
   let qualitywater = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
     id: 'qualitywater',
     visible: false,
     opacity: 0.8,
-    
   })
   // moderate sensitive
   let landscape = new MapImageLayer({
@@ -123,7 +113,6 @@ onMounted(() => {
     sublayers: [{ id: 24 }],
     visible: false,
     opacity: 0.8,
-    
   })
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -131,7 +120,6 @@ onMounted(() => {
     sublayers: [{ id: 23 }],
     visible: false,
     opacity: 1,
-    
   })
   let migratoryBirdStopoverWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -139,7 +127,6 @@ onMounted(() => {
     sublayers: [{ id: 13 }],
     visible: false,
     opacity: 1,
-    
   })
 
   // degraded and disturbed lands
@@ -148,23 +135,20 @@ onMounted(() => {
     id: 'abandonedmines',
     visible: false,
     opacity: 0.8,
-    
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
     id: 'brownfields',
     visible: false,
     opacity: 0.8,
-    
   })
   // agriculture
   let abandonedag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'abandonedag',
-    sublayers: [{ id: 1 }],
+    sublayers: [{ id: 27 }],
     visible: false,
     opacity: 0.8,
-    
   })
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -172,7 +156,6 @@ onMounted(() => {
     sublayers: [{ id: 12 }],
     visible: false,
     opacity: 0.8,
-    
   })
   //wind and solar best locations
   let lassoWind = new MapImageLayer({
@@ -181,7 +164,6 @@ onMounted(() => {
     sublayers: [{ id: 2 }],
     visible: false,
     opacity: 0.8,
-    
   })
   let lassoSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -189,7 +171,6 @@ onMounted(() => {
     sublayers: [{ id: 1 }],
     visible: false,
     opacity: 0.8,
-    
   })
 
   // native lands
@@ -198,7 +179,7 @@ onMounted(() => {
     id: 'nativeLands',
     visible: true,
     opacity: 1,
-    
+
     popupTemplate: {
       title: '{NAME}',
       content:
@@ -233,7 +214,6 @@ onMounted(() => {
     id: 'cjestFL',
     visible: false,
     opacity: 0.8,
-    
   })
 
   //states for ca
@@ -338,6 +318,7 @@ onMounted(() => {
   })
 
   mapStore.filterLayers('solar')
+
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
@@ -360,7 +341,6 @@ onMounted(() => {
       console.error('Guarded query error:', err)
     }
   })
-
   arcgisMap.addEventListener('arcgisViewClick', async (e) => {
     try {
       //set a watch for popup
@@ -566,14 +546,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <arcgis-map id="my-map" center="-95.5348, 38.7946" zoom="3" :constraints="{ minZoom: 2, maxZoom: 15 }">
+  <arcgis-map
+    id="my-map"
+    center="-95.5348, 38.7946"
+    zoom="3"
+    :constraints="{ minZoom: 2, maxZoom: 15 }"
+  >
     <arcgis-zoom position="top-left"></arcgis-zoom>
     <!--arcgis-legend position="bottom-left"></arcgis-legend-->
     <arcgis-search
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
-
+    <div style="position: absolute; bottom: 15px; left: 15px; z-index: 999">
+      <BasemapSwitcher />
+    </div>
     <!-- help button next to search-->
     <q-btn
       square
