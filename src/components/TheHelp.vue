@@ -1,7 +1,5 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
-import { ref } from 'vue'
-
 const mapStore = useMapStore()
 </script>
 
@@ -30,12 +28,6 @@ const mapStore = useMapStore()
             >
             <q-item-label v-html="sublayer.longDescription"></q-item-label>
           </q-item-section>
-
-          <!--q-item-section side top>
-            <div style="width: 20px; height: 20px" >
-              <img :src="'data:image/gif;base64,' + mapStore.legend[sublayer.id]" />
-            </div>
-          </q-item-section-->
         </q-item>
       </q-list>
     </div>

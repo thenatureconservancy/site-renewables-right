@@ -14,6 +14,8 @@ import Query from "@arcgis/core/rest/support/Query";
 import * as query from "@arcgis/core/rest/query";
 
 export const useMapStore = defineStore('mapStore', () => ({
+  showHelpPanel: true,
+  showing: 'help1',
   opacity: 90,
   showOpacity: false,
   showDemo: false,
@@ -548,7 +550,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[0])
       this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[2])
-      this.toggleGroupVisibility(this.layers[4])
+      this.toggleGroupVisibility(this.layers[3])
     }
     
     // Custom behavior for expansion groups

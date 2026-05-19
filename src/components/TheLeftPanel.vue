@@ -51,7 +51,7 @@ computed(() => {
       <q-btn icon="keyboard_arrow_up" size='xs' flat :label="mapStore.seeMore ? 'show' : 'hide'" @click="mapStore.seeMore = !mapStore.seeMore" ></q-btn>
     </p>
     <the-toolbar></the-toolbar>
-    <q-scroll-area style="height: calc(100vh - 400px)">
+    <q-scroll-area style="height: calc(100vh - 300px)" >
        <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>
       <the-layer-list></the-layer-list>
     </q-scroll-area>

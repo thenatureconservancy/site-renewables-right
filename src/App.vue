@@ -5,6 +5,10 @@ import { useQuasar } from 'quasar'
 import { useMapStore } from '@/stores/map'
 import { useHelpStore } from './stores/help'
 import { useShepherd } from 'vue-shepherd'
+import TheHelp from '@/components/TheHelp.vue'
+import TheHelp1 from '@/components/TheHelp1.vue'
+import TheHelp2 from '@/components/TheHelp2.vue'
+import { ref } from 'vue'
 const tour = useShepherd({
   useModalOverlay: true,
   defaultStepOptions: {
@@ -66,6 +70,8 @@ onMounted(async () => {
     ],
   })
 })
+const height = ref(window.innerHeight)
+const width = ref(window.innerWidth / 2.2)
 </script>
 
 <template>
@@ -82,6 +88,7 @@ onMounted(async () => {
           Site Renewables Right</span
         >
         <q-space></q-space>
+
         <div style="border: 1.5px solid red">
           <p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px">
             Draft - Internal use only
@@ -89,16 +96,36 @@ onMounted(async () => {
         </div>
         <q-space></q-space>
         <q-btn
-          color="primary"
+          color="blue"
           class="q-mr-sm"
-          label="Start Tour"
-          outline
+          label="Download Data"
           unelevated
           square
           size="12px"
-          @click="tour.start()"
+          icon="download"
         ></q-btn>
         <q-btn
+          color="primary"
+          class="q-mr-sm"
+          label="Start Tour"
+          unelevated
+          square
+          size="12px"
+          icon="play_arrow"
+          @click="tour.start()"
+        ></q-btn>
+
+        <q-btn
+          color="primary"
+          label="Help"
+          icon="o_info"
+          unelevated
+          square
+          size="12px"
+          @click="mapStore.showHelpPanel = true"
+        ></q-btn>
+        <q-btn
+          class="q-ml-sm"
           color="primary"
           label="About"
           unelevated
@@ -112,5 +139,23 @@ onMounted(async () => {
     <q-page-container>
       <RouterView />
     </q-page-container>
+    <q-drawer
+      class="shadow-5 no-scroll full-height"
+      overlay
+      v-model="mapStore.showHelpPanel"
+      side="right"
+      :width="width"
+      :height="height"
+      bordered
+    >
+      <q-toolbar class="">
+        <q-btn flat label="layout 1" @click="mapStore.showing = 'help1'"></q-btn>
+        <q-btn flat label="layout 2" @click="mapStore.showing = 'help2'"></q-btn>
+        <q-space></q-space>
+        <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
+      </q-toolbar>
+      <TheHelp1 v-if="mapStore.showing == 'help1'"></TheHelp1>
+      <TheHelp2 v-if="mapStore.showing == 'help2'"></TheHelp2>
+    </q-drawer>
   </q-layout>
 </template>
