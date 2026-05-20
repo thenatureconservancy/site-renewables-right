@@ -26,6 +26,7 @@ import '@arcgis/map-components/components/arcgis-search'
 import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-legend'
+import "@arcgis/map-components/components/arcgis-scale-bar";
 
 const mapStore = useMapStore()
 const helpStore = useHelpStore()

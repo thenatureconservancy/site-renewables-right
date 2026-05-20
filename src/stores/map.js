@@ -14,7 +14,7 @@ import Query from "@arcgis/core/rest/support/Query";
 import * as query from "@arcgis/core/rest/query";
 
 export const useMapStore = defineStore('mapStore', () => ({
-  showHelpPanel: true,
+  showHelpPanel: false,
   showing: 'help1',
   opacity: 90,
   showOpacity: false,

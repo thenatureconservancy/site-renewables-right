@@ -46,10 +46,8 @@ computed(() => {
     <p class="text-body2 text-bold q-mb-none q-mt-md">Explore the Data</p>
 
     <p>
-      Select an energy type, then toggle layers to see where renewable energy development may
-      intersect with important ecological and cultural features. 
-      <q-btn icon="keyboard_arrow_up" size='xs' flat :label="mapStore.seeMore ? 'show' : 'hide'" @click="mapStore.seeMore = !mapStore.seeMore" ></q-btn>
-    </p>
+      Select an energy type, then click the eye icons below to turn groups of Data Layers on and off. 
+     </p> 
     <the-toolbar></the-toolbar>
     <q-scroll-area style="height: calc(100vh - 300px)" >
        <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>
