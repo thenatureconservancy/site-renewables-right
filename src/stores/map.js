@@ -175,7 +175,8 @@ export const useMapStore = defineStore('mapStore', () => ({
         longDescription: 'Over the next century, climate change is expected to drive shifts in species ranges and increase stressors to natural ecosystems. To identify areas important to sustaining species and natural communities in a changing climate, we mapped the Resilient and Connected Network, including all areas with resilience and concentrated or diffuse flow, with or without recognized biodiversity. These sites include representative geophysical environments and microclimates with relatively low levels of human modification, which comprise a network of lands most likely to retain biodiversity and ecosystem function in altered climate conditions (<a href="https://www.pnas.org/doi/10.1073/pnas.2204434119" target="_blank">Anderson et al. 2023</a>).',
         totalArea: 0,
         percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==' // #80a16f
+        //legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==', // #80a16f
+        pngLegend: '\\legend\\rcn.png',
       },
       {
         index: 6,

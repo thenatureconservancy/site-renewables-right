@@ -126,14 +126,25 @@ async function scrollToElement(elid) {
                         :step="0.1"
                         @update:model-value="mapStore.changeNativeOpacity(sublayer.opacity)"
                       />
-                      <q-img
-                        v-if="sublayer.pngLegend"
-                        :src="sublayer.pngLegend"
-                        style="width: 200px; height: auto"
-                      ></q-img>
                     </q-checkbox>
                   </q-item-section>
                   <q-item-section side>
+                    <div v-if="sublayer.pngLegend">
+                      <q-btn outline square icon="list" size="12px" padding="1px" color="blue">
+                        <q-tooltip>click for legend</q-tooltip>
+                        <q-menu
+                          class="q-pa-md"
+                          anchor="bottom left"
+                          self="top left"
+                          :transition-duration="0"
+                        >
+                          <q-img
+                            :src="sublayer.pngLegend"
+                            style="width: 300px; height: auto"
+                          ></q-img>
+                        </q-menu>
+                      </q-btn>
+                    </div>
                     <div style="width: 20px; height: 20px" v-if="sublayer.legendImg">
                       <img :src="'data:image/png;base64,' + sublayer.legendImg" />
                     </div>
@@ -194,14 +205,30 @@ async function scrollToElement(elid) {
 
               <!-- Legend image -->
               <q-item-section side>
+                <div v-if="sublayer.pngLegend">
+                  <q-btn
+                    outline
+                    square
+                    icon="list"
+                    size="12px"
+                    padding="1px"
+                    color="blue"
+                    @click.stop
+                  >
+                    <q-tooltip>click for legend</q-tooltip>
+                    <q-menu
+                      class="q-pa-md"
+                      anchor="bottom left"
+                      self="top left"
+                      :transition-duration="0"
+                    >
+                      <q-img :src="sublayer.pngLegend" style="width: 230px; height: auto"></q-img>
+                    </q-menu>
+                  </q-btn>
+                </div>
                 <div style="width: 20px; height: 20px" v-if="sublayer.legendImg">
                   <img :src="'data:image/gif;base64,' + sublayer.legendImg" />
                 </div>
-                  <q-img
-                  v-if="sublayer.pngLegend"
-                  :src="sublayer.pngLegend"
-                  style="width: 130px; height: auto"
-                ></q-img>
               </q-item-section>
 
               <!-- Info button -->
@@ -243,7 +270,6 @@ async function scrollToElement(elid) {
                   :val="sublayer.title"
                   @update:model-value="mapStore.changeBuildoutLayer(sublayer.elid)"
                 />
-              
               </q-item-section>
 
               <!-- Title + optional per-item controls -->
@@ -253,12 +279,27 @@ async function scrollToElement(elid) {
 
               <!-- Legend image -->
               <q-item-section side>
-               
-                  <q-img
-                  v-if="sublayer.pngLegend"
-                  :src="sublayer.pngLegend"
-                  style="width: 120px; height: auto"
-                ></q-img>
+                <div v-if="sublayer.pngLegend">
+                  <q-btn
+                    outline
+                    square
+                    icon="list"
+                    size="12px"
+                    padding="1px"
+                    color="blue"
+                    @click.stop
+                  >
+                    <q-tooltip>click for legend</q-tooltip>
+                    <q-menu
+                      class="q-pa-md"
+                      anchor="bottom left"
+                      self="top left"
+                      :transition-duration="0"
+                    >
+                      <q-img :src="sublayer.pngLegend" style="width: 230px; height: auto"></q-img>
+                    </q-menu>
+                  </q-btn>
+                </div>
               </q-item-section>
 
               <!-- Info button -->

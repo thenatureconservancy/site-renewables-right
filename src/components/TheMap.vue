@@ -65,10 +65,9 @@ onMounted(() => {
     visible: false,
     opacity: 1,
   })
-  let resilientConnected = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+  let resilientConnected = new TileLayer({
+    url: 'https://tiles.arcgis.com/tiles/F7DSX1DSNSiWmOqh/arcgis/rest/services/RCN_Simple/MapServer',
     id: 'resilientConnected',
-    sublayers: [{ id: 4 }],
     visible: false,
     opacity: 1,
   })
