@@ -157,7 +157,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
         totalArea: 0,
         percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPsmHyHgRTARJLqUQ2jGoaUBgA0mAIXWenGNAAAAABJRU5ErkJggg==' // #c8c8c8
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHUlEQVR4nGMUzvD6z0ABYKJE86gBowaMGjCYDAAAa/wB5OuA0X4AAAAASUVORK5CYII=' // #c8c8c8
       },
       {
         index: 5,
