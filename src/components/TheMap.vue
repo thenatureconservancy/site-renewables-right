@@ -176,6 +176,27 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
+  let ag2 = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'ag2',
+    sublayers: [{ id: 37 }],
+    visible: false,
+    opacity: 0.8,
+  })
+   let ag3 = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'ag3',
+    sublayers: [{ id: 35 }],
+    visible: false,
+    opacity: 0.8,
+  })
+   let ag4 = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'ag4',
+    sublayers: [{ id: 36 }],
+    visible: false,
+    opacity: 0.8,
+  })
   //wind and solar best locations
   let lassoWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -305,6 +326,9 @@ onMounted(() => {
     basemap: basemap,
     layers: [
       highestag,
+      ag2,
+      ag3,
+      ag4,
       waterLimited,
       abandonedag,
       brownfields,
