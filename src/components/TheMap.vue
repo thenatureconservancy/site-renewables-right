@@ -162,13 +162,7 @@ onMounted(() => {
     opacity: 0.8,
   })
   // agriculture
-  let abandonedag = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'abandonedag',
-    sublayers: [{ id: 27 }],
-    visible: false,
-    opacity: 0.8,
-  })
+
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
@@ -330,7 +324,6 @@ onMounted(() => {
       ag3,
       ag4,
       waterLimited,
-      abandonedag,
       brownfields,
       abandonedmines,
       cjest,
