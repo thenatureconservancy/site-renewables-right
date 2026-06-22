@@ -177,14 +177,14 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-   let ag3 = new MapImageLayer({
+  let ag3 = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'ag3',
     sublayers: [{ id: 35 }],
     visible: false,
     opacity: 0.8,
   })
-   let ag4 = new MapImageLayer({
+  let ag4 = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'ag4',
     sublayers: [{ id: 36 }],
@@ -256,12 +256,12 @@ onMounted(() => {
     id: 'states',
     visible: false,
     definitionExpression: "STATE_NAME = 'California'",
-    minScale: 18489297.737236,
+    minScale: 9244648,
     renderer: {
       type: 'simple',
       symbol: {
         type: 'simple-fill',
-        color: [51, 51, 51, 0.9], // white fill, 0.9 opacity
+        color: [246, 245, 239, 0.9], // beige fill, 0.9 opacity
         outline: {
           color: [0, 0, 0, 0], // fully transparent outline
           width: 6,
@@ -302,7 +302,7 @@ onMounted(() => {
     id: 'buttonLayer',
     listMode: 'hide',
     visible: false,
-    minScale: 18489297.737236,
+    minScale: 9244648,
   })
   buttonLayer.add(centroidGraphic)
 
@@ -361,23 +361,23 @@ onMounted(() => {
   })
   arcgisMap.addEventListener('arcgisViewDoubleClick', async (e) => {
     if (measuring.value == false) {
-    mapStore.showDemo = true
-    try {
-      bufferLayer.visible = true
-      pointLayer.visible = true
-      mapStore.createBuffer(e)
-      // Ensure a selection layer exists and clear prior selections
-      let selectionLayer = arcgisMap.map.findLayerById('Selection')
-      if (!selectionLayer) {
-        selectionLayer = new GraphicsLayer({ title: 'Selection' })
-        arcgisMap.view.map.add(selectionLayer)
-      } else {
-        selectionLayer.removeAll()
+      mapStore.showDemo = true
+      try {
+        bufferLayer.visible = true
+        pointLayer.visible = true
+        mapStore.createBuffer(e)
+        // Ensure a selection layer exists and clear prior selections
+        let selectionLayer = arcgisMap.map.findLayerById('Selection')
+        if (!selectionLayer) {
+          selectionLayer = new GraphicsLayer({ title: 'Selection' })
+          arcgisMap.view.map.add(selectionLayer)
+        } else {
+          selectionLayer.removeAll()
+        }
+      } catch (err) {
+        console.error('Guarded query error:', err)
       }
-    } catch (err) {
-      console.error('Guarded query error:', err)
     }
-  }
   })
   arcgisMap.addEventListener('arcgisViewClick', async (e) => {
     if (measuring.value == false) {
@@ -696,7 +696,9 @@ onMounted(() => {
       size="md"
       @click="toggleMeasure()"
       padding="6px"
-      :class="measuring == false ? 'text-primary shadow-3 bg-white' : 'text-primary shadow-3 bg-green-2'"
+      :class="
+        measuring == false ? 'text-primary shadow-3 bg-white' : 'text-primary shadow-3 bg-green-2'
+      "
       unelevated
       square
       icon="straighten"
