@@ -47,7 +47,7 @@ computed(() => {
    
     <the-toolbar></the-toolbar>
     <q-scroll-area style="height: calc(100vh - 300px)" >
-       <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>
+       <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS ( {{ mapStore.category }} filter applied )</p>
       <the-layer-list></the-layer-list>
     </q-scroll-area>
   </div>

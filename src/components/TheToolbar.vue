@@ -69,9 +69,9 @@ let mapStore = useMapStore()
         square
         size="md"
         unelevated=""
-        @click="mapStore.filterLayers('floating')"
+        @click="mapStore.filterLayers('floating solar')"
         :style="
-          mapStore.category == 'floating'
+          mapStore.category == 'floating solar'
             ? 'border: 2px solid #64B45B; background-color: #e8f5e9'
             : 'border: 2px solid #e8f5e9; '
         "
