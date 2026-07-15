@@ -190,7 +190,7 @@ onMounted(() => {
         <div
           style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
         >
-          <h6 class="">Site Report Results</h6>
+          <h6 class="">Site Report Instructions</h6>
           <q-space></q-space>
           <q-btn
             flat
