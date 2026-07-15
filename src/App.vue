@@ -120,7 +120,7 @@ const width = ref(window.innerWidth / 2.2)
           color="primary"
           label="Help"
           flat
-          icon="help_outline"
+          icon="info_outline"
           unelevated
           square
           size="12px"
