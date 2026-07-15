@@ -178,6 +178,7 @@ onMounted(() => {
 
 <template>
   <div
+    v-if="mapStore.showSiteReport"
     class="results-panel"
     :style="{ left: panelX + 'px', top: panelY + 'px' }"
     @mousedown="onDragStart"
@@ -185,11 +186,28 @@ onMounted(() => {
   >
     <!-- INACTIVE STATE -->
     <div v-if="totalArea === 0 && !mapStore.showDemo">
-      <div class="results-header">
-        <h6 class="">Site Intersection Analysis</h6>
-      </div>
-      <div class="inactive-message">
-        <p>Double click the map or use the find address to begin</p>
+        <div class="results-header q-pr-sm">
+        <div
+          style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
+        >
+          <h6 class="">Site Report Results</h6>
+          <q-space></q-space>
+          <q-btn
+            flat
+            dense
+            no-caps
+            size="sm"
+            padding="sm"
+            class="" 
+            icon="close"
+            @click="mapStore.showSiteReport = false"
+            />
+        </div>
+        </div>
+
+      <div class="text-h6 q-pa-md">
+        <p>Double click the map to select a project location.
+Buffer radius options are available on the next screen.</p>
       </div>
     </div>
 
@@ -200,7 +218,18 @@ onMounted(() => {
         <div
           style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
         >
-          <h6>Site Intersection Results</h6>
+          <h6 class="">Site Report Results</h6>
+          <q-space></q-space>
+          <q-btn
+            flat
+            dense
+            no-caps
+            size="sm"
+            padding="sm"
+            class="" 
+            icon="close"
+            @click="mapStore.showSiteReport = false"
+            />
         </div>
         <div
           style="
@@ -345,23 +374,16 @@ onMounted(() => {
           no-caps
           size="sm"
           class="btn btn-secondary"
-          label="Clear"
+          label="Select New Location"
           @click="clearResults"
         />
-        <q-btn
-          flat
-          dense
-          no-caps
-          class="btn btn-secondary"
-          label="📊 Export CSV"
-          @click="console.log('Export CSV')"
-        />
+       
         <q-btn
           flat
           dense
           no-caps
           class="btn btn-primary"
-          label="Get Site Report"
+          label="Save as PDF"
           @click="console.log('Get Report')"
         />
       </div>

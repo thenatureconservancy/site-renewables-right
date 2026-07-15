@@ -15,6 +15,7 @@ import * as query from "@arcgis/core/rest/query";
 
 export const useMapStore = defineStore('mapStore', () => ({
   showHelpPanel: false,
+  showSiteReport: false,
   showing: 'help1',
   opacity: 90,
   showOpacity: false,
@@ -462,9 +463,9 @@ export const useMapStore = defineStore('mapStore', () => ({
 	   ]
   },
   ]},
-  {header: 'Potential Renewable Energy Buildout', id: 'renewable', expanded: false, 
+  {header: 'Predicted Renewable Energy Buildout', id: 'renewable', expanded: false, 
    subheaders: [
-    {title: 'Potential Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
+    {title: 'Predicted Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
         {index: 0, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Potential Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',

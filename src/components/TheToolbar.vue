@@ -14,7 +14,7 @@ let mapStore = useMapStore()
       label="Site report"
       square
       unelevated
-      @click="mapStore.showHelpPanel = true"
+      @click="mapStore.showSiteReport = true"
     ></q-btn>
     <q-btn
       class="q-ml-sm"
