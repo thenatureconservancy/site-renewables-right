@@ -439,14 +439,14 @@ onMounted(() => {
 
                 // Define the fields and human-friendly labels
                 const fields = [
-                  { label: 'Climate Disadvantaged', field: 'N_CLT_EOMI' },
-                  { label: 'Energy Disadvantaged', field: 'N_ENY_EOMI' },
-                  { label: 'Transportation Disadvantaged', field: 'N_TRN_EOMI' },
-                  { label: 'Housing Disadvantaged', field: 'N_HSG_EOMI' },
-                  { label: 'Pollution Disadvantaged', field: 'N_PLN_EOMI' },
-                  { label: 'Water Disadvantaged', field: 'N_WTR_EOMI' },
-                  { label: 'Health Disadvantaged', field: 'N_HLTH_90' },
-                  { label: 'Workforce Disadvantaged', field: 'N_WKFC_91' },
+                  { label: 'Climate Burdened', field: 'N_CLT_EOMI' },
+                  { label: 'Energy Burdened', field: 'N_ENY_EOMI' },
+                  { label: 'Transportation Burdened', field: 'N_TRN_EOMI' },
+                  { label: 'Housing Burdened', field: 'N_HSG_EOMI' },
+                  { label: 'Pollution Burdened', field: 'N_PLN_EOMI' },
+                  { label: 'Water Burdened', field: 'N_WTR_EOMI' },
+                  { label: 'Health Burdened', field: 'N_HLTH_90' },
+                  { label: 'Workforce Burdened', field: 'N_WKFC_91' },
                 ]
 
                 // Keep only the 'Yes' ones (value === 1), then sort by label A→Z
@@ -492,7 +492,7 @@ onMounted(() => {
           border-radius:8px;background:rgba(120,120,120,.06);
           font:500 13px system-ui;color:#555
         ">
-          No disadvantaged categories flagged for this feature.
+          No Burdened categories flagged for this feature.
         </div>`
                 // ---- Percent (rounded to nearest 10) from P200_I_PFS ----
                 const raw = a['P200_I_PFS']
@@ -525,7 +525,7 @@ onMounted(() => {
         <!-- Header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
           <div style="font:600 14px/1.2 system-ui;color:#1b5eab;letter-spacing:.2px">
-            Disadvantaged Categories
+            Burdened Categories
           </div>
           <div style="font:12px/1 system-ui;color:#333">
             ${yesOnly.length} selected
@@ -570,6 +570,20 @@ onMounted(() => {
     }
   })
   arcgisMap.addEventListener('arcgisViewReadyChange', (event) => {
+    // Force the popup to always open in a docked state
+    arcgisMap.view.popup.dockEnabled = true
+
+    // Configure default docking placement and behavior
+    arcgisMap.view.popup.dockOptions = {
+      // Set the default position (e.g., "bottom-right", "top-right", "top-left", "bottom-left")
+      position: 'bottom-right',
+
+      // Set to false to prevent the popup from undocking on large screens
+      breakpoint: false,
+
+      // Set to false if you want to hide the manual dock/undock toggle button
+      buttonEnabled: true,
+    }
     measureVM = new DistanceMeasurement2DViewModel({
       view: event.target.view,
       unit: 'meters',

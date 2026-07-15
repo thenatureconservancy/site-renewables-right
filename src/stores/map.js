@@ -371,7 +371,7 @@ export const useMapStore = defineStore('mapStore', () => ({
 {
     index: 15, elid: 'cjest_climate', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Climate Disadvantaged', style: 'styles/N_CLT_EOMI.json',
+    title: 'Climate Burdened', style: 'styles/N_CLT_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for expected agriculture loss rate OR expected building loss rate OR expected population loss rate OR projected flood risk OR projected wildfire risk AND are at or above the 65th percentile for low income.',
@@ -382,7 +382,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 16, elid: 'cjest_energy', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Energy Disadvantaged', style: 'styles/N_ENY_EOMI.json',
+    title: 'Energy Burdened', style: 'styles/N_ENY_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for energy cost OR PM2.5 in the air AND are at or above the 65th percentile for low income.',
@@ -393,7 +393,7 @@ export const useMapStore = defineStore('mapStore', () => ({
    {
     index: 21, elid: 'cjest_health', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Health Disadvantaged', style: 'styles/N_HLTH_90.json',
+    title: 'Health Burdened', style: 'styles/N_HLTH_90.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for asthma OR diabetes OR heart disease OR low life expectancy AND are at or above the 65th percentile for low income.',
@@ -404,7 +404,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 18, elid: 'cjest_housing', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Housing Disadvantaged', style: 'styles/N_HSG_EOMI.json',
+    title: 'Housing Burdened', style: 'styles/N_HSG_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that experienced historic underinvestment OR are at or above the 90th percentile for housing cost OR lack of green space OR lack of indoor plumbing OR lead paint AND are at or above the 65th percentile for low income.',
@@ -415,7 +415,7 @@ export const useMapStore = defineStore('mapStore', () => ({
    {
     index: 19, elid: 'cjest_pollution', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Pollution Disadvantaged', style: 'styles/N_PLN_EOMI.json',
+    title: 'Pollution Burdened', style: 'styles/N_PLN_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that have at least one abandoned mine land OR Formerly Used Defense Sites OR are at or above the 90th percentile for proximity to hazardous waste facilities OR proximity to Superfund sites (National Priorities List (NPL)) OR proximity to Risk Management Plan (RMP) facilities AND are at or above the 65th percentile for low income.',
@@ -426,7 +426,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 17, elid: 'cjest_transportation', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Transportation Disadvantaged', style: 'styles/N_TRN_EOMI.json',
+    title: 'Transportation Burdened', style: 'styles/N_TRN_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for diesel particulate matter exposure OR transportation barriers OR traffic proximity and volume AND are at or above the 65th percentile for low income.',
@@ -439,7 +439,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 20, elid: 'cjest_water', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Water Disadvantaged', style: '/styles/N_WTR_EOMI.json',
+    title: 'Water Burdened', style: '/styles/N_WTR_EOMI.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for underground storage tanks and releases OR wastewater discharge AND are at or above the 65th percentile for low income.',
@@ -451,7 +451,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   {
     index: 22, elid: 'cjest_workforce', serviceId: 'vtl', filter: true, type: 'radio',
     visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Workforce Disadvantaged', style: 'styles/N_WKFC_91.json',
+    title: 'Workforce Burdened', style: 'styles/N_WKFC_91.json',
     inBuffer: false, inExtent: false,
     description: 'short description',
     longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for linguistic isolation OR low median income OR poverty OR unemployment AND more than 10% of people ages 25 years or older whose high school education is less than a high school diploma.',
