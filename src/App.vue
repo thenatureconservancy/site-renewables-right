@@ -6,8 +6,6 @@ import { useMapStore } from '@/stores/map'
 import { useHelpStore } from './stores/help'
 import { useShepherd } from 'vue-shepherd'
 import TheHelp from '@/components/TheHelp.vue'
-import TheHelp1 from '@/components/TheHelp1.vue'
-import TheHelp2 from '@/components/TheHelp2.vue'
 import { ref } from 'vue'
 const tour = useShepherd({
   useModalOverlay: true,
@@ -104,6 +102,7 @@ const width = ref(window.innerWidth / 2.2)
           square
           size="12px"
           icon="download"
+          outline
         ></q-btn>
         <q-btn
           color="primary"
@@ -114,12 +113,14 @@ const width = ref(window.innerWidth / 2.2)
           size="12px"
           icon="play_arrow"
           @click="tour.start()"
+          flat
         ></q-btn>
 
         <q-btn
           color="primary"
           label="Help"
-          icon="o_info"
+          flat
+          icon="help_outline"
           unelevated
           square
           size="12px"
@@ -128,6 +129,7 @@ const width = ref(window.innerWidth / 2.2)
         <q-btn
           class="q-ml-sm"
           color="primary"
+          flat
           label="About"
           unelevated
           square
@@ -149,14 +151,13 @@ const width = ref(window.innerWidth / 2.2)
       :height="height"
       bordered
     >
-      <q-toolbar class="">
-        <q-btn flat label="layout 1" @click="mapStore.showing = 'help1'"></q-btn>
-        <q-btn flat label="layout 2" @click="mapStore.showing = 'help2'"></q-btn>
+      <q-toolbar class="bg-blue-grey-9 text-white">
+        <span class="text-h6 text-weight-bold">Help Topics</span>
         <q-space></q-space>
         <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
       </q-toolbar>
-      <TheHelp1 v-if="mapStore.showing == 'help1'"></TheHelp1>
-      <TheHelp2 v-if="mapStore.showing == 'help2'"></TheHelp2>
+      <TheHelp ></TheHelp>
+   
     </q-drawer>
   </q-layout>
 </template>

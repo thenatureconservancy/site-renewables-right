@@ -43,11 +43,8 @@ computed(() => {
 </script>
 <template>
   <div class="q-mx-md" style="border-top: 1px solid lightgray">
-    <p class="text-body2 text-bold q-mb-none q-mt-md">Explore the Data</p>
-
-    <p>
-      Select an energy type, then click the eye icons below to turn groups of Data Layers on and off. 
-     </p> 
+    <p class="text-body2 text-weight-medium q-mb-none q-my-md">Explore where renewable energy development may face constraints, tradeoffs, or opportunities.</p>
+   
     <the-toolbar></the-toolbar>
     <q-scroll-area style="height: calc(100vh - 300px)" >
        <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>

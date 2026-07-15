@@ -1,35 +1,111 @@
 <script setup>
+import { ref, computed } from 'vue'
 import { useMapStore } from '@/stores/map'
+
 const mapStore = useMapStore()
+const splitterModel = ref(30)
+
+// Flatten subheaders into a single TOC list
+const tocItems = computed(() => {
+  const items = []
+  mapStore.layers.forEach((item) => {
+    item.subheaders.forEach((layer) => {
+      items.push({
+        ...layer,
+        title:
+          layer.title === 'Highly Sensitive'
+            ? 'Conservation Values (Highly Sensitive)'
+            : layer.title === 'Moderately Sensitive'
+              ? 'Conservation Values (Moderately Sensitive)'
+              : layer.title,
+      })
+    })
+  })
+  return items
+})
+
+// Track selected section — default to first
+const selectedTitle = ref(null)
+
+const selectedSection = computed(() => {
+  if (!selectedTitle.value && tocItems.value.length) {
+    return tocItems.value[0]
+  }
+  return tocItems.value.find((t) => t.title === selectedTitle.value) || tocItems.value[0]
+})
+
+function selectSection(layer) {
+  selectedTitle.value = layer.title
+}
 </script>
 
 <template>
-  <div class="bg-white q-ma-sm" v-for="(item, index1) in mapStore.layers" :key="index1">
-    <div v-for="(layer, index2) in item.subheaders" :key="index2">
-      <div class="bg-blue-grey-9 text-white text-center">
-        <p class="text-body1">{{ layer.title }}</p>
-      </div>
-      <q-list
-        class=""
-        v-for="(sublayer, index3) in layer.sublayers"
-        :key="index3"
-        :id="sublayer.elid"
-      >
-        <q-item class="" v-if="sublayer.elid !== 'whoopingCraneSolar'">
-          <q-item-section class="">
-            <q-item-label
-              class="text-bold"
-              :style="
-                mapStore.activeHelpElement == sublayer.elid
-                  ? 'border: 2px solid green; padding: 5px'
-                  : ''
-              "
-              >{{ sublayer.title }}</q-item-label
-            >
-            <q-item-label v-html="sublayer.longDescription"></q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </div>
+  <div class="help-panel">
+    <q-splitter v-model="splitterModel" class="full-height">
+      <!-- LEFT: Table of Contents -->
+      <template #before>
+        <q-list separator class="toc-list">
+          <q-item
+            v-for="(layer, i) in tocItems"
+            :key="i"
+            clickable
+            v-ripple
+            :active="selectedSection?.title === layer.title"
+            active-class="bg-blue-grey-1 text-blue-grey-9"
+            @click="selectSection(layer)"
+          >
+            <q-item-section>
+              <q-item-label class="text-body2 text-bold">
+                {{ layer.title }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </template>
+
+      <!-- RIGHT: Detail Content -->
+      <template #after>
+        <div v-if="selectedSection" class="q-pa-md detail-content">
+         
+            <div v-html="selectedSection.description"></div>
+          <div class="text-center q-pa-sm q-mb-md" style="border-radius: 4px">
+            <p class="text-body1 q-mb-none">{{ selectedSection.title }}</p>
+          </div>
+          <q-list v-for="(sublayer, i) in selectedSection.sublayers" :key="i">
+            <q-item v-if="sublayer.elid !== 'whoopingCraneSolar'">
+              <q-item-section>
+                <q-item-label
+                  class="text-bold"
+                  :style="
+                    mapStore.activeHelpElement === sublayer.elid
+                      ? 'border: 2px solid green; padding: 5px'
+                      : ''
+                  "
+                >
+                  {{ sublayer.title }}
+                </q-item-label>
+                <q-item-label v-html="sublayer.longDescription" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <div style="height: 50px"></div>
+        </div>
+      </template>
+    </q-splitter>
   </div>
 </template>
+
+<style scoped>
+.help-panel {
+  height: 100%;
+}
+
+.toc-list {
+  overflow-y: auto;
+}
+
+.detail-content {
+  overflow-y: auto;
+  height: 100%;
+}
+</style>

@@ -125,14 +125,7 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-  // moderate sensitive
-  let landscape = new MapImageLayer({
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
-    id: 'landscape',
-    sublayers: [{ id: 24 }],
-    visible: false,
-    opacity: 0.8,
-  })
+
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscapeIntactness',
@@ -332,7 +325,6 @@ onMounted(() => {
       lassoWind,
       migratoryBirdStopoverWind,
       landscapeIntactness,
-      landscape,
       qualitywater,
       whoopingCraneSolar,
       whoopingCraneWind,
@@ -356,6 +348,7 @@ onMounted(() => {
   mapStore.filterLayers('solar')
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
+    console.log('CurrentExtent:', arcgisMap.scale)
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
