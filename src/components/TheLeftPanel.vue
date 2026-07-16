@@ -43,11 +43,28 @@ computed(() => {
 </script>
 <template>
   <div class="q-mx-md" style="border-top: 1px solid lightgray">
-    <p class="text-body2 text-weight-medium q-mb-none q-my-md">Explore where renewable energy development may face constraints, tradeoffs, or opportunities.</p>
-   
+    <p class="text-body2 text-weight-medium q-mb-none q-my-md">
+      Explore where renewable energy development may face constraints, tradeoffs, or opportunities.
+    </p>
+
     <the-toolbar></the-toolbar>
-    <q-scroll-area style="height: calc(100vh - 300px)" >
-       <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS ( {{ mapStore.category }} filter applied )</p>
+    <q-scroll-area style="height: calc(100vh - 330px)">
+      <p class="text-overline q-ml-sm q-mb-none">
+        DATA LAYERS ( {{ mapStore.category }} filter applied )
+        <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat class="q-ml-sm">
+          <q-menu>
+            <div class="q-pa-md" style="width: 300px">
+              <p class="">
+                <b>Category:</b> Click each category to expand the list of layers and turn them on or off.
+                  Only one category can be active at a time. With the exception of native lands, which can be toggled on or off at any time. <br /><br />
+                <b>Drag Indicator:</b> If a drag indicator appears next to a layer, you can click and drag it to reorder the layers in the list. <br /><br />
+                <b>Info Button:</b> This button opens the info panel and will route you to the specific layer information. <br /><br />
+                <b>Opacity Button:</b> Allows you to adjust the transparency of the layer on the map. <br /><br />
+              </p>
+            </div>
+          </q-menu>
+        </q-btn>
+      </p>
       <the-layer-list></the-layer-list>
     </q-scroll-area>
   </div>

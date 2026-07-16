@@ -4,9 +4,19 @@ let mapStore = useMapStore()
 </script>
 
 <template>
-    
   <div id="" class="q-mb-md q-pb-md" style="border-bottom: 1px solid lightgrey">
-    <p class="text-overline q-ml-sm q-mb-none">TOOLS</p>
+    <p class="text-overline q-ml-sm q-mb-none">TOOLS
+      <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat  class="q-ml-sm">
+        <q-menu>
+          <div class="q-pa-md" style="width: 300px">
+            <p class="">
+              <b>Site report:</b> Click this button to drop a pin on the map, choose buffer size, and generate an intersection summary.  <br/><br/>
+              <b>Info:</b> This button opens the info panel with a table of contents for each of the data layers and their descriptions.
+            </p>
+          </div>
+        </q-menu>
+      </q-btn>
+    </p>
     <q-btn
       color="primary"
       size="12px"
@@ -18,7 +28,7 @@ let mapStore = useMapStore()
     ></q-btn>
     <q-btn
       class="q-ml-sm"
-      label="Help"
+      label="Info"
       size="12px"
       color="primary"
       icon="o_info"
@@ -29,7 +39,18 @@ let mapStore = useMapStore()
     ></q-btn>
   </div>
   <div id="energyType" class="q-mb-md q-pb-md" style="border-bottom: 1px solid lightgrey">
-    <p class="text-overline q-ml-sm q-mb-none">ENERGY FILTER FOR DATA LAYERS</p>
+    <p class="text-overline q-ml-sm q-mb-none">
+      ENERGY FILTER FOR DATA LAYERS
+      <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat  class="q-ml-sm">
+        <q-menu>
+          <div class="q-pa-md" style="width: 300px">
+            <p class="">
+              Use this option to control which energy related layers appear in the list below. The default is solar.
+            </p>
+          </div>
+        </q-menu>
+      </q-btn>
+    </p>
 
     <div id="" class="bg-white text-left">
       <q-btn
@@ -65,7 +86,7 @@ let mapStore = useMapStore()
 
         <span class="text-caption text-weight-medium">Solar</span>
       </q-btn>
-       <q-btn
+      <q-btn
         square
         size="md"
         unelevated=""
@@ -83,7 +104,6 @@ let mapStore = useMapStore()
 
         <span class="text-caption text-weight-medium">Floating Solar</span>
       </q-btn>
-
 
       <q-space></q-space>
     </div>

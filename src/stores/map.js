@@ -341,7 +341,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   {title: 'Limitations to Farmland', id: 'ag2', visible: true, visibleModel: true, expanded: false,
       sublayers: [
-        {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
+        {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
           longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
           totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQElEQVQ4jWNhoDJgoZmBT6bU/KfEIJmcFkYUA6kFWEYNpBiwUG4EKhg1kHLAQgUzUMCogZQDeBjCyjOqGUgtAAALkgVen6ZPhAAAAABJRU5ErkJggg=="},
        {index: 17, elid: 'waterLimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
@@ -554,7 +554,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     group.expanded = !group.expanded
     this.toggleGroupVisibility(group)
       // Custom behavior for expansion groups
-    if (group.header == 'Potential Renewable Energy Buildout'  && group.expanded == true){
+    if (group.header == 'Predicted Renewable Energy Buildout'  && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
@@ -564,6 +564,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[2])
       this.toggleGroupVisibility(this.layers[3])
+
     }
     
     // Custom behavior for expansion groups
@@ -578,7 +579,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[2])
       this.toggleGroupVisibility(this.layers[4])
     }
-      if (group.header == 'Agricultural Values'  && group.expanded == true){
+    if (group.header == 'Agricultural Values'  && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
@@ -589,9 +590,19 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[3])
       this.toggleGroupVisibility(this.layers[4])
     }
+    if (group.header == 'Disturbed Lands'  && group.expanded == true){
+      //when community is open close the other two groups
+      this.layers[0].expanded = false;
+      this.layers[2].expanded = false;
+      this.layers[3].expanded = false;
+      this.layers[4].expanded = false;
+      this.toggleGroupVisibility(this.layers[0])
+      this.toggleGroupVisibility(this.layers[2])
+      this.toggleGroupVisibility(this.layers[3])
+      this.toggleGroupVisibility(this.layers[4])
+    }
     if (
-      group.header == 'Conservation Values' && group.expanded == true ||
-      group.header == 'Disturbed Lands' && group.expanded == true
+      group.header == 'Conservation Values' && group.expanded == true 
     ){
       //this turns on the CA overlay
        if (
@@ -600,10 +611,12 @@ export const useMapStore = defineStore('mapStore', () => ({
        map.findLayerById('states').visible = true
        map.findLayerById('buttonLayer').visible = true
       }
-      //when the other two are open close community
-      this.layers[3].expanded = false;
+    
+      this.layers[1].expanded = false;
       this.layers[2].expanded = false;
+      this.layers[3].expanded = false;
       this.layers[4].expanded = false;
+      this.toggleGroupVisibility(this.layers[1])
       this.toggleGroupVisibility(this.layers[2])
       this.toggleGroupVisibility(this.layers[3])
       this.toggleGroupVisibility(this.layers[4])
@@ -630,6 +643,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         }
         
         if(layer.filter){
+          console.log('setting visibility for ' + layer.elid + ' to ' + visible)
         sublayer.visible = visible
         }
 

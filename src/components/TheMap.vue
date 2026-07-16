@@ -125,7 +125,6 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscapeIntactness',
@@ -140,7 +139,6 @@ onMounted(() => {
     visible: false,
     opacity: 1,
   })
-
   // degraded and disturbed lands
   let abandonedmines = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
@@ -155,7 +153,6 @@ onMounted(() => {
     opacity: 0.8,
   })
   // agriculture
-
   let highestag = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'highestag',
@@ -184,6 +181,13 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
+  let abandonedag = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
+    id: 'abandonedag',
+    sublayers: [{ id: 27 }],
+    visible: false,
+    opacity: 0.8,
+  })
   //wind and solar best locations
   let lassoWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
@@ -199,7 +203,6 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-
   // native lands
   let nativeLands = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
@@ -234,7 +237,6 @@ onMounted(() => {
     id: 'cjest',
     visible: false,
   })
-
   //feature layer for vector tile
   let cjestFL = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
@@ -242,7 +244,6 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-
   //states for ca
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
@@ -316,6 +317,7 @@ onMounted(() => {
       ag2,
       ag3,
       ag4,
+      abandonedag,
       waterLimited,
       brownfields,
       abandonedmines,

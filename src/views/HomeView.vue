@@ -7,8 +7,8 @@ import { useMapStore } from '../stores/map'
 import { useHelpStore } from '@/stores/help'
 import { ref, onMounted } from 'vue'
 import { useAgolStore } from '@/stores/arcGisOnline'
-
-
+import { useQuasar } from 'quasar'
+import { computed } from 'vue'
 const mapStore = useMapStore()
 const helpStore = useHelpStore()
 
@@ -25,6 +25,10 @@ function dialogControl() {
     localStorage.setItem('showSRRSplash', 'show')
   }
 }
+const $q = useQuasar()
+const mobile = computed(() => {
+  return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
+})
 
 onMounted(() => {
   //set initial active tool to legend
@@ -37,10 +41,7 @@ onMounted(() => {
   if (localStorage.getItem('SRRUserWantsAuth') == 'yes') {
     agolStore.showDialog = true
   }
- 
 })
-
-
 </script>
 
 <template>
@@ -157,8 +158,8 @@ onMounted(() => {
       </div>
     </q-card>
   </q-dialog>
-  
-  <div class="row" style='height: calc(100vh - 64px)'>
+
+  <div class="row" style="height: calc(100vh - 64px)">
     <div class="col-4"><TheLeftPanel></TheLeftPanel></div>
     <div class="col"><the-map></the-map></div>
   </div>

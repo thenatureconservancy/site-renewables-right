@@ -92,7 +92,7 @@ async function scrollToElement(elid) {
           </template>
           <q-list
             dense
-            class="q-mx-md q-pb-md"
+            class="q-pb-md"
             v-if="
               layer.title !== 'Community Considerations' &&
               layer.title !== 'Potential Renewable Energy Buildout'
@@ -150,14 +150,26 @@ async function scrollToElement(elid) {
                     </div>
                   </q-item-section>
                   <q-item-section side class="">
-                    <q-btn
-                      size="sm"
-                      flat
-                      padding="none"
-                      icon="o_info"
-                      @click="scrollToElement(sublayer.elid)"
-                      ><q-tooltip> more info </q-tooltip></q-btn
-                    >
+                    <div class="row items-center no-wrap q-gutter-xs">
+                      <q-btn
+                     
+                        size="sm"
+                        flat
+                        padding="none"
+                        icon="o_info"
+                        @click="scrollToElement(sublayer.elid)"
+                        ><q-tooltip> go to layer info in help panel </q-tooltip></q-btn
+                      >
+                      <q-btn
+                   
+                        size="sm"
+                        flat
+                        padding="none"
+                        icon="opacity"
+                        @click="setOpacity(sublayer.elid)"
+                        ><q-tooltip> set opacity </q-tooltip></q-btn
+                      >
+                    </div>
                   </q-item-section>
                 </q-item>
               </template>
@@ -233,15 +245,24 @@ async function scrollToElement(elid) {
 
               <!-- Info button -->
               <q-item-section side>
-                <q-btn
-                  size="sm"
-                  flat
-                  padding="none"
-                  icon="o_info"
-                  @click.stop="scrollToElement(sublayer.elid)"
-                >
-                  <q-tooltip> more info </q-tooltip>
-                </q-btn>
+                <div class="row items-center no-wrap q-gutter-xs">
+                  <q-btn
+                    size="sm"
+                    flat
+                    padding="none"
+                    icon="o_info"
+                    @click="scrollToElement(sublayer.elid)"
+                    ><q-tooltip> go to layer info in help panel </q-tooltip></q-btn
+                  >
+                  <q-btn
+                    size="sm"
+                    flat
+                    padding="none"
+                    icon="opacity"
+                    @click="setOpacity(sublayer.elid)"
+                    ><q-tooltip> set opacity </q-tooltip></q-btn
+                  >
+                </div>
               </q-item-section>
             </q-item>
           </q-list>

@@ -118,7 +118,7 @@ const width = ref(window.innerWidth / 2.2)
 
         <q-btn
           color="primary"
-          label="Help"
+          label="Info"
           flat
           icon="info_outline"
           unelevated
@@ -152,7 +152,7 @@ const width = ref(window.innerWidth / 2.2)
       bordered
     >
       <q-toolbar class="bg-blue-grey-9 text-white">
-        <span class="text-h6 text-weight-bold">Help Topics</span>
+        <span class="text-h6 text-weight-bold">Layer Info Topics</span>
         <q-space></q-space>
         <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
       </q-toolbar>
