@@ -31,7 +31,6 @@ function toggleOpacity(sublayer) {
   activeOpacityLayer.value = activeOpacityLayer.value === sublayer.elid ? null : sublayer.elid
 }
 
-
 function customLegend(sublayer) {
   const legends = {
     bats: {
@@ -91,9 +90,9 @@ function legendImageSrc(sublayer) {
 }
 
 // takes an element object
-async function scrollToElement(elid) {
-  mapStore.panelState = 'open'
-  mapStore.activeTool = 'help'
+async function scrollToElement(layer, elid) {
+  mapStore.showHelpPanel = true
+  mapStore.selectedHelpSection = layer
   mapStore.activeHelpElement = elid
 
   await nextTick()
@@ -114,7 +113,7 @@ async function scrollToElement(elid) {
   }
 
   const el = await waitForElement(elid, 1500)
-
+  console.log(el)
   if (el) {
     el.scrollIntoView({
       behavior: 'smooth',
@@ -230,7 +229,7 @@ async function scrollToElement(elid) {
                           flat
                           padding="none"
                           icon="o_info"
-                          @click.stop="scrollToElement(sublayer.elid)"
+                          @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
                           <q-tooltip>Go to layer info panel</q-tooltip>
                         </q-btn>
@@ -321,7 +320,9 @@ async function scrollToElement(elid) {
                     :max="1"
                     :step="0.1"
                     label
-                    @update:model-value="mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)"
+                    @update:model-value="
+                      mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)
+                    "
                   />
                 </q-item-section>
 
@@ -338,7 +339,7 @@ async function scrollToElement(elid) {
                       flat
                       padding="none"
                       icon="o_info"
-                      @click.stop="scrollToElement(sublayer.elid)"
+                      @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
                       <q-tooltip>Go to layer info panel</q-tooltip>
                     </q-btn>
@@ -434,7 +435,9 @@ async function scrollToElement(elid) {
                         :max="1"
                         :step="0.1"
                         label
-                        @update:model-value="mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)"
+                        @update:model-value="
+                          mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)
+                        "
                       />
                     </q-item-section>
 
@@ -451,7 +454,7 @@ async function scrollToElement(elid) {
                           flat
                           padding="none"
                           icon="o_info"
-                          @click.stop="scrollToElement(sublayer.elid)"
+                          @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
                           <q-tooltip>Go to layer info panel</q-tooltip>
                         </q-btn>
@@ -536,7 +539,9 @@ async function scrollToElement(elid) {
                     :max="1"
                     :step="0.1"
                     label
-                    @update:model-value="mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)"
+                    @update:model-value="
+                      mapStore.setSublayerOpacity(sublayer.elid, sublayer.opacity)
+                    "
                   />
                 </q-item-section>
 
@@ -553,7 +558,7 @@ async function scrollToElement(elid) {
                       flat
                       padding="none"
                       icon="o_info"
-                      @click.stop="scrollToElement(sublayer.elid)"
+                      @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
                       <q-tooltip>Go to layer info panel</q-tooltip>
                     </q-btn>

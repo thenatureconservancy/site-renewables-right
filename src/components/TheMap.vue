@@ -604,7 +604,7 @@ onMounted(() => {
     id="my-map"
     center="-95.5348, 38.7946"
     zoom="3"
-    :constraints="{ minZoom: 2, maxZoom: 15, rotationEnabled: false }"
+    :constraints="{ scale: 18000, minZoom: 2, maxZoom: 14, rotationEnabled: false }"
   >
     <arcgis-scale-bar position="bottom-right" bar-style="line" unit="metric"></arcgis-scale-bar>
     <arcgis-zoom position="top-left"></arcgis-zoom>

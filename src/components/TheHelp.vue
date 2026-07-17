@@ -12,6 +12,7 @@ const tocItems = computed(() => {
     item.subheaders.forEach((layer) => {
       items.push({
         ...layer,
+        tocId: layer.title,
         title:
           layer.title === 'Highly Sensitive'
             ? 'Conservation Values (Highly Sensitive)'
@@ -24,19 +25,14 @@ const tocItems = computed(() => {
   return items
 })
 
-// Track selected section — default to first
-const selectedTitle = ref(null)
 
 const selectedSection = computed(() => {
-  if (!selectedTitle.value && tocItems.value.length) {
-    return tocItems.value[0]
-  }
-  return tocItems.value.find((t) => t.title === selectedTitle.value) || tocItems.value[0]
+  return (
+    tocItems.value.find(
+      (t) => t.tocId === mapStore.selectedHelpSection
+    ) || tocItems.value[0]
+  )
 })
-
-function selectSection(layer) {
-  selectedTitle.value = layer.title
-}
 </script>
 
 <template>
@@ -50,9 +46,9 @@ function selectSection(layer) {
             :key="i"
             clickable
             v-ripple
-            :active="selectedSection?.title === layer.title"
+            :active="mapStore.selectedHelpSection === layer.tocId"
             active-class="bg-blue-grey-1 text-blue-grey-9"
-            @click="selectSection(layer)"
+            @click="mapStore.selectedHelpSection = layer.tocId"
           >
             <q-item-section>
               <q-item-label class="text-body2 text-bold">
@@ -66,8 +62,7 @@ function selectSection(layer) {
       <!-- RIGHT: Detail Content -->
       <template #after>
         <div v-if="selectedSection" class="q-pa-md detail-content">
-         
-            <div v-html="selectedSection.description"></div>
+          <div v-html="selectedSection.description"></div>
           <div class="text-center q-pa-sm q-mb-md" style="border-radius: 4px">
             <p class="text-body1 q-mb-none">{{ selectedSection.title }}</p>
           </div>
@@ -75,6 +70,7 @@ function selectSection(layer) {
             <q-item v-if="sublayer.elid !== 'whoopingCraneSolar'">
               <q-item-section>
                 <q-item-label
+                  :id="sublayer.elid"
                   class="text-bold"
                   :style="
                     mapStore.activeHelpElement === sublayer.elid

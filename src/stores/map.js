@@ -15,8 +15,8 @@ import * as query from "@arcgis/core/rest/query";
 
 export const useMapStore = defineStore('mapStore', () => ({
   showHelpPanel: false,
+  selectedHelpSection: 'Highly Sensitive',
   showSiteReport: false,
-  showing: 'help1',
   opacity: 90,
   showOpacity: false,
   showDemo: false,
@@ -25,7 +25,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   showReportDetails: true,
   reportLayerFilter: 'buffer',
   compare: true, 
-  panelState: 'closed',
   activeTool: 'legend',
   activeHelpElement: '',  
   category: 'solar',
