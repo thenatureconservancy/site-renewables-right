@@ -112,23 +112,16 @@ async function scrollToElement(layer, elid) {
     })
   }
 
+  const container = document.querySelector('.detail-content')
   const el = await waitForElement(elid, 1500)
-  console.log(el)
-  if (el) {
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest',
-    })
 
-    try {
-      el.focus && el.focus()
-    } catch {
-      /* ignore focus errors */
-    }
-  } else {
-    console.warn('scrollToElement: could not find element', elid)
-  }
+  const top =
+    el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop
+
+  container.scrollTo({
+    top: top - 20,
+    behavior: 'smooth',
+  })
 }
 </script>
 

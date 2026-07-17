@@ -151,11 +151,7 @@ const width = ref(window.innerWidth / 2.2)
       :height="height"
       bordered
     >
-      <q-toolbar class="bg-blue-grey-9 text-white">
-        <span class="text-h6 text-weight-bold">Layer Info Topics</span>
-        <q-space></q-space>
-        <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
-      </q-toolbar>
+      
       <TheHelp ></TheHelp>
    
     </q-drawer>

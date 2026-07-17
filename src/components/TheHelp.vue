@@ -25,18 +25,18 @@ const tocItems = computed(() => {
   return items
 })
 
-
 const selectedSection = computed(() => {
-  return (
-    tocItems.value.find(
-      (t) => t.tocId === mapStore.selectedHelpSection
-    ) || tocItems.value[0]
-  )
+  return tocItems.value.find((t) => t.tocId === mapStore.selectedHelpSection) || tocItems.value[0]
 })
 </script>
 
 <template>
   <div class="help-panel">
+    <q-toolbar class="bg-blue-grey-9 text-white">
+      <span class="text-h6 text-weight-bold">Layer Info Topics</span>
+      <q-space></q-space>
+      <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
+    </q-toolbar>
     <q-splitter v-model="splitterModel" class="full-height">
       <!-- LEFT: Table of Contents -->
       <template #before>
