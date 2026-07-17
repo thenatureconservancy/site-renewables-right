@@ -766,7 +766,7 @@ onMounted(() => {
 
 #my-map {
   flex: 1;
-  height: 100%;
+  height: calc(100vh - 50px);
   width: 100%;
   position: relative;
 }

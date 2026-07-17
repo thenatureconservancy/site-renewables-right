@@ -29,8 +29,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   activeTool: 'legend',
   activeHelpElement: '',  
   category: 'solar',
-  communitySelection: 'Low Income Percentile',
-  buildoutSelection: 'Potential Solar Buildout',
   legend: '',
   bufferSize: 1,
   currentPoint: '',
@@ -354,7 +352,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Community Considerations' , id: 'community', expanded: false, 
    subheaders: [
-    {title: 'Community Considerations', id: 'comm', visible: true, visibleModel: true, expanded: false,
+    {title: 'Community Considerations', id: 'comm', selection: 'Low Income Percentile', visible: true, visibleModel: true, expanded: false,
       sublayers: [
   {
     index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
@@ -365,8 +363,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     longDescription: 'The percentage of a census tract’s population living in households with incomes at or below 200% of the federal poverty level, excluding students enrolled in higher education.',
     totalArea: 0,
     percentOfTotal: 0,
-    legendImg: '',
-    pngLegend: '\\legend\\comm.png',
+    legendType: 'ramp',  lowLabel: 'Low Income', highLabel: 'High Income',  gradient: 'linear-gradient(to right, #f4edf7, #b56bc7)',
   },      
 {
     index: 15, elid: 'cjest_climate', serviceId: 'vtl', filter: true, type: 'radio',
@@ -465,16 +462,16 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Predicted Renewable Energy Buildout', id: 'renewable', expanded: false, 
    subheaders: [
-    {title: 'Predicted Renewable Energy Buildout', id: 'renewable', visible: true, visibleModel: true, expanded: false,
+    {title: 'Predicted Renewable Energy Buildout', id: 'renewable', visible: true, selection: 'Predicted Solar Buildout',visibleModel: true, expanded: false,
       sublayers:  [
         {index: 0, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Predicted Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
            longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see solar development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that solar projects are more likely to be developed in areas with high infrastructure accessibility, closer to load centers, and lower environmental impacts (e.g., ecological sensitivities and forested land). ', type: 'radio', 
-           totalArea: 0, percentOfTotal: 0,  pngLegend: '\\legend\\buildout2.png', pngWidth: '200'},
+           totalArea: 0, percentOfTotal: 0},
         {index: 1, elid: 'lassoWind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
            category: 'both', title: 'Predicted Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
             longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see wind development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that wind projects are more likely to be developed in areas that are windier, have favorable land cover (agricultural and non-forested), closer to transmission lines, on more sloped terrain, and with lower land acquisition costs. ', type: 'radio', 
-              pngLegend: '\\legend\\buildout2.png', pngWidth: '200'},
+            legendType: 'ramp',  lowLabel: 'Low',  highLabel: 'High',  gradient: 'linear-gradient(to right, #e8ecff, #5b6fd6)'},
         ]   
   },
   ]},
@@ -551,7 +548,8 @@ export const useMapStore = defineStore('mapStore', () => ({
    
   },
   setGroupVisibility(group){
-    group.expanded = !group.expanded
+    console.log(group)
+    //group.expanded = !group.expanded
     this.toggleGroupVisibility(group)
       // Custom behavior for expansion groups
     if (group.header == 'Predicted Renewable Energy Buildout'  && group.expanded == true){
@@ -670,6 +668,16 @@ export const useMapStore = defineStore('mapStore', () => ({
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(elid);
     layer.visible = checked
+  },
+  //sets opacity
+  setSublayerOpacity(elid, opacity){
+    let map = document.querySelector("arcgis-map").map;
+    let id = elid;
+    if(elid.includes('cjest')){
+      id = 'cjest'
+    }
+    let layer = map.findLayerById(id);
+    layer.opacity = opacity
   },
   //filter layers
   filterLayers(cat){
@@ -1257,7 +1265,6 @@ export const useMapStore = defineStore('mapStore', () => ({
     requestAnimationFrame(animate);
   });
   },
-
   changeCommunityStyle(style){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('cjest');
