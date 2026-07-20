@@ -547,11 +547,9 @@ export const useMapStore = defineStore('mapStore', () => ({
    
   },
   setGroupVisibility(group){
-    console.log(group)
-    //group.expanded = !group.expanded
     this.toggleGroupVisibility(group)
-      // Custom behavior for expansion groups
-    if (group.header == 'Predicted Renewable Energy Buildout'  && group.expanded == true){
+      // Custom behavior for expansion groups - allow native lands visible anytime
+    if (group.header == 'Predicted Renewable Energy Buildout' && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;
@@ -563,8 +561,6 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[3])
 
     }
-    
-    // Custom behavior for expansion groups
     if (group.header == 'Community Considerations'  && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
@@ -598,17 +594,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[3])
       this.toggleGroupVisibility(this.layers[4])
     }
-    if (
-      group.header == 'Conservation Values' && group.expanded == true 
-    ){
-      //this turns on the CA overlay
-       if (
-      group.header == 'Conservation Values' && group.expanded == true){
-       let map = document.querySelector("arcgis-map").map;
-       map.findLayerById('states').visible = true
-       map.findLayerById('buttonLayer').visible = true
-      }
-    
+    if (group.header == 'Conservation Values' && group.expanded == true){
       this.layers[1].expanded = false;
       this.layers[2].expanded = false;
       this.layers[3].expanded = false;
@@ -618,13 +604,8 @@ export const useMapStore = defineStore('mapStore', () => ({
       this.toggleGroupVisibility(this.layers[3])
       this.toggleGroupVisibility(this.layers[4])
     }
-    //this turns off CA overlay and button
-     if (
-      group.header == 'Conservation Values' && group.expanded == false){
-       let map = document.querySelector("arcgis-map").map;
-       map.findLayerById('states').visible = false
-       map.findLayerById('buttonLayer').visible = false
-      }
+    //update state overlays
+    this.filterStateOverlays()
   },
   toggleGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;
@@ -649,7 +630,6 @@ export const useMapStore = defineStore('mapStore', () => ({
         
       })
     })
-
   },
   //sets overall group layer visibility
   setLayerVisibility(layer) {
@@ -683,29 +663,28 @@ export const useMapStore = defineStore('mapStore', () => ({
     console.log(cat)
     this.category = cat
     let map = document.querySelector("arcgis-map").map;
- 
-   if (this.category == 'floating'){
-   this.layers.forEach(layer => {
-      layer.subheaders.forEach(subheader => {
-        subheader.sublayers.forEach(layer => {
-          
-          if(layer.category !== this.category || layer.category == 'both' ){
-            //turn off those layers so they are not visibl ein the map
-            let mapLayer = map.findLayerById(layer.elid);
-            layer.filter = false
-            mapLayer.visible = false
-          }
-          if (layer.category == this.category || (layer.elid == 'nativeLands' && layer.visibleModel == true)){
-            //turn on those layers
-            let mapLayer = map.findLayerById(layer.elid);
-            layer.filter = true
-            if(layer.visibleModel){mapLayer.visible = true}
-          }
-         })
+    if (this.category == 'floating'){
+      this.layers.forEach(layer => {
+        layer.subheaders.forEach(subheader => {
+          subheader.sublayers.forEach(layer => {
+            
+            if(layer.category !== this.category || layer.category == 'both' ){
+              //turn off those layers so they are not visibl ein the map
+              let mapLayer = map.findLayerById(layer.elid);
+              layer.filter = false
+              mapLayer.visible = false
+            }
+            if (layer.category == this.category || (layer.elid == 'nativeLands' && layer.visibleModel == true)){
+              //turn on those layers
+              let mapLayer = map.findLayerById(layer.elid);
+              layer.filter = true
+              if(layer.visibleModel){mapLayer.visible = true}
+            }
+          })
+        });
       });
-    });
-   }
-   else{
+    }
+    else{
     this.layers.forEach(layer => {
       layer.subheaders.forEach(subheader => {
         subheader.sublayers.forEach(layer => {
@@ -725,78 +704,8 @@ export const useMapStore = defineStore('mapStore', () => ({
         })
       });
     });
-  }
-  
-/*
-    const h = highly.filter((layer, index) => {
-      if(layer.category !== this.category && layer.category !== 'both'){
-        //turn off those layers so they are not visibl ein the map
-        let mapLayer = map.findLayerById(layer.elid);
-        layer.filter = false
-        mapLayer.visible = false
-      }
-      if (layer.category == this.category || layer.category == 'both'){
-        //turn on those layers
-        let mapLayer = map.findLayerById(layer.elid);
-        layer.filter = true
-        mapLayer.visible = true
-      }
-    })
-   
-    let minimize = this.layers[0].subheaders[1].sublayers
-    const f_minimize = minimize.filter((layer, index) => {
-    
-      if(layer.category !== this.category && layer.category !== 'both'){
-        //turn off those layers so they are not visibl ein the map
-        let mapLayer = map.findLayerById('minimize');
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.filter = false
-        sub.visible = false
-      }
-      if (layer.category == this.category || layer.category == 'both'){
-        //turn on those layers
-        let mapLayer = map.findLayerById('minimize');
-        let sub = mapLayer.findSublayerById(layer.id);
-     
-        layer.filter = true
-        sub.visible = true
-      }
-    })
-    
-    let opportunities = this.layers[1].subheaders[0].sublayers
-    const f_opportunities = opportunities.filter((layer, index) => {
-    
-      if(layer.category !== this.category && layer.category !== 'both'){
-        //turn off those layers so they are not visibl ein the map
-        let mapLayer = ''
-        mapLayer = map.findLayerById('opportunities') ;
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.filter = false
-        sub.visible = false
-      }
-      if (layer.category == this.category || layer.category == 'both'){
-        //turn on those layers
-        let mapLayer = ''
-        mapLayer = map.findLayerById('opportunities') ;
-        let sub = mapLayer.findSublayerById(layer.id);
-        layer.filter = true
-        if (layer.id !== 0 ){
-          sub.visible = true
-        }
-      }
-      
-    })
-   
-    if (this.category == 'solar'){
-      let sub2 = map.findLayerById('brownfields')
-      sub2.visible = true
     }
-    if(this.category !==  'solar'){
-      let sub2 = map.findLayerById('brownfields')
-      sub2.visible = false
-    }*/
-    
-      
+    this.filterStateOverlays()
   },
   //function to create the buffer
   createBuffer(e){
@@ -1286,8 +1195,22 @@ export const useMapStore = defineStore('mapStore', () => ({
       let layer2 = map.findLayerById('lassoSolar');
       layer2.visible = false
     }
+  },
+  //when change layer visibility //when change filter visible 
+  filterStateOverlays(){
+    let map = document.querySelector("arcgis-map").map;
+    let layer = map.findLayerById('states');
+    //only show overlay on conservation values visible = true
+    if(this.layers[0].expanded == false){
+      layer.definitionExpression = "STATE_NAME = 'N/A'"
+    }
+    else{
+       layer.definitionExpression = this.category == 'solar' ? 
+       "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'":
+       "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
+    }
+
   }
-  
 
 }
 ));

@@ -244,62 +244,85 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-  //states for ca
   let states = new FeatureLayer({
     url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
     id: 'states',
-    visible: false,
-    definitionExpression: "STATE_NAME = 'California'",
+    visible: true,
+    // Added California to your filter expression
+    definitionExpression:
+      "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'",
     minScale: 9244648,
+
+    labelingInfo: [
+      {
+        labelPlacement: 'always-horizontal',
+     
+        labelExpressionInfo: {
+          expression: "'ℹ️ View ' + $feature.STATE_NAME + ' Info'",
+        },
+        symbol: {
+          type: 'text',
+          color: '#FFFFFF',
+          font: {
+            size: 11,
+            weight: 'bold',
+            family: 'sans-serif',
+          },
+          backgroundColor: '#0079c1',
+          borderLineColor: '#004b75',
+          borderLineSize: 1,
+          haloColor: '#0079c1',
+          haloSize: 4,
+        },
+      },
+    ],
+    popupTemplate: {
+      title: '{STATE_NAME} Details',
+      content: (feature) => {
+        const state = feature.graphic.attributes.STATE_NAME
+
+        if (state === 'Maine') {
+          return `
+      <strong>Maine Policy Details:</strong>
+        TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
+        Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
+        solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
+        high-value agricultural land.</a> These policies were supported by TNC and other partners and
+        developed with extensive public input.
+      `
+        }
+
+        if (state === 'Georgia') {
+          return `
+        <strong>Georgia Solar Details:</strong> 
+        TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a> as an environmental sensitivity screening tool to guide solar development to places of lower environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service, Georgia Department of Natural Resources, industry stakeholders and others.
+      `
+        }
+
+        if (state === 'California') {
+          return `
+        <strong>California Policy Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+      `
+        }
+
+        return 'No information available.'
+      },
+    },
+
     renderer: {
       type: 'simple',
       symbol: {
         type: 'simple-fill',
-        color: [246, 245, 239, 0.9], // beige fill, 0.9 opacity
+        color: [246, 245, 239, 0.9],
         outline: {
-          color: [0, 0, 0, 0], // fully transparent outline
+          color: [246, 245, 239, 0.9], // beige fill, 0.9 opacity
           width: 6,
         },
       },
     },
   })
-  //button overlay
-  const centroidGraphic = new Graphic({
-    geometry: {
-      type: 'point',
-      latitude: 35.71698590073627,
-      longitude: -119.0476256315448,
-    },
-    symbol: {
-      type: 'picture-marker',
-      url: 'moreinfo.png', // your icon here
-      width: '65px',
-      height: '25px',
-      backgroundColor: [255, 255, 255, 0.9], // soft white plate
-      outline: {
-        color: [0, 0, 0, 0.15],
-        width: 1,
-      },
-    },
-    popupTemplate: {
-      content: `
-      <div>
-        <h6>California Policy Details</h6>
-        <p>TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders, the California Energy Commission’s (CEC) Land Use Screens: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a></p>
-        
 
-      </div>
-    `,
-    },
-  })
-  const buttonLayer = new GraphicsLayer({
-    id: 'buttonLayer',
-    listMode: 'hide',
-    visible: false,
-    minScale: 9244648,
-  })
-  buttonLayer.add(centroidGraphic)
-
+  
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
@@ -343,7 +366,6 @@ onMounted(() => {
       bufferLayer,
       pointLayer,
       imageLayer,
-      buttonLayer,
     ],
   })
 
