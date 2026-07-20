@@ -486,66 +486,41 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   ]}
   ],
+  updateLayerOrder(layer) {
+    const GROUP_RANGES = {
+        'Highest Quality Farmland': 3, //0,1,2,3
+        'Limitations To Farmland': 5, //4,5
+        'Disturbed Lands': 7, //6,7
+        'Community Considerations': 9, //8,9
+        'Predicted Renewable Energy Buildout': 11, //10,11
+        'Moderately Sensitive': 14, //12,13,14
+        'Highly Sensitive': 24, //15-24
+      }
+    const map = document.querySelector('arcgis-map').map
 
-  
-  //map loads sublayers in reverse order from the list in the ui which causes confusion about 
-  //which layer is on top.  This function reverses the order
-  //and is used by the MapImageLayer to define sublayers.  
-  consLayersReverse(){
-    let newList = this.layers[0].subheaders[0].sublayers
-    let reversed = newList.slice().reverse();
-    return reversed
-  }, 
-  //reversed layers for opportunities
-  agLayersReverse(){
+    const topIndex = GROUP_RANGES[layer.title]
 
-    let newList = this.layers[1].subheaders[0].sublayers
-    let reversed = newList.slice().reverse();
-   
-    return reversed
-  },
-  //this function updates the layer order in the map when the user drags to reorder layers
-  //on the UI
-  updateLayerOrder(layer){
-    console.log(layer)
-    if(layer.id == 'native'){
+    if (topIndex === undefined) {
+      console.warn('No group range defined for:', layer.title)
       return
     }
-    let map = document.querySelector("arcgis-map").map;
-    //update index in layers list
-    layer.sublayers.forEach((sublayer,index) => { 
-      //get dif
-      
-      let dif = sublayer.index - index
-     
-      //update new index
-      sublayer.index = index
-      let currMapIndex = sublayer.mapIndex
-      let newMapIndex = ''
-      if (dif > 0 ){
-        newMapIndex = currMapIndex + dif
-      }
-      if (dif > 0 ){
-        newMapIndex = currMapIndex - dif
-      }
-      
-      sublayer.mapIndex = newMapIndex
-     // console.log('currMapIndex:' + currMapIndex)
-     // console.log('newMapIndex:' + newMapIndex)
-     let mapLayer = map.findLayerById(sublayer.elid);
-     map.reorder(mapLayer,newMapIndex);
-    
-     // 
 
+    layer.sublayers.forEach((sublayer, index) => {
+      const mapLayer = map.findLayerById(sublayer.elid)
+
+      const newIndex = topIndex - index
+
+      console.log(
+        `${sublayer.title} -> ${newIndex}`
+      )
+
+      if (mapLayer) {
+        map.reorder(mapLayer, newIndex)
+      }
     })
-      let resetlayers = ['highestag','abandonedag','brownfields',
-        'abandonedmines','landscapeIntactness','landscape','migratoryBirdStopoverWind',] 
-        resetlayers.forEach((layer, index) => {
-        let mapLayer = map.findLayerById(layer);
-        map.reorder(mapLayer,index);
-      })
-   
-  },
+},
+
+  //set overall group visibility
   setGroupVisibility(group){
     this.toggleGroupVisibility(group)
       // Custom behavior for expansion groups - allow native lands visible anytime
@@ -607,6 +582,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     //update state overlays
     this.filterStateOverlays()
   },
+  //turns off subgroup layers when group is toggled
   toggleGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;
     group.subheaders.forEach(subheader => {
@@ -631,7 +607,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       })
     })
   },
-  //sets overall group layer visibility
+  //sets subgroup layer visibility (first checkbox)
   setLayerVisibility(layer) {
     let map = document.querySelector("arcgis-map").map;
     let sublayers = layer.sublayers
@@ -707,6 +683,8 @@ export const useMapStore = defineStore('mapStore', () => ({
     }
     this.filterStateOverlays()
   },
+
+  //these were used for the reporting these will all be updated
   //function to create the buffer
   createBuffer(e){
     if(this.bufferSize > 36){
@@ -1054,8 +1032,6 @@ export const useMapStore = defineStore('mapStore', () => ({
    
     
   },
-
-
   getHistogram(buffer, item) {
     const rasters = [
       'pvr_pctls_merged_FINAL',
@@ -1101,7 +1077,6 @@ export const useMapStore = defineStore('mapStore', () => ({
         });
     });
   },
-
   fetchRasterIds() {
     const imageServerUrl =
       'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer'
@@ -1145,34 +1120,13 @@ export const useMapStore = defineStore('mapStore', () => ({
 
 
 
-  changeNativeOpacity(opacity){
-      let map = document.querySelector("arcgis-map").map;
-      let native = map.findLayerById('nativeLands');
-      native.opacity = opacity;
-  },
+  //responds to opacity slider in map, changes opacity of all layers
   changeOpacity(){
   let map = document.querySelector("arcgis-map").map;
   //let layersList = [avoid, minimize, opportunities]
   map.layers.forEach(layer => layer.opacity = this.opacity)
   },
-  fadeLayer(layer, start, end, duration = 300) {
-  return new Promise(resolve => {
-    const startTime = performance.now();
-
-    function animate(time) {
-      const t = Math.min((time - startTime) / duration, 1);
-      layer.opacity = start + (end - start) * t;
-
-      if (t < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        resolve();
-      }
-    }
-
-    requestAnimationFrame(animate);
-  });
-  },
+  //these two functions respond to radio layers in toc
   changeCommunityStyle(style){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('cjest');
@@ -1196,7 +1150,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       layer2.visible = false
     }
   },
-  //when change layer visibility //when change filter visible 
+  //show hide state overlays with more info button 
   filterStateOverlays(){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('states');

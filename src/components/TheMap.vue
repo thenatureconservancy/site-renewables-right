@@ -256,7 +256,7 @@ onMounted(() => {
     labelingInfo: [
       {
         labelPlacement: 'always-horizontal',
-     
+
         labelExpressionInfo: {
           expression: "'ℹ️ View ' + $feature.STATE_NAME + ' Info'",
         },
@@ -322,7 +322,6 @@ onMounted(() => {
     },
   })
 
-  
   //defining graphic layers to be used with the buffer tool
   let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
   let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
@@ -350,6 +349,7 @@ onMounted(() => {
       lassoWind,
       migratoryBirdStopoverWind,
       landscapeIntactness,
+      birdsWind,
       qualitywater,
       whoopingCraneSolar,
       whoopingCraneWind,
@@ -359,7 +359,6 @@ onMounted(() => {
       prairieGrouse,
       floodPlainsWetlands,
       bigGameSolar,
-      birdsWind,
       bats,
       nativeLands,
       states,
@@ -630,6 +629,23 @@ onMounted(() => {
   >
     <arcgis-scale-bar position="bottom-right" bar-style="line" unit="metric"></arcgis-scale-bar>
     <arcgis-zoom position="top-left"></arcgis-zoom>
+    <q-btn
+      square
+      padding="2px"
+      flat
+      unelevated=""
+      class=""
+      size="sm"
+      color="grey-9"
+      label="*lon, lat"
+      style="position: absolute; top: 50px; right: 20px; z-index: 999"
+    >
+      <q-tooltip
+        ><p class="text-body2 text-white q-mb-none">
+          For coordinates, use format: longitude, latitude ie: -75.16, 39.95
+        </p></q-tooltip
+      >
+    </q-btn>
     <!--arcgis-legend position="bottom-left"></arcgis-legend-->
     <arcgis-search
       position="top-right"
@@ -639,23 +655,7 @@ onMounted(() => {
       <BasemapSwitcher />
     </div>
     <!-- help button next to search-->
-    <q-btn
-      square
-      padding="2px"
-      flat
-      unelevated=""
-      class=""
-      size="md"
-      color="grey-9"
-      icon="o_info"
-      style="position: absolute; top: 16px; right: 15px; z-index: 999"
-    >
-      <q-tooltip
-        ><p class="text-body2 text-white q-mb-none">
-          For coordinates, use format: longitude, latitude (ie: -75.16, 39.95)
-        </p></q-tooltip
-      >
-    </q-btn>
+
     <!-- opacity control knob-->
     <q-btn
       size="md"
