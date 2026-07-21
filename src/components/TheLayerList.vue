@@ -269,7 +269,7 @@ async function scrollToElement(layer, elid) {
                     @update:model-value="
                       layer.title == 'Community Considerations'
                         ? mapStore.changeCommunityStyle(sublayer.style)
-                        : mapStore.changeBuildoutLayer(sublayer.title)
+                        : mapStore.changeBuildoutLayer(sublayer.elid)
                     "
                   />
                 </q-item-section>
