@@ -245,7 +245,7 @@ async function scrollToElement(layer, elid) {
 
             <q-list v-else dense class="q-pb-md">
               <p
-                class="text-caption text-grey-8 q-ml-md text-italic q-mb-sm"
+                class="text-caption text-grey-8 q-pt-md q-px-md text-italic"
                 v-if="layer.title == 'Community Considerations'"
               >
                 *Click census tract on the map to view summary info
@@ -356,7 +356,7 @@ async function scrollToElement(layer, elid) {
           <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'">
             <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
               <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
-                *Energy type - filters the conservation values layers below.
+                *Energy type filters the conservation layers below.
               </div>
               <q-chip
                 clickable
@@ -421,7 +421,6 @@ async function scrollToElement(layer, elid) {
                   class="q-ml-xs"
                 />
               </q-chip>
-
             </div>
           </div>
 
@@ -655,6 +654,10 @@ async function scrollToElement(layer, elid) {
 </template>
 
 <style>
+.energy-chip {
+  border: 1px solid #64b45b;
+  font-weight: 450;
+}
 .legend-swatch {
   width: 20px;
   height: 20px;
