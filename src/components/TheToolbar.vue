@@ -61,7 +61,7 @@ const showFilter = ref(true)
       </div>
     </q-slide-transition>
   </div>
-  <div id="energyType" class="" style="border-bottom: 1px solid lightgrey">
+  <!--div id="energyType" class="" style="border-bottom: 1px solid lightgrey">
     <q-toolbar class="q-ma-none q-pa-none">
       <p class="text-overline q-ml-sm q-mb-none">
         ENERGY TYPE FILTER
@@ -142,5 +142,5 @@ const showFilter = ref(true)
         </div>
       </div>
     </q-slide-transition>
-  </div>
+  </div-->
 </template>

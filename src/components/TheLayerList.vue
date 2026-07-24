@@ -1,12 +1,12 @@
 r
 <script setup>
 import { useMapStore } from '@/stores/map'
+import { laSolarPanelSolid } from '@quasar/extras/line-awesome'
 import { ref, nextTick, computed } from 'vue'
 import draggable from 'vuedraggable'
 
 const mapStore = useMapStore()
 const activeOpacityLayer = ref(null)
-
 computed(() => {
   return {
     animation: 200,
@@ -353,7 +353,85 @@ async function scrollToElement(layer, elid) {
           </div>
 
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
-          <q-expansion-item v-else v-model="layer.expanded" dense header-class="" expand="true">
+          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'">
+            <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
+              <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
+                *Energy type - filters the conservation values layers below.
+              </div>
+              <q-chip
+                clickable
+                @click="mapStore.filterLayers('wind')"
+                :outline="mapStore.category !== 'wind'"
+                :color="mapStore.category === 'wind' ? 'green-1' : 'grey-9'"
+                :text-color="mapStore.category === 'wind' ? 'green-9' : 'grey-9'"
+                class="q-px-sm q-py-xs energy-chip"
+              >
+                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                  wind_power
+                </span>
+
+                Wind
+
+                <q-icon
+                  v-if="mapStore.category === 'wind'"
+                  name="check"
+                  size="16px"
+                  class="q-ml-xs"
+                />
+              </q-chip>
+              <q-chip
+                clickable
+                @click="mapStore.filterLayers('solar')"
+                :outline="mapStore.category !== 'solar'"
+                :color="mapStore.category === 'solar' ? 'green-1' : 'grey-9'"
+                :text-color="mapStore.category === 'solar' ? 'green-9' : 'grey-9'"
+                class="q-px-sm q-py-xs energy-chip"
+              >
+                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                  solar_power
+                </span>
+
+                Solar
+
+                <q-icon
+                  v-if="mapStore.category === 'solar'"
+                  name="check"
+                  size="16px"
+                  class="q-ml-xs"
+                />
+              </q-chip>
+              <q-chip
+                clickable
+                @click="mapStore.filterLayers('floating solar')"
+                :outline="mapStore.category !== 'floating solar'"
+                :color="mapStore.category === 'floating solar' ? 'green-1' : 'grey-9'"
+                :text-color="mapStore.category === 'floating solar' ? 'green-9' : 'grey-9'"
+                class="q-px-sm q-py-xs energy-chip"
+              >
+                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                  water_lux
+                </span>
+
+                Floating Solar
+
+                <q-icon
+                  v-if="mapStore.category === 'floating solar'"
+                  name="check"
+                  size="16px"
+                  class="q-ml-xs"
+                />
+              </q-chip>
+
+            </div>
+          </div>
+
+          <q-expansion-item
+            v-if="!isDuplicateSubheader(item, layer)"
+            v-model="layer.expanded"
+            dense
+            header-class=""
+            expand="true"
+          >
             <template #header>
               <div class="self-center">
                 <q-checkbox
@@ -676,5 +754,75 @@ async function scrollToElement(layer, elid) {
 
 .list-group-item i {
   cursor: pointer;
+}
+.energy-filter-panel {
+  padding: 14px 16px 16px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fbfcfb;
+}
+
+.filter-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+
+.filter-info-icon {
+  color: #737373;
+}
+
+.filter-help {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #606060;
+}
+
+.energy-filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.energy-filter-btn {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid #d7dcd7;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+
+  .q-icon {
+    color: #777;
+  }
+
+  &:hover {
+    background: #f6faf5;
+    border-color: #9fca99;
+  }
+}
+
+.energy-filter-btn--active {
+  background: #eef7ec;
+  border-color: #4f9f40;
+  color: #1f1f1f;
+
+  .q-icon {
+    color: #4f9f40;
+  }
+
+  .selected-check {
+    color: #4f9f40;
+  }
 }
 </style>

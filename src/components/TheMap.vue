@@ -53,7 +53,7 @@ onMounted(() => {
   let bats = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'bats',
-    sublayers: [{ id: 25 }],
+    sublayers: [{ id: 38 }],
     visible: false,
     opacity: 1,
   })
@@ -67,21 +67,21 @@ onMounted(() => {
   let birdsWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'birdsWind',
-    sublayers: [{ id: 11 }],
+    sublayers: [{ id: 40 }],
     visible: false,
     opacity: 1,
   })
   let prairieGrouse = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'prairieGrouse',
-    sublayers: [{ id: 30 }],
+    sublayers: [{ id: 39 }],
     visible: false,
     opacity: 1,
   })
   let protectedAreas = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'protectedAreas',
-    sublayers: [{ id: 6 }],
+    sublayers: [{ id: 42 }],
     visible: false,
     opacity: 1,
   })
@@ -94,28 +94,28 @@ onMounted(() => {
   let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'threatenedEndangeredSpecies',
-    sublayers: [{ id: 18 }],
+    sublayers: [{ id: 46 }],
     visible: false,
     opacity: 1,
   })
   let floodPlainsWetlands = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'floodPlainsWetlands',
-    sublayers: [{ id: 3 }],
+    sublayers: [{ id: 49 }],
     visible: false,
     opacity: 1,
   })
   let whoopingCraneSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopingCraneSolar',
-    sublayers: [{ id: 28 }],
+    sublayers: [{ id: 41 }],
     visible: false,
     opacity: 1,
   })
   let whoopingCraneWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'whoopingCraneWind',
-    sublayers: [{ id: 29 }],
+    sublayers: [{ id: 47 }],
     visible: false,
     opacity: 1,
   })
@@ -128,14 +128,14 @@ onMounted(() => {
   let landscapeIntactness = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'landscapeIntactness',
-    sublayers: [{ id: 23 }],
+    sublayers: [{ id: 44 }],
     visible: false,
     opacity: 1,
   })
   let migratoryBirdStopoverWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'migratoryBirdStopoverWind',
-    sublayers: [{ id: 13 }],
+    sublayers: [{ id: 45 }],
     visible: false,
     opacity: 1,
   })

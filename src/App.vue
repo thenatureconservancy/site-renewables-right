@@ -118,7 +118,7 @@ const width = ref(window.innerWidth / 2.2)
 
         <q-btn
           color="primary"
-          label="Info"
+          label="Layer Info"
           flat
           icon="info_outline"
           unelevated

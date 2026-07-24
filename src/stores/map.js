@@ -1159,9 +1159,16 @@ export const useMapStore = defineStore('mapStore', () => ({
       layer.definitionExpression = "STATE_NAME = 'N/A'"
     }
     else{
-       layer.definitionExpression = this.category == 'solar' ? 
-       "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'":
-       "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
+       if(this.category == 'solar'){
+        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'"
+       } 
+       if(this.category == 'wind'){
+        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
+       }
+       if(this.category == 'floating solar'){
+        layer.definitionExpression = "STATE_NAME = 'Maine'"
+       }
+       
     }
 
   }

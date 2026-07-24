@@ -12,7 +12,7 @@ const filterHeight = 58
 
 const scrollHeight = computed(() => ({
   height: `calc(100vh - ${
-    280 + (showTools.value ? toolsHeight : 0) + (showFilter.value ? filterHeight : 0)
+    160 + (showTools.value ? toolsHeight : 0) + (showFilter.value ? filterHeight : 0)
   }px)`,
 }))
 </script>
@@ -25,13 +25,14 @@ const scrollHeight = computed(() => ({
       <q-toolbar class="q-ma-none q-pa-none">
         <p class="text-overline q-ml-sm q-mb-none">
           TOOLS
-          <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat class="q-ml-sm">
+          <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" 
+          flat class="q-ml-sm">
             <q-menu>
               <div class="q-pa-md" style="width: 300px">
                 <p class="">
                   <b>Site report:</b> Click this button to drop a pin on the map, choose buffer
                   size, and generate an intersection summary. <br /><br />
-                  <b>Info:</b> This button opens the info panel with a table of contents for each of
+                  <b>Layer Info:</b> This button opens the info panel with a table of contents for each of
                   the data layers and their descriptions.
                 </p>
               </div>
@@ -61,7 +62,7 @@ const scrollHeight = computed(() => ({
             ></q-btn>
             <q-btn
               class="q-ml-sm"
-              label="Info"
+              label="Layer Info"
               size="12px"
               color="primary"
               icon="o_info"
@@ -74,7 +75,7 @@ const scrollHeight = computed(() => ({
         </div>
       </q-slide-transition>
     </div>
-    <div id="energyType" class="" style="border-bottom: 1px solid lightgrey">
+    <!--div id="energyType" class="" style="border-bottom: 1px solid lightgrey">
       <q-toolbar class="q-ma-none q-pa-none">
         <p class="text-overline q-ml-sm q-mb-none">
           ENERGY TYPE FILTER
@@ -161,11 +162,11 @@ const scrollHeight = computed(() => ({
           </div>
         </div>
       </q-slide-transition>
-    </div>
+    </div-->
 
     <q-toolbar class="q-ma-none q-pa-none">
       <p class="text-overline q-ml-sm q-mb-none">
-        DATA LAYERS ( {{ mapStore.category }} filter applied )
+        DATA LAYERS
         <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat class="q-ml-sm">
           <q-menu>
             <div class="q-pa-md" style="width: 300px">
