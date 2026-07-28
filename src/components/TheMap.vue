@@ -53,7 +53,7 @@ onMounted(() => {
   let bats = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'bats',
-    sublayers: [{ id: 38 }],
+    sublayers: [{ id: 71 }],
     visible: false,
     opacity: 1,
   })
@@ -94,7 +94,7 @@ onMounted(() => {
   let threatenedEndangeredSpecies = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'threatenedEndangeredSpecies',
-    sublayers: [{ id: 46 }],
+    sublayers: [{ id: 70 }],
     visible: false,
     opacity: 1,
   })
@@ -251,7 +251,7 @@ onMounted(() => {
     // Added California to your filter expression
     definitionExpression:
       "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'",
-    minScale: 9244648,
+    minScale: 9244649,
 
     labelingInfo: [
       {

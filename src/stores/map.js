@@ -230,7 +230,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
       },
-      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
+      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating solar', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
       
     ]
     },
@@ -597,7 +597,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         }
         
         if(layer.filter){
-          console.log('setting visibility for ' + layer.elid + ' to ' + visible)
+        console.log('setting visibility for ' + layer.elid + ' to ' + visible)
         sublayer.visible = visible
         }
 
@@ -622,6 +622,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   setSublayerVisibility(elid, checked) {
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(elid);
+    console.log(layer)
     layer.visible = checked
   },
   //sets opacity
@@ -639,7 +640,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     console.log(cat)
     this.category = cat
     let map = document.querySelector("arcgis-map").map;
-    if (this.category == 'floating'){
+    if (this.category == 'floating solar'){
       this.layers.forEach(layer => {
         layer.subheaders.forEach(subheader => {
           subheader.sublayers.forEach(layer => {
@@ -1032,22 +1033,18 @@ export const useMapStore = defineStore('mapStore', () => ({
    
     
   },
-  getHistogram(buffer, item) {
+  getHistogram(buffer) {
     const rasters = [
-      'pvr_pctls_merged_FINAL',
-      'birds_COG',
-      'Connectivity_04_20260304',
-      'BigGame_08',
-      'IntactHabitats_04',
-      'Migratory_Bird_Stopover',
-      'OtherBiodiversity_09',
-      'PrairieGrouseAndSageGrouse_Hise',
-      'ProtectedAreas_COG_NEW',
-      'ResilientAndConnected_COG2',
-      'WhoopingCraneSolar_Hise',
-      'WhoopingCraneWind_Hise',
-      'TE_Species_03',
-      'FloodPlainsAndWetlands2'
+      'Bats_10_Final_02_NoCA',
+      'Birds_05_NoCA',
+      'IntactHabitats_HMI200_20260518_NoCA_R',
+      'Migratory_Bird_Stopover_NoCA',
+      'PrairieGrouseAndSageGrouse_20260518_NoCA_R',
+      'ProtectedAreas_01_Final_NoCA',
+      'TE_Species_03_20260630_NoCA',
+      'Water_02_reclass_20260630_NoCA',
+      'WhoopingCraneSolar_20260408_NoCA_R',
+      'WhoopingCraneWind_20260408_NoCA_R'
     ];
 
     const map = document.querySelector("arcgis-map").map;
@@ -1166,7 +1163,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
        }
        if(this.category == 'floating solar'){
-        layer.definitionExpression = "STATE_NAME = 'Maine'"
+        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
        }
        
     }

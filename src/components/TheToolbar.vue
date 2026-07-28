@@ -38,6 +38,7 @@ const showFilter = ref(true)
       <div v-show="showTools">
         <div class="q-pb-md">
           <q-btn
+          flat
             color="primary"
             size="12px"
             icon="table_chart"
