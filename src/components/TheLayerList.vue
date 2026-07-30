@@ -81,6 +81,18 @@ function customLegend(sublayer) {
       highLabel: 'High',
       gradient: 'linear-gradient(to right, #e8ecff, #5b6fd6)',
     },
+    abandonedmines: {
+      type: 'symbol',
+      shape: 'triangle',
+      color: '#c78b2c',
+      label: 'Abandoned Mines',
+    },
+    brownfields: {
+      type: 'symbol',
+      shape: 'diamond',
+      color: '#56b7b1',
+      label: 'Brownfields',
+    },
   }
   return legends[sublayer.elid] || null
 }
@@ -213,6 +225,24 @@ async function scrollToElement(layer, elid) {
                       <div class="legend-swatch" v-if="sublayer.legendImg">
                         <img :src="legendImageSrc(sublayer)" />
                       </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                        class="custom-symbol-legend q-mt-xs"
+                      >
+                        <div class="custom-symbol-item">
+                          <span
+                            v-if="customLegend(sublayer).shape === 'triangle'"
+                            class="custom-symbol-triangle"
+                            :style="{ borderBottomColor: customLegend(sublayer).color }"
+                          />
+
+                          <span
+                            v-else
+                            class="custom-symbol-diamond"
+                            :style="{ backgroundColor: customLegend(sublayer).color }"
+                          />
+                        </div>
+                      </div>
                     </q-item-section>
 
                     <q-item-section side>
@@ -302,6 +332,24 @@ async function scrollToElement(layer, elid) {
                       />
 
                       <span>{{ legendItem.label }}</span>
+                    </div>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                    class="custom-symbol-legend q-mt-xs"
+                  >
+                    <div class="custom-symbol-item">
+                      <span
+                        v-if="customLegend(sublayer).shape === 'triangle'"
+                        class="custom-symbol-triangle"
+                        :style="{ borderBottomColor: customLegend(sublayer).color }"
+                      />
+
+                      <span
+                        v-else
+                        class="custom-symbol-diamond"
+                        :style="{ backgroundColor: customLegend(sublayer).color }"
+                      />
                     </div>
                   </div>
 
@@ -496,6 +544,24 @@ async function scrollToElement(layer, elid) {
                           <span>{{ legendItem.label }}</span>
                         </div>
                       </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                        class="custom-symbol-legend q-mt-xs"
+                      >
+                        <div class="custom-symbol-item">
+                          <span
+                            v-if="customLegend(sublayer).shape === 'triangle'"
+                            class="custom-symbol-triangle"
+                            :style="{ borderBottomColor: customLegend(sublayer).color }"
+                          />
+
+                          <span
+                            v-else
+                            class="custom-symbol-diamond"
+                            :style="{ backgroundColor: customLegend(sublayer).color }"
+                          />
+                        </div>
+                      </div>
 
                       <q-slider
                         v-if="activeOpacityLayer === sublayer.elid"
@@ -598,6 +664,24 @@ async function scrollToElement(layer, elid) {
                       />
 
                       <span>{{ legendItem.label }}</span>
+                    </div>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                    class="custom-symbol-legend q-mt-xs"
+                  >
+                    <div class="custom-symbol-item">
+                      <span
+                        v-if="customLegend(sublayer).shape === 'triangle'"
+                        class="custom-symbol-triangle"
+                        :style="{ borderBottomColor: customLegend(sublayer).color }"
+                      />
+
+                      <span
+                        v-else
+                        class="custom-symbol-diamond"
+                        :style="{ backgroundColor: customLegend(sublayer).color }"
+                      />
                     </div>
                   </div>
 
@@ -827,5 +911,23 @@ async function scrollToElement(layer, elid) {
   .selected-check {
     color: #4f9f40;
   }
+}
+.custom-symbol-triangle {
+  width: 0;
+  height: 0;
+  display: block;
+
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid;
+
+  margin-top: -2px;
+}
+
+.custom-symbol-diamond {
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  display: inline-block;
 }
 </style>

@@ -60,7 +60,7 @@ onMounted(() => {
   let bigGameSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'bigGameSolar',
-    sublayers: [{ id: 10 }],
+    sublayers: [{ id: 76 }],
     visible: false,
     opacity: 1,
   })
@@ -85,9 +85,10 @@ onMounted(() => {
     visible: false,
     opacity: 1,
   })
-  let resilientConnected = new TileLayer({
-    url: 'https://tiles.arcgis.com/tiles/F7DSX1DSNSiWmOqh/arcgis/rest/services/RCN_Simple/MapServer',
+  let resilientConnected = new MapImageLayer({
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'resilientConnected',
+     sublayers: [{ id: 80 }],
     visible: false,
     opacity: 1,
   })

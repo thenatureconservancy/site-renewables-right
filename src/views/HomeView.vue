@@ -54,15 +54,10 @@ onMounted(() => {
     backdrop-filter="blur(4px)"
     full-width=""
   >
-    <q-card class="q-pa-none q-ma-none no-scrollbar" style="overflow: hidden">
+    <q-card class="q-pa-none q-ma-none no-scrollbar full-height" style="overflow: hidden">
       <div class="row q-pa-none q-ma-none">
         <q-card-section class="col-sm-5 col-md-6 col-lg-6 q-pa-none q-ma-none">
-          <q-img
-            src="/srr.png"
-            style="object-fit: contain; max-width: 100%; max-height: 100%; margin-bottom: 0px"
-            alt="windmills"
-          >
-          </q-img>
+          <q-img src="/srr.jpeg" class="full-height" fit="cover"></q-img>
         </q-card-section>
 
         <q-card-section

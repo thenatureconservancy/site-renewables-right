@@ -303,10 +303,10 @@ export const useMapStore = defineStore('mapStore', () => ({
         {index: 13, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
           longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines <a href="https://mrdata.usgs.gov/usmin/" target="_blank">(USGS geospatial database).</a> Users are advised that the data are of inconsistent quality and better data may be available from state mining agencies. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', 
-          totalArea: 0, percentOfTotal: 0, legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGwSURBVDhP5ZPLbtNQEECPnbhJmgewARaULd+B+AEWfCoLlhVCbVFRIVIqmlRNY6VJareJUz9i+/pF7EYRUR1vyI6zudLM6OjeOzNSsoQdIq/OnbFzYeGT4yRmttCJREJV3qfZbCLLxXfYmo3jGF94jK0BPfOMnv0TP/CyeBFbhVEcYnpzruw2v+xDOs435u6UMApWFflsFVrCZPDQ5bJ8zLD1A63+m75xkcWLyBVGUcRc6FyKU+zGLeEzC2f/jm54hBFMsvw2coWucLj1B1yXzgjrNkoDgppNXzlF81UWnrOqfEqucGRfo4pzzNaQqCyyWFIK8F9MGYs+mjXKYnlsCNMOuq7LTdBlIneh7pPIj11NSglSLUClTV+0s7q8jq+F6TiKwGdq64ziC6YVFXlvOajSYz49pDJolR6q1Obe0nI7vhamH/3gGZwb39HLV4hafjellsBQhnRmJ9jB05r1pqRC3R5zdPOFUaWDU71HLmU1GyyXh6r3nJeLd7x/+5FXzTcb27MWpv9x50z4OviMGc6IpOIB3pOrfDj4xOvGAYqirKJ/CXdF7tj8C/+dEP4AGLv06o7CI14AAAAASUVORK5CYII="},
+          totalArea: 0, percentOfTotal: 0, legendImg: ''},
         {index: 14, elid: 'brownfields', filter: true, visible: false, visibleModel: false, opacity: 0.9,
           category: 'both', title: 'Brownfields over 10 acres', inBuffer: false, inExtent: false, description: 'short description',
-          longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAC/SURBVDhPY/wPBAxUBExQmmpg1EDKAcFYnjJ5CsOurdsZnr15ySAlIs7g5u3JkJObA5XFBHgNTI1PYpD5w8cQpmzHoMAnwfDg0wuGVXcPMTxh+cQwe+E8qCpUgNNAkMvenrjDUGYYBhVBgK7zqxiELVSwuhRnGIK8CXIZNgASB8ljAzgNBIUZyJvYAEgcJI8N4DQQFAGgMMMGQOIgeWwAp4Gg2ARFADYAEgfJYwP0i2UYoGo6JAdQPeuNOAMZGACQ7mcGtSS9RgAAAABJRU5ErkJggg=="},
+          longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0,  legendImg: ""},
 	      ]   
     },
   ]},
@@ -622,6 +622,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   setSublayerVisibility(elid, checked) {
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(elid);
+    console.log(elid)
     console.log(layer)
     layer.visible = checked
   },
@@ -746,8 +747,8 @@ export const useMapStore = defineStore('mapStore', () => ({
       const graphic = bufferLayer.graphics.getItemAt(0)
       graphic.geometry = buffer
     }
-   // this.getHistogram(buffer, 'test')
-  this.fetchRasterIds()
+    this.getHistogram(buffer)
+  //this.fetchRasterIds()
   
   },
   oldExtras(){
