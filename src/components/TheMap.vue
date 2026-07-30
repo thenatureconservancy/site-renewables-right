@@ -88,7 +88,7 @@ onMounted(() => {
   let resilientConnected = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'resilientConnected',
-     sublayers: [{ id: 80 }],
+    sublayers: [{ id: 80 }],
     visible: false,
     opacity: 1,
   })
@@ -225,8 +225,8 @@ onMounted(() => {
     id: 'imageLayer',
   })
   //water limited areas
-  let waterLimited = new TileLayer({
-    url: 'https://tiles.arcgis.com/tiles/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLand/MapServer',
+  let waterLimited = new VectorTileLayer({
+    url: 'https://vectortileservices.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLands_VTL/VectorTileServer',
     id: 'waterLimited',
     visible: false,
   })
