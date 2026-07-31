@@ -64,44 +64,23 @@ export const useMapStore = defineStore('mapStore', () => ({
    subheaders: [
     {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false,
       sublayers:  [
-         {
-        index: 10,
-        mapIndex: 25,
-        elid: 'bats',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Bats',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: "Bat mortality has been documented at wind energy facilities across North America. Because bats concentrate in large numbers and have low reproductive rates, the viability of their populations is particularly vulnerable to adult mortality events. Therefore, caution is warranted when undertaking any activity that may adversely affect known bat populations. <br/><br/> To represent bat presence, we display roost and detection data (via acoustical recorders) collected from every state via the <a href='https://www.nabatmonitoring.org/' target='_blank'>North America Bat Monitoring Program.</a> Threatened and endangered species are shown in blue, non-listed species in gray. These areas on the map may pose a particular threat to bats from wind.",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: '',
-        pngLegend: '\\legend\\bat.png',
-        pngWidth: '220'
-
-      },
       {
-        index: 0,
-        mapIndex: 10,
-        elid: 'bigGameSolar',
+        index: 4,
+        mapIndex: 6,
+        elid: 'protectedAreas',
         filter: true,
         visible: false,
         visibleModel: false,
         opacity: 0.9,
-        category: 'solar',
-        title: 'Big Game',
+        category: 'both',
+        title: 'Protected Areas',
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: "Energy development may alter the movement of big game animals and increase rates of mortality, particularly along migration routes and in winter ranges. This layer includes migration areas for elk, mule deer, and pronghorn antelope across the Western United States, including annual ranges, corridors, stopovers, and winter ranges <a href='https://westernmigrations.net/' target='_blank'>(US Geological Survey Western Migrations)</a>, supplemented with state-specific data from North Dakota, Montana, and New Mexico state wildlife agency data.",
+        longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
         totalArea: 0,
         percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHUlEQVR4nGMUzvD6z0ABYKJE86gBowaMGjCYDAAAa/wB5OuA0X4AAAAASUVORK5CYII=' // #c8c8c8
       },
       {
         index: 2,
@@ -121,42 +100,8 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
       },
-      {
-        index: 3,
-        mapIndex: 15,
-        elid: 'prairieGrouse',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Prairie Grouse',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Grouse species in the central U.S. have experienced substantial population declines since the early 20th century and may be further threatened by improperly sited energy development. To prevent grouse displacement, we mapped important habitat for the following species: Attwater’s prairie-chicken (Tympanuchus cupido attwateri), Columbian sharp-tailed grouse (T. phasianellus columbianus), greater prairie-chicken (T. cupido), greater sage-grouse (Centrocercus urophasianus), Gunnison sage-grouse (C. minimus), lesser prairie-chicken (T. pallidicinctus), and plains sharp-tailed grouse (T. phasianellus jamesi).',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
-      },
-      {
-        index: 4,
-        mapIndex: 6,
-        elid: 'protectedAreas',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Protected Areas',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHUlEQVR4nGMUzvD6z0ABYKJE86gBowaMGjCYDAAAa/wB5OuA0X4AAAAASUVORK5CYII=' // #c8c8c8
-      },
+   
+    
       {
         index: 5,
         mapIndex: 4,
@@ -193,6 +138,24 @@ export const useMapStore = defineStore('mapStore', () => ({
         totalArea: 0,
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
+      },
+         {
+        index: 3,
+        mapIndex: 15,
+        elid: 'prairieGrouse',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'both',
+        title: 'Prairie Grouse',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'Grouse species in the central U.S. have experienced substantial population declines since the early 20th century and may be further threatened by improperly sited energy development. To prevent grouse displacement, we mapped important habitat for the following species: Attwater’s prairie-chicken (Tympanuchus cupido attwateri), Columbian sharp-tailed grouse (T. phasianellus columbianus), greater prairie-chicken (T. cupido), greater sage-grouse (Centrocercus urophasianus), Gunnison sage-grouse (C. minimus), lesser prairie-chicken (T. pallidicinctus), and plains sharp-tailed grouse (T. phasianellus jamesi).',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
       },
       {
         index: 7,
@@ -231,30 +194,51 @@ export const useMapStore = defineStore('mapStore', () => ({
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
       },
       {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating solar', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
-      
-    ]
-    },
-    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false,
-      sublayers:  [
-          {
-        index: 1,
-        mapIndex: 11,
-        elid: 'birdsWind',
+       
+      {
+        index: 0,
+        mapIndex: 10,
+        elid: 'bigGameSolar',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'solar',
+        title: 'Big Game',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: "Energy development may alter the movement of big game animals and increase rates of mortality, particularly along migration routes and in winter ranges. This layer includes migration areas for elk, mule deer, and pronghorn antelope across the Western United States, including annual ranges, corridors, stopovers, and winter ranges <a href='https://westernmigrations.net/' target='_blank'>(US Geological Survey Western Migrations)</a>, supplemented with state-specific data from North Dakota, Montana, and New Mexico state wildlife agency data.",
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
+      },
+      {
+        index: 10,
+        mapIndex: 25,
+        elid: 'bats',
         filter: true,
         visible: false,
         visibleModel: false,
         opacity: 0.9,
         category: 'wind',
-        title: 'Birds at Risk from Wind',
+        title: 'Bats',
         inBuffer: false,
         inExtent: false,
         description: 'short description',
-        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
+        longDescription: "Bat mortality has been documented at wind energy facilities across North America. Because bats concentrate in large numbers and have low reproductive rates, the viability of their populations is particularly vulnerable to adult mortality events. Therefore, caution is warranted when undertaking any activity that may adversely affect known bat populations. <br/><br/> To represent bat presence, we display roost and detection data (via acoustical recorders) collected from every state via the <a href='https://www.nabatmonitoring.org/' target='_blank'>North America Bat Monitoring Program.</a> Threatened and endangered species are shown in blue, non-listed species in gray. These areas on the map may pose a particular threat to bats from wind.",
         totalArea: 0,
         percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
+        legendImg: '',
+        pngLegend: '\\legend\\bat.png',
+        pngWidth: '220'
+
       },
-      
+    ]
+    },
+    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false,
+      sublayers:  [
+     
      {
         index: 12,
         mapIndex: 24,
@@ -273,6 +257,25 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
       },
+           {
+        index: 1,
+        mapIndex: 11,
+        elid: 'birdsWind',
+        filter: true,
+        visible: false,
+        visibleModel: false,
+        opacity: 0.9,
+        category: 'wind',
+        title: 'Birds at Risk from Wind',
+        inBuffer: false,
+        inExtent: false,
+        description: 'short description',
+        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
+        totalArea: 0,
+        percentOfTotal: 0,
+        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
+      },
+      
         {
         index: 11,
         mapIndex: 13,
