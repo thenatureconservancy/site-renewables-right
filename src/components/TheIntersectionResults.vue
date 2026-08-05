@@ -1,19 +1,22 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { generateSiteReport } from '@/utils/generateSiteReport'
 
-let mapStore = useMapStore()
+const mapStore = useMapStore()
 
 // Draggable panel position
 const panelX = ref(window.innerWidth - 320)
 const panelY = ref(140)
+const showCustom = ref(false)
 const isDragging = ref(false)
+const includeDescriptions = ref(false)
 const dragOffset = { x: 0, y: 0 }
-
-// For testing - set to false when you have real data
 
 // Track which category headers are expanded
 const expandedCategories = ref({})
+
+const hasSelection = computed(() => !!mapStore.currentPoint)
 
 // Get all visible layers organized by category
 const intersectionResults = computed(() => {
@@ -25,7 +28,6 @@ const intersectionResults = computed(() => {
 
       group.subheaders?.forEach((subheader) => {
         subheader.sublayers?.forEach((sublayer) => {
-          // Only include sublayers that match current category or are 'both'
           if (
             (sublayer.category === mapStore.category || sublayer.category === 'both') &&
             sublayer.filter
@@ -44,32 +46,33 @@ const intersectionResults = computed(() => {
   return results
 })
 
-// Calculate total area from results
+// --- Unified "did this layer hit?" test (raster area OR vector intersect) ---
+const layerHit = (layer) => {
+  if (layer.intersected === true) return true // vector/point layers
+  if ((layer.totalArea || 0) > 0) return true // raster layers
+  return false
+}
+
+// Calculate total area from results (rasters only contribute area)
 const totalArea = computed(() => {
   let total = 0
   Object.values(intersectionResults.value).forEach((categoryLayers) => {
     categoryLayers.forEach((layer) => {
-      // Add demo data if showing demo
-      const area = mapStore.showDemo
-        ? layer.totalArea || Math.random() * 5000
-        : layer.totalArea || 0
-      total += area
+      total += layer.totalArea || 0
     })
   })
   return total
 })
 
 // Compute inactive state
-const isInactive = computed(() => totalArea.value === 0 && !mapStore.showDemo)
+const isInactive = computed(() => !hasSelection.value)
 
 // Watch for state changes and adjust panel position
 watch(isInactive, (newIsInactive) => {
   if (newIsInactive) {
-    // Inactive state - smaller panel positioned further left
     panelX.value = window.innerWidth - 320
     panelY.value = 140
   } else {
-    // Active state - larger panel positioned closer to address bar
     panelX.value = window.innerWidth - 430
     panelY.value = 110
   }
@@ -77,29 +80,50 @@ watch(isInactive, (newIsInactive) => {
 
 // Format area for display
 const formatArea = (area) => {
-  if (area >= 1000) {
-    return `${(area / 1000).toFixed(1)}k ha`
+  const value = area || 0
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}k ha`
   }
-  return `${area.toFixed(0)} ha`
+  return `${value.toFixed(0)} ha`
 }
 
-// Calculate percentage
+// Format the right summary per layer type
+const formatSummary = (layer) => {
+  if (layer.summaryType === 'count') {
+    return `${layer.count || 0} found`
+  }
+  if (layer.summaryType === 'boolean') {
+    return layer.intersected ? 'Present' : 'Not present'
+  }
+  // default = raster area layer
+  return formatArea(layer.totalArea)
+}
+
+// True only for raster layers (so we know when to show the % stat)
+const isRasterLayer = (layer) => layer.summaryType == null
+
+// Calculate percentage (raster layers only)
 const getPercentage = (area) => {
-  if (totalArea.value === 0) return 0
-  return ((area / totalArea.value) * 100).toFixed(1)
+  const denom = mapStore.reportBufferAreaHa
+  if (!denom) return 0
+  return (((area || 0) / denom) * 100).toFixed(1)
 }
-
+const showSubheader = (layers, i, categoryName) => {
+  const sub = layers[i].subheaderTitle
+  if (!sub || sub === categoryName) return false // no sub, or same as header → skip
+  if (i === 0) return true // first in category → show
+  return sub !== layers[i - 1].subheaderTitle // show only when it changes
+}
 // Calculate metadata for each category
 const getCategoryMetadata = (categoryName) => {
   const categoryLayers = intersectionResults.value[categoryName] || []
   const count = categoryLayers.length
   let categoryTotal = 0
+  let intersectedCount = 0
 
   categoryLayers.forEach((layer) => {
-    const area = mapStore.showDemo
-      ? layer.totalArea || Math.floor(Math.random() * 5000)
-      : layer.totalArea
-    categoryTotal += area || 0
+    categoryTotal += layer.totalArea || 0 // only rasters add area
+    if (layerHit(layer)) intersectedCount++ // counts raster + vector hits
   })
 
   const percentage =
@@ -107,23 +131,25 @@ const getCategoryMetadata = (categoryName) => {
 
   return {
     count,
+    intersected: intersectedCount,
     total: categoryTotal,
     percentage,
   }
 }
 
+// Compute all category metadata once (cached + reactive)
+const categoryMeta = computed(() => {
+  const out = {}
+  for (const name of Object.keys(intersectionResults.value)) {
+    out[name] = getCategoryMetadata(name)
+  }
+  return out
+})
+
 // Buffer controls
 const onBufferChange = (bufferValue) => {
   mapStore.bufferSize = bufferValue
-  // Trigger recalculation - add your API call here
-  console.log('Buffer changed to:', bufferValue, 'miles')
-}
-
-const setCustomBuffer = (value) => {
-  if (value) {
-    mapStore.bufferSize = value
-    console.log('Custom buffer set to:', value, 'miles')
-  }
+  mapStore.createBuffer('current')
 }
 
 // Toggle category accordion
@@ -133,16 +159,18 @@ const toggleCategory = (categoryName) => {
 
 // Clear results
 const clearResults = () => {
-  mapStore.showDemo = false
-  // Clear all sublayer totalArea values
   mapStore.layers.forEach((group) => {
     group.subheaders?.forEach((subheader) => {
       subheader.sublayers?.forEach((sublayer) => {
         sublayer.totalArea = 0
+        sublayer.intersected = false
+        sublayer.count = 0
+        sublayer.summaryType = undefined
       })
     })
   })
-  // Reset expanded categories
+  mapStore.reportResults = {}
+  mapStore.currentPoint = null
   expandedCategories.value = {}
 }
 
@@ -168,11 +196,11 @@ const onDragEnd = () => {
 onMounted(() => {
   document.addEventListener('mousemove', onDragMove)
   document.addEventListener('mouseup', onDragEnd)
+})
 
-  return () => {
-    document.removeEventListener('mousemove', onDragMove)
-    document.removeEventListener('mouseup', onDragEnd)
-  }
+onUnmounted(() => {
+  document.removeEventListener('mousemove', onDragMove)
+  document.removeEventListener('mouseup', onDragEnd)
 })
 </script>
 
@@ -182,11 +210,11 @@ onMounted(() => {
     class="results-panel"
     :style="{ left: panelX + 'px', top: panelY + 'px' }"
     @mousedown="onDragStart"
-    :class="{ inactive: totalArea === 0 && !mapStore.showDemo }"
+    :class="{ inactive: !hasSelection }"
   >
     <!-- INACTIVE STATE -->
-    <div v-if="totalArea === 0 && !mapStore.showDemo">
-        <div class="results-header q-pr-sm">
+    <div v-if="!hasSelection">
+      <div class="results-header q-pr-sm">
         <div
           style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
         >
@@ -198,16 +226,18 @@ onMounted(() => {
             no-caps
             size="sm"
             padding="sm"
-            class="" 
+            class=""
             icon="close"
             @click="mapStore.showSiteReport = false"
-            />
+          />
         </div>
-        </div>
+      </div>
 
       <div class="text-h6 q-pa-md">
-        <p>Double click the map to select a project location.
-Buffer radius options are available on the next screen.</p>
+        <p>
+          Double click the map to select a project location. Buffer radius options are available on
+          the next screen.
+        </p>
       </div>
     </div>
 
@@ -226,10 +256,10 @@ Buffer radius options are available on the next screen.</p>
             no-caps
             size="sm"
             padding="sm"
-            class="" 
+            class=""
             icon="close"
             @click="mapStore.showSiteReport = false"
-            />
+          />
         </div>
         <div
           style="
@@ -241,21 +271,32 @@ Buffer radius options are available on the next screen.</p>
           "
         >
           <span>
-            Lat: {{ mapStore.currentPoint ? mapStore.currentPoint.lat?.toFixed(2) : '--' }} | Lon:
-            {{ mapStore.currentPoint ? mapStore.currentPoint.lon?.toFixed(2) : '--' }}
+            Lat:
+            {{
+              mapStore.currentPoint.detail.mapPoint.latitude
+                ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
+                : '--'
+            }}
+            | Lon:
+            {{
+              mapStore.currentPoint.detail.mapPoint.longitude
+                ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
+                : '--'
+            }}
           </span>
           <span class="total-area-compact">{{ formatArea(totalArea) }}</span>
         </div>
 
         <!-- Buffer Size Control -->
         <div class="buffer-section">
-            <div class="row">
-          <div class="buffer-label">
-            Buffer Size:
-            <div class="info-icon" title="Expand the search area around your selected point">?</div>
-          </div>
-          <q-space></q-space>
-          <div class="text-caption text-bold">**Sample Data - Demo Only**</div>
+          <div class="row">
+            <div class="buffer-label">
+              Buffer Size:
+              <div class="info-icon" title="Expand the search area around your selected point">
+                ?
+              </div>
+            </div>
+            <q-space></q-space>
           </div>
           <div class="buffer-buttons">
             <q-btn
@@ -266,10 +307,7 @@ Buffer radius options are available on the next screen.</p>
               no-caps
               :class="{ active: mapStore.bufferSize === size }"
               class="buffer-btn"
-              @click="
-                mapStore.bufferSize = size;
-                onBufferChange(size)
-              "
+              @click="onBufferChange(size)"
             >
               {{ size }} mi
             </q-btn>
@@ -277,29 +315,32 @@ Buffer radius options are available on the next screen.</p>
               flat
               dense
               no-caps
-              :class="{ active: mapStore.bufferSize >= 10 }"
+              :class="{ active: showCustom == true }"
               class="buffer-btn"
-              @click="$refs.customBufferMenu?.toggle()"
+              @click="showCustom = !showCustom"
             >
               Custom
             </q-btn>
           </div>
-          <div class="custom-input-wrapper" v-if="mapStore.bufferSize >= 10">
+          <div class="custom-input-wrapper bg-white" v-if="showCustom == true">
             <q-input
               v-model.number="mapStore.bufferSize"
               dense
               outlined
+              color="white"
               type="number"
               min="0.1"
               step="0.1"
-              @update:model-value="setCustomBuffer"
+              @update:model-value="onBufferChange(mapStore.bufferSize)"
               style="flex: 1"
+              placeholder="input radius: max allowed 35 mi"
+              suffix="mi"
             />
-            <span class="custom-input-label">mi</span>
           </div>
         </div>
       </div>
 
+      <!-- Results Body -->
       <!-- Results Body -->
       <div class="results-body">
         <template v-for="(categoryLayers, categoryName) in intersectionResults" :key="categoryName">
@@ -310,50 +351,58 @@ Buffer radius options are available on the next screen.</p>
               </span>
               <span>{{ categoryName }}</span>
               <div class="category-pills">
-                <span class="pill pill-count"
-                  >{{ getCategoryMetadata(categoryName).count }} items</span
+                <span
+                  class="pill"
+                  :class="categoryMeta[categoryName].intersected > 0 ? 'pill-present' : 'pill-none'"
                 >
-                <span class="pill pill-area">{{
-                  formatArea(getCategoryMetadata(categoryName).total)
-                }}</span>
+                  {{ categoryMeta[categoryName].intersected }} /
+                  {{ categoryMeta[categoryName].count }}
+                  Items
+                </span>
+                <span class="pill pill-area">
+                  {{ formatArea(categoryMeta[categoryName].total) }}
+                </span>
               </div>
             </div>
 
             <div v-if="expandedCategories[categoryName]">
-              <div v-for="layer in categoryLayers" :key="layer.elid" class="result-item">
+              <template v-for="(layer, i) in categoryLayers" :key="layer.elid">
+                <!-- subheader divider: only when it changes AND differs from the category name -->
                 <div
-                  class="color-swatch"
-                  v-if="layer.legendImg"
-                  :style="{ backgroundImage: `url('data:image/png;base64,${layer.legendImg}')` }"
-                ></div>
-                <div v-else class="color-swatch" style="background: #ddd"></div>
-
-                <div class="result-info">
-                  <div class="result-name">{{ layer.title }}</div>
-                  <div class="result-stats">
-                    <span class="stat">
-                      <span class="stat-label">Area:</span>
-                      {{
-                        formatArea(
-                          mapStore.showDemo
-                            ? layer.totalArea || Math.floor(Math.random() * 5000)
-                            : layer.totalArea,
-                        )
-                      }}
-                    </span>
-                    <span class="stat">
-                      <span class="stat-label">%:</span>
-                      {{
-                        getPercentage(
-                          mapStore.showDemo
-                            ? layer.totalArea || Math.floor(Math.random() * 5000)
-                            : layer.totalArea,
-                        )
-                      }}%
-                    </span>
-                  </div>
+                  v-if="showSubheader(categoryLayers, i, categoryName)"
+                  class="subheader-divider"
+                >
+                  {{ layer.subheaderTitle }}
                 </div>
-              </div>
+
+                <div class="result-item">
+                  <div
+                    class="color-swatch"
+                    v-if="layer.legendImg"
+                    :style="{ backgroundImage: `url('data:image/png;base64,${layer.legendImg}')` }"
+                  ></div>
+                  <div v-else class="color-swatch" style="background: #ddd"></div>
+
+                  <div class="result-info">
+                    <div class="result-name">{{ layer.title }}</div>
+                    <div class="result-stats">
+                      <span :class="layerHit(layer) ? 'stat-active' : 'stat'">
+                        <span class="stat-label">Result:</span>
+                        {{ formatSummary(layer) }}
+                      </span>
+                      <span
+                        :class="layerHit(layer) ? 'stat-active' : 'stat'"
+                        v-if="isRasterLayer(layer)"
+                      >
+                        <span class="stat-label">%:</span>
+                        {{ getPercentage(layer.totalArea) }}%
+                      </span>
+                    </div>
+                  </div>
+                  <!-- intersect indicator dot -->
+                  <div class="hit-dot" :class="{ active: layerHit(layer) }"></div>
+                </div>
+              </template>
             </div>
           </div>
         </template>
@@ -377,15 +426,24 @@ Buffer radius options are available on the next screen.</p>
           label="Select New Location"
           @click="clearResults"
         />
-       
-        <q-btn
-          flat
-          dense
-          no-caps
-          class="btn btn-primary"
-          label="Save as PDF"
-          @click="console.log('Get Report')"
-        />
+
+        <div class="pdf-controls">
+          <q-checkbox
+            v-model="includeDescriptions"
+            dense
+            size="xs"
+            label="Include layer descriptions"
+            class="desc-toggle"
+          />
+          <q-btn
+            flat
+            dense
+            no-caps
+            class="btn btn-primary"
+            label="Save as PDF"
+            @click="generateSiteReport(mapStore, { includeDescriptions: includeDescriptions })"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -493,7 +551,7 @@ Buffer radius options are available on the next screen.</p>
 
 .buffer-btn {
   flex: 1;
-  padding: 8px 6px;
+  padding: 4px 6px;
   border: 1.5px solid rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.1) !important;
   color: white;
@@ -516,8 +574,7 @@ Buffer radius options are available on the next screen.</p>
 
 .custom-input-wrapper {
   display: flex;
-  gap: 6px;
-  align-items: center;
+  align-items: end;
   margin-top: 8px;
 }
 
@@ -591,6 +648,18 @@ Buffer radius options are available on the next screen.</p>
 .pill-area {
   display: none;
 }
+/* Layers present — soft amber flag (attention, not alarm) */
+.pill-present {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+/* No layers present — neutral, no judgment */
+.pill-none {
+  background: #f4f5f6; /* very light gray — reads cleaner than pure white on a white panel */
+  color: #61656e;
+  border: 1px solid #e5e7eb; /* subtle outline so it doesn't vanish */
+}
 
 .result-item {
   display: flex;
@@ -643,6 +712,12 @@ Buffer radius options are available on the next screen.</p>
   align-items: center;
   gap: 4px;
   color: #666;
+}
+.statActive {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #1976d2;
 }
 
 .stat-label {
@@ -712,5 +787,43 @@ Buffer radius options are available on the next screen.</p>
 
 .results-body::-webkit-scrollbar-thumb:hover {
   background: #aaa;
+}
+
+.pdf-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.desc-toggle {
+  font-size: 10px;
+  color: #666;
+}
+.desc-toggle :deep(.q-checkbox__label) {
+  font-size: 10px;
+}
+.hit-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: 10px;
+  background: transparent; /* invisible when no hit */
+  border: 1px solid transparent;
+  transition: background 0.2s ease;
+}
+
+.hit-dot.active {
+  background: #1976d2; /* matches the blue pill */
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15); /* soft halo, subtle pop */
+}
+.subheader-divider {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9aa5b1;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 6px 12px 2px;
+  margin-top: 4px;
 }
 </style>

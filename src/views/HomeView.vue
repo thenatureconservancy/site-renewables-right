@@ -64,7 +64,7 @@ onMounted(() => {
           class="col-sm-7 col-md-6 col-lg-6 q-pa-lg column self-stretch"
           style="min-height: 0"
         >
-          <q-scroll-area style="height: calc(100vh - 100px)" class="q-pa-lg">
+          <q-scroll-area style="height: calc(100vh - 100px; margin-right: -20px" class="q-pa-lg">
             <div id="topdiv">
               <a href="https://www.nature.org/en-us/">
                 <img

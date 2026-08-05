@@ -9,6 +9,8 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
+import * as projectOperator from "@arcgis/core/geometry/operators/projectOperator.js";
+import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
 
 import Query from "@arcgis/core/rest/support/Query";
 import * as query from "@arcgis/core/rest/query";
@@ -33,29 +35,12 @@ export const useMapStore = defineStore('mapStore', () => ({
   currentPoint: '',
   currentMapExtent: '',
   checkboxHideSplash: false,
-  results: {
-    highlySensitiveTotalArea: 0,
-    highlySensitiveCount: 0,
-    moderatelySensitiveTotalArea: 0,
-    mines: 0,
-    minesTotalArea: 0,
-    waterBodies: 0,
-    brownfields: 0,
-    bufferArea: 0
-  },
-  summary: {
-    highlySensitiveTotalArea: 0,
-    highlySensitiveCount: 0,
-    moderatelySensitiveTotalArea: 0,
-    mines: 0,
-    brownfields: 0,
-    bufferArea: 0,
-    highlySensitiveHabitats: [],
-    hsExtentCount: 0,
-    minesExtentCount: 0,
-    msExtentCount: 0,
-  },
-  oppResults: [],
+  reportBufferAreaHa: '',
+  reportBufferAreaAc: '',
+
+  reportResults: [],
+  reportLoading: false,
+  reportGeneratedAt: null,
  
   splash: true,
 
@@ -301,7 +286,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Disturbed Lands' , id: 'agriculture', expanded: false, 
    subheaders: [
-    {title: ' Disturbed Lands', id: 'ag', visible: true, visibleModel: true, expanded: false,
+    {title: 'Disturbed Lands', id: 'ag', visible: true, visibleModel: true, expanded: false,
       sublayers:[
         {index: 13, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
           opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
@@ -479,7 +464,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   ]},
   {header: 'Native Lands' , id: 'native', expanded: true, 
    subheaders: [
-     {title: ' Native Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
+     {title: 'Native Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
       sublayers: [
         {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true,
        opacity: 0.9, category: 'both', title: 'American Indian, Alaska Native, and Native Hawaiian Areas', description: 'short description',
@@ -691,198 +676,65 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   //these were used for the reporting these will all be updated
   //function to create the buffer
-  createBuffer(e){
-    if(this.bufferSize > 36){
-      alert ('Buffer size cannot exceed 35 miles')
-      return
-    }
-    
+  // --- module scope (top of the store file) ---
 
-    const polySymbol = {
-      type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-      color: [255, 255, 255, 0.3],
-      outline: {
-        color: [0, 0, 0, 0.5],
-        width: 2,
-      },
-    }
-    const pointSymbol = {
-      type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
-      color: [255, 0, 0],
-      outline: {
-        color: [255, 255, 255],
-        width: 1,
-      },
-      size: 7,
-    }
-    const point = e.detail.mapPoint
-    //saving the last clicked point so that it can be used 
-    //again for different buffer areas
-    this.currentPoint = e
-    let view = document.querySelector("arcgis-map")
-    let map = document.querySelector("arcgis-map").map;
+
+async createBuffer (e){
+  if (e == 'current'){
    
-    let pointLayer = map.findLayerById('pointLayer') 
-    let bufferLayer = map.findLayerById('bufferLayer')  
-    
-    //view.zoom = 11
-    if (pointLayer.graphics.length === 0) {
-      pointLayer.add(
-        new Graphic({
-          geometry: point,
-          symbol: pointSymbol,
-        }),
-      )
-    } else {
-      const graphic = pointLayer.graphics.getItemAt(0)
-      graphic.geometry = point
-    }
+    e = this.currentPoint
+     console.log(e)
+  }
+  if(this.bufferSize > 36){
+    alert('Buffer size cannot exceed 35 miles')
+    return
+  }
+  const polySymbol = {
+    type: 'simple-fill',
+    color: [255, 255, 255, 0.3],
+    outline: { color: [0, 0, 0, 0.5], width: 2 },
+  }
+  const pointSymbol = {
+    type: 'simple-marker',
+    color: [255, 0, 0],
+    outline: { color: [255, 255, 255], width: 1 },
+    size: 7,
+  }
 
-    const buffer = bufferOperator.execute(point, this.bufferSize, { unit: 'miles' })
-    if (bufferLayer.graphics.length === 0) {
-      bufferLayer.add(
-        new Graphic({
-          geometry: buffer,
-          symbol: polySymbol,
-        }),
-      )
-    } else {
-      const graphic = bufferLayer.graphics.getItemAt(0)
-      graphic.geometry = buffer
-    }
-    this.getHistogram(buffer)
-  //this.fetchRasterIds()
-  
-  },
-  oldExtras(){
-        //clear values from previous buffer
-    view.goTo({target: bufferLayer.graphics.getItemAt(0).geometry, padding: 20})
-    /*let layerList = [{name: 'Big Game', id: 17, color: '#FED1EF', index: 0, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[0]},
-      {name: 'Whooping Crane (wind)', id: 20, color: '#FF884D', index: 1, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[11]},
-      {name: 'Whooping Crane (solar)', id: 21, color: '#FF884D', index: 2, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[10]},
-      {name: 'Eagles (wind)', id: 22, color: '#AC8B7C', index: 3, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[2]},
-      {name: 'Prarie Grouse', id: 23, color: '#93AE7F', index: 4, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[5]},
-      {name: 'Important Bird Areas', id: 24, color: '#F9BFA3', index: 5, map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[3]},
-      {name: 'Threatened & Endangered Species', id: 26, color: '#D9A2F8', index: 7, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[7]},
-      {name: 'Intact Habitats', id: 27, color: '#BABABA', index: 8, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[4]},
-      {name: 'Climate Resilience', id: 28, color: '#80A26F', index: 9,  map:'intersectingFeatures', pathToLayer:  this.layers[0].subheaders[0].sublayers[1]},
-      {name: 'Landscape Connectivity', id: 30, color: '#71a599', index: 2, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[1].sublayers[0]},
-      {name: 'Protected Areas', id: 25, color: '#8895D9', index: 6, map:'intersectingFeatures',  pathToLayer:  this.layers[0].subheaders[0].sublayers[6]},
-      //{name: 'Mines not in Suitability (solar)', id: 2, color: '#FFFDE7', index: 1, map: 'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
-      {name: 'Mines in Suitability (solar)', id: 1, color: '#FFFDE7', index: 2, map:'opportunities',  pathToLayer:  this.layers[1].subheaders[0].sublayers[2]},
-    ]*/
-    let layerList = [{
-        title: 'High Quality Watersheds',
-        layerid: 0,
-        type: 'polygon',
-        group: 'highly sensitive',
-        defquery: '',
-        pathToLayer: this.layers[0].subheaders[0].sublayers[1]
-        },
+  const point = e.detail.mapPoint          // comes in as the map SR (Web Mercator)
+  const ALBERS = new SpatialReference({ wkid: 5070 }); // NAD83 / Conus Albers
+  this.currentPoint = e
 
-        {
-        title: 'Landscape Connectivity',
-        layerid: 1,
-        type: 'polygon',
-        group: 'moderately sensitive',
-        defquery: 'gridcode <> 0',
-        pathToLayer: this.layers[0].subheaders[1].sublayers[0]
-        },
-        {
-        title: 'Prairie Grouse',
-        layerid: 2,
-        type: 'polygon',
-        group: 'highly sensitive',
-        defquery: 'gridcode <> 0',
-        pathToLayer: this.layers[0].subheaders[0].sublayers[4]
-        },
-        {
-        title: 'Resilient and Connected Network',
-        layerid: 3,
-        type: 'polygon',
-        group: 'highly sensitive',
-        defquery: 'gridcode <> 0',
-        pathToLayer: this.layers[0].subheaders[0].sublayers[3]
-        },
-        {
-        title: 'Whooping Crane Wind',
-        layerid: 4,
-        type: 'polygon',
-        group: 'highly sensitive',
-        defquery: 'gridcode <> 0',
-        pathToLayer: this.layers[0].subheaders[0].sublayers[5]
-        },
-        {
-        title: 'Whooping Crane Solar',
-        layerid: 5,
-        type: 'polygon',
-        group: 'highly sensitive',
-        defquery: 'gridcode <> 0',
-        pathToLayer: this.layers[0].subheaders[0].sublayers[6]
-        },
-        {
-        title: 'Former Mine Lands',
-        layerid: 7,
-        type: 'point',
-        group: 'degraded lands',
-        defquery: '',
-        pathToLayer: this.layers[0].subheaders[2].sublayers[0]
-        },
-        {
-        title: 'Brownfields over 10 acres',
-        layerid: 8,
-        type: 'point',
-        group: 'degraded lands',
-        defquery: '',
-        pathToLayer: this.layers[0].subheaders[2].sublayers[0]
-            },]
-    this.results = []
-    this.oppResults = []
-      //clear all previous results
-    this.layers[0].subheaders[0].sublayers.forEach((layer)=>{
-      layer.totalArea = 0
-      layer.percentOfTotal = 0
-    })
-    this.layers[0].subheaders[1].sublayers.forEach((layer)=>{ 
-      layer.totalArea = 0
-      layer.percentOfTotal = 0
-    })
-     this.layers[0].subheaders[2].sublayers.forEach((layer)=>{ 
-      layer.totalArea = 0
-      layer.percentOfTotal = 0
-    })
-    this.layers[1].subheaders[0].sublayers.forEach((layer)=>{
-      layer.totalArea = 0
-      layer.percentOfTotal = 0
-    })
-   
-    this.summary= {
-         highlySensitiveTotalArea: 0,
-    highlySensitiveCount: 0,
-    moderatelySensitiveTotalArea: 0,
-    mines: 0,
-    brownfields: 0,
-    bufferArea: 0,
-    highlySensitiveHabitats: [],
-    hsExtentCount: 0,
-    minesExtentCount: 0,
-    msExtentCount: 0,
-    }      
-    for (let i=0;i<layerList.length;i++){
-      if(layerList[i].type == 'polygon'){
-        this.getIntersectionFeatures(buffer, layerList[i])
-        this.getHistogram(buffer, layerList[i])
-      }
-      if(layerList[i].type == 'point'){
-        this.getCountFeatures(buffer, layerList[i])
-      }
-      if(layerList[i].type == 'raster'){
-         this.getHistogram(buffer, layerList[i])
-      }
-      //this.getIntersectionExtent(layerList[i])
-    }  
-    
-  },
+  let map = document.querySelector("arcgis-map").map;
+  let pointLayer  = map.findLayerById('pointLayer')
+  let bufferLayer = map.findLayerById('bufferLayer')
+
+  // point marker stays in the map's SR — fine for display
+  if (pointLayer.graphics.length === 0) {
+    pointLayer.add(new Graphic({ geometry: point, symbol: pointSymbol }))
+  } else {
+    pointLayer.graphics.getItemAt(0).geometry = point
+  }
+
+  // --- project the click to NAD83 / Conus Albers (5070) for honest area/distance ---
+  if (!projectOperator.isLoaded()) {
+    await projectOperator.load()
+  }
+  const pointAlbers = projectOperator.execute(point, ALBERS)
+
+  // buffer in 5070 (equal-area) — distance still specified in miles
+  const buffer = bufferOperator.execute(pointAlbers, this.bufferSize, { unit: 'miles' })
+
+  if (bufferLayer.graphics.length === 0) {
+    bufferLayer.add(new Graphic({ geometry: buffer, symbol: polySymbol }))
+  } else {
+    bufferLayer.graphics.getItemAt(0).geometry = buffer
+  }
+
+  this.getHistogram(buffer)   // buffer is now in 5070
+  this.getIntersections(buffer)
+},
+  /*
   //function to clip features and calculate area
   getIntersectionFeatures(buffer, item){
     //first step is to probably query the layer and get geometries
@@ -911,16 +763,7 @@ export const useMapStore = defineStore('mapStore', () => ({
      
       if(results.features.length === 0){
        //TODO handle if no results come back must zero out old results
-       /* this.summary= {
-          highlySensitiveTotalArea: 0,
-          highlySensitiveCount: 0,
-          moderatelySensitiveTotalArea: 0,
-          minesTotalArea: 0,
-          waterBodies: 0,
-          brownfields: 0,
-          bufferArea: 0,
-          highlySensitiveHabitats: []
-        }*/
+    
       
       }
       else{
@@ -971,12 +814,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     featureLayer.queryFeatures(queryGeom).then((results) => {
       let count = results.features.length
       console.log(results)
-     /* let obj = {
-        map: item.map,
-        layerId: item.id,
-        layerName: item.name,
-        count: count
-      }*/
+     
         if(count > 0){
           item.pathToLayer.inBuffer = true
        }else{
@@ -1036,48 +874,166 @@ export const useMapStore = defineStore('mapStore', () => ({
     })
    
     
-  },
-  getHistogram(buffer) {
-    const rasters = [
-      'Bats_10_Final_02_NoCA',
-      'Birds_05_NoCA',
-      'IntactHabitats_HMI200_20260518_NoCA_R',
-      'Migratory_Bird_Stopover_NoCA',
-      'PrairieGrouseAndSageGrouse_20260518_NoCA_R',
-      'ProtectedAreas_01_Final_NoCA',
-      'TE_Species_03_20260630_NoCA',
-      'Water_02_reclass_20260630_NoCA',
-      'WhoopingCraneSolar_20260408_NoCA_R',
-      'WhoopingCraneWind_20260408_NoCA_R'
-    ];
+  },*/
+  
+    // Robust bin lookup — works whether min is 0, 0.5, -0.5, etc.
+  countForValue(hist, value) {
+      if (!hist || !hist.counts?.length) return 0
+      const binWidth = (hist.max - hist.min) / hist.size
+      const idx = Math.floor((value - hist.min) / binWidth)
+      return hist.counts[idx] ?? 0
+    },
+async getHistogram(buffer) {
+   
+  const rasters = [
 
-    const map = document.querySelector("arcgis-map").map;
-    const imageLayer = map.findLayerById("imageLayer");
+    { name: 'Bats_10_Final_02_NoCA_5070', elid: 'bats' },
+    { name: 'BigGame_08_NoCA_5070', elid: 'bigGameSolar'},
+    { name: 'Birds_05_NoCA_5070', elid: 'birds' },
+    { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness' },
+    { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind' },
+    { name: 'PrairieGrouseAndSageGrouse_20260518_NoCA_R_5070', elid: 'prairieGrouse' },
+    { name: 'ProtectedAreas_01_Final_NoCA_5070', elid: 'protectedAreas' },
+    { name: 'RCN_NoCal_20260728_5070', elid: 'resilientConnected'},
+    { name: 'TE_Species_03_20260630_NoCA_5070', elid: 'threatenedEndangeredSpecies' },
+    { name: 'Water_02_reclass_20260630_NoCA_5070', elid: 'floodPlainsWetlands' },
+    { name: 'WhoopingCraneSolar_20260408_NoCA_R_5070', elid: 'whoopingCraneSolar' },
+    { name: 'WhoopingCraneWind_20260408_NoCA_R_5070', elid: 'whoopingCraneWind' },
 
-    rasters.forEach((rasterName) => {
-      const mosaicRule = new MosaicRule({
-        method: "attribute",
-        where: `Name = '${rasterName}'`,
-        operation: "first"
-      });
+  ]
 
-      const params = new ImageHistogramParameters({
-        geometry: buffer,
-        mosaicRule,
-        pixelSize: 30,
-        renderingRule: null,
-        bandIds: [0]
-      });
+  const map = document.querySelector('arcgis-map').map
+  const imageLayer = map.findLayerById('imageLayer')
+  this.reportLoading = true
 
-      imageLayer.computeHistograms(params)
-        .then((results) => {
-          console.log(rasterName, results);
-        })
-        .catch((err) => {
-          console.error(`Histogram failed for ${rasterName}`, err);
-        });
-    });
-  },
+  const radiusMeters = this.bufferSize * 1609.344     // miles → meters
+  const bufferAreaM2 = Math.PI * radiusMeters * radiusMeters
+  this.reportBufferAreaHa = +(bufferAreaM2 / 10000).toFixed(2)
+  this.reportBufferAreaAc = +(bufferAreaM2 / 4046.8564224).toFixed(2)
+
+  const PIXEL_SIZE   = 30
+  const PIXEL_M2     = PIXEL_SIZE * PIXEL_SIZE   // 900   ← this is m², the value you're seeing
+  const HA_PER_PIXEL = PIXEL_M2 / 10000          // 0.09  ✅ hectares
+  const AC_PER_PIXEL = PIXEL_M2 / 4046.8564224   // 0.2224 acres
+  const ALBERS=new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
+  console.log('HA_PER_PIXEL =', HA_PER_PIXEL)  // should be 0.09
+
+  // Run all 10 in parallel and collect [elid, result] pairs
+  const tasks = rasters.map(async ({ name, elid }) => {
+    const mosaicRule = new MosaicRule({
+      method: 'attribute',
+      where: `Name = '${name}'`,        // use .name, not the object
+      operation: 'first'
+    })
+
+    const params = new ImageHistogramParameters({
+      geometry: buffer,                  // already in 5070
+      mosaicRule,
+      pixelSize: { x: PIXEL_SIZE, y: PIXEL_SIZE, spatialReference: ALBERS },
+      renderingRule: null
+    })
+
+    try {
+      const res = await imageLayer.computeStatisticsHistograms(params)
+      const hist = res.histograms?.[0]
+
+      // Total valid pixels = sum of all bins (NoData already excluded)
+     // instead of: const pixelCount = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
+      const pixelCount = this.countForValue(hist, 1) + this.countForValue(hist, 2)
+
+      // Per-value breakdown (some rasters use 1, some use 2)
+      const byValue = {
+        1: { pixelCount: this.countForValue(hist, 1) },
+        2: { pixelCount: this.countForValue(hist, 2) }
+      }
+      for (const v of [1, 2]) {
+        byValue[v].areaHa = +(byValue[v].pixelCount * HA_PER_PIXEL).toFixed(2)
+        byValue[v].areaAc = +(byValue[v].pixelCount * AC_PER_PIXEL).toFixed(2)
+      }
+      console.log([elid, {
+        ok: true,
+        error: null,
+        elid,
+        rasterName: name,              // keep for debugging/traceability
+        pixelCount,
+        areaHa: +(pixelCount * HA_PER_PIXEL).toFixed(2),
+        areaAc: +(pixelCount * AC_PER_PIXEL).toFixed(2),
+        byValue,
+        min: hist?.min ?? null,
+        max: hist?.max ?? null
+      }]
+
+      )
+      return [elid, {
+        ok: true,
+        error: null,
+        elid,
+        rasterName: name,              // keep for debugging/traceability
+        pixelCount,
+        areaHa: +(pixelCount * HA_PER_PIXEL).toFixed(2),
+        areaAc: +(pixelCount * AC_PER_PIXEL).toFixed(2),
+        byValue,
+        min: hist?.min ?? null,
+        max: hist?.max ?? null
+      }]
+      
+    } catch (err) {
+      console.error(`Histogram failed for ${name} (${elid})`, err)
+      return [elid, {
+        ok: false,
+        error: err.message,
+        elid,
+        rasterName: name,
+        pixelCount: 0,
+        areaHa: 0,
+        areaAc: 0,
+        byValue: { 1: { pixelCount: 0, areaHa: 0 }, 2: { pixelCount: 0, areaHa: 0 } },
+        min: null,
+        max: null
+      }]
+    }
+  })
+
+  const entries = await Promise.all(tasks)
+  const reportResults = Object.fromEntries(entries)   // keyed by elid
+
+  // 1) keep the full structured result in the store
+  this.reportResults = reportResults
+  this.reportGeneratedAt = Date.now()
+
+  // 2) push areas onto the matching sublayers so the report renders unchanged
+  this.applyResultsToLayers(reportResults)
+
+  this.reportLoading = false
+  return reportResults
+},
+applyResultsToLayers(reportResults) {
+  this.layers.forEach((group) => {
+    group.subheaders?.forEach((subheader) => {
+      subheader.sublayers?.forEach((sublayer) => {
+        const r = reportResults[sublayer.elid]
+        if (!r) {
+          sublayer.totalArea = 0
+          sublayer.intersected = false
+          sublayer.count = 0
+          return
+        }
+        // raster layers
+        if (r.areaHa != null) {
+          sublayer.totalArea = r.areaHa
+          sublayer.intersected = r.areaHa > 0
+        }
+        // vector/point layers
+        if (r.summaryType) {
+          sublayer.summaryType = r.summaryType
+          sublayer.count = r.count ?? 0
+          sublayer.intersected = r.intersected ?? false
+        }
+      })
+    })
+  })
+},
+
   fetchRasterIds() {
     const imageServerUrl =
       'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer'
@@ -1119,7 +1075,135 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   },
 
+  //gets agol data for report
+  async getIntersections(buffer) {
+  const layers =  [
+  { name: 'Surface Water Limited Lands', elid: 'waterLimited',
+    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLands_VTL/FeatureServer/0',
+    summaryType: 'boolean' },
 
+  { name: 'Former Mine Lands', elid: 'abandonedmines',
+    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
+    summaryType: 'count' },
+
+  { name: 'Brownfields over 10 acres', elid: 'brownfields',
+    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
+    summaryType: 'count' },
+  
+  {name: 'Native Lands', elid: 'nativeLands',
+    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
+    summaryType: 'boolean'
+  },
+
+ { name: 'Community Considerations',
+  featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
+  summaryType: 'attributes',
+  fields: [
+    { elid: 'cjest_workforce',      field: 'N_WKFC_91' },
+    { elid: 'cjest_water',          field: 'N_WTR_EOMI' },
+    { elid: 'cjest_transportation', field: 'N_TRN_EOMI' },
+    { elid: 'cjest_pollution',      field: 'N_PLN_EOMI' },
+    { elid: 'cjest_housing',        field: 'N_HSG_EOMI' },
+    { elid: 'cjest_health',         field: 'N_HLTH_90' },
+    { elid: 'cjest_energy',         field: 'N_ENY_EOMI' },
+    { elid: 'cjest_climate',        field: 'N_CLT_EOMI' },
+  ],
+  whereQueries: [
+    { elid: 'cjest_lowincome', where: 'P200_I_PFS <= 0.2' }, // ← percentile, server-filtered
+  ],
+}
+]
+
+  this.intersectLoading = true
+
+  const tasks = layers.map(async (cfg) => {
+    const featureLayer = new FeatureLayer({ url: cfg.featureUrl })
+
+    try {
+      // --- COUNT / BOOLEAN: just need how many features intersect ---
+      if (cfg.summaryType === 'count' || cfg.summaryType === 'boolean') {
+        const count = await featureLayer.queryFeatureCount({
+          geometry: buffer,               // 5070 — server projects automatically
+          spatialRelationship: 'intersects',
+        })
+
+        const result = {
+          ok: true,
+          error: null,
+          elid: cfg.elid,
+          name: cfg.name,
+          summaryType: cfg.summaryType,
+          intersected: count > 0,
+          count,                          // meaningful for 'count', still handy for 'boolean'
+        }
+        return [[cfg.elid, result]]       // wrapped in array for flatMap below
+      }
+
+      // --- ATTRIBUTES (Community Considerations): one query, fan out to sub-elids ---
+// --- ATTRIBUTES (Community Considerations) ---
+if (cfg.summaryType === 'attributes') {
+  const fieldNames = cfg.fields.map((f) => f.field)
+
+  // 1) single query → fan out the 8 boolean fields (value == 1)
+  const res = await featureLayer.queryFeatures({
+    geometry: buffer,
+    spatialRelationship: 'intersects',
+    returnGeometry: false,
+    outFields: fieldNames,
+  })
+  const feats = res.features || []
+
+  const fieldResults = cfg.fields.map((f) => {
+    const isTrue = feats.some((feat) => Number(feat.attributes[f.field]) === 1)
+    return [f.elid, {
+      ok: true, error: null, elid: f.elid, name: cfg.name,
+      summaryType: 'boolean', intersected: isTrue, count: isTrue ? 1 : 0,
+    }]
+  })
+
+  // 2) separate where-based count query per special field (e.g. percentile)
+  const whereResults = await Promise.all(
+    (cfg.whereQueries || []).map(async (wq) => {
+      const count = await featureLayer.queryFeatureCount({
+        geometry: buffer,
+        spatialRelationship: 'intersects',
+        where: wq.where,               // server filters out null/off values
+      })
+      return [wq.elid, {
+        ok: true, error: null, elid: wq.elid, name: cfg.name,
+        summaryType: 'boolean', intersected: count > 0, count,
+      }]
+    })
+  )
+
+  return [...fieldResults, ...whereResults]   // both feed the flat() merge
+}
+    } catch (err) {
+      console.error(`Intersection failed for ${cfg.name} (${cfg.elid || 'multi'})`, err)
+      // Fail gracefully — one bad layer shouldn't blank the report
+      if (cfg.summaryType === 'attributes') {
+        return cfg.fields.map((f) => [f.elid, {
+          ok: false, error: err.message, elid: f.elid, name: cfg.name,
+          summaryType: 'boolean', intersected: false, count: 0,
+        }])
+      }
+      return [[cfg.elid, {
+        ok: false, error: err.message, elid: cfg.elid, name: cfg.name,
+        summaryType: cfg.summaryType, intersected: false, count: 0,
+      }]]
+    }
+  })
+
+  const nested = await Promise.all(tasks)
+  const intersectionResults = Object.fromEntries(nested.flat())   // flatten the fan-out
+
+  // Merge with raster results (don't clobber) and apply to layers
+  this.reportResults = { ...this.reportResults, ...intersectionResults }
+  this.applyResultsToLayers(this.reportResults)
+
+  this.intersectLoading = false
+  return intersectionResults
+},
 
   //responds to opacity slider in map, changes opacity of all layers
   changeOpacity(){

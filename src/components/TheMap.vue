@@ -220,7 +220,7 @@ onMounted(() => {
   //mosaic layer for in
   let imageLayer = new ImageryLayer({
     // URL to the imagery service
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer',
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_Mosaic_Albers/ImageServer',
     visible: false,
     id: 'imageLayer',
   })
@@ -352,7 +352,7 @@ onMounted(() => {
       migratoryBirdStopoverWind,
       birdsWind,
       landscapeIntactness,
-     
+
       bats,
       bigGameSolar,
       qualitywater,
