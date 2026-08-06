@@ -5,13 +5,11 @@ import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 import Map from '@arcgis/core/Map'
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import ArcGISOnline from './ArcGISOnline.vue'
-import TheReport from './TheReport.vue'
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 import Graphic from '@arcgis/core/Graphic'
-import TileLayer from '@arcgis/core/layers/TileLayer'
 import Basemap from '@arcgis/core/Basemap'
-import TheIntersectionResults from '@/components/TheIntersectionResults.vue'
+import SiteReport from '@/components/SiteReport.vue'
 import BasemapSwitcher from '@/components/BasemapSwitcher.vue'
 import DistanceMeasurement2DViewModel from '@arcgis/core/widgets/DistanceMeasurement2D/DistanceMeasurement2DViewModel.js'
 /**GET STORE */
@@ -380,6 +378,8 @@ onMounted(() => {
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
   arcgisMap.addEventListener('arcgisViewDoubleClick', async (e) => {
+      e.preventDefault?.()
+      e.stopPropagation?.()
     if (measuring.value == false) {
       mapStore.showDemo = true
       try {
@@ -758,7 +758,7 @@ onMounted(() => {
 
     <!-- report summary boxes-->
 
-    <TheIntersectionResults />
+    <site-report />
   </arcgis-map>
   <!-- agol add data dialog -->
   <keep-alive>

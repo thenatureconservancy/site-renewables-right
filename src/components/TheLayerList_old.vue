@@ -1,9 +1,9 @@
+r
 <script setup>
 import { useMapStore } from '@/stores/map'
+import { laSolarPanelSolid } from '@quasar/extras/line-awesome'
 import { ref, nextTick, computed } from 'vue'
 import draggable from 'vuedraggable'
-import LegendSwatch from '@/components/LegendSwatch.vue' // ← unified legend renderer
-import { resolveLegend } from '@/utils/legends'
 
 const mapStore = useMapStore()
 const activeOpacityLayer = ref(null)
@@ -15,20 +15,6 @@ computed(() => {
     ghostClass: 'ghost',
   }
 })
-
-// Compact legends (single square / image / hatch / symbol) render on the RIGHT
-// side to keep the layer list short. Ramp & discrete legends (which need
-// low/high or per-item labels) stay stacked under the checkbox.
-const COMPACT_TYPES = ['swatch', 'image', 'hatch', 'symbol']
-function isCompactLegend(sublayer) {
-  const spec = resolveLegend(sublayer)
-  return !!spec && COMPACT_TYPES.includes(spec.type)
-}
-function isStackedLegend(sublayer) {
-  const spec = resolveLegend(sublayer)
-  return !!spec && !COMPACT_TYPES.includes(spec.type) // ramp / discrete
-}
-
 function normalizeTitle(value = '') {
   return value.trim().toLowerCase()
 }
@@ -43,6 +29,76 @@ function isRadioLayerGroup(layer) {
 
 function toggleOpacity(sublayer) {
   activeOpacityLayer.value = activeOpacityLayer.value === sublayer.elid ? null : sublayer.elid
+}
+
+function customLegend(sublayer) {
+  const legends = {
+    bats: {
+      type: 'discrete',
+      items: [
+        {
+          label: 'Threatened and endangered species',
+          color: '#3f8edc',
+        },
+        {
+          label: 'Non-listed species',
+          color: '#8f8f8f',
+        },
+      ],
+    },
+    resilientConnected: {
+      type: 'discrete',
+      items: [
+        {
+          label: 'Resilient, biodiverse areas',
+          color: '#4f8f5b',
+        },
+        {
+          label: 'Connectivity pinchpoints',
+          color: '#e58a35',
+        },
+        {
+          label: 'Coastal migration space',
+          color: '#d9c47a',
+        },
+      ],
+    },
+    cjest_lowincome: {
+      type: 'ramp',
+      lowLabel: 'Low Income',
+      highLabel: 'High Income',
+      gradient: 'linear-gradient(to right, #f4edf7, #b56bc7)',
+    },
+    lassoSolar: {
+      type: 'ramp',
+      lowLabel: 'Low',
+      highLabel: 'High',
+      gradient: 'linear-gradient(to right, #e8ecff, #5b6fd6)',
+    },
+    lassoWind: {
+      type: 'ramp',
+      lowLabel: 'Low',
+      highLabel: 'High',
+      gradient: 'linear-gradient(to right, #e8ecff, #5b6fd6)',
+    },
+    abandonedmines: {
+      type: 'symbol',
+      shape: 'triangle',
+      color: '#c78b2c',
+      label: 'Abandoned Mines',
+    },
+    brownfields: {
+      type: 'symbol',
+      shape: 'diamond',
+      color: '#56b7b1',
+      label: 'Brownfields',
+    },
+  }
+  return legends[sublayer.elid] || null
+}
+
+function legendImageSrc(sublayer) {
+  return `data:image/png;base64,${sublayer.legendImg}`
 }
 
 // takes an element object
@@ -123,13 +179,33 @@ async function scrollToElement(layer, elid) {
                       >
                         {{ sublayer.title }}
                       </q-checkbox>
+                      <div v-if="customLegend(sublayer)?.type === 'ramp'" class="legend-ramp">
+                        <span>{{ customLegend(sublayer).lowLabel }}</span>
 
-                      <!-- Stacked legends (ramp / discrete) go under the label -->
-                      <LegendSwatch
-                        v-if="isStackedLegend(sublayer)"
-                        :layer="sublayer"
-                        class="legend-inline"
-                      />
+                        <div
+                          class="legend-ramp-bar"
+                          :style="{ background: customLegend(sublayer).gradient }"
+                        />
+
+                        <span>{{ customLegend(sublayer).highLabel }}</span>
+                      </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'discrete'"
+                        class="custom-legend q-mt-xs"
+                      >
+                        <div
+                          v-for="legendItem in customLegend(sublayer).items"
+                          :key="legendItem.label"
+                          class="custom-legend-item"
+                        >
+                          <span
+                            class="custom-legend-swatch"
+                            :style="{ backgroundColor: legendItem.color }"
+                          />
+
+                          <span>{{ legendItem.label }}</span>
+                        </div>
+                      </div>
 
                       <q-slider
                         v-if="activeOpacityLayer === sublayer.elid"
@@ -145,9 +221,28 @@ async function scrollToElement(layer, elid) {
                       />
                     </q-item-section>
 
-                    <!-- Compact legends (swatch / image / hatch / symbol) on the RIGHT -->
-                    <q-item-section side v-if="isCompactLegend(sublayer)">
-                      <LegendSwatch :layer="sublayer" :show-labels="false" :size="14" />
+                    <q-item-section side>
+                      <div class="legend-swatch" v-if="sublayer.legendImg">
+                        <img :src="legendImageSrc(sublayer)" />
+                      </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                        class="custom-symbol-legend q-mt-xs"
+                      >
+                        <div class="custom-symbol-item">
+                          <span
+                            v-if="customLegend(sublayer).shape === 'triangle'"
+                            class="custom-symbol-triangle"
+                            :style="{ borderBottomColor: customLegend(sublayer).color }"
+                          />
+
+                          <span
+                            v-else
+                            class="custom-symbol-diamond"
+                            :style="{ backgroundColor: customLegend(sublayer).color }"
+                          />
+                        </div>
+                      </div>
                     </q-item-section>
 
                     <q-item-section side>
@@ -212,11 +307,51 @@ async function scrollToElement(layer, elid) {
                 <q-item-section>
                   <div class="text-body2">{{ sublayer.title }}</div>
 
-                  <LegendSwatch
-                    v-if="isStackedLegend(sublayer)"
-                    :layer="sublayer"
-                    class="legend-inline"
-                  />
+                  <div v-if="customLegend(sublayer)?.type === 'ramp'" class="legend-ramp">
+                    <span>{{ customLegend(sublayer).lowLabel }}</span>
+
+                    <div
+                      class="legend-ramp-bar"
+                      :style="{ background: customLegend(sublayer).gradient }"
+                    />
+
+                    <span>{{ customLegend(sublayer).highLabel }}</span>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'discrete'"
+                    class="custom-legend q-mt-xs"
+                  >
+                    <div
+                      v-for="legendItem in customLegend(sublayer).items"
+                      :key="legendItem.label"
+                      class="custom-legend-item"
+                    >
+                      <span
+                        class="custom-legend-swatch"
+                        :style="{ backgroundColor: legendItem.color }"
+                      />
+
+                      <span>{{ legendItem.label }}</span>
+                    </div>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                    class="custom-symbol-legend q-mt-xs"
+                  >
+                    <div class="custom-symbol-item">
+                      <span
+                        v-if="customLegend(sublayer).shape === 'triangle'"
+                        class="custom-symbol-triangle"
+                        :style="{ borderBottomColor: customLegend(sublayer).color }"
+                      />
+
+                      <span
+                        v-else
+                        class="custom-symbol-diamond"
+                        :style="{ backgroundColor: customLegend(sublayer).color }"
+                      />
+                    </div>
+                  </div>
 
                   <q-slider
                     v-if="activeOpacityLayer === sublayer.elid"
@@ -232,8 +367,10 @@ async function scrollToElement(layer, elid) {
                   />
                 </q-item-section>
 
-                <q-item-section side v-if="isCompactLegend(sublayer)">
-                  <LegendSwatch :layer="sublayer" :show-labels="false" :size="14" />
+                <q-item-section side>
+                  <div class="legend-swatch" v-if="sublayer.legendImg">
+                    <img :src="legendImageSrc(sublayer)" />
+                  </div>
                 </q-item-section>
 
                 <q-item-section side>
@@ -380,11 +517,51 @@ async function scrollToElement(layer, elid) {
                         {{ sublayer.title }}
                       </q-checkbox>
 
-                      <LegendSwatch
-                        v-if="isStackedLegend(sublayer)"
-                        :layer="sublayer"
-                        class="legend-inline"
-                      />
+                      <div v-if="customLegend(sublayer)?.type === 'ramp'" class="legend-ramp">
+                        <span>{{ customLegend(sublayer).lowLabel }}</span>
+
+                        <div
+                          class="legend-ramp-bar"
+                          :style="{ background: customLegend(sublayer).gradient }"
+                        />
+
+                        <span>{{ customLegend(sublayer).highLabel }}</span>
+                      </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'discrete'"
+                        class="custom-legend q-mt-xs"
+                      >
+                        <div
+                          v-for="legendItem in customLegend(sublayer).items"
+                          :key="legendItem.label"
+                          class="custom-legend-item"
+                        >
+                          <span
+                            class="custom-legend-swatch"
+                            :style="{ backgroundColor: legendItem.color }"
+                          />
+
+                          <span>{{ legendItem.label }}</span>
+                        </div>
+                      </div>
+                      <div
+                        v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                        class="custom-symbol-legend q-mt-xs"
+                      >
+                        <div class="custom-symbol-item">
+                          <span
+                            v-if="customLegend(sublayer).shape === 'triangle'"
+                            class="custom-symbol-triangle"
+                            :style="{ borderBottomColor: customLegend(sublayer).color }"
+                          />
+
+                          <span
+                            v-else
+                            class="custom-symbol-diamond"
+                            :style="{ backgroundColor: customLegend(sublayer).color }"
+                          />
+                        </div>
+                      </div>
 
                       <q-slider
                         v-if="activeOpacityLayer === sublayer.elid"
@@ -400,8 +577,10 @@ async function scrollToElement(layer, elid) {
                       />
                     </q-item-section>
 
-                    <q-item-section side v-if="isCompactLegend(sublayer)">
-                      <LegendSwatch :layer="sublayer" :show-labels="false" :size="14" />
+                    <q-item-section side>
+                      <div class="legend-swatch" v-if="sublayer.legendImg">
+                        <img :src="legendImageSrc(sublayer)" />
+                      </div>
                     </q-item-section>
 
                     <q-item-section side>
@@ -460,11 +639,51 @@ async function scrollToElement(layer, elid) {
                 <q-item-section>
                   <div class="text-body2">{{ sublayer.title }}</div>
 
-                  <LegendSwatch
-                    v-if="isStackedLegend(sublayer)"
-                    :layer="sublayer"
-                    class="legend-inline"
-                  />
+                  <div v-if="customLegend(sublayer)?.type === 'ramp'" class="legend-ramp">
+                    <span>{{ customLegend(sublayer).lowLabel }}</span>
+
+                    <div
+                      class="legend-ramp-bar"
+                      :style="{ background: customLegend(sublayer).gradient }"
+                    />
+
+                    <span>{{ customLegend(sublayer).highLabel }}</span>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'discrete'"
+                    class="custom-legend q-mt-xs"
+                  >
+                    <div
+                      v-for="legendItem in customLegend(sublayer).items"
+                      :key="legendItem.label"
+                      class="custom-legend-item"
+                    >
+                      <span
+                        class="custom-legend-swatch"
+                        :style="{ backgroundColor: legendItem.color }"
+                      />
+
+                      <span>{{ legendItem.label }}</span>
+                    </div>
+                  </div>
+                  <div
+                    v-else-if="customLegend(sublayer)?.type === 'symbol'"
+                    class="custom-symbol-legend q-mt-xs"
+                  >
+                    <div class="custom-symbol-item">
+                      <span
+                        v-if="customLegend(sublayer).shape === 'triangle'"
+                        class="custom-symbol-triangle"
+                        :style="{ borderBottomColor: customLegend(sublayer).color }"
+                      />
+
+                      <span
+                        v-else
+                        class="custom-symbol-diamond"
+                        :style="{ backgroundColor: customLegend(sublayer).color }"
+                      />
+                    </div>
+                  </div>
 
                   <q-slider
                     v-if="activeOpacityLayer === sublayer.elid"
@@ -480,8 +699,10 @@ async function scrollToElement(layer, elid) {
                   />
                 </q-item-section>
 
-                <q-item-section side v-if="isCompactLegend(sublayer)">
-                  <LegendSwatch :layer="sublayer" :show-labels="false" :size="14" />
+                <q-item-section side>
+                  <div class="legend-swatch" v-if="sublayer.legendImg">
+                    <img :src="legendImageSrc(sublayer)" />
+                  </div>
                 </q-item-section>
 
                 <q-item-section side>
@@ -521,17 +742,59 @@ async function scrollToElement(layer, elid) {
   border: 1px solid #64b45b;
   font-weight: 450;
 }
+.legend-swatch {
+  width: 20px;
+  height: 20px;
+}
 
-/* indent the stacked (ramp/discrete) legend to line up under the checkbox label */
-.legend-inline {
+.legend-swatch img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.custom-legend {
+  display: grid;
+  gap: 4px;
   margin-left: 32px;
-  margin-top: 4px;
+  color: #4a4a4a;
+  font-size: 0.78rem;
+  line-height: 1.25;
   margin-bottom: 5px;
+}
+
+.custom-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-legend-swatch {
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .opacity-slider {
   max-width: 180px;
   margin-left: 32px;
+}
+.legend-ramp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 32px;
+  max-width: 220px;
+  font-size: 0.78rem;
+  margin-bottom: 5px;
+  color: #4a4a4a;
+}
+
+.legend-ramp-bar {
+  flex: 1;
+  height: 14px;
+  border-radius: 2px;
 }
 .headerClass {
   background: #ffffff;
@@ -648,5 +911,23 @@ async function scrollToElement(layer, elid) {
   .selected-check {
     color: #4f9f40;
   }
+}
+.custom-symbol-triangle {
+  width: 0;
+  height: 0;
+  display: block;
+
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid;
+
+  margin-top: -2px;
+}
+
+.custom-symbol-diamond {
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  display: inline-block;
 }
 </style>

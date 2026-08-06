@@ -2,6 +2,7 @@
 import { useMapStore } from '@/stores/map'
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { generateSiteReport } from '@/utils/generateSiteReport'
+import LegendSwatch from '@/components/LegendSwatch.vue'
 
 const mapStore = useMapStore()
 
@@ -288,7 +289,6 @@ onUnmounted(() => {
           <span> Energy Type: {{ mapStore.category }}</span>
           <span>|</span>
           <span class="">Area: {{ formatArea(totalArea) }}</span>
-          
         </div>
 
         <!-- Buffer Size Control -->
@@ -345,7 +345,6 @@ onUnmounted(() => {
       </div>
 
       <!-- Results Body -->
-      <!-- Results Body -->
       <div class="results-body">
         <template v-for="(categoryLayers, categoryName) in intersectionResults" :key="categoryName">
           <div v-if="categoryLayers.length > 0" class="result-category">
@@ -380,24 +379,19 @@ onUnmounted(() => {
                 </div>
 
                 <div class="result-item">
-                  <div
-                    class="color-swatch"
-                    v-if="layer.legendImg"
-                    :style="{ backgroundImage: `url('data:image/png;base64,${layer.legendImg}')` }"
-                  ></div>
-                  <div v-else class="color-swatch" style="background: #ddd"></div>
+                  <!-- Unified legend (compact: cascade / gradient chip / single square) -->
+                  <div class="report-swatch">
+                    <LegendSwatch :layer="layer" :show-labels="false" :size="14" compact />
+                  </div>
 
                   <div class="result-info">
                     <div class="result-name">{{ layer.title }}</div>
                     <div class="result-stats">
-                      <span :class="layerHit(layer) ? 'stat-active' : 'stat'">
+                      <span class="stat">
                         <span class="stat-label">Result:</span>
                         {{ formatSummary(layer) }}
                       </span>
-                      <span
-                        :class="layerHit(layer) ? 'stat-active' : 'stat'"
-                        v-if="isRasterLayer(layer)"
-                      >
+                      <span class="stat" v-if="isRasterLayer(layer)">
                         <span class="stat-label">%:</span>
                         {{ getPercentage(layer.totalArea) }}%
                       </span>
@@ -681,16 +675,14 @@ onUnmounted(() => {
   transform: translateX(4px);
 }
 
-.color-swatch {
+/* wrapper for the unified legend on the left of each result row */
+.report-swatch {
   width: 24px;
-  height: 24px;
-  border-radius: 3px;
   margin-right: 12px;
   flex-shrink: 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .result-info {
@@ -716,12 +708,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 4px;
   color: #666;
-}
-.statActive {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #1976d2;
 }
 
 .stat-label {
@@ -814,11 +800,10 @@ onUnmounted(() => {
   margin-left: 10px;
   background: transparent; /* invisible when no hit */
   transition: background 0.2s ease;
-  
 }
 
 .hit-dot.active {
-  background: rgba(25, 118, 210, 0.50) !important;
+  background: rgba(25, 118, 210, 0.5) !important;
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15); /* soft halo, subtle pop */
 }
 .subheader-divider {

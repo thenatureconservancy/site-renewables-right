@@ -2,7 +2,6 @@
 import TheMap from '../components/TheMap.vue'
 import TheLeftPanel from '@/components/TheLeftPanel.vue'
 import TheHelp from '@/components/TheHelp.vue'
-import TheReport from '@/components/TheReport_old.vue'
 import { useMapStore } from '../stores/map'
 import { useHelpStore } from '@/stores/help'
 import { ref, onMounted } from 'vue'

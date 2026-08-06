@@ -1,6 +1,5 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { resolveLegend } from "@/utils/legends";
 // Version-proof font init (handles 0.1.x, 0.2.x, and bundler quirks)
 pdfMake.vfs = pdfFonts?.pdfMake?.vfs || pdfFonts?.vfs || pdfMake.vfs;
 // ============================================================================
@@ -22,13 +21,6 @@ const BRAND = {
   subLabel: "#9aa5b1",   // subheader divider color (matches panel)
   subLabelBg: "#fafbfc",
 };
-
-// legend swatch geometry (pdf points)
-const SW = 9;      // swatch square size
-const SW_GAP = 5;  // gap between swatch and label
-const CASCADE_CHIP = 7;
-const CASCADE_OFFSET = 3;
-
 export async function generateSiteReport(mapStore, options = {}) {
   const { includeDescriptions = false } = options;
   // ---- Map screenshot (buffer + point are already drawn on the view) ----
@@ -61,8 +53,6 @@ export async function generateSiteReport(mapStore, options = {}) {
   const categories = buildCategories(mapStore);
   // ---- Site-level summary metrics ----
   const summary = buildSummary(mapStore, categories);
-  // ---- Map legend (only VISIBLE layers, to match the screenshot) ----
-  const mapLegend = buildMapLegend(mapStore);
   // ---- Assemble document ----
   const content = [
     // ===== HEADER =====
@@ -91,10 +81,8 @@ export async function generateSiteReport(mapStore, options = {}) {
     { image: screenshot.dataUrl, width: 515, margin: [0, 0, 0, 6] },
     {
       text: "Selected project location with analysis buffer.",
-      fontSize: 8, italics: true, color: "#999", margin: [0, 0, 0, 10],
+      fontSize: 8, italics: true, color: "#999", margin: [0, 0, 0, 16],
     },
-    // ===== MAP LEGEND (visible layers) =====
-    ...mapLegend,
     // ===== SITE SUMMARY BAND =====
     { text: "Site Summary", style: "sectionHeader" },
     // Energy type subtitle (Option A) — reads like a report subtitle
@@ -168,7 +156,6 @@ export async function generateSiteReport(mapStore, options = {}) {
       statValue: { fontSize: 13, bold: true, color: "#333" },
       layerName: { fontSize: 10, color: "#333" },
       layerDesc: { fontSize: 8, color: "#777", italics: true },
-      legendHeader: { fontSize: 11, bold: true, color: BRAND.navy, margin: [0, 0, 0, 6] },
     },
   };
   pdfMake.createPdf(docDefinition).download("srr-site-report.pdf");
@@ -232,123 +219,6 @@ function buildSummary(mapStore, categories) {
   };
 }
 // ============================================================================
-//  MAP LEGEND BUILDER (visible layers only — mirrors the on-screen legend)
-// ============================================================================
-function buildMapLegend(mapStore) {
-  // Collect every VISIBLE sublayer, resolve its legend spec.
-  const entries = [];
-  mapStore.layers.forEach((group) => {
-    group.subheaders?.forEach((subheader) => {
-      subheader.sublayers?.forEach((sublayer) => {
-        if (sublayer.visible !== true) return;          // only what's on the map
-        const spec = resolveLegend(sublayer);
-        if (!spec) return;                              // no legend → skip
-        entries.push({ title: sublayer.title || sublayer.elid, spec });
-      });
-    });
-  });
-
-  if (!entries.length) return []; // nothing visible → no legend block
-
-  // Build one legend column entry (swatch canvas + title) per layer.
-  const items = entries.map((e) => legendItem(e.title, e.spec));
-
-  // Two-column layout to keep the legend compact under the map.
-  const half = Math.ceil(items.length / 2);
-  const col1 = items.slice(0, half);
-  const col2 = items.slice(half);
-
-  return [
-    { text: "Map Legend", style: "legendHeader" },
-    {
-      columns: [
-        { width: "50%", stack: col1 },
-        { width: "50%", stack: col2 },
-      ],
-      columnGap: 12,
-      margin: [0, 0, 0, 14],
-    },
-  ];
-}
-
-/** One legend row: a small canvas swatch beside the layer title. */
-function legendItem(title, spec) {
-  return {
-    columns: [
-      { width: "auto", canvas: swatchCanvas(spec), margin: [0, 1, 0, 0] },
-      { width: "*", text: title, fontSize: 8, color: "#333", margin: [SW_GAP, 0, 0, 0] },
-    ],
-    columnGap: 0,
-    margin: [0, 0, 0, 3],
-  };
-}
-
-/** Build a pdfMake canvas array that mirrors the LegendSwatch shapes. */
-function swatchCanvas(spec) {
-  switch (spec.type) {
-    case "swatch":
-      return [rect(0, 0, SW, SW, spec.color)];
-
-    case "hatch":
-      // approximate the diagonal hatch with a few diagonal lines in a bordered box
-      return [
-        rect(0, 0, SW, SW, "#ffffff", spec.color),
-        { type: "line", x1: 0, y1: SW, x2: SW, y2: 0, lineWidth: 1, lineColor: spec.color },
-        { type: "line", x1: SW / 2, y1: SW, x2: SW, y2: SW / 2, lineWidth: 1, lineColor: spec.color },
-        { type: "line", x1: 0, y1: SW / 2, x2: SW / 2, y2: 0, lineWidth: 1, lineColor: spec.color },
-      ];
-
-    case "symbol":
-      if (spec.shape === "triangle") {
-        return [{ type: "polyline", closePath: true, color: spec.color,
-          points: [{ x: SW / 2, y: 0 }, { x: SW, y: SW }, { x: 0, y: SW }] }];
-      }
-      // diamond
-      return [{ type: "polyline", closePath: true, color: spec.color,
-        points: [{ x: SW / 2, y: 0 }, { x: SW, y: SW / 2 }, { x: SW / 2, y: SW }, { x: 0, y: SW / 2 }] }];
-
-    case "discrete": {
-      // diagonal cascade of small chips (mirrors compact mode)
-      const items = spec.items || [];
-      return items.map((it, i) =>
-        rect(i * CASCADE_OFFSET, i * CASCADE_OFFSET, CASCADE_CHIP, CASCADE_CHIP, it.color, "#ffffff")
-      );
-    }
-
-    case "ramp":
-      // gradient can't render in canvas → sample 3 stops as adjacent chips
-      return rampChips(spec.gradient);
-
-    case "image":
-      // legacy image fallback: draw a neutral box (image can't go in canvas)
-      return [rect(0, 0, SW, SW, "#dddddd", "#bbbbbb")];
-
-    default:
-      return [rect(0, 0, SW, SW, "#dddddd")];
-  }
-}
-
-/** filled (optionally bordered) rectangle helper */
-function rect(x, y, w, h, color, border) {
-  const r = { type: "rect", x, y, w, h, color };
-  if (border) { r.lineWidth = 0.75; r.lineColor = border; }
-  return r;
-}
-
-/** Turn a CSS linear-gradient string into a few adjacent color chips. */
-function rampChips(gradient) {
-  const cols = extractColors(gradient);
-  const stops = cols.length ? cols : ["#dddddd"];
-  const chipW = SW / stops.length;
-  return stops.map((c, i) => rect(i * chipW, 0, chipW, SW, c));
-}
-
-/** Pull hex colors out of a "linear-gradient(...)" string. */
-function extractColors(gradient) {
-  const m = (gradient || "").match(/#[0-9a-fA-F]{3,8}/g);
-  return m || [];
-}
-// ============================================================================
 //  TABLE / SECTION BUILDERS
 // ============================================================================
 function buildRollupTable(categories) {
@@ -386,6 +256,7 @@ function buildRollupTable(categories) {
 function norm(s) {
   return (s || "").trim().toLowerCase();
 }
+/** "wind" -> "Wind"; handles null/undefined gracefully. */
 /** Title-case each word: "floating solar" -> "Floating Solar". Null-safe. */
 function capitalize(s) {
   if (!s) return "—";

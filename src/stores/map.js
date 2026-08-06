@@ -3,12 +3,8 @@ import { defineStore } from 'pinia';
 import Graphic from '@arcgis/core/Graphic.js'
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import * as bufferOperator from '@arcgis/core/geometry/operators/bufferOperator.js'
-import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator.js";
-import * as areaOperator from "@arcgis/core/geometry/operators/areaOperator.js";
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer'
 import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
-import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer'
 import * as projectOperator from "@arcgis/core/geometry/operators/projectOperator.js";
 import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
 
@@ -59,13 +55,8 @@ export const useMapStore = defineStore('mapStore', () => ({
         opacity: 0.9,
         category: 'both',
         title: 'Protected Areas',
-        inBuffer: false,
-        inExtent: false,
         description: 'short description',
         longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHUlEQVR4nGMUzvD6z0ABYKJE86gBowaMGjCYDAAAa/wB5OuA0X4AAAAASUVORK5CYII=' // #c8c8c8
       },
       {
         index: 2,
@@ -77,14 +68,9 @@ export const useMapStore = defineStore('mapStore', () => ({
         opacity: 0.9,
         category: 'both',
         title: 'Floodplains, Wetlands, and Groundwater-fed Ecosystems',
-        inBuffer: false,
-        inExtent: false,
         description: 'short description',
         longDescription: 'Renewable energy development near wetland complexes and riparian corridors may cause adverse impacts to wildlife and fragile wetland ecosystems. This layer identifies floodplains, rivers, open water, and wetlands (Fathom-US 1-in-20 year fluvial and 1-in-20-year pluvial flood model tiles; <a href="https://www.fws.gov/program/national-wetlands-inventory" target="_blank"> US Fish & Wildlife Service National Wetlands Inventory </a>). Groundwater-dependent ecosystem data in Nevada and Arizona and vernal pools in California were also included.',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGOcdvwPAymAiSTVoxpGNQwpDQBf8QJ5pQeyKAAAAABJRU5ErkJggg==' // #96c7fc
-      },
+            },
    
     
       {
@@ -733,6 +719,19 @@ async createBuffer (e){
 
   this.getHistogram(buffer)   // buffer is now in 5070
   this.getIntersections(buffer)
+  //zoom to buffer
+  // at the end of createBuffer, after adding the buffer graphic:
+const view = document.querySelector("arcgis-map").view
+const padded = buffer.extent.clone().expand(1.3)
+
+view.goTo(
+  { target: padded },
+  { duration: 800, easing: "ease-in-out" }
+).catch((err) => {
+  // goTo rejects if interrupted by user interaction — safe to ignore
+  if (err.name !== "AbortError") console.error(err)
+})
+
 },
   /*
   //function to clip features and calculate area
