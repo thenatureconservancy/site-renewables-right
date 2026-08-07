@@ -1,20 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { startTour } from '@/utils/appTour'
 import { onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useMapStore } from '@/stores/map'
 import { useHelpStore } from './stores/help'
-import { useShepherd } from 'vue-shepherd'
 import TheHelp from '@/components/TheHelp.vue'
 import { ref } from 'vue'
-const tour = useShepherd({
-  useModalOverlay: true,
-  defaultStepOptions: {
-    classes: 'shepherd-theme-bright',
-    scrollTo: { behavior: 'smooth', block: 'center' },
-    cancelIcon: { enabled: true },
-  },
-})
+
 
 //import esri component libs globally so they are available in multiple components
 import '@arcgis/map-components/components/arcgis-map'
@@ -34,41 +27,7 @@ const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
 
-onMounted(async () => {
-  tour.addStep({
-    attachTo: { element: '#energyType', on: 'right' },
-    title: '1: Select energy type',
-    text: 'This will filter the layers to show only those relevant to the energy type you want to develop on your site.',
-    cancelIcon: {
-      enabled: true,
-      label: '✖',
-      className: 'shepherd-cancel-icon',
-    },
-    buttons: [
-      {
-        text: 'Next',
-        action: tour.next,
-      },
-    ],
-  })
 
-  tour.addStep({
-    attachTo: { element: '#dataDownload', on: 'right' },
-    title: '2: Download data & report',
-    text: 'Download all data as a .zip file and a report summarizing potential risks and considerations for your site.  The report button becomes active after you have selected a site on the map.',
-    cancelIcon: {
-      enabled: true,
-      label: '✖',
-      className: 'shepherd-cancel-icon',
-    },
-    buttons: [
-      {
-        text: 'Finish',
-        action: tour.cancel,
-      },
-    ],
-  })
-})
 const height = ref(window.innerHeight)
 const width = ref(window.innerWidth / 2.2)
 </script>
@@ -104,6 +63,7 @@ const width = ref(window.innerWidth / 2.2)
           size="12px"
           icon="download"
           outline
+          data-tour="download-data"
         ></q-btn>
         <q-btn
           color="primary"
@@ -113,7 +73,7 @@ const width = ref(window.innerWidth / 2.2)
           square
           size="12px"
           icon="play_arrow"
-          @click="tour.start()"
+          @click="startTour(mapStore)"
           flat
         ></q-btn>
 

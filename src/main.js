@@ -4,7 +4,7 @@ import { Quasar } from 'quasar';
 import App from './App.vue'
 import router from './router'
 import 'shepherd.js/dist/css/shepherd.css'
-import '@/assets/shepherd-theme-bright.css'
+import '@/assets/tour-theme.css'   // the TNC-green theme file
 import quasarUserOptions from './quasar-user-options';
 const app = createApp(App)
 

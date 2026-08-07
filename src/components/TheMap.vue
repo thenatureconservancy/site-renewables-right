@@ -651,15 +651,15 @@ onMounted(() => {
       >
     </q-btn>
     <!--arcgis-legend position="bottom-left"></arcgis-legend-->
-    <arcgis-search
+    <arcgis-search data-tour="search"
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
-    <div style="position: absolute; bottom: 15px; left: 15px; z-index: 999">
+    <div style="position: absolute; bottom: 15px; left: 15px; z-index: 999" tour-data="basemap">
       <BasemapSwitcher />
     </div>
     <!-- help button next to search-->
-
+    <div data-tour="map-tools">
     <!-- opacity control knob-->
     <q-btn
       size="md"
@@ -757,7 +757,7 @@ onMounted(() => {
     </q-btn>
 
     <!-- report summary boxes-->
-
+</div>
     <site-report />
   </arcgis-map>
   <!-- agol add data dialog -->

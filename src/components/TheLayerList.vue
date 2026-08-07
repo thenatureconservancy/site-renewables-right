@@ -84,6 +84,7 @@ async function scrollToElement(layer, elid) {
 <template>
   <div class="" v-for="(item, groupIndex) in mapStore.layers" :key="item.id || groupIndex">
     <q-expansion-item
+      :data-tour="item.header === 'Conservation Values' ? 'cat-conservation' : null"
       v-model="item.expanded"
       @update:model-value="mapStore.setGroupVisibility(item)"
       :label="item.header"
@@ -264,7 +265,7 @@ async function scrollToElement(layer, elid) {
           </div>
 
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
-          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'">
+          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'" data-tour="energy-filter" >
             <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
               <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
                 *Energy type filters the conservation layers below.
@@ -364,7 +365,7 @@ async function scrollToElement(layer, elid) {
                 item-key="index"
               >
                 <template #item="{ element: sublayer }">
-                  <q-item v-if="sublayer.filter" dense class="">
+                  <q-item v-if="sublayer.filter" dense class=""  :data-tour="sublayer.elid === 'protectedAreas' ? 'layer-row' : null">
                     <q-item-section side>
                       <q-icon size="xs" name="drag_indicator" />
                     </q-item-section>

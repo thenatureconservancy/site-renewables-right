@@ -1,0 +1,80 @@
+/* ============================================================================
+   Site Renewables Right — Shepherd tour theme (TNC green)
+   Import AFTER shepherd.css:
+     import 'shepherd.js/dist/css/shepherd.css'
+     import '@/assets/tour-theme.css'
+   ============================================================================ */
+
+.shepherd-element.srr-tour {
+  max-width: 340px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  font-family: inherit;
+}
+
+/* Header / title */
+.srr-tour .shepherd-header {
+  background: linear-gradient(135deg, #64b45b 0%, #5aa54d 100%);
+  padding: 12px 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.srr-tour .shepherd-title {
+  color: #272525;
+  font-size: 15px;
+  font-weight: 600;
+}
+.srr-tour .shepherd-cancel-icon {
+  color: rgba(255, 255, 255, 0.9);
+}
+.srr-tour .shepherd-cancel-icon:hover {
+  color: #fff;
+}
+
+/* Body text */
+.srr-tour .shepherd-text {
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+}
+.srr-tour .shepherd-text b {
+  color: #2e7d32;
+}
+
+/* Footer / buttons */
+.srr-tour .shepherd-footer {
+  padding: 0 16px 14px;
+  gap: 8px;
+}
+.srr-tour .shepherd-button {
+  background: #64b45b;
+  color: #fff;
+  border-radius: 4px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease;
+}
+.srr-tour .shepherd-button:hover {
+  background: #5aa54d;
+}
+.srr-tour .shepherd-button.shepherd-button-secondary {
+  background: #f0f0f0;
+  color: #555;
+}
+.srr-tour .shepherd-button.shepherd-button-secondary:hover {
+  background: #e5e5e5;
+}
+
+/* Arrow color to match card body */
+.srr-tour .shepherd-arrow::before {
+  background: #fff;
+}
+
+/* Modal overlay dim */
+.shepherd-modal-overlay-container.shepherd-modal-is-visible {
+  opacity: 0.55;
+}

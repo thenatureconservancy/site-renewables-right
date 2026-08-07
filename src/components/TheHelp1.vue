@@ -26,7 +26,7 @@ function goBack() {
 </script>
 
 <template>
-  <div class="help-panel">
+  <div class="help-panel" data-tour="layer-info-panel">
     <!-- TABLE OF CONTENTS -->
     <template v-if="!selectedSection">
       <div class="help-header bg-blue-grey-9 text-white text-center q-pa-sm">

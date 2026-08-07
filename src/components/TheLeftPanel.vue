@@ -17,7 +17,7 @@ const scrollHeight = computed(() => ({
 }))
 </script>
 <template>
-  <div class="q-mx-md" style="border-top: 1px solid lightgray">
+  <div class="q-mx-md" style="border-top: 1px solid lightgray" data-tour="intro-text">
     <p class="text-body2 text-weight-medium q-mt-md q-mb-none">
       Explore where renewable energy development may face constraints, tradeoffs, or opportunities.
     </p>
@@ -67,7 +67,7 @@ const scrollHeight = computed(() => ({
       </q-slide-transition>
     </div>
 
-    <q-toolbar class="q-ma-none q-pa-none">
+    <q-toolbar class="q-ma-none q-pa-none" data-tour="data-layers">
       <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>
       <q-space></q-space>
       <q-btn color="grey-8" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
