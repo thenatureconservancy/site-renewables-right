@@ -240,10 +240,11 @@ export function startTour(mapStore) {
     title: 'Map tools',
     text: `The map has a few handy tools:
            <br/><br/>
-           <b>Basemap Switcher</b> <span style="color:#888">(bottom-left)</span> — change the underlying basemap.<br/>
+           <b>Set Opacity</b> <span style="color:#888">(top-left)</span> — Set the opacity of ALL layers on the map (useful for seeing underlying basemap features)<br/>
+            <b>ArcGIS Online</b> <span style="color:#888">(top-left)</span> — sign in to add additional or private data to the map.<br/>
            <b>Home</b> <span style="color:#888">(top-left)</span> — return to the full U.S. view.<br/>
            <b>Measure</b> <span style="color:#888">(top-left)</span> — measure distances and areas.<br/>
-           <b>ArcGIS Online</b> <span style="color:#888">(top-left)</span> — sign in to add additional data to the map.<br/>
+           <b>Basemap Switcher</b> <span style="color:#888">(bottom-left)</span> — change the underlying basemap.<br/>
            <b>Search</b> <span style="color:#888">(top-right)</span> — find a location by address, place name, or coordinates.`,
     // No attachTo → centered dialog; we highlight the whole map manually.
     beforeShowPromise: async () => {
