@@ -160,7 +160,7 @@ async function scrollToElement(layer, elid) {
                           icon="o_info"
                           @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
-                          <q-tooltip>Go to layer info panel</q-tooltip>
+                          <q-tooltip>click for layer info</q-tooltip>
                         </q-btn>
 
                         <q-btn
@@ -246,7 +246,7 @@ async function scrollToElement(layer, elid) {
                       icon="o_info"
                       @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
-                      <q-tooltip>Go to layer info panel</q-tooltip>
+                      <q-tooltip>click for layer info</q-tooltip>
                     </q-btn>
 
                     <q-btn
@@ -265,7 +265,7 @@ async function scrollToElement(layer, elid) {
           </div>
 
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
-          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'" data-tour="energy-filter" >
+          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'" data-tour="energy-filter">
             <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
               <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
                 *Energy type filters the conservation layers below.
@@ -365,7 +365,12 @@ async function scrollToElement(layer, elid) {
                 item-key="index"
               >
                 <template #item="{ element: sublayer }">
-                  <q-item v-if="sublayer.filter" dense class=""  :data-tour="sublayer.elid === 'protectedAreas' ? 'layer-row' : null">
+                  <q-item
+                    v-if="sublayer.filter"
+                    dense
+                    class=""
+                    :data-tour="sublayer.elid === 'protectedAreas' ? 'layer-row' : null"
+                  >
                     <q-item-section side>
                       <q-icon size="xs" name="drag_indicator" />
                     </q-item-section>
@@ -414,7 +419,7 @@ async function scrollToElement(layer, elid) {
                           icon="o_info"
                           @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
-                          <q-tooltip>Go to layer info panel</q-tooltip>
+                          <q-tooltip>click for layer info</q-tooltip>
                         </q-btn>
 
                         <q-btn
@@ -494,7 +499,7 @@ async function scrollToElement(layer, elid) {
                       icon="o_info"
                       @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
-                      <q-tooltip>Go to layer info panel</q-tooltip>
+                      <q-tooltip>click for layer info</q-tooltip>
                     </q-btn>
 
                     <q-btn

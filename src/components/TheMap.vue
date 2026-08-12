@@ -218,7 +218,7 @@ onMounted(() => {
   //mosaic layer for in
   let imageLayer = new ImageryLayer({
     // URL to the imagery service
-    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_Mosaic_Albers/ImageServer',
+    url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Compass_MosaicRasters_Albers/ImageServer',
     visible: false,
     id: 'imageLayer',
   })
@@ -322,8 +322,8 @@ onMounted(() => {
   })
 
   //defining graphic layers to be used with the buffer tool
-  let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide' })
-  let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide' })
+  let bufferLayer = new GraphicsLayer({ id: 'bufferLayer', listMode: 'hide', visible: false })
+  let pointLayer = new GraphicsLayer({ id: 'pointLayer', listMode: 'hide', visible: false })
   const basemap = new Basemap({
     portalItem: {
       id: 'd22aed9a4acb4bc8ae8f2141732af496', // Replace with your desired basemap item ID (e.g., "668f436dc2dc4f2c83ceb0c064380590" for Topo US worldview)
@@ -378,8 +378,9 @@ onMounted(() => {
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })
   arcgisMap.addEventListener('arcgisViewDoubleClick', async (e) => {
-      e.preventDefault?.()
-      e.stopPropagation?.()
+    e.preventDefault?.()
+    e.stopPropagation?.()
+    mapStore.showSiteReport = true
     if (measuring.value == false) {
       mapStore.showDemo = true
       try {
@@ -651,7 +652,8 @@ onMounted(() => {
       >
     </q-btn>
     <!--arcgis-legend position="bottom-left"></arcgis-legend-->
-    <arcgis-search data-tour="search"
+    <arcgis-search
+      data-tour="search"
       position="top-right"
       search-extent='{"xmin": -125, "ymin": 24.396308, "xmax": -66.93457, "ymax": 49.384358, "spatialReference": {"wkid": 4326}}'
     ></arcgis-search>
@@ -660,40 +662,40 @@ onMounted(() => {
     </div>
     <!-- help button next to search-->
     <div data-tour="map-tools">
-    <!-- opacity control knob-->
-    <q-btn
-      size="md"
-      @click="mapStore.showOpacity = !mapStore.showOpacity"
-      padding="6px"
-      class="text-primary shadow-3 bg-white"
-      unelevated
-      square
-      icon="opacity"
-      stack
-      style="z-index: 999; position: absolute; left: 65px; top: 15px"
-      ><q-tooltip class="text-body2">Set layers opacity</q-tooltip>
-    </q-btn>
-    <q-slide-transition>
-      <div
-        class="bg-white q-pt-md q-px-md"
-        v-show="mapStore.showOpacity"
-        style="z-index: 999; position: absolute; left: 65px; top: 60px; width: 200px"
-      >
-        <calcite-label>
-          Layers Opacity (%)
-          <calcite-slider
-            value="90"
-            label-handles
-            label-ticks
-            max-label="100"
-            min-label="0"
-            ticks="100"
-            class="green-slider"
-          ></calcite-slider>
-        </calcite-label>
-      </div>
-    </q-slide-transition>
-    <!--div
+      <!-- opacity control knob-->
+      <q-btn
+        size="md"
+        @click="mapStore.showOpacity = !mapStore.showOpacity"
+        padding="6px"
+        class="text-primary shadow-3 bg-white"
+        unelevated
+        square
+        icon="opacity"
+        stack
+        style="z-index: 999; position: absolute; left: 65px; top: 15px"
+        ><q-tooltip class="text-body2">Set layers opacity</q-tooltip>
+      </q-btn>
+      <q-slide-transition>
+        <div
+          class="bg-white q-pt-md q-px-md"
+          v-show="mapStore.showOpacity"
+          style="z-index: 999; position: absolute; left: 65px; top: 60px; width: 200px"
+        >
+          <calcite-label>
+            Layers Opacity (%)
+            <calcite-slider
+              value="90"
+              label-handles
+              label-ticks
+              max-label="100"
+              min-label="0"
+              ticks="100"
+              class="green-slider"
+            ></calcite-slider>
+          </calcite-label>
+        </div>
+      </q-slide-transition>
+      <!--div
       style="z-index: 999; position: absolute; left: 65px; top: 15px"
       class="row text-center bg-white q-pa-xs items-center shadow-3 rounded-borders"
     >
@@ -714,50 +716,50 @@ onMounted(() => {
         </q-knob>
       </div>
     </div-->
-    <!-- reset zoom button-->
-    <q-btn
-      size="md"
-      @click="zoomHome()"
-      padding="6px"
-      class="text-primary shadow-3 bg-white"
-      unelevated
-      square
-      icon="home"
-      stack
-      style="z-index: 999; position: absolute; left: 145px; top: 15px"
-      ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
-    </q-btn>
-    <q-btn
-      size="md"
-      @click="toggleMeasure()"
-      padding="6px"
-      :class="
-        measuring == false ? 'text-primary shadow-3 bg-white' : 'text-primary shadow-3 bg-green-2'
-      "
-      unelevated
-      square
-      icon="straighten"
-      stack
-      style="z-index: 999; position: absolute; left: 185px; top: 15px"
-      ><q-tooltip class="text-body2">Measure distance</q-tooltip>
-    </q-btn>
-    <!-- agol login-->
-    <q-btn
-      style="z-index: 999; position: absolute; left: 105px; top: 15px"
-      @click="agolStore.showDialog = true"
-      icon="img:globe.png"
-      size="md"
-      color="white"
-      padding="6px"
-      class="text-green-9 shadow-3"
-      unelevated
-      square
-      stack
-      ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
-    </q-btn>
+      <!-- reset zoom button-->
+      <q-btn
+        size="md"
+        @click="zoomHome()"
+        padding="6px"
+        class="text-primary shadow-3 bg-white"
+        unelevated
+        square
+        icon="home"
+        stack
+        style="z-index: 999; position: absolute; left: 145px; top: 15px"
+        ><q-tooltip class="text-body2">Reset zoom</q-tooltip>
+      </q-btn>
+      <q-btn
+        size="md"
+        @click="toggleMeasure()"
+        padding="6px"
+        :class="
+          measuring == false ? 'text-primary shadow-3 bg-white' : 'text-primary shadow-3 bg-green-2'
+        "
+        unelevated
+        square
+        icon="straighten"
+        stack
+        style="z-index: 999; position: absolute; left: 185px; top: 15px"
+        ><q-tooltip class="text-body2">Measure distance</q-tooltip>
+      </q-btn>
+      <!-- agol login-->
+      <q-btn
+        style="z-index: 999; position: absolute; left: 105px; top: 15px"
+        @click="agolStore.showDialog = true"
+        icon="img:globe.png"
+        size="md"
+        color="white"
+        padding="6px"
+        class="text-green-9 shadow-3"
+        unelevated
+        square
+        stack
+        ><q-tooltip class="text-body2">Sign in to ArcGIS Online to add your data</q-tooltip>
+      </q-btn>
 
-    <!-- report summary boxes-->
-</div>
+      <!-- report summary boxes-->
+    </div>
     <site-report />
   </arcgis-map>
   <!-- agol add data dialog -->

@@ -254,7 +254,7 @@ async function scrollToElement(layer, elid) {
                           icon="o_info"
                           @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
-                          <q-tooltip>Go to layer info panel</q-tooltip>
+                          <q-tooltip>click for layer info</q-tooltip>
                         </q-btn>
 
                         <q-btn
@@ -382,7 +382,7 @@ async function scrollToElement(layer, elid) {
                       icon="o_info"
                       @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
-                      <q-tooltip>Go to layer info panel</q-tooltip>
+                      <q-tooltip>click for layer info</q-tooltip>
                     </q-btn>
 
                     <q-btn
@@ -592,7 +592,7 @@ async function scrollToElement(layer, elid) {
                           icon="o_info"
                           @click.stop="scrollToElement(layer.title, sublayer.elid)"
                         >
-                          <q-tooltip>Go to layer info panel</q-tooltip>
+                          <q-tooltip>click for layer info</q-tooltip>
                         </q-btn>
 
                         <q-btn
@@ -714,7 +714,7 @@ async function scrollToElement(layer, elid) {
                       icon="o_info"
                       @click.stop="scrollToElement(layer.title, sublayer.elid)"
                     >
-                      <q-tooltip>Go to layer info panel</q-tooltip>
+                      <q-tooltip>click for layer info</q-tooltip>
                     </q-btn>
 
                     <q-btn

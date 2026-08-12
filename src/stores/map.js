@@ -164,7 +164,8 @@ export const useMapStore = defineStore('mapStore', () => ({
         percentOfTotal: 0,
         legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
       },
-      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, visibleModel: false, opacity: 0.9, category: 'floating solar', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
+      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, 
+        visibleModel: false, opacity: 0.9, category: 'floating solar', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
        
       {
         index: 0,
@@ -310,7 +311,7 @@ export const useMapStore = defineStore('mapStore', () => ({
      
  	   ]
   },
-  {title: 'Limitations to Farmland', id: 'ag2', visible: true, visibleModel: true, expanded: false,
+  {title: 'Limitations to Farmland', id: '', visible: true, visibleModel: true, expanded: false,
       sublayers: [
         {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
           longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
@@ -665,377 +666,244 @@ export const useMapStore = defineStore('mapStore', () => ({
   // --- module scope (top of the store file) ---
 
 
-async createBuffer (e){
-  if (e == 'current'){
-   
-    e = this.currentPoint
-     console.log(e)
-  }
-  if(this.bufferSize > 36){
-    alert('Buffer size cannot exceed 35 miles')
-    return
-  }
-  const polySymbol = {
-    type: 'simple-fill',
-    color: [255, 255, 255, 0.3],
-    outline: { color: [0, 0, 0, 0.5], width: 2 },
-  }
-  const pointSymbol = {
-    type: 'simple-marker',
-    color: [255, 0, 0],
-    outline: { color: [255, 255, 255], width: 1 },
-    size: 7,
-  }
-
-  const point = e.detail.mapPoint          // comes in as the map SR (Web Mercator)
-  const ALBERS = new SpatialReference({ wkid: 5070 }); // NAD83 / Conus Albers
-  this.currentPoint = e
-
-  let map = document.querySelector("arcgis-map").map;
-  let pointLayer  = map.findLayerById('pointLayer')
-  let bufferLayer = map.findLayerById('bufferLayer')
-
-  // point marker stays in the map's SR — fine for display
-  if (pointLayer.graphics.length === 0) {
-    pointLayer.add(new Graphic({ geometry: point, symbol: pointSymbol }))
-  } else {
-    pointLayer.graphics.getItemAt(0).geometry = point
-  }
-
-  // --- project the click to NAD83 / Conus Albers (5070) for honest area/distance ---
-  if (!projectOperator.isLoaded()) {
-    await projectOperator.load()
-  }
-  const pointAlbers = projectOperator.execute(point, ALBERS)
-
-  // buffer in 5070 (equal-area) — distance still specified in miles
-  const buffer = bufferOperator.execute(pointAlbers, this.bufferSize, { unit: 'miles' })
-
-  if (bufferLayer.graphics.length === 0) {
-    bufferLayer.add(new Graphic({ geometry: buffer, symbol: polySymbol }))
-  } else {
-    bufferLayer.graphics.getItemAt(0).geometry = buffer
-  }
-
-  this.getHistogram(buffer)   // buffer is now in 5070
-  this.getIntersections(buffer)
-  //zoom to buffer
-  // at the end of createBuffer, after adding the buffer graphic:
-const view = document.querySelector("arcgis-map").view
-const padded = buffer.extent.clone().expand(1.3)
-
-view.goTo(
-  { target: padded },
-  { duration: 800, easing: "ease-in-out" }
-).catch((err) => {
-  // goTo rejects if interrupted by user interaction — safe to ignore
-  if (err.name !== "AbortError") console.error(err)
-})
-
-},
-  /*
-  //function to clip features and calculate area
-  getIntersectionFeatures(buffer, item){
-    //first step is to probably query the layer and get geometries
-    //let map = document.querySelector("arcgis-map").map;
-    //console.log(item)
-    //let layer = map.findLayerById(item.id)
-    //console.log(layer)
+  async createBuffer (e){
+    if (e == 'current'){
     
-  // Create a FeatureLayer instance (not added to map)
-      const featureLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/" + item.layerid 
-      });
-
-     const queryGeom = {
-      geometry: buffer,
-      spatialRelationship: 'intersects',
-      returnGeometry: true,
-      outFields: ['*'],
-      where: item.defquery !== '' ? item.defquery : '1=1',
+      e = this.currentPoint
+      console.log(e)
+    }
+    if(this.bufferSize > 36){
+      alert('Buffer size cannot exceed 35 miles')
+      return
+    }
+    const polySymbol = {
+      type: 'simple-fill',
+      color: [255, 255, 255, 0.3],
+      outline: { color: [0, 0, 0, 0.5], width: 2 },
+    }
+    const pointSymbol = {
+      type: 'simple-marker',
+      color: [255, 0, 0],
+      outline: { color: [255, 255, 255], width: 1 },
+      size: 7,
     }
 
-    featureLayer.queryFeatures(queryGeom).then((results) => {
-      console.log(results)
-      //let obj = ''
-      let bufferArea = areaOperator.execute(buffer,{unit:'square-miles'})
-     
-      if(results.features.length === 0){
-       //TODO handle if no results come back must zero out old results
-    
-      
-      }
-      else{
-        let geoms = []
-        for(let i=0; i<results.features.length; i++){
-          geoms.push(results.features[i].geometry)
-        }
-        const clip = intersectionOperator.executeMany(geoms, buffer)
-        let area = 0
-        for(let i=0;i<clip.length;i++){
-          let fa = areaOperator.execute(clip[i], {unit:'square-miles'})
-          area = area + fa
-        }
-    
-        item.pathToLayer.totalArea= new Intl.NumberFormat('en-US', { notation: 'compact' }).format(area),
-        item.pathToLayer.percentOfTotal = area/bufferArea 
-      
-    //new Intl.NumberFormat('en-US', { notation: 'compact' }).format(bufferArea)
-    console.log(this.summary.highlySensitiveTotalArea)
-    //console.log(this.results.value.highlySensitiveTotalArea)
-    this.summary.bufferArea =bufferArea
-    if (item.group == 'highly sensitive'){ 
-      this.summary.highlySensitiveTotalArea = this.summary.highlySensitiveTotalArea + area
-      this.summary.highlySensitiveCount = this.summary.highlySensitiveCount + 1
-      this.summary.highlySensitiveHabitats.push({name: item.title, area: area, percentOfTotal: (area/bufferArea)  })
-    }
-    this.summary.highlySensitiveHabitats.sort((a, b) => b.percentOfTotal - a.percentOfTotal); 
-    if (item.group == 'moderately sensitive'){     
-    this.summary.moderatelySensitiveTotalArea= this.summary.moderatelySensitiveTotalArea + area
-    }
-    }
-   
-     })
-  },
-  //function to get count of intersecting points
-  getCountFeatures(buffer, item){ 
-     const featureLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/" + item.layerid 
-      });
+    const point = e.detail.mapPoint          // comes in as the map SR (Web Mercator)
+    const ALBERS = new SpatialReference({ wkid: 5070 }); // NAD83 / Conus Albers
+    this.currentPoint = e
 
-     const queryGeom = {
-      geometry: buffer,
-      spatialRelationship: 'intersects',
-      returnGeometry: false,
-      outFields: ['*'],
-    }
-
-    featureLayer.queryFeatures(queryGeom).then((results) => {
-      let count = results.features.length
-      console.log(results)
-     
-        if(count > 0){
-          item.pathToLayer.inBuffer = true
-       }else{
-          item.pathToLayer.inBuffer = false
-       }
-     
-      if (item.title == 'Brownfields over 10 acres'){
-        this.summary.brownfields = count
-        item.pathToLayer.count = count
-      }
-      if (item.title == 'Former Mine Lands'){
-        console.log('mines count:' + count)
-        console.log(item.pathToLayer)
-        this.summary.mines = count
-        item.pathToLayer.count = count
-      }
-      
-    })
-  },
-  //function to clip features and calculate area
-  getIntersectionExtent(item){
-    //first step is to probably query the layer and get geometries
     let map = document.querySelector("arcgis-map").map;
-    let layer = map.findLayerById(item.map)
-   
-    console.log(item.name)
-    let sublayer = layer.findSublayerById(item.id)
-     const queryGeom = {
-      geometry: this.currentMapExtent,
-      spatialRelationship: 'intersects',
-      returnGeometry: false,
-      outFields: [],
-      where: item.defquery !== ''? 'item.defquery': '1=1'
+    let pointLayer  = map.findLayerById('pointLayer')
+    let bufferLayer = map.findLayerById('bufferLayer')
+
+    // point marker stays in the map's SR — fine for display
+    if (pointLayer.graphics.length === 0) {
+      pointLayer.add(new Graphic({ geometry: point, symbol: pointSymbol }))
+    } else {
+      pointLayer.graphics.getItemAt(0).geometry = point
     }
 
-    sublayer.queryFeatures(queryGeom).then((results) => {
-     if(results.features.length > 0){  
-       console.log(item.name)  
-        item.pathToLayer.inExtent = true 
-        console.log(item.pathToLayer.inExtent)
-        if (item.id !== 1 && item.id !== 2 && item.id !== 30){ 
-          this.summary.hsExtentCount = this.summary.hsExtentCount + 1
-        }
-        else if (item.id == 30){     
-          this.summary.msExtentCount = this.summary.msExtentCount + 1
-        }
-        else if (item.id == 1 || item.id == 2){
-          this.summary.minesExtentCount = this.summary.minesExtentCount + 1
-        }
-        else{
-          console.log('no match')
-        }
-      }
-      else{
-         item.pathToLayer.inExtent = false 
-      }
-    })
-   
-    
-  },*/
+    // --- project the click to NAD83 / Conus Albers (5070) for honest area/distance ---
+    if (!projectOperator.isLoaded()) {
+      await projectOperator.load()
+    }
+    const pointAlbers = projectOperator.execute(point, ALBERS)
+
+    // buffer in 5070 (equal-area) — distance still specified in miles
+    const buffer = bufferOperator.execute(pointAlbers, this.bufferSize, { unit: 'miles' })
+
+    if (bufferLayer.graphics.length === 0) {
+      bufferLayer.add(new Graphic({ geometry: buffer, symbol: polySymbol }))
+    } else {
+      bufferLayer.graphics.getItemAt(0).geometry = buffer
+    }
+
+    this.getHistogram(buffer)   // buffer is now in 5070
+    this.getIntersections(buffer)
+    //zoom to buffer
+    // at the end of createBuffer, after adding the buffer graphic:
+  const view = document.querySelector("arcgis-map").view
+  const padded = buffer.extent.clone().expand(1.3)
+
+  view.goTo(
+    { target: padded },
+    { duration: 800, easing: "ease-in-out" }
+  ).catch((err) => {
+    // goTo rejects if interrupted by user interaction — safe to ignore
+    if (err.name !== "AbortError") console.error(err)
+  })
+
+  },
+  
   
     // Robust bin lookup — works whether min is 0, 0.5, -0.5, etc.
+    sumValidPixels(hist) {
+  if (!hist || !hist.counts?.length) return 0
+  const binWidth = (hist.max - hist.min) / hist.size
+  let total = 0
+  hist.counts.forEach((count, idx) => {
+    // value at the center of this bin
+    const value = hist.min + (idx + 0.5) * binWidth
+    if (Math.round(value) !== 0) total += count   // skip only the NoData / 0 bin
+  })
+  return total
+},
   countForValue(hist, value) {
       if (!hist || !hist.counts?.length) return 0
       const binWidth = (hist.max - hist.min) / hist.size
       const idx = Math.floor((value - hist.min) / binWidth)
       return hist.counts[idx] ?? 0
     },
-async getHistogram(buffer) {
-   
-  const rasters = [
+  async getHistogram(buffer) {
+    
+    const rasters = [
 
-    { name: 'Bats_10_Final_02_NoCA_5070', elid: 'bats' },
-    { name: 'BigGame_08_NoCA_5070', elid: 'bigGameSolar'},
-    { name: 'Birds_05_NoCA_5070', elid: 'birds' },
-    { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness' },
-    { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind' },
-    { name: 'PrairieGrouseAndSageGrouse_20260518_NoCA_R_5070', elid: 'prairieGrouse' },
-    { name: 'ProtectedAreas_01_Final_NoCA_5070', elid: 'protectedAreas' },
-    { name: 'RCN_NoCal_20260728_5070', elid: 'resilientConnected'},
-    { name: 'TE_Species_03_20260630_NoCA_5070', elid: 'threatenedEndangeredSpecies' },
-    { name: 'Water_02_reclass_20260630_NoCA_5070', elid: 'floodPlainsWetlands' },
-    { name: 'WhoopingCraneSolar_20260408_NoCA_R_5070', elid: 'whoopingCraneSolar' },
-    { name: 'WhoopingCraneWind_20260408_NoCA_R_5070', elid: 'whoopingCraneWind' },
+      { name: 'Bats_10_Final_02_NoCA_5070', elid: 'bats', values: [1,2] },
+      { name: 'BigGame_08_NoCA_5070', elid: 'bigGameSolar', values: [1]},
+      { name: 'Birds_05_NoCA_5070', elid: 'birds', values: [1] },
+      { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness', values: [2] },
+      { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind', values: [1] },
+      { name: 'PrairieGrouseA_5070', elid: 'prairieGrouse', values: [1] },
+      { name: 'ProtectedAreas_01_Final_NoCA_5070', elid: 'protectedAreas', values: [1] },
+      { name: 'RCN_NoCal_20260728_5070_new', elid: 'resilientConnected', values: [1,2,3]},
+      { name: 'TE_Species_03_20260630_NoCA_5070', elid: 'threatenedEndangeredSpecies', values: [1] },
+      { name: 'Water_02_reclass_20260630_NoCA_5070', elid: 'floodPlainsWetlands', values: [1] },
+      { name: 'WhoopingCraneSolar_20260408_NoCA_R_5070', elid: 'whoopingCraneSolar', values: [2] },
+      { name: 'WhoopingCraneWind_20260408_NoCA_R_5070', elid: 'whoopingCraneWind', values: [1] },
+      { name: 'abanDef2_rec_ur_5070_new', elid: 'abandonedag', values: [1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001, 2002, 2003, 2004, 2005, 2006, 2007,2008,2009,2010,2011,2012,2013,2014]},
+      { name: 'pvr_val_2_GT_5070_new', elid: 'ag2', values: [2]},
+      { name: 'pvr_val_3_GT_5070_new', elid: 'ag3', values:[3]},
+      { name: 'pvr_val_4_GT_5070_new', elid: 'ag4', values:[4]},
+    
+    ]
 
-  ]
+    const map = document.querySelector('arcgis-map').map
+    const imageLayer = map.findLayerById('imageLayer')
+    this.reportLoading = true
 
-  const map = document.querySelector('arcgis-map').map
-  const imageLayer = map.findLayerById('imageLayer')
-  this.reportLoading = true
+    const radiusMeters = this.bufferSize * 1609.344     // miles → meters
+    const bufferAreaM2 = Math.PI * radiusMeters * radiusMeters
+    this.reportBufferAreaHa = +(bufferAreaM2 / 10000).toFixed(2)
+    this.reportBufferAreaAc = +(bufferAreaM2 / 4046.8564224).toFixed(2)
 
-  const radiusMeters = this.bufferSize * 1609.344     // miles → meters
-  const bufferAreaM2 = Math.PI * radiusMeters * radiusMeters
-  this.reportBufferAreaHa = +(bufferAreaM2 / 10000).toFixed(2)
-  this.reportBufferAreaAc = +(bufferAreaM2 / 4046.8564224).toFixed(2)
+    const PIXEL_SIZE   = 30
+    const PIXEL_M2     = PIXEL_SIZE * PIXEL_SIZE   // 900   ← this is m², the value you're seeing
+    const HA_PER_PIXEL = PIXEL_M2 / 10000          // 0.09  ✅ hectares
+    const AC_PER_PIXEL = PIXEL_M2 / 4046.8564224   // 0.2224 acres
+    const ALBERS=new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
+    console.log('HA_PER_PIXEL =', HA_PER_PIXEL)  // should be 0.09
 
-  const PIXEL_SIZE   = 30
-  const PIXEL_M2     = PIXEL_SIZE * PIXEL_SIZE   // 900   ← this is m², the value you're seeing
-  const HA_PER_PIXEL = PIXEL_M2 / 10000          // 0.09  ✅ hectares
-  const AC_PER_PIXEL = PIXEL_M2 / 4046.8564224   // 0.2224 acres
-  const ALBERS=new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
-  console.log('HA_PER_PIXEL =', HA_PER_PIXEL)  // should be 0.09
+    
+    const tasks = rasters.map(async ({ name, elid, values }) => {
+      const valueList = Array.isArray(values) ? values : values != null ? [values] : [1]
+      const mosaicRule = new MosaicRule({
+        method: 'attribute',
+        where: `Name = '${name}'`,        // use .name, not the object
+        operation: 'first'
+      })
 
-  // Run all 10 in parallel and collect [elid, result] pairs
-  const tasks = rasters.map(async ({ name, elid }) => {
-    const mosaicRule = new MosaicRule({
-      method: 'attribute',
-      where: `Name = '${name}'`,        // use .name, not the object
-      operation: 'first'
+      const params = new ImageHistogramParameters({
+        geometry: buffer,                  // already in 5070
+        mosaicRule,
+        pixelSize: { x: PIXEL_SIZE, y: PIXEL_SIZE, spatialReference: ALBERS },
+        renderingRule: null
+      })
+
+      try {
+        const res = await imageLayer.computeStatisticsHistograms(params)
+        const hist = res.histograms?.[0]
+
+        // Total valid pixels = sum of all bins (NoData already excluded)
+      // instead of: const pixelCount = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
+       
+
+        // Per-value breakdown (some rasters use 1, some use 2)
+    // per-value breakdown for THIS raster's actual values
+      const byValue = {}
+      let pixelCount = 0
+      for (const v of valueList) {
+        const pc = this.countForValue(hist, v)
+        byValue[v] = {
+          pixelCount: pc,
+          areaHa: +(pc * HA_PER_PIXEL).toFixed(2),
+          areaAc: +(pc * AC_PER_PIXEL).toFixed(2),
+        }
+        pixelCount += pc          // total = sum of all this raster's values
+      }
+        console.log(elid, hist)
+        return [elid, {
+          ok: true,
+          error: null,
+          elid,
+          rasterName: name,              // keep for debugging/traceability
+          pixelCount,
+          areaHa: +(pixelCount * HA_PER_PIXEL).toFixed(2),
+          areaAc: +(pixelCount * AC_PER_PIXEL).toFixed(2),
+          byValue,
+          min: hist?.min ?? null,
+          max: hist?.max ?? null
+        }]
+        
+      } catch (err) {
+        console.error(`Histogram failed for ${name} (${elid})`, err)
+        return [elid, {
+          ok: false,
+          error: err.message,
+          elid,
+          rasterName: name,
+          pixelCount: 0,
+          areaHa: 0,
+          areaAc: 0,
+          byValue: { 1: { pixelCount: 0, areaHa: 0 }, 2: { pixelCount: 0, areaHa: 0 } },
+          min: null,
+          max: null
+        }]
+      }
     })
 
-    const params = new ImageHistogramParameters({
-      geometry: buffer,                  // already in 5070
-      mosaicRule,
-      pixelSize: { x: PIXEL_SIZE, y: PIXEL_SIZE, spatialReference: ALBERS },
-      renderingRule: null
-    })
+    const entries = await Promise.all(tasks)
+    const reportResults = Object.fromEntries(entries)   // keyed by elid
 
-    try {
-      const res = await imageLayer.computeStatisticsHistograms(params)
-      const hist = res.histograms?.[0]
+    // 1) keep the full structured result in the store
+    this.reportResults = reportResults
+    this.reportGeneratedAt = Date.now()
 
-      // Total valid pixels = sum of all bins (NoData already excluded)
-     // instead of: const pixelCount = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
-      const pixelCount = this.countForValue(hist, 1) + this.countForValue(hist, 2)
+    // 2) push areas onto the matching sublayers so the report renders unchanged
+    this.applyResultsToLayers(reportResults)
 
-      // Per-value breakdown (some rasters use 1, some use 2)
-      const byValue = {
-        1: { pixelCount: this.countForValue(hist, 1) },
-        2: { pixelCount: this.countForValue(hist, 2) }
-      }
-      for (const v of [1, 2]) {
-        byValue[v].areaHa = +(byValue[v].pixelCount * HA_PER_PIXEL).toFixed(2)
-        byValue[v].areaAc = +(byValue[v].pixelCount * AC_PER_PIXEL).toFixed(2)
-      }
-      console.log([elid, {
-        ok: true,
-        error: null,
-        elid,
-        rasterName: name,              // keep for debugging/traceability
-        pixelCount,
-        areaHa: +(pixelCount * HA_PER_PIXEL).toFixed(2),
-        areaAc: +(pixelCount * AC_PER_PIXEL).toFixed(2),
-        byValue,
-        min: hist?.min ?? null,
-        max: hist?.max ?? null
-      }]
-
-      )
-      return [elid, {
-        ok: true,
-        error: null,
-        elid,
-        rasterName: name,              // keep for debugging/traceability
-        pixelCount,
-        areaHa: +(pixelCount * HA_PER_PIXEL).toFixed(2),
-        areaAc: +(pixelCount * AC_PER_PIXEL).toFixed(2),
-        byValue,
-        min: hist?.min ?? null,
-        max: hist?.max ?? null
-      }]
-      
-    } catch (err) {
-      console.error(`Histogram failed for ${name} (${elid})`, err)
-      return [elid, {
-        ok: false,
-        error: err.message,
-        elid,
-        rasterName: name,
-        pixelCount: 0,
-        areaHa: 0,
-        areaAc: 0,
-        byValue: { 1: { pixelCount: 0, areaHa: 0 }, 2: { pixelCount: 0, areaHa: 0 } },
-        min: null,
-        max: null
-      }]
-    }
-  })
-
-  const entries = await Promise.all(tasks)
-  const reportResults = Object.fromEntries(entries)   // keyed by elid
-
-  // 1) keep the full structured result in the store
-  this.reportResults = reportResults
-  this.reportGeneratedAt = Date.now()
-
-  // 2) push areas onto the matching sublayers so the report renders unchanged
-  this.applyResultsToLayers(reportResults)
-
-  this.reportLoading = false
-  return reportResults
-},
-applyResultsToLayers(reportResults) {
-  this.layers.forEach((group) => {
-    group.subheaders?.forEach((subheader) => {
-      subheader.sublayers?.forEach((sublayer) => {
-        const r = reportResults[sublayer.elid]
-        if (!r) {
-          sublayer.totalArea = 0
-          sublayer.intersected = false
-          sublayer.count = 0
-          return
-        }
-        // raster layers
-        if (r.areaHa != null) {
-          sublayer.totalArea = r.areaHa
-          sublayer.intersected = r.areaHa > 0
-        }
-        // vector/point layers
-        if (r.summaryType) {
-          sublayer.summaryType = r.summaryType
-          sublayer.count = r.count ?? 0
-          sublayer.intersected = r.intersected ?? false
-        }
+    this.reportLoading = false
+    return reportResults
+  },
+  applyResultsToLayers(reportResults) {
+    this.layers.forEach((group) => {
+      group.subheaders?.forEach((subheader) => {
+        subheader.sublayers?.forEach((sublayer) => {
+          const r = reportResults[sublayer.elid]
+          if (!r) {
+            sublayer.totalArea = 0
+            sublayer.intersected = false
+            sublayer.count = 0
+            return
+          }
+          // raster layers
+          if (r.areaHa != null) {
+            sublayer.totalArea = r.areaHa
+            sublayer.intersected = r.areaHa > 0
+          }
+          // vector/point layers
+          if (r.summaryType) {
+            sublayer.summaryType = r.summaryType
+            sublayer.count = r.count ?? 0
+            sublayer.intersected = r.intersected ?? false
+          }
+        })
       })
     })
-  })
-},
+  },
 
   fetchRasterIds() {
     const imageServerUrl =
-      'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/SRR_MosaicRasters/ImageServer'
+      'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Compass_MosaicRasters_Albers/ImageServer'
 
 
     const rasterNames = [
@@ -1077,6 +945,11 @@ applyResultsToLayers(reportResults) {
   //gets agol data for report
   async getIntersections(buffer) {
   const layers =  [
+    {
+      name: 'High Quality Watersheds', elid: 'qualitywater', 
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
+      summaryType: 'boolean'
+    },
   { name: 'Surface Water Limited Lands', elid: 'waterLimited',
     featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLands_VTL/FeatureServer/0',
     summaryType: 'boolean' },
@@ -1125,7 +998,15 @@ applyResultsToLayers(reportResults) {
           geometry: buffer,               // 5070 — server projects automatically
           spatialRelationship: 'intersects',
         })
-
+        console.log({
+          ok: true,
+          error: null,
+          elid: cfg.elid,
+          name: cfg.name,
+          summaryType: cfg.summaryType,
+          intersected: count > 0,
+          count,                          // meaningful for 'count', still handy for 'boolean'
+        })
         const result = {
           ok: true,
           error: null,

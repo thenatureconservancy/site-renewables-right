@@ -194,6 +194,15 @@ const onDragEnd = () => {
   isDragging.value = false
 }
 
+function hideSiteReport() {
+  mapStore.showSiteReport = false
+  let map = document.querySelector('arcgis-map').map
+  let pointLayer = map.findLayerById('pointLayer')
+  let bufferLayer = map.findLayerById('bufferLayer')
+  bufferLayer.visible = false
+  pointLayer.visible = false
+}
+
 onMounted(() => {
   document.addEventListener('mousemove', onDragMove)
   document.addEventListener('mouseup', onDragEnd)
@@ -229,7 +238,7 @@ onUnmounted(() => {
             padding="sm"
             class=""
             icon="close"
-            @click="mapStore.showSiteReport = false"
+            @click="hideSiteReport()"
           />
         </div>
       </div>
