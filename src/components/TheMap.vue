@@ -45,6 +45,21 @@ function stopMeasure() {
   measuring.value = false
   measureVM?.clear()
 }
+
+async function reorderBasemap() {
+  const map = document.querySelector('arcgis-map').map
+  const basemap = map.basemap
+  await basemap.load()
+
+  const statesLayer = map.findLayerById('states') // your overlay
+  const statesIndex = map.layers.indexOf(statesLayer) // its current position
+
+  basemap.referenceLayers.forEach((ref) => {
+    basemap.referenceLayers.remove(ref)
+    // insert the labels just BELOW the states overlay
+    map.add(ref, statesIndex) // adds at statesIndex, pushing states up by one
+  })
+}
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
   // highly sensitive
@@ -291,7 +306,7 @@ onMounted(() => {
 
         if (state === 'Georgia') {
           return `
-        <strong>Georgia Solar Details:</strong> 
+        <strong>Georgia Solar Details:</strong>
         TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a> as an environmental sensitivity screening tool to guide solar development to places of lower environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service, Georgia Department of Natural Resources, industry stakeholders and others.
       `
         }
@@ -305,14 +320,13 @@ onMounted(() => {
         return 'No information available.'
       },
     },
-
     renderer: {
       type: 'simple',
       symbol: {
         type: 'simple-fill',
         color: [246, 245, 239, 0.9],
         outline: {
-          color: [246, 245, 239, 0.9], // beige fill, 0.9 opacity
+          color: [246, 245, 239], // beige fill, 0.9 opacity
           width: 6,
         },
       },
@@ -365,7 +379,7 @@ onMounted(() => {
 
         if (state === 'Georgia') {
           return `
-        <strong>Georgia Solar Details:</strong> 
+        <strong>Georgia Solar Details:</strong>
         TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a> as an environmental sensitivity screening tool to guide solar development to places of lower environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service, Georgia Department of Natural Resources, industry stakeholders and others.
       `
         }
@@ -379,14 +393,13 @@ onMounted(() => {
         return 'No information available.'
       },
     },
-
     renderer: {
       type: 'simple',
       symbol: {
         type: 'simple-fill',
         color: [246, 245, 239, 0.9],
         outline: {
-          color: [246, 245, 239, 0.9], // beige fill, 0.9 opacity
+          color: [246, 245, 239], // beige fill, 0.9 opacity
           width: 6,
         },
       },
@@ -695,6 +708,7 @@ onMounted(() => {
     mapStore.opacity = event.target.value / 100
     mapStore.changeOpacity()
   })
+  reorderBasemap()
 })
 </script>
 
