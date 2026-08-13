@@ -33,7 +33,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   checkboxHideSplash: false,
   reportBufferAreaHa: '',
   reportBufferAreaAc: '',
-
+  statePolicy: null,
   reportResults: [],
   reportLoading: false,
   reportGeneratedAt: null,
@@ -615,15 +615,19 @@ export const useMapStore = defineStore('mapStore', () => ({
   filterLayers(cat){
     console.log(cat)
     this.category = cat
+    this.currentPoint == '' ? "" : this.createBuffer ('current')
     let map = document.querySelector("arcgis-map").map;
+    
     if (this.category == 'floating solar'){
       this.layers.forEach(layer => {
+       if(layer.header == 'Conservation Values'){
         layer.subheaders.forEach(subheader => {
           subheader.sublayers.forEach(layer => {
-            
             if(layer.category !== this.category || layer.category == 'both' ){
               //turn off those layers so they are not visibl ein the map
               let mapLayer = map.findLayerById(layer.elid);
+               
+              console.log(layer)
               layer.filter = false
               mapLayer.visible = false
             }
@@ -635,27 +639,30 @@ export const useMapStore = defineStore('mapStore', () => ({
             }
           })
         });
+       }
       });
     }
     else{
     this.layers.forEach(layer => {
-      layer.subheaders.forEach(subheader => {
-        subheader.sublayers.forEach(layer => {
-        
-          if(layer.category !== this.category && layer.category !== 'both'){
-            //turn off those layers so they are not visibl ein the map
-            let mapLayer = map.findLayerById(layer.elid);
-            layer.filter = false
-            mapLayer.visible = false
-          }
-          if (layer.category == this.category || layer.category == 'both'){
-            //turn on those layers
-            let mapLayer = map.findLayerById(layer.elid);
-            layer.filter = true
-            if(layer.visibleModel){mapLayer.visible = true}
-          }
-        })
-      });
+      if(layer.header == 'Conservation Values'){
+        layer.subheaders.forEach(subheader => {
+          subheader.sublayers.forEach(layer => {
+          
+            if(layer.category !== this.category && layer.category !== 'both'){
+              //turn off those layers so they are not visibl ein the map
+              let mapLayer = map.findLayerById(layer.elid);
+              layer.filter = false
+              mapLayer.visible = false
+            }
+            if (layer.category == this.category || layer.category == 'both'){
+              //turn on those layers
+              let mapLayer = map.findLayerById(layer.elid);
+              layer.filter = true
+              if(layer.visibleModel){mapLayer.visible = true}
+            }
+          })
+        });
+      }
     });
     }
     this.filterStateOverlays()
@@ -667,11 +674,12 @@ export const useMapStore = defineStore('mapStore', () => ({
 
 
   async createBuffer (e){
+    this.statePolicy = null
+   
     if (e == 'current'){
-    
       e = this.currentPoint
-      console.log(e)
     }
+     this.getStatePolicy(e.detail.mapPoint)
     if(this.bufferSize > 36){
       alert('Buffer size cannot exceed 35 miles')
       return
@@ -764,7 +772,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness', values: [2] },
       { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind', values: [1] },
       { name: 'PrairieGrouseA_5070', elid: 'prairieGrouse', values: [1] },
-      { name: 'ProtectedAreas_01_Final_NoCA_5070', elid: 'protectedAreas', values: [1] },
+      { name: 'ProtectedAreas_01_Final_NoCA_5070_new', elid: 'protectedAreas', values: [1] },
       { name: 'RCN_NoCal_20260728_5070_new', elid: 'resilientConnected', values: [1,2,3]},
       { name: 'TE_Species_03_20260630_NoCA_5070', elid: 'threatenedEndangeredSpecies', values: [1] },
       { name: 'Water_02_reclass_20260630_NoCA_5070', elid: 'floodPlainsWetlands', values: [1] },
@@ -830,7 +838,13 @@ export const useMapStore = defineStore('mapStore', () => ({
         }
         pixelCount += pc          // total = sum of all this raster's values
       }
-        console.log(elid, hist)
+        console.log(elid, {
+  min: hist?.min,
+  max: hist?.max,
+  size: hist?.size,
+  counts: hist?.counts,
+})
+
         return [elid, {
           ok: true,
           error: null,
@@ -1119,24 +1133,96 @@ if (cfg.summaryType === 'attributes') {
   filterStateOverlays(){
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById('states');
+    let layer2 = map.findLayerById('states2')
     //only show overlay on conservation values visible = true
     if(this.layers[0].expanded == false){
       layer.definitionExpression = "STATE_NAME = 'N/A'"
+      layer2.definitionExpression = "STATE_NAME = 'N/A"
     }
     else{
+      console.log(this.category)
        if(this.category == 'solar'){
         layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'"
+        layer2.definitionExpression = "STATE_NAME = 'California'"
        } 
        if(this.category == 'wind'){
         layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
+        layer2.definitionExpression = "STATE_NAME = 'California'"
        }
        if(this.category == 'floating solar'){
-        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
+        layer.definitionExpression = "STATE_NAME = 'Maine'"
+        layer2.definitionExpression = "STATE_NAME = 'N/A'"
        }
        
     }
 
-  }
+  },
 
+  async getStatePolicy(point) {
+    const map = document.querySelector('arcgis-map').map
+    const layer = map.findLayerById('states')
+    if (!layer) { this.statePolicy = null; return null }
+
+    try {
+      const results = await layer.queryFeatures({
+        geometry: point,
+        spatialRelationship: 'intersects',
+        returnGeometry: false,
+        outFields: ['*'],
+      })
+
+      const feat = results.features?.[0]
+      console.log(feat)
+      if (!feat) { this.statePolicy = null; return null }
+
+      // ⚠️ adjust field name to your states layer (see question below)
+      const state = feat.attributes.STATE_NAME
+      const category = this.category   // 'wind' | 'solar' | 'floating solar'
+
+      // eligibility: which categories trigger a message per state
+      const rules = {
+        California: ['wind', 'solar'],
+        Georgia:    ['solar'],
+        Maine:      ['wind', 'solar', 'floating solar'],
+      }
+
+      if (!rules[state] || !rules[state].includes(category)) {
+        this.statePolicy = null
+        return null
+      }
+
+      this.statePolicy = { state, html: this.statePolicyHtml(state) }
+      console.log(this.statePolicy)
+      return this.statePolicy
+    } catch (err) {
+      console.error('State policy query failed', err)
+      this.statePolicy = null
+      return null
+    }
+  },
+  statePolicyHtml(state) {
+  if (state === 'Maine') {
+    return `<strong>Maine Policy Details:</strong>
+      TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
+      Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
+      solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
+      high-value agricultural land.</a> These policies were supported by TNC and other partners and
+      developed with extensive public input.`
+  }
+  if (state === 'Georgia') {
+    return `<strong>Georgia Solar Details:</strong>
+      TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a>
+      as an environmental sensitivity screening tool to guide solar development to places of lower
+      environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service,
+      Georgia Department of Natural Resources, industry stakeholders and others.`
+  }
+  if (state === 'California') {
+    return `<strong>California Policy Details:</strong> TNC recommends use of the State of California’s
+      screening tool for energy planning, developed with TNC and other stakeholders:
+      <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>`
+  }
+  return ''
+  }
+  
 }
 ));

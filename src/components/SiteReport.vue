@@ -172,6 +172,7 @@ const clearResults = () => {
   })
   mapStore.reportResults = {}
   mapStore.currentPoint = null
+  mapStore.statePolicy = null
   expandedCategories.value = {}
 }
 
@@ -357,6 +358,7 @@ onUnmounted(() => {
       <div class="results-body">
         <template v-for="(categoryLayers, categoryName) in intersectionResults" :key="categoryName">
           <div v-if="categoryLayers.length > 0" class="result-category">
+            <!-- Category title (ALWAYS shows) -->
             <div class="category-title" @click="toggleCategory(categoryName)">
               <span class="accordion-icon">
                 {{ expandedCategories[categoryName] ? '▼' : '▶' }}
@@ -377,6 +379,19 @@ onUnmounted(() => {
               </div>
             </div>
 
+            <!-- State policy note: only under Conservation Values, only when present -->
+            <div
+              v-if="
+                categoryName === 'Conservation Values' &&
+                mapStore.statePolicy &&
+                expandedCategories[categoryName]
+              "
+              class="state-policy"
+            >
+              <div v-html="mapStore.statePolicy.html"></div>
+            </div>
+
+            <!-- Expanded layers -->
             <div v-if="expandedCategories[categoryName]">
               <template v-for="(layer, i) in categoryLayers" :key="layer.elid">
                 <!-- subheader divider: only when it changes AND differs from the category name -->
@@ -823,5 +838,19 @@ onUnmounted(() => {
   letter-spacing: 0.4px;
   padding: 6px 12px 2px;
   margin-top: 4px;
+}
+.state-policy {
+  background: #f0f7ec;
+  border-left: 3px solid #64b45b;
+  border-radius: 3px;
+  padding: 10px 12px;
+  margin: 0 0 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #35502f;
+}
+.state-policy :deep(a) {
+  color: #2e7d32;
+  text-decoration: underline;
 }
 </style>
