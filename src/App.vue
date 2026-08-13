@@ -50,11 +50,7 @@ const width = ref(window.innerWidth / 2.2)
         </div>
         <q-space></q-space>
 
-        <div style="border: 1.5px solid red">
-          <!--p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px">
-            Draft - Internal use only
-          </p-->
-        </div>
+        
         <q-space></q-space>
         <q-btn
           color="blue"
