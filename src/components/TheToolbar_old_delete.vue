@@ -9,7 +9,7 @@ const showFilter = ref(true)
 
 <template>
   <div id="tools" class="" style="border-bottom: 1px solid lightgrey">
-    <q-toolbar class="q-ma-none q-pa-none">
+    <q-toolbar class="q-ma-none q-pa-none bg-green-1">
       <p class="text-overline q-ml-sm q-mb-none">
         TOOLS
         <q-btn color="grey-8" icon="help_outline" size="xs" padding="xs" flat class="q-ml-sm">

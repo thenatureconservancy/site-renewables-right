@@ -16,6 +16,9 @@ const dragOffset = { x: 0, y: 0 }
 
 // Track which category headers are expanded
 const expandedCategories = ref({})
+// true when this category should show its policy INSTEAD of its layers
+const isPolicyOnly = (categoryName) =>
+  categoryName === 'Conservation Values' && !!mapStore.statePolicy
 
 const hasSelection = computed(() => !!mapStore.currentPoint)
 
@@ -302,7 +305,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Buffer Size Control -->
-        <div class="buffer-section">
+        <div class="buffer-section q-pb-sm">
           <div class="row">
             <div class="buffer-label">
               Buffer Size:
@@ -381,18 +384,14 @@ onUnmounted(() => {
 
             <!-- State policy note: only under Conservation Values, only when present -->
             <div
-              v-if="
-                categoryName === 'Conservation Values' &&
-                mapStore.statePolicy &&
-                expandedCategories[categoryName]
-              "
+              v-if="isPolicyOnly(categoryName) && expandedCategories[categoryName]"
               class="state-policy"
             >
               <div v-html="mapStore.statePolicy.html"></div>
             </div>
 
             <!-- Expanded layers -->
-            <div v-if="expandedCategories[categoryName]">
+            <div v-if="expandedCategories[categoryName] && !isPolicyOnly(categoryName)">
               <template v-for="(layer, i) in categoryLayers" :key="layer.elid">
                 <!-- subheader divider: only when it changes AND differs from the category name -->
                 <div
@@ -483,17 +482,18 @@ onUnmounted(() => {
 }
 
 .results-header {
-  background: linear-gradient(135deg, #64b45b 0%, #5aa54d 100%);
-  color: white;
+  background: linear-gradient(135deg, #34406b 0%, #2a3557 100%);  /* deep solar blue */
+  color: #ffffff;                       /* white text — was dark, now reads on blue */
   padding-left: 10px;
-  border-bottom: 4px solid #4a8c3a;
+   /* green accent stripe (was darker green) */
   cursor: move;
 }
 
 .results-header h6 {
   font-size: 14px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;                     /* was 500 — slightly bolder reads better in white */
+  color: #ffffff;
 }
 
 .total-area {
@@ -766,7 +766,7 @@ onUnmounted(() => {
 }
 
 .btn-primary {
-  background: #64b45b;
+  background: #3f8c4a;
   color: white;
 }
 

@@ -32,8 +32,8 @@ const selectedSection = computed(() => {
 
 <template>
   <div class="help-panel">
-    <q-toolbar class="bg-blue-grey-9 text-white">
-      <span class="text-h6 text-weight-bold">Layer Info</span>
+    <q-toolbar class="section-header" >
+       <p class="text-overline q-ml-sm q-mb-none text-bold">Layer Info</p>
       <q-space></q-space>
       <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
     </q-toolbar>

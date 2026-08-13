@@ -8,7 +8,6 @@ import { useHelpStore } from './stores/help'
 import TheHelp from '@/components/TheHelp.vue'
 import { ref } from 'vue'
 
-
 //import esri component libs globally so they are available in multiple components
 import '@arcgis/map-components/components/arcgis-map'
 import '@arcgis/map-components/components/arcgis-basemap-gallery'
@@ -17,7 +16,7 @@ import '@arcgis/map-components/components/arcgis-search'
 import '@arcgis/map-components/components/arcgis-zoom'
 import '@arcgis/map-components/components/arcgis-home'
 import '@arcgis/map-components/components/arcgis-legend'
-import "@arcgis/map-components/components/arcgis-scale-bar";
+import '@arcgis/map-components/components/arcgis-scale-bar'
 
 const mapStore = useMapStore()
 const helpStore = useHelpStore()
@@ -27,31 +26,34 @@ const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
 
-
 const height = ref(window.innerHeight)
 const width = ref(window.innerWidth / 2.2)
 </script>
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-white text-dark text-body1">
+    <q-header class="bg-white text-dark text-body1 shadow-1" >
       <q-toolbar>
         <a href="https://www.nature.org/en-us/" target="_blank">
-          <img
-            src="./assets/tnc_globe.jpg"
-            style="width: 30px;margin-top:3px; "
-          />
-      </a>
-        <q-separator vertical spaced inset></q-separator>
-        <span :class="mobile ? 'text-body2' : 'q-ml-md text-weight-bold'">
-          Site Renewables Right</span
-        >
+          <img src="./assets/tnc_globe.jpg" style="width: 30px; margin-top: 3px" />
+        </a>
+        <q-separator vertical spaced inset class="bg-green-1"></q-separator>
+        <div class="app-title-block">
+          <p class="app-title">
+            <span class="title-strong">Clean Energy </span>
+            <span class="title-accent">Compass</span>
+          </p>
+          <div class="app-subtitle">
+            Navigating <span class="subtitle-accent">3Cs</span> considerations for clean energy
+            planning
+          </div>
+        </div>
         <q-space></q-space>
 
         <div style="border: 1.5px solid red">
-          <p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px">
+          <!--p class="text-overline q-mb-none q-pa-xs text-red" style="font-size: 25px">
             Draft - Internal use only
-          </p>
+          </p-->
         </div>
         <q-space></q-space>
         <q-btn
@@ -66,7 +68,7 @@ const width = ref(window.innerWidth / 2.2)
           data-tour="download-data"
         ></q-btn>
         <q-btn
-          color="primary"
+          color="secondary"
           class="q-mr-sm"
           label="Start Tour"
           unelevated
@@ -78,7 +80,7 @@ const width = ref(window.innerWidth / 2.2)
         ></q-btn>
 
         <q-btn
-          color="primary"
+          color="secondary"
           label="Layer Info"
           flat
           icon="info_outline"
@@ -89,7 +91,7 @@ const width = ref(window.innerWidth / 2.2)
         ></q-btn>
         <q-btn
           class="q-ml-sm"
-          color="primary"
+          color="secondary"
           flat
           label="About"
           unelevated
@@ -112,9 +114,43 @@ const width = ref(window.innerWidth / 2.2)
       :height="height"
       bordered
     >
-      
-      <TheHelp ></TheHelp>
-   
+      <TheHelp></TheHelp>
     </q-drawer>
   </q-layout>
 </template>
+<style scoped>
+.app-title-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.15;
+  margin: 10px;
+}
+
+.app-title {
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+.title-strong {
+  color: #1a3a2e;
+}
+.title-accent {
+  color: #64b45b;
+}
+
+.app-subtitle {
+  font-size: 12px;
+  color: #5c635f;
+  font-weight: 400;
+  letter-spacing: 0.1px;
+  margin-top: 2px;
+  white-space: nowrap; /* keep it one line */
+  
+}
+.subtitle-accent { color: #1a3a2e; font-weight: 700; }
+.q-header.soft-shadow {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05) !important;
+}
+</style>

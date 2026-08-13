@@ -3,7 +3,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 // Version-proof font init (handles 0.1.x, 0.2.x, and bundler quirks)
 pdfMake.vfs = pdfFonts?.pdfMake?.vfs || pdfFonts?.vfs || pdfMake.vfs;
 // ============================================================================
-//  Site Renewables Right — Site Report PDF
+//  Clean Energy Compass — Site Report PDF
 //  Adapted from the CCI Tool report. Driven entirely by mapStore.
 //
 //  Usage:
@@ -58,7 +58,7 @@ export async function generateSiteReport(mapStore, options = {}) {
     // ===== HEADER =====
     {
       columns: [
-        { text: "Site Renewables Right\nSite Report", style: "title", width: "*" },
+        { text: "Clean Energy Compass\nSite Report", style: "title", width: "*" },
         {
           text: [
             { text: "REPORT DATE\n", style: "metaLabel" },
@@ -140,7 +140,7 @@ export async function generateSiteReport(mapStore, options = {}) {
     pageMargins: [40, 40, 40, 50],
     footer: (currentPage, pageCount) => ({
       columns: [
-        { text: "Site Renewables Right — Site Report", fontSize: 8, color: "#999", margin: [40, 0, 0, 0] },
+        { text: "Clean Energy Compass — Site Report", fontSize: 8, color: "#999", margin: [40, 0, 0, 0] },
         { text: `Page ${currentPage} of ${pageCount}`, fontSize: 8, color: "#999", alignment: "right", margin: [0, 0, 40, 0] },
       ],
     }),

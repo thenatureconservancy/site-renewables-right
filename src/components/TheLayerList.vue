@@ -94,7 +94,7 @@ async function scrollToElement(layer, elid) {
           : 'headerClass text-h6 text-weight-light'
       "
       expanded-icon="visibility"
-      :expand-icon-class="item.expanded ? 'text-primary' : 'text-secondary'"
+      :expand-icon-class="item.expanded ? 'text-secondary' : 'text-primary'"
       expand-icon="visibility_off"
     >
       <div class="q-mx-sm q-mb-md bg-grey-1">

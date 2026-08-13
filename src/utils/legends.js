@@ -1,5 +1,5 @@
 // ============================================================================
-//  Unified Legend System — Site Renewables Right
+//  Unified Legend System — Clean Energy Compass
 //  ONE normalized model, consumed by: layers list, site report panel, and PDF.
 //
 //  Normalized legend shape (what every consumer receives):

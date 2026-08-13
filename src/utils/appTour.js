@@ -1,5 +1,5 @@
 // ============================================================================
-//  Site Renewables Right — Guided Tour (Shepherd.js)
+//  Clean Energy Compass — Guided Tour (Shepherd.js)
 //
 //  Usage (from the "Start Tour" header button):
 //    import { startTour } from '@/utils/appTour'
@@ -110,7 +110,7 @@ export function startTour(mapStore) {
   // -------------------------------------------------------------------------
   tour.addStep({
     id: 'welcome',
-    title: 'Welcome to Site Renewables Right',
+    title: 'Welcome to Clean Energy Compass',
     text: `This quick tour shows how to explore where renewable energy development
            may face conservation constraints, tradeoffs, or opportunities.
            <br/><br/>It takes about a minute — you can exit anytime.`,

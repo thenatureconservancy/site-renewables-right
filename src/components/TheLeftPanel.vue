@@ -17,15 +17,13 @@ const scrollHeight = computed(() => ({
 }))
 </script>
 <template>
-  <div class="q-mx-md" style="border-top: 1px solid lightgray" data-tour="intro-text">
-    <p class="text-body2 text-weight-medium q-mt-md q-mb-none">
-      Explore where renewable energy development may face constraints, tradeoffs, or opportunities.
-    </p>
-    <div id="tools" class="" style="border-bottom: 1px solid lightgrey">
-      <q-toolbar class="q-ma-none q-pa-none">
-        <p class="text-overline q-ml-sm q-mb-none">TOOLS</p>
+  <div class="q-mx-xs" style="border-top: 1px solid lightgray" data-tour="intro-text">
+   
+    <div id="tools" class="q-pb-md q-mt-sm" style="border-bottom: 1px solid lightgrey">
+      <q-toolbar class="q-mb-md q-pa-none section-header">
+        <p class="text-overline q-ml-sm q-mb-none text-bold">TOOLS</p>
         <q-space></q-space>
-        <q-btn color="grey-8" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
+        <q-btn color="white" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
           <q-menu>
             <div class="q-pa-md" style="width: 300px">
               <p class="">
@@ -42,7 +40,7 @@ const scrollHeight = computed(() => ({
         <div v-show="showTools">
           <div class="q-pb-md">
             <q-btn
-              color="primary"
+              color="secondary"
               size="12px"
               icon="table_chart"
               label="Site report"
@@ -55,7 +53,7 @@ const scrollHeight = computed(() => ({
               class="q-ml-sm"
               label="Layer Info"
               size="12px"
-              color="primary"
+              color="secondary"
               icon="o_info"
               square
               unelevated
@@ -67,10 +65,10 @@ const scrollHeight = computed(() => ({
       </q-slide-transition>
     </div>
 
-    <q-toolbar class="q-ma-none q-pa-none" data-tour="data-layers">
-      <p class="text-overline q-ml-sm q-mb-none">DATA LAYERS</p>
+    <q-toolbar class="q-mb-sm q-pa-none section-header" data-tour="data-layers">
+      <p class="text-overline q-ml-sm q-mb-none text-bold">DATA LAYERS</p>
       <q-space></q-space>
-      <q-btn color="grey-8" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
+      <q-btn color="white" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
         <q-menu>
           <div class="q-pa-md" style="width: 300px">
             <p class="">
@@ -114,4 +112,15 @@ const scrollHeight = computed(() => ({
     </q-scroll-area>
   </div>
 </template>
-<style></style>
+<style>
+.section-header {
+  background: #34406b;              /* deep solar blue */
+  color: #ffffff;                  /* white text now works! */
+  border-left: 4px solid #64B45B;  /* keep green as the accent stripe */
+  padding: 9px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+</style>

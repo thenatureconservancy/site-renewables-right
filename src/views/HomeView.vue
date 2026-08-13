@@ -70,9 +70,7 @@ onMounted(() => {
                   src="../assets/logo.svg"
                   :style="mobile ? 'width: 100px;' : 'width: 150px; padding-top: 5px; margin: 5px'"
               /></a>
-              <p class="text-overline text-green-9 text-weight-bold">
-                CLEAN ENERGY TOOL (NAME COMING SOON)
-              </p>
+              <p class="text-overline text-green-9 text-weight-bold">CLEAN ENERGY COMPASS</p>
               <p class="text-h6">
                 Accelerating clean energy that works in harmony with nature and people
               </p>
