@@ -733,13 +733,13 @@ export const useMapStore = defineStore('mapStore', () => ({
   const view = document.querySelector("arcgis-map").view
   const padded = buffer.extent.clone().expand(1.3)
 
- /* view.goTo(
+  view.goTo(
     { target: padded },
     { duration: 800, easing: "ease-in-out" }
   ).catch((err) => {
     // goTo rejects if interrupted by user interaction — safe to ignore
     if (err.name !== "AbortError") console.error(err)
-  })*/
+  })
 
   },
   
