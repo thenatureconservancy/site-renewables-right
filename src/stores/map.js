@@ -733,13 +733,13 @@ export const useMapStore = defineStore('mapStore', () => ({
   const view = document.querySelector("arcgis-map").view
   const padded = buffer.extent.clone().expand(1.3)
 
-  view.goTo(
+ /* view.goTo(
     { target: padded },
     { duration: 800, easing: "ease-in-out" }
   ).catch((err) => {
     // goTo rejects if interrupted by user interaction — safe to ignore
     if (err.name !== "AbortError") console.error(err)
-  })
+  })*/
 
   },
   
@@ -782,6 +782,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'pvr_val_2_GT_5070_new', elid: 'ag2', values: [2]},
       { name: 'pvr_val_3_GT_5070_new', elid: 'ag3', values:[3]},
       { name: 'pvr_val_4_GT_5070_new', elid: 'ag4', values:[4]},
+      { name: 'lasso_wind_solar_5070', elid: 'lassoSolar', values: [1]}
     
     ]
 
@@ -915,46 +916,6 @@ export const useMapStore = defineStore('mapStore', () => ({
     })
   },
 
-  fetchRasterIds() {
-    const imageServerUrl =
-      'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/Compass_MosaicRasters_Albers/ImageServer'
-
-
-    const rasterNames = [
-      'pvr_pctls_merged_FINAL',
-      'birds_COG',
-      'Connectivity_04_20260304',
-      'BigGame_08',
-      'IntactHabitats_04',
-      'Migratory_Bird_Stopover',
-      'OtherBiodiversity_09',
-      'PrairieGrouseAndSageGrouse_Hise',
-      'ProtectedAreas_COG_NEW',
-      'ResilientAndConnected_COG2',
-      'WhoopingCraneSolar_Hise',
-      'WhoopingCraneWind_Hise',
-      'TE_Species_03',
-      'FloodPlainsAndWetlands2'
-    ];
-
-   
- const q = new Query({
-    where: "1=1",                 // or filter by Name
-    outFields: ["Name", "OBJECTID"],
-    returnGeometry: false
-  });
-
-  return query.executeQueryJSON(imageServerUrl, q)
-    .then(res => {
-      const map = {};
-      res.features.forEach(f => {
-        map[f.attributes.Name] = f.attributes.OBJECTID;
-      });
-      console.log(map)
-      return map;
-    });
-
-  },
 
   //gets agol data for report
   async getIntersections(buffer) {

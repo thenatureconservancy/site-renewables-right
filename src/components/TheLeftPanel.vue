@@ -76,8 +76,8 @@ const scrollHeight = computed(() => ({
               off. Only one category can be active at a time. With the exception of native lands,
               which can be toggled on or off at any time. <br /><br />
               <b>Drag Indicator:</b> If a drag indicator appears next to a layer, you can click and
-              drag it to reorder the layers in the list. <br /><br />
-              <b>Info Button:</b> This button opens the info panel and will route you to the
+              drag it to reorder how the layers appear on the map. <br /><br />
+              <b>Info Button:</b> This button opens the layer info panel and will route you to the
               specific layer information. <br /><br />
               <b>Opacity Button:</b> Allows you to adjust the transparency of the layer on the map.
               <br /><br />
@@ -122,5 +122,8 @@ const scrollHeight = computed(() => ({
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+.q-toolbar{
+  min-height:35px !important;
 }
 </style>
