@@ -301,7 +301,7 @@ onUnmounted(() => {
           <span>|</span>
           <span> Energy Type: {{ mapStore.category }}</span>
           <span>|</span>
-          <span class="">Area: {{ formatArea(totalArea) }}</span>
+          <span class="">Area: {{ formatArea(mapStore.reportBufferAreaHa) }}</span>
         </div>
 
         <!-- Buffer Size Control -->
@@ -371,14 +371,15 @@ onUnmounted(() => {
                 <span
                   class="pill"
                   :class="categoryMeta[categoryName].intersected > 0 ? 'pill-present' : 'pill-none'"
-                >
-                  {{ categoryMeta[categoryName].intersected }} /
-                  {{ categoryMeta[categoryName].count }}
-                  Items
+                > 
+                  <span v-if="mapStore.reportLoading" class="pill-loader"></span>
+                  <template v-else>
+                    {{ categoryMeta[categoryName].intersected }} /
+                    {{ categoryMeta[categoryName].count }}
+                    Items
+                  </template>
                 </span>
-                <span class="pill pill-area">
-                  {{ formatArea(categoryMeta[categoryName].total) }}
-                </span>
+               
               </div>
             </div>
 
@@ -482,17 +483,17 @@ onUnmounted(() => {
 }
 
 .results-header {
-  background: linear-gradient(135deg, #34406b 0%, #2a3557 100%);  /* deep solar blue */
-  color: #ffffff;                       /* white text — was dark, now reads on blue */
+  background: linear-gradient(135deg, #34406b 0%, #2a3557 100%); /* deep solar blue */
+  color: #ffffff; /* white text — was dark, now reads on blue */
   padding-left: 10px;
-   /* green accent stripe (was darker green) */
+  /* green accent stripe (was darker green) */
   cursor: move;
 }
 
 .results-header h6 {
   font-size: 14px;
   margin: 0;
-  font-weight: 600;                     /* was 500 — slightly bolder reads better in white */
+  font-weight: 600; /* was 500 — slightly bolder reads better in white */
   color: #ffffff;
 }
 
@@ -852,5 +853,22 @@ onUnmounted(() => {
 .state-policy :deep(a) {
   color: #2e7d32;
   text-decoration: underline;
+}
+.pill-loader {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #34406b 30%, #cdd4e6 30%);
+  background-size: 200% 100%;
+  animation: pill-load 1s linear infinite;
+  border-radius: 2px;
+}
+@keyframes pill-load {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 </style>
