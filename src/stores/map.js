@@ -668,11 +668,6 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.filterStateOverlays()
   },
 
-  //these were used for the reporting these will all be updated
-  //function to create the buffer
-  // --- module scope (top of the store file) ---
-
-
   async createBuffer (e){
     this.statePolicy = null
    
@@ -733,19 +728,18 @@ export const useMapStore = defineStore('mapStore', () => ({
   const view = document.querySelector("arcgis-map").view
   const padded = buffer.extent.clone().expand(1.3)
 
-  view.goTo(
+ /* view.goTo(
     { target: padded },
     { duration: 800, easing: "ease-in-out" }
   ).catch((err) => {
     // goTo rejects if interrupted by user interaction — safe to ignore
     if (err.name !== "AbortError") console.error(err)
-  })
+  })*/
 
   },
-  
-  
-    // Robust bin lookup — works whether min is 0, 0.5, -0.5, etc.
-    sumValidPixels(hist) {
+    
+  // Robust bin lookup — works whether min is 0, 0.5, -0.5, etc.
+  sumValidPixels(hist) {
   if (!hist || !hist.counts?.length) return 0
   const binWidth = (hist.max - hist.min) / hist.size
   let total = 0
@@ -755,13 +749,13 @@ export const useMapStore = defineStore('mapStore', () => ({
     if (Math.round(value) !== 0) total += count   // skip only the NoData / 0 bin
   })
   return total
-},
+  },
   countForValue(hist, value) {
       if (!hist || !hist.counts?.length) return 0
       const binWidth = (hist.max - hist.min) / hist.size
       const idx = Math.floor((value - hist.min) / binWidth)
       return hist.counts[idx] ?? 0
-    },
+  },
   async getHistogram(buffer) {
     
     const rasters = [
@@ -772,7 +766,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness', values: [2] },
       { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind', values: [1] },
       { name: 'PrairieGrouseA_5070', elid: 'prairieGrouse', values: [1] },
-      { name: 'ProtectedAreas_01_Final_NoCA_5070_new', elid: 'protectedAreas', values: [1] },
+      { name: 'ProtectedAreas_01_Final_NoCA_5070_new2', elid: 'protectedAreas', values: [255] },
       { name: 'RCN_NoCal_20260728_5070_new', elid: 'resilientConnected', values: [1,2,3]},
       { name: 'TE_Species_03_20260630_NoCA_5070', elid: 'threatenedEndangeredSpecies', values: [1] },
       { name: 'Water_02_reclass_20260630_NoCA_5070', elid: 'floodPlainsWetlands', values: [1] },
@@ -782,7 +776,8 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'pvr_val_2_GT_5070_new', elid: 'ag2', values: [2]},
       { name: 'pvr_val_3_GT_5070_new', elid: 'ag3', values:[3]},
       { name: 'pvr_val_4_GT_5070_new', elid: 'ag4', values:[4]},
-      { name: 'lasso_wind_solar_5070', elid: 'lassoSolar', values: [1]}
+      { name: 'lasso_wind_5070', elid: 'lassoWind', values: [1]},
+      { name: 'lasso_solar_5070', elid: 'lassoSolar', values: [1]}
     
     ]
 
@@ -821,6 +816,8 @@ export const useMapStore = defineStore('mapStore', () => ({
       try {
         const res = await imageLayer.computeStatisticsHistograms(params)
         const hist = res.histograms?.[0]
+        console.log(elid)
+        console.log(res)
 
         // Total valid pixels = sum of all bins (NoData already excluded)
       // instead of: const pixelCount = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
