@@ -267,6 +267,11 @@ async function scrollToElement(layer, elid) {
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
           <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'" data-tour="energy-filter">
             <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
+              <div>
+                <p class="text-caption">This category includes wildlife, habitats and ecosystems to consider during wind and
+                solar planning. Highly Sensitive layers include wildlife and ecosystems most sensitive to wind and
+                solar development.</p>
+              </div>
               <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
                 *Energy type filters the conservation layers below.
               </div>

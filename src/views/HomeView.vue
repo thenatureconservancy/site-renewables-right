@@ -63,54 +63,44 @@ onMounted(() => {
           class="col-sm-7 col-md-6 col-lg-6 q-pa-lg column self-stretch"
           style="min-height: 0"
         >
-          <q-scroll-area style="height: calc(100vh - 100px; margin-right: -20px" class="q-pa-lg">
+          <q-scroll-area style="height: calc(100vh - 80px); margin-right: -20px" class="q-pa-lg">
             <div id="topdiv">
               <a href="https://www.nature.org/en-us/">
                 <img
                   src="../assets/logo.svg"
                   :style="mobile ? 'width: 100px;' : 'width: 150px; padding-top: 5px; margin: 5px'"
               /></a>
-              <p class="text-overline text-green-9 text-weight-bold">CLEAN ENERGY COMPASS</p>
-              <p class="text-h6">
-                Accelerating clean energy that works in harmony with nature and people
-              </p>
-              <p class="text-body2 text-italic">
-                For a clean energy project to come together, developers need the right land
-                topography, a nearby grid connection, willing landowners and more. Finding locations
-                that fulfill all these requirements is a challenge unto itself.
+              <div class="splash-header">
+                <!-- App name = THE title now -->
+                <h1 class="splash-title">
+                  The Clean Energy <span class="title-accent">Compass</span>
+                </h1>
 
+                <!-- Tagline = supporting subtitle -->
+                <p class="splash-tagline">
+                  Navigating 3Cs considerations for clean energy planning
+                </p>
+              </div>
+              <p class="text-body2">
+                Welcome to the Clean Energy Compass, The Nature Conservancy’s first-stop tool for
+                clean energy planning. It is designed to inform—not determine—planning decisions.
                 <br />
                 <br />
-
-                When projects are proposed in places that are important to communities and the
-                environment, they can be met with opposition—at times amplified by
-                misinformation—that leads to project delays, cost increases and cancelations. These
-                challenges slow the clean energy transition at a time when pace and scale are
-                critical.
-
+                Use the map to identify potential <b>climate, conservation and community (3C)</b>
+                considerations that may warrant further evaluation. The Compass provides
+                national-scale information to support early-stage planning and should be used
+                alongside site-specific assessments, input from state and federal wildlife agencies,
+                robust community engagement, Tribal consultation and other local analyses.
                 <br />
                 <br />
-
-                With energy demand rising, clean energy plays an important role in quickly
-                delivering affordable, reliable power. This tool helps inform the development of
-                projects with benefits for climate, conservation and communities—the “3Cs”—with the
-                goal of building public support for rapid clean energy deployment.
-
-                <br />
-                <br />
-
-                This tool is a first-stop, early screening tool for planning, siting and procuring
-                renewable energy projects. It can be used for high-level information gathering about
-                sensitive wildlife and habitat as well as best practices for engaging communities
-                and Tribes. It can help with identifying potential risks and late-stage surprises.
-
-                <br />
-                <br />
-
-                This tool is not intended to be used on its own to determine where clean energy
-                should or should not be sited. The datasets are high-quality, but they are also
-                coarse. They serve to complement—not replace—site-level assessments, community input
-                and consultations with local, state and federal agencies.
+                It is important to note that the presence of wildlife and habitat resources or
+                community considerations does not necessarily preclude wind and solar development,
+                as many impacts can be avoided, minimized or addressed through thoughtful project
+                design, operations and mitigation measures. The <b>Compass Resource Hub</b> helps
+                the user navigate these considerations. Learn more
+                <a href="https://www.nature.org/cleanenergycompass" target="_blank"
+                  >www.nature.org/cleanenergycompass</a
+                >
               </p>
             </div>
             <div class="row q-mt-xl">
@@ -169,5 +159,24 @@ onMounted(() => {
 
 .q-dialog__inner--standard .q-dialog__inner::-web {
   display: none;
+}
+
+.splash-title {
+  font-size: 34px; /* big — this is the star */
+  font-weight: 700;
+  color: #1a3a2e; /* deep near-black green */
+  letter-spacing: -0.3px;
+  margin: 20px 0 6px;
+  line-height: 1.1;
+}
+.splash-title .title-accent {
+  color: #64b45b; /* brand green accent, matches app header */
+}
+.splash-tagline {
+  font-size: 16px; /* smaller than title, bigger than body */
+  font-weight: 500;
+  color: #5a6b62; /* muted gray-green */
+  margin: 0 0 24px;
+  font-style: normal; /* NOT italic — differentiate from body */
 }
 </style>
