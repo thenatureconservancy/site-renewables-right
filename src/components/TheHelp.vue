@@ -64,7 +64,7 @@ const selectedSection = computed(() => {
             @click="mapStore.selectedHelpSection = layer.tocId"
           >
             <q-item-section>
-              <q-item-label class="text-body2" v-html="layer.title"></q-item-label>
+              <q-item-label class="text-body2 text-weight-medium" v-html="layer.title"></q-item-label>
    
             </q-item-section>
           </q-item>

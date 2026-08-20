@@ -12,7 +12,7 @@ const filterHeight = 58
 
 const scrollHeight = computed(() => ({
   height: `calc(100vh - ${
-    160 + (showTools.value ? toolsHeight : 0) + (showFilter.value ? filterHeight : 0)
+    150 + (showTools.value ? toolsHeight : 0) + (showFilter.value ? filterHeight : 0)
   }px)`,
 }))
 </script>
