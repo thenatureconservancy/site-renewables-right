@@ -876,7 +876,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   toggleGroupVisibility(group){
     let map = document.querySelector("arcgis-map").map;
     group.subheaders.forEach(subheader => {
-      console.log(group)
       let visible = group.expanded
       subheader.visible = visible
       subheader.expanded = true
@@ -887,7 +886,6 @@ export const useMapStore = defineStore('mapStore', () => ({
         }
         
         if(layer.filter){
-        console.log('setting visibility for ' + layer.elid + ' to ' + visible)
         sublayer.visible = visible
         }
 
@@ -912,8 +910,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   setSublayerVisibility(elid, checked) {
     let map = document.querySelector("arcgis-map").map;
     let layer = map.findLayerById(elid);
-    console.log(elid)
-    console.log(layer)
     layer.visible = checked
   },
   //sets opacity for single layers
@@ -958,7 +954,6 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
    //filter layers
   filterLayers(cat){
-    console.log(cat)
     this.category = cat
     this.currentPoint == '' ? "" : this.createBuffer ('current')
     let map = document.querySelector("arcgis-map").map;
@@ -971,8 +966,6 @@ export const useMapStore = defineStore('mapStore', () => ({
             if(layer.category !== this.category || layer.category == 'both' ){
               //turn off those layers so they are not visibl ein the map
               let mapLayer = map.findLayerById(layer.elid);
-               
-              console.log(layer)
               layer.filter = false
               mapLayer.visible = false
             }
@@ -1023,7 +1016,6 @@ export const useMapStore = defineStore('mapStore', () => ({
       layer2.definitionExpression = "STATE_NAME = 'N/A"
     }
     else{
-      console.log(this.category)
        if(this.category == 'solar'){
         layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'"
         layer2.definitionExpression = "STATE_NAME = 'California'"
@@ -1065,10 +1057,6 @@ export const useMapStore = defineStore('mapStore', () => ({
 
       const newIndex = topIndex - index
 
-      console.log(
-        `${sublayer.title} -> ${newIndex}`
-      )
-
       if (mapLayer) {
         map.reorder(mapLayer, newIndex)
       }
@@ -1076,13 +1064,29 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
 
   /**functions for report*/
-
+  hideSiteReport() {
+    const el = document.querySelector('arcgis-map')
+    const map = el?.map
+    const pointLayer = map?.findLayerById('pointLayer')
+    const bufferLayer = map?.findLayerById('bufferLayer')
+    if (bufferLayer) bufferLayer.visible = false
+    if (pointLayer) pointLayer.visible = false
+    this.showSiteReport = false
+  },
+  viewSiteReport() {
+    const el = document.querySelector('arcgis-map')
+    const map = el?.map
+    const pointLayer = map?.findLayerById('pointLayer')
+    const bufferLayer = map?.findLayerById('bufferLayer')
+    if (bufferLayer) bufferLayer.visible = true
+    if (pointLayer) pointLayer.visible = true
+    this.showSiteReport = true
+  },
   //called from map.vue to create a bufer around clicked point and calls historam and intersection functions
   async createBuffer (e){
     this.statePolicy = null
     let current = false
     if (e == 'current'){
-      console.log(this.currentPoint)
       current = true
       e = this.currentPoint
       
@@ -1153,7 +1157,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   }
 
   },
-    
+
   // functions for report raster histograms and area calculations
   async getHistogram(buffer) {
     
@@ -1194,8 +1198,6 @@ export const useMapStore = defineStore('mapStore', () => ({
     const HA_PER_PIXEL = PIXEL_M2 / 10000          // 0.09  ✅ hectares
     const AC_PER_PIXEL = PIXEL_M2 / 4046.8564224   // 0.2224 acres
     const ALBERS=new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
-    console.log('HA_PER_PIXEL =', HA_PER_PIXEL)  // should be 0.09
-
     
     const tasks = rasters.map(async ({ name, elid, values }) => {
       const valueList = Array.isArray(values) ? values : values != null ? [values] : [1]
@@ -1215,33 +1217,20 @@ export const useMapStore = defineStore('mapStore', () => ({
       try {
         const res = await imageLayer.computeStatisticsHistograms(params)
         const hist = res.histograms?.[0]
-        console.log(elid)
-        console.log(res)
-
-        // Total valid pixels = sum of all bins (NoData already excluded)
-      // instead of: const pixelCount = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
-       
 
         // Per-value breakdown (some rasters use 1, some use 2)
-    // per-value breakdown for THIS raster's actual values
-      const byValue = {}
-      let pixelCount = 0
-      for (const v of valueList) {
-        const pc = this.countForValue(hist, v)
-        byValue[v] = {
-          pixelCount: pc,
-          areaHa: +(pc * HA_PER_PIXEL).toFixed(2),
-          areaAc: +(pc * AC_PER_PIXEL).toFixed(2),
+        // per-value breakdown for THIS raster's actual values
+        const byValue = {}
+        let pixelCount = 0
+        for (const v of valueList) {
+          const pc = this.countForValue(hist, v)
+          byValue[v] = {
+            pixelCount: pc,
+            areaHa: +(pc * HA_PER_PIXEL).toFixed(2),
+            areaAc: +(pc * AC_PER_PIXEL).toFixed(2),
+          }
+          pixelCount += pc          // total = sum of all this raster's values
         }
-        pixelCount += pc          // total = sum of all this raster's values
-      }
-              console.log(elid, {
-        min: hist?.min,
-        max: hist?.max,
-        size: hist?.size,
-        counts: hist?.counts,
-      })
-
         return [elid, {
           ok: true,
           error: null,
@@ -1320,7 +1309,6 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   //gets agol vector data for report
   async getIntersections(buffer) {
-    console.log('getIntersections', buffer)
   const layers =  [
     {
       name: 'High Quality Watersheds', elid: 'qualitywater', 
@@ -1375,15 +1363,7 @@ export const useMapStore = defineStore('mapStore', () => ({
           geometry: buffer,               // 5070 — server projects automatically
           spatialRelationship: 'intersects',
         })
-        console.log({
-          ok: true,
-          error: null,
-          elid: cfg.elid,
-          name: cfg.name,
-          summaryType: cfg.summaryType,
-          intersected: count > 0,
-          count,                          // meaningful for 'count', still handy for 'boolean'
-        })
+      
         const result = {
           ok: true,
           error: null,
@@ -1477,7 +1457,6 @@ if (cfg.summaryType === 'attributes') {
       })
 
       const feat = results.features?.[0]
-      console.log(feat)
       if (!feat) { this.statePolicy = null; return null }
 
       // ⚠️ adjust field name to your states layer (see question below)
@@ -1497,7 +1476,6 @@ if (cfg.summaryType === 'attributes') {
       }
 
       this.statePolicy = { state, html: this.statePolicyHtml(state) }
-      console.log(this.statePolicy)
       return this.statePolicy
     } catch (err) {
       console.error('State policy query failed', err)

@@ -198,14 +198,7 @@ const onDragEnd = () => {
   isDragging.value = false
 }
 
-function hideSiteReport() {
-  mapStore.showSiteReport = false
-  let map = document.querySelector('arcgis-map').map
-  let pointLayer = map.findLayerById('pointLayer')
-  let bufferLayer = map.findLayerById('bufferLayer')
-  bufferLayer.visible = false
-  pointLayer.visible = false
-}
+
 
 onMounted(() => {
   document.addEventListener('mousemove', onDragMove)
@@ -262,7 +255,7 @@ onUnmounted(() => {
         <div
           style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
         >
-          <h6 class="">Site Report Results</h6>
+          <p class="text-overline q-ml-sm q-mb-none text-bold">SITE REPORT RESULTS</p>
           <q-space></q-space>
           <q-btn
             flat
@@ -272,40 +265,37 @@ onUnmounted(() => {
             padding="sm"
             class=""
             icon="close"
-            @click="mapStore.showSiteReport = false"
+            @click="mapStore.hideSiteReport()"
           />
         </div>
-        <div
-          style="
-            font-size: 10px;
-            opacity: 0.85;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          "
-        >
-          <span>
-            Lat:
-            {{
-              mapStore.currentPoint.detail.mapPoint.latitude
-                ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
-                : '--'
-            }}
-            , Lon:
-            {{
-              mapStore.currentPoint.detail.mapPoint.longitude
-                ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
-                : '--'
-            }}
-          </span>
-          <span>|</span>
-          <span> Energy Type: {{ mapStore.category }}</span>
-          <span>|</span>
-          <span class="">Area: {{ formatArea(mapStore.reportBufferAreaHa) }}</span>
-        </div>
+<div
+  style="
+    font-size: 10px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+  "
+>
+  <span style="flex: 1; text-align: center;">
+    Lat:
+    {{
+      mapStore.currentPoint.detail.mapPoint.latitude
+        ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
+        : '--'
+    }}
+    , Lon:
+    {{
+      mapStore.currentPoint.detail.mapPoint.longitude
+        ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
+        : '--'
+    }}
+  </span>
+  <span style="flex: 1; text-align: center;">Energy Type: {{ mapStore.category }}</span>
+  <span style="flex: 1; text-align: center;">Area: {{ formatArea(mapStore.reportBufferAreaHa) }}</span>
+</div>
 
         <!-- Buffer Size Control -->
-        <div class="buffer-section q-pb-sm">
+        <div class="buffer-section q-pa-sm">
           <div class="row">
             <div class="buffer-label">Buffer Size:</div>
             <q-btn color="white" icon="help_outline" size="sm" padding="xs" flat class="q-mb-xs">
@@ -551,7 +541,7 @@ onUnmounted(() => {
 
 .buffer-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 550;
   margin-bottom: 6px;
   display: flex;
   align-items: center;
@@ -862,7 +852,7 @@ onUnmounted(() => {
 .pill-loader {
   display: block;
   height: 3px;
-  width: 100%;
+  width: 40px; /* ← was 100% — fixed width so it can't collapse */
   background: linear-gradient(90deg, #34406b 30%, #cdd4e6 30%);
   background-size: 200% 100%;
   animation: pill-load 1s linear infinite;

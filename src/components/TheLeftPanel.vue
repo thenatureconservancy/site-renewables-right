@@ -1,7 +1,7 @@
 <script setup>
 import { useMapStore } from '@/stores/map'
 import { ref, computed } from 'vue'
-import TheLayerList from './TheLayerList.vue'
+import TheLayersList from './TheLayersList.vue'
 
 const mapStore = useMapStore()
 const showLayers = ref(true)
@@ -18,12 +18,18 @@ const scrollHeight = computed(() => ({
 </script>
 <template>
   <div class="q-mx-xs" style="border-top: 1px solid lightgray" data-tour="intro-text">
-   
     <div id="tools" class="q-pb-md q-mt-sm" style="border-bottom: 1px solid lightgrey">
       <q-toolbar class="q-mb-md q-pa-none section-header">
         <p class="text-overline q-ml-sm q-mb-none text-bold">TOOLS</p>
         <q-space></q-space>
-        <q-btn color="white" icon="help_outline" size="sm" padding="xs" flat class="q-ml-sm q-mr-md">
+        <q-btn
+          color="white"
+          icon="help_outline"
+          size="sm"
+          padding="xs"
+          flat
+          class="q-ml-sm q-mr-md"
+        >
           <q-menu>
             <div class="q-pa-md" style="width: 300px">
               <p class="">
@@ -47,7 +53,7 @@ const scrollHeight = computed(() => ({
               square
               unelevated
               :flat="mapStore.showSiteReport ? false : true"
-              @click="mapStore.showSiteReport = !mapStore.showSiteReport"
+              @click="mapStore.showSiteReport ? mapStore.hideSiteReport() : mapStore.viewSiteReport()"
             ></q-btn>
             <q-btn
               class="q-ml-sm"
@@ -106,7 +112,7 @@ const scrollHeight = computed(() => ({
     >
       <q-slide-transition>
         <div v-show="showLayers">
-          <the-layer-list></the-layer-list>
+          <the-layers-list></the-layers-list>
         </div>
       </q-slide-transition>
     </q-scroll-area>
@@ -114,16 +120,16 @@ const scrollHeight = computed(() => ({
 </template>
 <style>
 .section-header {
-  background: #34406b;              /* deep solar blue */
-  color: #ffffff;                  /* white text now works! */
-  border-left: 4px solid #64B45B;  /* keep green as the accent stripe */
+  background: #34406b; /* deep solar blue */
+  color: #ffffff; /* white text now works! */
+  border-left: 4px solid #64b45b; /* keep green as the accent stripe */
   padding: 9px 14px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
-.q-toolbar{
-  min-height:35px !important;
+.q-toolbar {
+  min-height: 35px !important;
 }
 </style>
