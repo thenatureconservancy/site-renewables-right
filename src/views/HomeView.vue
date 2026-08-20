@@ -12,7 +12,10 @@ const mapStore = useMapStore()
 const helpStore = useHelpStore()
 
 const agolStore = useAgolStore()
-
+function openPanel(active) {
+  mapStore.panelState = 'open'
+  mapStore.activeTool = active
+}
 function dialogControl() {
   helpStore.showDialog = false
   if (mapStore.checkboxHideSplash) {

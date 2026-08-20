@@ -1080,13 +1080,15 @@ export const useMapStore = defineStore('mapStore', () => ({
   //called from map.vue to create a bufer around clicked point and calls historam and intersection functions
   async createBuffer (e){
     this.statePolicy = null
-   
+    let current = false
     if (e == 'current'){
       console.log(this.currentPoint)
+      current = true
       e = this.currentPoint
+      
     }
     //clear prior results
-    this.reportResults = {}
+    this.reportResults = ''
     this.getStatePolicy(e.detail.mapPoint)
     if(this.bufferSize > 36){
       alert('Buffer size cannot exceed 35 miles')
@@ -1140,14 +1142,15 @@ export const useMapStore = defineStore('mapStore', () => ({
     // at the end of createBuffer, after adding the buffer graphic:
     const view = document.querySelector("arcgis-map").view
     const padded = buffer.extent.clone().expand(1.3)
-
-  /* view.goTo(
+    if (!current){
+    view.goTo(
       { target: padded },
       { duration: 800, easing: "ease-in-out" }
     ).catch((err) => {
       // goTo rejects if interrupted by user interaction — safe to ignore
       if (err.name !== "AbortError") console.error(err)
-    })*/
+    })
+  }
 
   },
     
@@ -1158,9 +1161,9 @@ export const useMapStore = defineStore('mapStore', () => ({
 
       { name: 'Bats_10_Final_02_NoCA_5070', elid: 'bats', values: [1,2] },
       { name: 'BigGame_08_NoCA_5070', elid: 'bigGameSolar', values: [1]},
-      { name: 'Birds_05_NoCA_5070', elid: 'birds', values: [1] },
+      { name: 'Birds_05_NoCA_5070', elid: 'birdsWind', values: [1] },
       { name: 'IntactHabitats_HMI200_20260518_NoCA_R_5070', elid: 'landscapeIntactness', values: [2] },
-      { name: 'Migratory_Bird_Stopover_NoCA_5070', elid: 'migratoryBirdStopoverWind', values: [1] },
+      { name: 'Migratory_Bird_Stopover_NoCA_5070_8bit', elid: 'migratoryBirdStopoverWind', values: [255] },
       { name: 'PrairieGrouseA_5070', elid: 'prairieGrouse', values: [1] },
       { name: 'ProtectedAreas_01_Final_NoCA_5070_new2', elid: 'protectedAreas', values: [255] },
       { name: 'RCN_NoCal_20260728_5070_new', elid: 'resilientConnected', values: [1,2,3]},
@@ -1169,11 +1172,11 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'WhoopingCraneSolar_20260408_NoCA_R_5070', elid: 'whoopingCraneSolar', values: [2] },
       { name: 'WhoopingCraneWind_20260408_NoCA_R_5070', elid: 'whoopingCraneWind', values: [1] },
       { name: 'abanDef2_rec_ur_5070_new', elid: 'abandonedag', values: [1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001, 2002, 2003, 2004, 2005, 2006, 2007,2008,2009,2010,2011,2012,2013,2014]},
-      { name: 'pvr_val_2_GT_5070_new', elid: 'ag2', values: [2]},
-      { name: 'pvr_val_3_GT_5070_new', elid: 'ag3', values:[3]},
-      { name: 'pvr_val_4_GT_5070_new', elid: 'ag4', values:[4]},
-      { name: 'lasso_wind_5070', elid: 'lassoWind', values: [1]},
-      { name: 'lasso_solar_5070', elid: 'lassoSolar', values: [1]}
+      { name: 'pvr_val_2_GT_5070_new_mask', elid: 'ag2', values: [1]},
+      { name: 'pvr_val_3_GT_5070_new_mask', elid: 'ag3', values:[1]},
+      { name: 'pvr_val_4_GT_5070_new_mask', elid: 'ag4', values:[1]},
+      { name: 'lasso_wind_5070_fix', elid: 'lassoWind', values: [1]},
+      { name: 'lasso_solar_5070_fix_', elid: 'lassoSolar', values: [1]}
     
     ]
 
@@ -1458,7 +1461,6 @@ if (cfg.summaryType === 'attributes') {
   this.intersectLoading = false
   return intersectionResults
   },
-
 
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {

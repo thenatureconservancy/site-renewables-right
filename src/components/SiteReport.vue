@@ -307,13 +307,19 @@ onUnmounted(() => {
         <!-- Buffer Size Control -->
         <div class="buffer-section q-pb-sm">
           <div class="row">
-            <div class="buffer-label">
-              Buffer Size:
-              <div class="info-icon" title="Expand the search area around your selected point">
-                ?
-              </div>
-            </div>
-            <q-space></q-space>
+            <div class="buffer-label">Buffer Size:</div>
+            <q-btn color="white" icon="help_outline" size="sm" padding="xs" flat class="q-mb-xs">
+              <q-menu>
+                <div class="q-pa-md" style="width: 300px">
+                  <p class="">
+                    <b>Buffer Size:</b> The buffer radius determines how far outward from your
+                    selected point the analysis area extends. Intersecting layers are evaluated
+                    within this area. Choose a preset distance or enter a custom radius up to 35
+                    miles.
+                  </p>
+                </div>
+              </q-menu>
+            </q-btn>
           </div>
           <div class="buffer-buttons">
             <q-btn
@@ -371,7 +377,7 @@ onUnmounted(() => {
                 <span
                   class="pill"
                   :class="categoryMeta[categoryName].intersected > 0 ? 'pill-present' : 'pill-none'"
-                > 
+                >
                   <span v-if="mapStore.reportLoading" class="pill-loader"></span>
                   <template v-else>
                     {{ categoryMeta[categoryName].intersected }} /
@@ -379,7 +385,6 @@ onUnmounted(() => {
                     Items
                   </template>
                 </span>
-               
               </div>
             </div>
 

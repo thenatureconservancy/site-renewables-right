@@ -177,7 +177,7 @@ function symbolStyle(s) {
 
 /* Full ramp */
 .legend-ramp {
-  min-width: 120px;
+  max-width: 200px;
 }
 .ramp-bar {
   height: 10px;
