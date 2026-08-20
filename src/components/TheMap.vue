@@ -87,7 +87,7 @@ onMounted(() => {
   let prairieGrouse = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'prairieGrouse',
-    sublayers: [{ id: 39 }],
+    sublayers: [{ id: 78 }],
     visible: false,
     opacity: 1,
   })

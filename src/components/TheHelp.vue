@@ -5,6 +5,14 @@ import { useMapStore } from '@/stores/map'
 const mapStore = useMapStore()
 const splitterModel = ref(30)
 
+// which whooping crane elid to hide for the current category
+const hiddenElid = computed(() => {
+  if (mapStore.category === 'solar') return 'whoopingCraneWind'
+  if (mapStore.category === 'wind' || mapStore.category === 'floating solar')
+    return 'whoopingCraneSolar'
+  return null
+})
+
 // Flatten subheaders into a single TOC list
 const tocItems = computed(() => {
   const items = []
@@ -12,19 +20,24 @@ const tocItems = computed(() => {
     item.subheaders.forEach((layer) => {
       items.push({
         ...layer,
+        // drop the crane layer that doesn't apply to the current category
+        sublayers: layer.sublayers?.filter((s) => s.elid !== hiddenElid.value),
         tocId: layer.title,
         title:
           layer.title === 'Highly Sensitive'
-            ? 'Conservation Values (Highly Sensitive)'
+            ? 'Conservation Values <br/> (Highly Sensitive)'
             : layer.title === 'Moderately Sensitive'
-              ? 'Conservation Values (Moderately Sensitive)'
-              : layer.title,
+              ? 'Conservation Values <br/>(Moderately Sensitive)'
+              : layer.title === 'Highest Quality Farmland'
+                ? 'Agricultural Values <br/>(Highest Quality Farmland)'
+                : layer.title === 'Limitations to Farmland'
+                  ? 'Agricultural Values <br/>(Limitations to Farmland)'
+                  : layer.title,
       })
     })
   })
   return items
 })
-
 const selectedSection = computed(() => {
   return tocItems.value.find((t) => t.tocId === mapStore.selectedHelpSection) || tocItems.value[0]
 })
@@ -32,8 +45,8 @@ const selectedSection = computed(() => {
 
 <template>
   <div class="help-panel">
-    <q-toolbar class="section-header" >
-       <p class="text-overline q-ml-sm q-mb-none text-bold">Layer Info</p>
+    <q-toolbar class="section-header">
+      <p class="text-overline q-ml-sm q-mb-none text-bold">Layer Info</p>
       <q-space></q-space>
       <q-btn flat icon="close" @click="mapStore.showHelpPanel = false"></q-btn>
     </q-toolbar>
@@ -47,13 +60,12 @@ const selectedSection = computed(() => {
             clickable
             v-ripple
             :active="mapStore.selectedHelpSection === layer.tocId"
-            active-class="bg-blue-grey-1 text-blue-grey-9"
+            active-class="bg-blue-grey-1 text-weight-bold text-blue-grey-9"
             @click="mapStore.selectedHelpSection = layer.tocId"
           >
             <q-item-section>
-              <q-item-label class="text-body2 text-bold">
-                {{ layer.title }}
-              </q-item-label>
+              <q-item-label class="text-body2" v-html="layer.title"></q-item-label>
+   
             </q-item-section>
           </q-item>
         </q-list>
@@ -62,25 +74,43 @@ const selectedSection = computed(() => {
       <!-- RIGHT: Detail Content -->
       <template #after>
         <div v-if="selectedSection" class="q-pa-md detail-content">
-          <div v-html="selectedSection.description"></div>
           <div class="text-center q-pa-sm q-mb-md" style="border-radius: 4px">
-            <p class="text-body1 q-mb-none">{{ selectedSection.title }}</p>
+            <p class="text-h6 q-mb-none" v-html="selectedSection.title"></p>
+            <p caption class="text-caption text-left q-mt-md" v-html="selectedSection.subheaderBlurb"></p>
           </div>
           <q-list v-for="(sublayer, i) in selectedSection.sublayers" :key="i">
-            <q-item v-if="sublayer.elid !== 'whoopingCraneSolar'">
+            <q-item>
               <q-item-section>
-                <q-item-label
-                  :id="sublayer.elid"
-                  class="text-bold"
-                  :style="
-                    mapStore.activeHelpElement === sublayer.elid
-                      ? 'border: 2px solid green; padding: 5px'
-                      : ''
-                  "
-                >
-                  {{ sublayer.title }}
+                <q-item-label>
+                  <div class="layer-info">
+                    <h3
+                      class="layer-title"
+                      :id="sublayer.elid"
+                      :style="
+                        mapStore.activeHelpElement === sublayer.elid
+                          ? 'border: 2px solid rgb(52, 64, 107, .2); padding: 5px'
+                          : ''
+                      "
+                    >
+                      {{ sublayer.title }}
+                    </h3>
+
+                    <div class="info-section">
+                      <h4 class="info-label">About the data</h4>
+                      <p v-html="sublayer.infoAbout"></p>
+                    </div>
+
+                    <div class="info-section">
+                      <h4 class="info-label">Why these data are included</h4>
+                      <p v-html="sublayer.infoWhy"></p>
+                    </div>
+
+                    <div class="info-section">
+                      <h4 class="info-label">How should the data be used?</h4>
+                      <p v-html="sublayer.infoHow"></p>
+                    </div>
+                  </div>
                 </q-item-label>
-                <q-item-label v-html="sublayer.longDescription" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -103,5 +133,30 @@ const selectedSection = computed(() => {
 .detail-content {
   overflow-y: auto;
   height: 100%;
+}
+
+.layer-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+.info-section {
+  margin-bottom: 16px;
+}
+.info-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #34406b; /* your solar-blue — ties to the panel header */
+  margin: 0 0 4px;
+}
+.info-section p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+  margin: 0;
 }
 </style>

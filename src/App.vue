@@ -44,7 +44,7 @@ const width = ref(window.innerWidth / 2.2)
             <span class="title-accent">Compass</span>
           </p>
           <div class="app-subtitle">
-            Navigating <span class="subtitle-accent">3Cs</span> considerations for clean energy
+            Navigating 3Cs considerations for clean energy
             planning
           </div>
         </div>

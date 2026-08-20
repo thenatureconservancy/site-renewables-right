@@ -223,9 +223,9 @@ onUnmounted(() => {
     <div v-if="!hasSelection">
       <div class="results-header q-pr-sm">
         <div
-          style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px"
+          style="display: flex; width: 300px;justify-content: space-between; align-items: flex-start; gap: 8px"
         >
-          <h6 class="">Site Report Instructions</h6>
+           <p class="text-overline q-ml-sm q-mb-none text-bold" >SITE REPORT INSTRUCTIONS</p>
           <q-space></q-space>
           <q-btn
             flat
