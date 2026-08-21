@@ -1362,6 +1362,9 @@ export const useMapStore = defineStore('mapStore', () => ({
             sublayer.totalArea = 0
             sublayer.intersected = false
             sublayer.count = 0
+            sublayer.min = null       // clear stats too on reset
+            sublayer.max = null
+            sublayer.mean = null
             return
           }
           // raster layers
@@ -1374,6 +1377,13 @@ export const useMapStore = defineStore('mapStore', () => ({
             sublayer.summaryType = r.summaryType
             sublayer.count = r.count ?? 0
             sublayer.intersected = r.intersected ?? false
+
+            // stats layers carry min / max / mean
+            if (r.summaryType === 'stats') {
+              sublayer.min = r.min ?? null
+              sublayer.max = r.max ?? null
+              sublayer.mean = r.mean ?? null
+            }
           }
         })
       })
@@ -1382,137 +1392,152 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   //gets agol vector data for report
   async getIntersections(buffer) {
-  const layers =  [
+    const layers =  [
     {
       name: 'High Quality Watersheds', elid: 'qualitywater', 
       featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/6',
       summaryType: 'boolean'
     },
-  { name: 'Surface Water Limited Lands', elid: 'waterLimited',
-    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLands_VTL/FeatureServer/0',
-    summaryType: 'boolean' },
+    { name: 'Surface Water Limited Lands', elid: 'waterLimited',
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_WaterLimitedLands_VTL/FeatureServer/0',
+      summaryType: 'boolean' },
 
-  { name: 'Former Mine Lands', elid: 'abandonedmines',
-    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
-    summaryType: 'count' },
+    { name: 'Former Mine Lands', elid: 'abandonedmines',
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
+      summaryType: 'count' },
 
-  { name: 'Brownfields over 10 acres', elid: 'brownfields',
-    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
-    summaryType: 'count' },
-  
-  {name: 'Native Lands', elid: 'nativeLands',
-    featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
-    summaryType: 'boolean'
-  },
-
- { name: 'Community Considerations',
-  featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
-  summaryType: 'attributes',
-  fields: [
-    { elid: 'cjest_workforce',      field: 'N_WKFC_91' },
-    { elid: 'cjest_water',          field: 'N_WTR_EOMI' },
-    { elid: 'cjest_transportation', field: 'N_TRN_EOMI' },
-    { elid: 'cjest_pollution',      field: 'N_PLN_EOMI' },
-    { elid: 'cjest_housing',        field: 'N_HSG_EOMI' },
-    { elid: 'cjest_health',         field: 'N_HLTH_90' },
-    { elid: 'cjest_energy',         field: 'N_ENY_EOMI' },
-    { elid: 'cjest_climate',        field: 'N_CLT_EOMI' },
-  ],
-  whereQueries: [
-    { elid: 'cjest_lowincome', where: 'P200_I_PFS <= 0.2' }, // ← percentile, server-filtered
-  ],
-}
-]
-
-  this.intersectLoading = true
-
-  const tasks = layers.map(async (cfg) => {
-    const featureLayer = new FeatureLayer({ url: cfg.featureUrl })
-
-    try {
-      // --- COUNT / BOOLEAN: just need how many features intersect ---
-      if (cfg.summaryType === 'count' || cfg.summaryType === 'boolean') {
-        const count = await featureLayer.queryFeatureCount({
-          geometry: buffer,               // 5070 — server projects automatically
-          spatialRelationship: 'intersects',
-        })
-      
-        const result = {
-          ok: true,
-          error: null,
-          elid: cfg.elid,
-          name: cfg.name,
-          summaryType: cfg.summaryType,
-          intersected: count > 0,
-          count,                          // meaningful for 'count', still handy for 'boolean'
-        }
-        return [[cfg.elid, result]]       // wrapped in array for flatMap below
-      }
-
-      // --- ATTRIBUTES (Community Considerations): one query, fan out to sub-elids ---
-// --- ATTRIBUTES (Community Considerations) ---
-if (cfg.summaryType === 'attributes') {
-  const fieldNames = cfg.fields.map((f) => f.field)
-
-  // 1) single query → fan out the 8 boolean fields (value == 1)
-  const res = await featureLayer.queryFeatures({
-    geometry: buffer,
-    spatialRelationship: 'intersects',
-    returnGeometry: false,
-    outFields: fieldNames,
-  })
-  const feats = res.features || []
-
-  const fieldResults = cfg.fields.map((f) => {
-    const isTrue = feats.some((feat) => Number(feat.attributes[f.field]) === 1)
-    return [f.elid, {
-      ok: true, error: null, elid: f.elid, name: cfg.name,
-      summaryType: 'boolean', intersected: isTrue, count: isTrue ? 1 : 0,
-    }]
-  })
-
-  // 2) separate where-based count query per special field (e.g. percentile)
-  const whereResults = await Promise.all(
-    (cfg.whereQueries || []).map(async (wq) => {
-      const count = await featureLayer.queryFeatureCount({
-        geometry: buffer,
-        spatialRelationship: 'intersects',
-        where: wq.where,               // server filters out null/off values
-      })
-      return [wq.elid, {
-        ok: true, error: null, elid: wq.elid, name: cfg.name,
-        summaryType: 'boolean', intersected: count > 0, count,
-      }]
-    })
-  )
-
-  return [...fieldResults, ...whereResults]   // both feed the flat() merge
-}
-    } catch (err) {
-      console.error(`Intersection failed for ${cfg.name} (${cfg.elid || 'multi'})`, err)
-      // Fail gracefully — one bad layer shouldn't blank the report
-      if (cfg.summaryType === 'attributes') {
-        return cfg.fields.map((f) => [f.elid, {
-          ok: false, error: err.message, elid: f.elid, name: cfg.name,
-          summaryType: 'boolean', intersected: false, count: 0,
-        }])
-      }
-      return [[cfg.elid, {
-        ok: false, error: err.message, elid: cfg.elid, name: cfg.name,
-        summaryType: cfg.summaryType, intersected: false, count: 0,
-      }]]
+    { name: 'Brownfields over 10 acres', elid: 'brownfields',
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
+      summaryType: 'count' },
+    
+    {name: 'Native Lands', elid: 'nativeLands',
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/9',
+      summaryType: 'boolean'
+    },
+    { name: 'Community Considerations',
+      featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/CJEST_SRR_VTL/FeatureServer/0',
+      summaryType: 'attributes',
+      fields: [
+        { elid: 'cjest_workforce',      field: 'N_WKFC_91' },
+        { elid: 'cjest_water',          field: 'N_WTR_EOMI' },
+        { elid: 'cjest_transportation', field: 'N_TRN_EOMI' },
+        { elid: 'cjest_pollution',      field: 'N_PLN_EOMI' },
+        { elid: 'cjest_housing',        field: 'N_HSG_EOMI' },
+        { elid: 'cjest_health',         field: 'N_HLTH_90' },
+        { elid: 'cjest_energy',         field: 'N_ENY_EOMI' },
+        { elid: 'cjest_climate',        field: 'N_CLT_EOMI' },
+      ],
+      statsQueries: [
+      {
+        elid: 'cjest_lowincome',
+        field: 'P200_I_PFS',
+        stats: ['min', 'max', 'avg'],   // avg = mean
+      },
+    ],
     }
-  })
+  
+    ]
 
-  const nested = await Promise.all(tasks)
-  const intersectionResults = Object.fromEntries(nested.flat())   // flatten the fan-out
+    this.intersectLoading = true
 
-  // Merge with raster results (don't clobber) and apply to layers
-  this.reportResults = { ...this.reportResults, ...intersectionResults }
-  this.applyResultsToLayers(this.reportResults)
+    const tasks = layers.map(async (cfg) => {
+      const featureLayer = new FeatureLayer({ url: cfg.featureUrl })
 
-  this.intersectLoading = false
-  return intersectionResults
+      try {
+        // --- COUNT / BOOLEAN: just need how many features intersect ---
+        if (cfg.summaryType === 'count' || cfg.summaryType === 'boolean') {
+          const count = await featureLayer.queryFeatureCount({
+            geometry: buffer,               // 5070 — server projects automatically
+            spatialRelationship: 'intersects',
+          })
+        
+          const result = {
+            ok: true,
+            error: null,
+            elid: cfg.elid,
+            name: cfg.name,
+            summaryType: cfg.summaryType,
+            intersected: count > 0,
+            count,                          // meaningful for 'count', still handy for 'boolean'
+          }
+          return [[cfg.elid, result]]       // wrapped in array for flatMap below
+        }
+
+      
+      // --- ATTRIBUTES (Community Considerations) ---
+      if (cfg.summaryType === 'attributes') {
+        const fieldNames = cfg.fields.map((f) => f.field)
+
+        // 1) single query → fan out the 8 boolean fields (value == 1)
+        const res = await featureLayer.queryFeatures({
+          geometry: buffer,
+          spatialRelationship: 'intersects',
+          returnGeometry: false,
+          outFields: fieldNames,
+        })
+        const feats = res.features || []
+
+        const fieldResults = cfg.fields.map((f) => {
+          const isTrue = feats.some((feat) => Number(feat.attributes[f.field]) === 1)
+          return [f.elid, {
+            ok: true, error: null, elid: f.elid, name: cfg.name,
+            summaryType: 'boolean', intersected: isTrue, count: isTrue ? 1 : 0,
+          }]
+        })
+
+        // 2) statistics query → min / max / mean over intersecting polygons
+        const statsResults = await Promise.all(
+          (cfg.statsQueries || []).map(async (sq) => {
+            const res2 = await featureLayer.queryFeatures({
+              geometry: buffer,
+              spatialRelationship: 'intersects',
+              returnGeometry: false,
+              outStatistics: [
+                { statisticType: 'min', onStatisticField: sq.field, outStatisticFieldName: 'stat_min' },
+                { statisticType: 'max', onStatisticField: sq.field, outStatisticFieldName: 'stat_max' },
+                { statisticType: 'avg', onStatisticField: sq.field, outStatisticFieldName: 'stat_mean' },
+              ],
+            })
+            const a = res2.features?.[0]?.attributes || {}
+            const hasData = a.stat_mean != null
+            return [sq.elid, {
+              ok: true, error: null, elid: sq.elid, name: cfg.name,
+              summaryType: 'stats',
+              intersected: hasData,
+              min:  hasData ? a.stat_min  : null,
+              max:  hasData ? a.stat_max  : null,
+              mean: hasData ? a.stat_mean : null,
+            }]
+          })
+        )
+        return [...fieldResults, ...statsResults]
+        }
+      } catch (err) {
+        console.error(`Intersection failed for ${cfg.name} (${cfg.elid || 'multi'})`, err)
+        // Fail gracefully — one bad layer shouldn't blank the report
+        if (cfg.summaryType === 'attributes') {
+          const boolFallback = cfg.fields.map((f) => [f.elid, {
+            ok: false, error: err.message, elid: f.elid, name: cfg.name,
+            summaryType: 'boolean', intersected: false, count: 0,
+          }])
+          const statsFallback = (cfg.statsQueries || []).map((sq) => [sq.elid, {
+            ok: false, error: err.message, elid: sq.elid, name: cfg.name,
+            summaryType: 'stats', intersected: false, min: null, max: null, mean: null,
+          }])
+          return [...boolFallback, ...statsFallback]
+        }
+      }
+    })
+
+    const nested = await Promise.all(tasks)
+    const intersectionResults = Object.fromEntries(nested.flat())   // flatten the fan-out
+
+    // Merge with raster results (don't clobber) and apply to layers
+    this.reportResults = { ...this.reportResults, ...intersectionResults }
+    this.applyResultsToLayers(this.reportResults)
+
+    this.intersectLoading = false
+    return intersectionResults
   },
 
   //does the intersection query for excluding states and returns policy html for the report

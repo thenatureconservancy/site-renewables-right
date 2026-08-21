@@ -99,6 +99,10 @@ const formatSummary = (layer) => {
   if (layer.summaryType === 'boolean') {
     return layer.intersected ? 'Present' : 'Not present'
   }
+  if (layer.summaryType === 'stats') {
+  if (!layer.intersected) return 'No data'
+    return `min ${layer.min?.toFixed(2)} · mean ${layer.mean?.toFixed(2)} · max ${layer.max?.toFixed(2)}`
+}
   // default = raster area layer
   return formatArea(layer.totalArea)
 }
