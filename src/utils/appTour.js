@@ -125,7 +125,7 @@ export function startTour(mapStore) {
     title: 'What this tool does',
     text: `Use the map and data layers to understand environmental and community
            context around a potential project site across the United States.`,
-    attachTo: { element: SELECTORS.intro, on: 'bottom' },
+    attachTo: { element: SELECTORS.intro, on: 'right' },
     buttons: backNext,
   })
 
