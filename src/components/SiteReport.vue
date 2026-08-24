@@ -86,9 +86,9 @@ watch(isInactive, (newIsInactive) => {
 const formatArea = (area) => {
   const value = area || 0
   if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}k ha`
+    return `${(value / 1000).toFixed(1)}k ac`
   }
-  return `${value.toFixed(0)} ha`
+  return `${value.toFixed(0)} ac`
 }
 
 // Format the right summary per layer type
@@ -112,7 +112,7 @@ const isRasterLayer = (layer) => layer.summaryType == null
 
 // Calculate percentage (raster layers only)
 const getPercentage = (area) => {
-  const denom = mapStore.reportBufferAreaHa
+  const denom = mapStore.reportBufferAreaAc
   if (!denom) return 0
   return (((area || 0) / denom) * 100).toFixed(1)
 }
@@ -295,7 +295,7 @@ onUnmounted(() => {
     }}
   </span>
   <span style="flex: 1; text-align: center;">Energy Type: {{ mapStore.category }}</span>
-  <span style="flex: 1; text-align: center;">Area: {{ formatArea(mapStore.reportBufferAreaHa) }}</span>
+  <span style="flex: 1; text-align: center;">Area: {{ formatArea(mapStore.reportBufferAreaAc) }}</span>
 </div>
 
         <!-- Buffer Size Control -->

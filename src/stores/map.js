@@ -995,7 +995,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     let layer = map.findLayerById(id);
     layer.opacity = opacity
   },
-   //responds to opacity slider in map, changes opacity of all layers
+  //responds to opacity slider in map, changes opacity of all layers
   changeOpacity(){
   let map = document.querySelector("arcgis-map").map;
   //let layersList = [avoid, minimize, opportunities]
@@ -1025,7 +1025,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       layer2.visible = false
     }
   },
-   //filter layers
+  //filter layers
   filterLayers(cat){
     this.category = cat
     this.currentPoint == '' ? "" : this.createBuffer ('current')
@@ -1368,9 +1368,9 @@ export const useMapStore = defineStore('mapStore', () => ({
             return
           }
           // raster layers
-          if (r.areaHa != null) {
-            sublayer.totalArea = r.areaHa
-            sublayer.intersected = r.areaHa > 0
+          if (r.areaAC != null) {
+            sublayer.totalArea = r.areaAc
+            sublayer.intersected = r.areaAc > 0
           }
           // vector/point layers
           if (r.summaryType) {
