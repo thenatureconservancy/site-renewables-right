@@ -271,7 +271,7 @@ onMounted(() => {
       {
         labelPlacement: 'always-horizontal',
         labelExpressionInfo: {
-          expression: "'ℹ️ ' + $feature.STATE_NAME + TextFormatting.NewLine + 'Policy Info'",
+          expression: "'ℹ️ ' + 'Additional' + TextFormatting.NewLine + 'Info'",
         },
         symbol: {
           type: 'text',
@@ -344,7 +344,7 @@ onMounted(() => {
       {
         labelPlacement: 'always-horizontal',
         labelExpressionInfo: {
-          expression: "'ℹ️ ' + $feature.STATE_NAME + TextFormatting.NewLine + 'Policy Info'",
+          expression: "'ℹ️ ' + 'Additional' + TextFormatting.NewLine + 'Info'",
         },
         symbol: {
           type: 'text',

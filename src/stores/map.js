@@ -1368,7 +1368,7 @@ export const useMapStore = defineStore('mapStore', () => ({
             return
           }
           // raster layers
-          if (r.areaAC != null) {
+          if (r.areaAc != null) {
             sublayer.totalArea = r.areaAc
             sublayer.intersected = r.areaAc > 0
           }
