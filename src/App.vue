@@ -62,7 +62,10 @@ const width = ref(window.innerWidth / 2.2)
           icon="download"
           outline
           data-tour="download-data"
+          href="https://tnc.app.box.com/file/2402477476742?s=0u67qsxf5s9ydcb8yigdcrztmztobw4o"
+          target="_blank"
         ></q-btn>
+       
         <q-btn
           color="secondary"
           class="q-mr-sm"
