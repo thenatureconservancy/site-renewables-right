@@ -136,7 +136,7 @@ export function startTour(mapStore) {
     id: 'data-layers',
     title: 'Data Layers',
     text: `Data are organized into themed categories — Conservation Values,
-           Disturbed Lands, Agricultural Values, Community Considerations, and more.
+           Disturbed Lands, Agricultural Considerations, Community Considerations, and more.
            Toggle a category on to see it on the map.`,
     attachTo: { element: SELECTORS.dataLayers, on: 'right' },
     buttons: backNext,

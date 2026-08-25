@@ -227,7 +227,7 @@ onMounted(() => {
     popupTemplate: {
       title: '{NAME}',
       content:
-        "This federally recognized tribal entity's functional status is defined as a(n) {FUNC_D}. The Census type is classified as: {AIANNHType}.",
+        'The Indigenous Lands layer will be updated on an ongoing basis based on real-time feedback. TNC welcomes input about how this layer is represented, especially when Tribes wish to adjust, refine or remove reflected data. TNC welcomes opportunities to provide trainings on the use of the Clean Energy Compass to Indigenous energy experts and planners. Inquiries and feedback about this part of the tool should be directed to maya.batres@tnc.org.',
     },
   })
   //mosaic layer for in

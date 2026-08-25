@@ -29,9 +29,9 @@ const tocItems = computed(() => {
             : layer.title === 'Moderately Sensitive'
               ? 'Conservation Values <br/>(Moderately Sensitive)'
               : layer.title === 'Highest Quality Farmland'
-                ? 'Agricultural Values <br/>(Highest Quality Farmland)'
+                ? 'Agricultural Considerations <br/>(Highest Quality Farmland)'
                 : layer.title === 'Limitations to Farmland'
-                  ? 'Agricultural Values <br/>(Limitations to Farmland)'
+                  ? 'Agricultural Considerations <br/>(Limitations to Farmland)'
                   : layer.title,
       })
     })
@@ -64,8 +64,10 @@ const selectedSection = computed(() => {
             @click="mapStore.selectedHelpSection = layer.tocId"
           >
             <q-item-section>
-              <q-item-label class="text-body2 text-weight-medium" v-html="layer.title"></q-item-label>
-   
+              <q-item-label
+                class="text-body2 text-weight-medium"
+                v-html="layer.title"
+              ></q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -76,7 +78,11 @@ const selectedSection = computed(() => {
         <div v-if="selectedSection" class="q-pa-md detail-content">
           <div class="text-center q-pa-sm q-mb-md" style="border-radius: 4px">
             <p class="text-h6 q-mb-none" v-html="selectedSection.title"></p>
-            <p caption class="text-caption text-left q-mt-md" v-html="selectedSection.subheaderBlurb"></p>
+            <p
+              caption
+              class="text-caption text-left q-mt-md"
+              v-html="selectedSection.subheaderBlurb"
+            ></p>
           </div>
           <q-list v-for="(sublayer, i) in selectedSection.sublayers" :key="i">
             <q-item>

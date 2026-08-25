@@ -36,8 +36,8 @@ export const CUSTOM_LEGENDS = {
   },
   cjest_lowincome: {
     type: 'ramp',
-    lowLabel: 'Low Income',
-    highLabel: 'High Income',
+    lowLabel: 'High Income',
+    highLabel: 'Low Income',
     gradient: 'linear-gradient(to right, #f4edf7, #b56bc7)',
   },
   lassoSolar: {

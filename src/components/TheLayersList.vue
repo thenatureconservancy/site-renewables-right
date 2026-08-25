@@ -101,6 +101,9 @@ async function scrollToElement(layer, elid) {
         <template v-for="(layer, layerIndex) in item.subheaders" :key="layer.id || layerIndex">
           <!-- Duplicate subheader: do not show the redundant subheader checkbox/header. -->
           <div v-if="isDuplicateSubheader(item, layer)">
+            <div class="q-px-md q-pt-md">
+              <p class="text-caption">{{ layer.subheaderLayerBlurb }}</p>
+            </div>
             <q-list v-if="!isRadioLayerGroup(layer)" dense class="q-pb-md">
               <draggable
                 v-model="layer.sublayers"
@@ -181,7 +184,7 @@ async function scrollToElement(layer, elid) {
 
             <q-list v-else dense class="q-pb-md">
               <p
-                class="text-caption text-grey-8 q-pt-md q-px-md text-italic"
+                class="text-caption text-grey-8 q-px-md text-italic"
                 v-if="layer.title == 'Community Considerations'"
               >
                 *Click census tract on the map to view summary info
@@ -265,13 +268,12 @@ async function scrollToElement(layer, elid) {
           </div>
 
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
-          <div class="q-pb-sm" v-if="layer.title == 'Highly Sensitive'" data-tour="energy-filter">
-            <div class="q-pa-md" style="border-bottom: 1px solid lightgray">
+          <div class="" v-if="layer.title == 'Highly Sensitive' || layer.title == 'Highest Quality Farmland'" data-tour="energy-filter">
+            <div class="q-px-md q-pt-md" >
               <div>
-                <p class="text-caption">This category includes wildlife, habitats and ecosystems to consider during wind and
-                solar planning. Highly Sensitive layers include wildlife and ecosystems most sensitive to wind and
-                solar development.</p>
+                <p class="text-caption">{{ layer.subheaderLayerBlurb }}</p>
               </div>
+              <div v-if="layer.title == 'Highly Sensitive'" style="border-bottom: 1px solid lightgray" class="q-pb-md q-mb-sm">
               <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
                 *Energy type filters the conservation layers below.
               </div>
@@ -338,6 +340,7 @@ async function scrollToElement(layer, elid) {
                   class="q-ml-xs"
                 />
               </q-chip>
+              </div>
             </div>
           </div>
 
