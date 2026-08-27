@@ -748,7 +748,7 @@ onMounted(() => {
       <BasemapSwitcher />
     </div>
     <!-- help button next to search-->
-    <div data-tour="map-tools">
+    <div data-tour="map-tool-custom">
       <!-- opacity control knob-->
       <q-btn
         size="md"

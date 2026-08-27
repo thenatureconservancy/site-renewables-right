@@ -27,7 +27,7 @@ const intersectionResults = computed(() => {
   const results = {}
 
   mapStore.layers.forEach((group) => {
-    if (group.header) {
+    if (group.header && group.header !== 'Probability of Renewable Energy Buildout') {
       results[group.header] = []
 
       group.subheaders?.forEach((subheader) => {

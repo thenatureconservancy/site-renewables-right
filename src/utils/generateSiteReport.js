@@ -23,7 +23,7 @@ const BRAND = {
   subLabelBg: "#fafbfc",
 };
 // Groups to exclude from the report entirely (per team request)
-const EXCLUDE_GROUPS = ["Predicted Renewable Energy Buildout"];
+const EXCLUDE_GROUPS = ["Probability of Renewable Energy Buildout"];
 // legend swatch geometry (pdf points)
 const SW = 9;      // swatch square size
 const SW_GAP = 5;  // gap between swatch and label
@@ -238,7 +238,7 @@ function buildMapLegend(mapStore) {
   // Collect every VISIBLE sublayer that applies to the current category.
   const entries = [];
   mapStore.layers.forEach((group) => {
-    if (EXCLUDE_GROUPS.includes(group.header)) return;   // keep excluded groups out of the legend too
+    //if (EXCLUDE_GROUPS.includes(group.header)) return;   // keep excluded groups out of the legend too
     group.subheaders?.forEach((subheader) => {
       subheader.sublayers?.forEach((sublayer) => {
         if (sublayer.visible !== true) return;          // only what's on the map

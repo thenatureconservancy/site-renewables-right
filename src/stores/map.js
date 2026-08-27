@@ -839,7 +839,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     header: 'Probability of Renewable Energy Buildout', id: 'renewable', expanded: false,
     subheaders: [
       {
-        title: 'Probability of Renewable Energy Buildout', id: 'renewable', visible: true, selection: 'Predicted Solar Buildout', visibleModel: true, expanded: false,
+        title: 'Probability of Renewable Energy Buildout', id: 'renewable', visible: true, selection: 'Probability of Solar Buildout', visibleModel: true, expanded: false,
         subheaderBlurb:'Areas with a higher likelihood for future wind and solar development', subheaderLayerBlurb: 'Areas with a higher likelihood for future wind and solar development',
         sublayers: [
           {
@@ -889,7 +889,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   setGroupVisibility(group){
     this.toggleGroupVisibility(group)
       // Custom behavior for expansion groups - allow native lands visible anytime
-    if (group.header == 'Predicted Renewable Energy Buildout' && group.expanded == true){
+    if (group.header == 'Probability of Renewable Energy Buildout' && group.expanded == true){
       //when community is open close the other two groups
       this.layers[0].expanded = false;
       this.layers[1].expanded = false;

@@ -268,78 +268,86 @@ async function scrollToElement(layer, elid) {
           </div>
 
           <!-- Normal subheader: keep the subheader checkbox/expander. -->
-          <div class="" v-if="layer.title == 'Highly Sensitive' || layer.title == 'Highest Quality Farmland'" data-tour="energy-filter">
-            <div class="q-px-md q-pt-md" >
+          <div
+            class=""
+            v-if="layer.title == 'Highly Sensitive' || layer.title == 'Highest Quality Farmland'"
+            data-tour="energy-filter"
+          >
+            <div class="q-px-md q-pt-md">
               <div>
                 <p class="text-caption">{{ layer.subheaderLayerBlurb }}</p>
               </div>
-              <div v-if="layer.title == 'Highly Sensitive'" style="border-bottom: 1px solid lightgray" class="q-pb-md q-mb-sm">
-              <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
-                *Energy type filters the conservation layers below.
-              </div>
-              <q-chip
-                clickable
-                @click="mapStore.filterLayers('wind')"
-                :outline="mapStore.category !== 'wind'"
-                :color="mapStore.category === 'wind' ? 'green-1' : 'grey-9'"
-                :text-color="mapStore.category === 'wind' ? 'green-9' : 'grey-9'"
-                class="q-px-sm q-py-xs energy-chip"
+              <div
+                v-if="layer.title == 'Highly Sensitive'"
+                style="border-bottom: 1px solid lightgray"
+                class="q-pb-md q-mb-sm"
               >
-                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
-                  wind_power
-                </span>
+                <div class="filter-help text-caption text-italic q-mb-xs q-mt-none">
+                  *Energy type filters the conservation layers below.
+                </div>
+                <q-chip
+                  clickable
+                  @click="mapStore.filterLayers('wind')"
+                  :outline="mapStore.category !== 'wind'"
+                  :color="mapStore.category === 'wind' ? 'green-1' : 'grey-9'"
+                  :text-color="mapStore.category === 'wind' ? 'green-9' : 'grey-9'"
+                  class="q-px-sm q-py-xs energy-chip"
+                >
+                  <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                    wind_power
+                  </span>
 
-                Wind
+                  Wind
 
-                <q-icon
-                  v-if="mapStore.category === 'wind'"
-                  name="check"
-                  size="16px"
-                  class="q-ml-xs"
-                />
-              </q-chip>
-              <q-chip
-                clickable
-                @click="mapStore.filterLayers('solar')"
-                :outline="mapStore.category !== 'solar'"
-                :color="mapStore.category === 'solar' ? 'green-1' : 'grey-9'"
-                :text-color="mapStore.category === 'solar' ? 'green-9' : 'grey-9'"
-                class="q-px-sm q-py-xs energy-chip"
-              >
-                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
-                  solar_power
-                </span>
+                  <q-icon
+                    v-if="mapStore.category === 'wind'"
+                    name="check"
+                    size="16px"
+                    class="q-ml-xs"
+                  />
+                </q-chip>
+                <q-chip
+                  clickable
+                  @click="mapStore.filterLayers('solar')"
+                  :outline="mapStore.category !== 'solar'"
+                  :color="mapStore.category === 'solar' ? 'green-1' : 'grey-9'"
+                  :text-color="mapStore.category === 'solar' ? 'green-9' : 'grey-9'"
+                  class="q-px-sm q-py-xs energy-chip"
+                >
+                  <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                    solar_power
+                  </span>
 
-                Solar
+                  Solar
 
-                <q-icon
-                  v-if="mapStore.category === 'solar'"
-                  name="check"
-                  size="16px"
-                  class="q-ml-xs"
-                />
-              </q-chip>
-              <q-chip
-                clickable
-                @click="mapStore.filterLayers('floating solar')"
-                :outline="mapStore.category !== 'floating solar'"
-                :color="mapStore.category === 'floating solar' ? 'green-1' : 'grey-9'"
-                :text-color="mapStore.category === 'floating solar' ? 'green-9' : 'grey-9'"
-                class="q-px-sm q-py-xs energy-chip"
-              >
-                <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
-                  water_lux
-                </span>
+                  <q-icon
+                    v-if="mapStore.category === 'solar'"
+                    name="check"
+                    size="16px"
+                    class="q-ml-xs"
+                  />
+                </q-chip>
+                <q-chip
+                  clickable
+                  @click="mapStore.filterLayers('floating solar')"
+                  :outline="mapStore.category !== 'floating solar'"
+                  :color="mapStore.category === 'floating solar' ? 'green-1' : 'grey-9'"
+                  :text-color="mapStore.category === 'floating solar' ? 'green-9' : 'grey-9'"
+                  class="q-px-sm q-py-xs energy-chip"
+                >
+                  <span class="material-symbols-outlined q-mr-xs" style="font-size: 18px">
+                    water_lux
+                  </span>
 
-                Floating Solar
+                  Floating Solar
 
-                <q-icon
-                  v-if="mapStore.category === 'floating solar'"
-                  name="check"
-                  size="16px"
-                  class="q-ml-xs"
-                />
-              </q-chip>
+                  <q-icon
+                    v-if="mapStore.category === 'floating solar'"
+                    name="check"
+                    size="16px"
+                    class="q-ml-xs"
+                  />
+                </q-chip>
               </div>
             </div>
           </div>
@@ -418,7 +426,7 @@ async function scrollToElement(layer, elid) {
                       <LegendSwatch :layer="sublayer" :show-labels="false" :size="14" />
                     </q-item-section>
 
-                    <q-item-section side>
+                    <q-item-section side layer-row:>
                       <div class="row items-center no-wrap q-gutter-xs">
                         <q-btn
                           size="sm"
@@ -426,6 +434,7 @@ async function scrollToElement(layer, elid) {
                           padding="none"
                           icon="o_info"
                           @click.stop="scrollToElement(layer.title, sublayer.elid)"
+                          :data-tour="sublayer.elid === 'protectedAreas' ? 'layer-info-icon' : null"
                         >
                           <q-tooltip>click for layer info</q-tooltip>
                         </q-btn>

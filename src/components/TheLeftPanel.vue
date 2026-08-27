@@ -18,8 +18,8 @@ const scrollHeight = computed(() => ({
 </script>
 <template>
   <div class="q-mx-xs" style="border-top: 1px solid lightgray" data-tour="intro-text">
-    <div id="tools" class="q-pb-md q-mt-sm" style="border-bottom: 1px solid lightgrey">
-      <q-toolbar class="q-mb-md q-pa-none section-header">
+    <div id="tools" class="q-pb-md q-mt-sm" style="border-bottom: 1px solid lightgrey" data-tour="tools-header">
+      <q-toolbar class="q-mb-md q-pa-none section-header" data-tour="tools-header">
         <p class="text-overline q-ml-sm q-mb-none text-bold">TOOLS</p>
         <q-space></q-space>
         <q-btn
@@ -52,8 +52,11 @@ const scrollHeight = computed(() => ({
               label="Site report"
               square
               unelevated
+              data-tour="tools-report"
               :flat="mapStore.showSiteReport ? false : true"
-              @click="mapStore.showSiteReport ? mapStore.hideSiteReport() : mapStore.viewSiteReport()"
+              @click="
+                mapStore.showSiteReport ? mapStore.hideSiteReport() : mapStore.viewSiteReport()
+              "
             ></q-btn>
             <q-btn
               class="q-ml-sm"
@@ -63,6 +66,7 @@ const scrollHeight = computed(() => ({
               icon="o_info"
               square
               unelevated
+              data-tour="tools-layer-info"
               :flat="mapStore.showHelpPanel ? false : true"
               @click="mapStore.showHelpPanel = !mapStore.showHelpPanel"
             ></q-btn>
@@ -79,8 +83,8 @@ const scrollHeight = computed(() => ({
           <div class="q-pa-md" style="width: 300px">
             <p class="">
               <b>Category:</b> Click each category to expand the list of layers and turn them on or
-              off. Only one category can be active at a time. With the exception of native lands,
-              which can be toggled on or off at any time. <br /><br />
+              off. Only one category can be active at a time. With the exception of indigenous
+              lands, which can be toggled on or off at any time. <br /><br />
               <b>Drag Indicator:</b> If a drag indicator appears next to a layer, you can click and
               drag it to reorder how the layers appear on the map. <br /><br />
               <b>Info Button:</b> This button opens the layer info panel and will route you to the

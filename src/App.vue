@@ -32,7 +32,7 @@ const width = ref(window.innerWidth / 2.2)
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-white text-dark text-body1 shadow-1" >
+    <q-header class="bg-white text-dark text-body1 shadow-1"   data-tour="header-about">
       <q-toolbar>
         <a href="https://www.nature.org/en-us/" target="_blank">
           <img src="./assets/tnc_globe.jpg" style="width: 30px; margin-top: 3px" />
@@ -87,6 +87,7 @@ const width = ref(window.innerWidth / 2.2)
           square
           size="12px"
           @click="mapStore.showHelpPanel = true"
+
         ></q-btn>
         <q-btn
           class="q-ml-sm"
@@ -97,6 +98,7 @@ const width = ref(window.innerWidth / 2.2)
           square
           size="12px"
           @click="helpStore.showDialog = true"
+          data-tour="header-about"
         ></q-btn>
       </q-toolbar>
     </q-header>
