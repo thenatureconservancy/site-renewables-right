@@ -22,13 +22,12 @@ const isPolicyOnly = (categoryName) =>
 
 const hasSelection = computed(() => !!mapStore.currentPoint)
 
-// Get all visible layers organized by category
 const intersectionResults = computed(() => {
   const results = {}
-
   mapStore.layers.forEach((group) => {
     if (group.header && group.header !== 'Probability of Renewable Energy Buildout') {
       results[group.header] = []
+      let subIdx = 0
 
       group.subheaders?.forEach((subheader) => {
         subheader.sublayers?.forEach((sublayer) => {
@@ -40,13 +39,19 @@ const intersectionResults = computed(() => {
               ...sublayer,
               groupHeader: group.header,
               subheaderTitle: subheader.title,
+              _subOrder: subIdx,          // ← keeps subheader groups together
             })
           }
         })
+        subIdx++
       })
+
+      // keep subheader groups in original order, highest value first within each
+      results[group.header].sort(
+        (a, b) => a._subOrder - b._subOrder || rankValue(b) - rankValue(a)
+      )
     }
   })
-
   return results
 })
 
@@ -59,6 +64,13 @@ const layerHit = (layer) => {
   if (layer.intersected === true) return true // vector/point layers
   if ((layer.totalArea || 0) > 0) return true // raster layers
   return false
+}
+// sort key: higher = shows first. Works per category since type is consistent.
+const rankValue = (layer) => {
+  if (layer.summaryType === 'count')   return layer.count || 0
+  if (layer.summaryType === 'boolean') return layer.intersected ? 1 : 0
+  if (layer.summaryType === 'stats')   return layer.intersected ? (layer.mean || 0) : 0
+  return layer.totalArea || 0   // raster area layers
 }
 
 // Calculate total area from results (rasters only contribute area)
@@ -105,7 +117,7 @@ const formatSummary = (layer) => {
   }
   if (layer.summaryType === 'stats') {
   if (!layer.intersected) return 'No data'
-    return `min ${layer.min?.toFixed(2)} · mean ${layer.mean?.toFixed(2)} · max ${layer.max?.toFixed(2)}`
+    return `${layer.mean?.toFixed(2)*100}% (Avg)`
 }
   // default = raster area layer
   return formatArea(layer.totalArea)
@@ -185,6 +197,7 @@ const clearResults = () => {
   mapStore.currentPoint = null
   mapStore.statePolicy = null
   expandedCategories.value = {}
+  mapStore.hidePointAndBuffer()
 }
 
 // Drag handlers
@@ -231,9 +244,9 @@ onUnmounted(() => {
     <div v-if="!hasSelection">
       <div class="results-header q-pr-sm">
         <div
-          style="display: flex; width: 300px;justify-content: space-between; align-items: flex-start; gap: 8px"
+          style="display: flex; "
         >
-           <p class="text-overline q-ml-sm q-mb-none text-bold" >SITE REPORT INSTRUCTIONS</p>
+           <p class="text-overline q-ml-sm q-mb-none text-bold" >INSTRUCTIONS</p>
           <q-space></q-space>
           <q-btn
             flat
@@ -243,7 +256,7 @@ onUnmounted(() => {
             padding="sm"
             class=""
             icon="close"
-            @click="hideSiteReport()"
+            @click="mapStore.hideSiteReport()"
           />
         </div>
       </div>
@@ -284,7 +297,7 @@ onUnmounted(() => {
     align-items: center;
   "
 >
-  <span style="flex: 1; text-align: center;">
+  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px" >
     Lat:
     {{
       mapStore.currentPoint.detail.mapPoint.latitude
@@ -298,9 +311,9 @@ onUnmounted(() => {
         : '--'
     }}
   </span>
-  <span style="flex: 1; text-align: center;">Energy Type:<br/> {{ capitalize }}</span>
-  <span style="flex: 1; text-align: center;">Area:<br/> {{ formatArea(mapStore.reportBufferAreaAc) }}</span>
-   <span style="flex: 1; text-align: center;">Conservation <br/>Area: {{ mapStore.conservationArea}}%</span>
+  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px; padding-left: 8px">Energy Type:<br/><b>{{ capitalize }}</b></span>
+  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px; padding-left: 8px">Buffer Area:<br/><b>{{ formatArea(mapStore.reportBufferAreaAc) }}</b></span>
+   <span style="flex: 1; text-align: left; padding-right: 4px; padding-left: 8px">Conservation <br/>Area: {{ mapStore.conservationArea}}%</span>
 </div>
 
         <!-- Buffer Size Control -->

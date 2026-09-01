@@ -1,27 +1,25 @@
 <script setup>
 import TheMap from '../components/TheMap.vue'
 import TheLeftPanel from '@/components/TheLeftPanel.vue'
-import TheHelp from '@/components/TheHelp.vue'
 import { useMapStore } from '../stores/map'
-import { useHelpStore } from '@/stores/help'
 import { ref, onMounted } from 'vue'
 import { useAgolStore } from '@/stores/arcGisOnline'
 import { useQuasar } from 'quasar'
 import { computed } from 'vue'
-const mapStore = useMapStore()
-const helpStore = useHelpStore()
+import { startTour } from '@/utils/appTour'
 
+const mapStore = useMapStore()
 const agolStore = useAgolStore()
-function openPanel(active) {
-  mapStore.panelState = 'open'
-  mapStore.activeTool = active
-}
+
 function dialogControl() {
-  helpStore.showDialog = false
+  mapStore.showDialog = false
   if (mapStore.checkboxHideSplash) {
     localStorage.setItem('showSRRSplash', 'hide')
   } else {
     localStorage.setItem('showSRRSplash', 'show')
+  }
+  if (!mapStore.tourCompleted) {
+    startTour(mapStore)
   }
 }
 const $q = useQuasar()
@@ -30,15 +28,17 @@ const mobile = computed(() => {
 })
 
 onMounted(() => {
-  //set initial active tool to legend
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
-    helpStore.showDialog = false
+    mapStore.showDialog = false
   } else {
-    helpStore.showDialog = true
+    mapStore.showDialog = true
   }
   if (localStorage.getItem('SRRUserWantsAuth') == 'yes') {
     agolStore.showDialog = true
+  }
+  if (localStorage.getItem('SRRTourCompleted') == 'yes') {
+    mapStore.tourCompleted = true
   }
 })
 </script>
@@ -49,7 +49,7 @@ onMounted(() => {
     transition-show="slide-right"
     transition-hide="slide-left"
     transition-duration="250"
-    v-model="helpStore.showDialog"
+    v-model="mapStore.showDialog"
     backdrop-filter="blur(4px)"
     full-width=""
   >

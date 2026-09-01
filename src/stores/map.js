@@ -9,6 +9,8 @@ import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
 
 export const useMapStore = defineStore('mapStore', () => ({
   showHelpPanel: false,
+  showDialog: true,
+  tourCompleted: false, 
   activeHelpElement: '', 
   selectedHelpSection: 'Highly Sensitive',
   opacity: 90,
@@ -28,428 +30,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   reportLoading: false,
   reportGeneratedAt: null,
   
-  /*old layers*/
-  /*layers: [
-  {header: 'Conservation Values' , id: 'avoid', expanded: false,
-   subheaders: [
-    {title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false,
-      sublayers:  [
-      {
-        index: 4,
-        mapIndex: 6,
-        elid: 'protectedAreas',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Protected Areas',
-        description: 'short description',
-        longDescription: "This layer presents the <a href='https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-overview?qt-science_center_objects=0#qt-science_center_objects' target='_blank'>US Geological Survey’s Protected Areas database</a>, a national inventory of U.S. terrestrial protected areas that are dedicated to the preservation of biological diversity and other natural, recreation and cultural uses, managed for these purposes through legal or other effective means. It includes all Federal and most State and local lands. We also included the <a href='https://www.conservationeasement.us/' target='_blank'>National Conservation Easement Database</a> for additional areas protected by agencies, land trusts (including TNC preserves), and other organizations, and additional state-specific data as appropriate.  ",
-      },
-      {
-        index: 2,
-        mapIndex: 19,
-        elid: 'floodPlainsWetlands',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Floodplains, Wetlands, and Groundwater-fed Ecosystems',
-        description: 'short description',
-        longDescription: 'Renewable energy development near wetland complexes and riparian corridors may cause adverse impacts to wildlife and fragile wetland ecosystems. This layer identifies floodplains, rivers, open water, and wetlands (Fathom-US 1-in-20 year fluvial and 1-in-20-year pluvial flood model tiles; <a href="https://www.fws.gov/program/national-wetlands-inventory" target="_blank"> US Fish & Wildlife Service National Wetlands Inventory </a>). Groundwater-dependent ecosystem data in Nevada and Arizona and vernal pools in California were also included.',
-            },
-   
-    
-      {
-        index: 5,
-        mapIndex: 4,
-        elid: 'resilientConnected',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Resilient and Connected Network',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Over the next century, climate change is expected to drive shifts in species ranges and increase stressors to natural ecosystems. To identify areas important to sustaining species and natural communities in a changing climate, we mapped the Resilient and Connected Network, including all areas with resilience and concentrated or diffuse flow, with or without recognized biodiversity. These sites include representative geophysical environments and microclimates with relatively low levels of human modification, which comprise a network of lands most likely to retain biodiversity and ecosystem function in altered climate conditions (<a href="https://www.pnas.org/doi/10.1073/pnas.2204434119" target="_blank">Anderson et al. 2023</a>).',
-        totalArea: 0,
-        percentOfTotal: 0,
-        //legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsWJjPQApgIkn1qIZRDUNKAwD6PQGwgiIB7gAAAABJRU5ErkJggg==', // #80a16f
-        pngLegend: '\\legend\\rcn.png',
-      },
-      {
-        index: 6,
-        mapIndex: 18,
-        elid: 'threatenedEndangeredSpecies',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Threatened and Endangered Species',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: "Energy and infrastructure development are among the most significant threats to imperiled species in the U.S. We identified federally listed threatened and endangered species that are at-risk from renewable energy development due to their habitat and life history requirements (e.g., gopher and desert tortoise, golden-cheeked warbler, Preble's jumping mouse; full species list available in methods paper.), and then mapped locations of current/recent distributions, modeled priority habitats, and occurrence records. We also included <a href=\"https://ecos.fws.gov/ecp/report/critical-habitat\" target=\"_blank\">critical habitat</a> delineated by the U.S. Fish and Wildlife Service.",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGO8POM3AymAiSTVoxpGNQwpDQCH5QKGbbyb2QAAAABJRU5ErkJggg==' // #d398fb
-      },
-         {
-        index: 3,
-        mapIndex: 15,
-        elid: 'prairieGrouse',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Prairie Grouse',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Grouse species in the central U.S. have experienced substantial population declines since the early 20th century and may be further threatened by improperly sited energy development. To prevent grouse displacement, we mapped important habitat for the following species: Attwater’s prairie-chicken (Tympanuchus cupido attwateri), Columbian sharp-tailed grouse (T. phasianellus columbianus), greater prairie-chicken (T. cupido), greater sage-grouse (Centrocercus urophasianus), Gunnison sage-grouse (C. minimus), lesser prairie-chicken (T. pallidicinctus), and plains sharp-tailed grouse (T. phasianellus jamesi).',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNsbyxgIAUwkaR6VMOohiGlAQCw8wGYzMRkMAAAAABJRU5ErkJggg==' // #878170
-      },
-      {
-        index: 7,
-        mapIndex: 20,
-        elid: 'whoopingCraneSolar',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'solar',
-        title: 'Whooping Crane',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'The federally endangered whooping crane (Grus americana), which has a current population of approximately 500 individuals, depends on wetlands in the central Great Plains during migration. Whooping cranes exhibit aversion to wind turbines and may be displaced from suitable habitats near wind and solar energy infrastructure. In addition, whooping cranes may be at risk of turbine collisions in low light conditions when ascending or descending from high altitude migration flights, or when travelling between roost and foraging areas. To address these concerns, we delineated areas within 400 meters and 5 km of whooping crane critical habitats and stopover sites to be avoided by solar and wind development, respectively. ',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
-      },
-      {
-        index: 8,
-        mapIndex: 21,
-        elid: 'whoopingCraneWind',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Whooping Crane',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'The federally endangered whooping crane (Grus americana), which has a current population of approximately 500 individuals, depends on wetlands in the central Great Plains during migration. Whooping cranes exhibit aversion to wind turbines and may be displaced from suitable habitats near wind and solar energy infrastructure. In addition, whooping cranes may be at risk of turbine collisions in low light conditions when ascending or descending from high altitude migration flights, or when travelling between roost and foraging areas. To address these concerns, we delineated areas within 400 meters and 5 km of whooping crane critical habitats and stopover sites to be avoided by solar and wind development, respectively.  ',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8X23JQApgIkn1qIZRDUNKAwBl6wHTpybEsgAAAABJRU5ErkJggg==' // #ff7b39
-      },
-      {index: 9, mapIndex: 10, elid: 'qualitywater', filter: true, visible: false, 
-        visibleModel: false, opacity: 0.9, category: 'floating solar', title: 'High Quality Watersheds', inBuffer: false, inExtent: false, description: 'short description', longDescription: 'This layer represents highly resilient and biodiverse watershed areas, containing lakes and ponds, from TNC’s Freshwater Resilience and Resilient and Connected Network (RCN) analyses (<a href="https://crcs.tnc.org/pages/frcn" target="_blank">Anderson et al. 2024</a>). This area covers 20.6% of the conterminous United States.', totalArea: 0, percentOfTotal: 0, inExtent: '', legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAA0SURBVDhPYxj0gBFKM2Ruf/IfyiQLTPeUAZvFBOZREYwaSDkYNZByMGog5WDwGzjYAQMDAMr8BCCfppMvAAAAAElFTkSuQmCC'},
-       
-      {
-        index: 0,
-        mapIndex: 10,
-        elid: 'bigGameSolar',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'solar',
-        title: 'Big Game',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: "Energy development may alter the movement of big game animals and increase rates of mortality, particularly along migration routes and in winter ranges. This layer includes migration areas for elk, mule deer, and pronghorn antelope across the Western United States, including annual ranges, corridors, stopovers, and winter ranges <a href='https://westernmigrations.net/' target='_blank'>(US Geological Survey Western Migrations)</a>, supplemented with state-specific data from North Dakota, Montana, and New Mexico state wildlife agency data.",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8d+YdAymAiSTVoxpGNQwpDQCCqALYvqtRVwAAAABJRU5ErkJggg==' // #feccee
-      },
-      {
-        index: 10,
-        mapIndex: 25,
-        elid: 'bats',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Bats',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: "Bat mortality has been documented at wind energy facilities across North America. Because bats concentrate in large numbers and have low reproductive rates, the viability of their populations is particularly vulnerable to adult mortality events. Therefore, caution is warranted when undertaking any activity that may adversely affect known bat populations. <br/><br/> To represent bat presence, we display roost and detection data (via acoustical recorders) collected from every state via the <a href='https://www.nabatmonitoring.org/' target='_blank'>North America Bat Monitoring Program.</a> Threatened and endangered species are shown in blue, non-listed species in gray. These areas on the map may pose a particular threat to bats from wind.",
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: '',
-        pngLegend: '\\legend\\bat.png',
-        pngWidth: '220'
-
-      },
-    ]
-    },
-    {title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false,
-      sublayers:  [
-     
-     {
-        index: 12,
-        mapIndex: 24,
-        elid: 'landscapeIntactness',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'both',
-        title: 'Landscape Intactness',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Remaining intact landscapes provide the basis for long-term viability of many species of conservation concern. To delineate discrete patches of relatively undisturbed natural landcover for renewable energy avoidance, we used a human modification model (<a href="https://www.nature.com/articles/s41597-025-04892-2" target="_blank">Theobald 2022</a> data using a 1 km radius moving window and selected areas with HM index values less than 0.2). We then eliminated areas fragmented by oil and natural gas development, defined as sites with 1.5 active wells per km2 or greater.  <br/><br/> We also excluded lands in the Great Plains bioregion altered by past tillage or other landscape disturbances (Ostlie 2003). Finally, we added core forest and core wetland areas to capture additional, functionally intact habitats in Illinois, Indiana, Iowa, Michigan, Minnesota, Missouri, and Ohio.',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGPctGkTAymAiSTVoxpGNQwpDQCTngI2h5rRGQAAAABJRU5ErkJggg==' // #b2b2b2
-      },
-           {
-        index: 1,
-        mapIndex: 11,
-        elid: 'birdsWind',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Birds at Risk from Wind',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Raptors, waterbirds, and other large species may be injured or killed by collisions with wind turbines, and rates of mortality at commercial wind facilities may be underestimated due to lack of rigorous monitoring and reporting. We include golden eagle nest data, ferruginous hawk presence, and prairie dog complexes to account for raptors. To represent waterbirds, we include playas, prairie potholes, and other wetlands important to birds <a href="https://whsrn.org/whsrn-sites/map-of-sites/" target="_blank">(Western Hemisphere Shorebird Reserve Network sites, Global Important Bird Areas, Ramsar Convention Wetlands).</a>',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGNcWJ/LQApgIkn1qIZRDUNKAwDxNgGtEzR2JAAAAABJRU5ErkJggg==' // #a17f6d
-      },
-      
-        {
-        index: 11,
-        mapIndex: 13,
-        elid: 'migratoryBirdStopoverWind',
-        filter: true,
-        visible: false,
-        visibleModel: false,
-        opacity: 0.9,
-        category: 'wind',
-        title: 'Migratory Bird Stopover',
-        inBuffer: false,
-        inExtent: false,
-        description: 'short description',
-        longDescription: 'Billions of migratory birds cross North America twice a year, putting them at risk for wind collision. Stopover habitat—places the birds feed and rest on their journey—help delineate these migratory routes. This layer highlights high-density distributions of migratory landbirds in stopover habitat across the U.S. (<a href="https://www.nature.com/articles/s41467-023-43046-z" target="_blank">Horton et al. 2023</a>). ',
-        totalArea: 0,
-        percentOfTotal: 0,
-        legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGP8tm0WAymAiSTVoxpGNQwpDQAmqQJm+0U4DQAAAABJRU5ErkJggg==' // #f6b69a
-      },
-        
-    ]
-    },
-   
-  ]},
-  {header: 'Disturbed Lands' , id: 'agriculture', expanded: false, 
-   subheaders: [
-    {title: 'Disturbed Lands', id: 'ag', visible: true, visibleModel: true, expanded: false,
-      sublayers:[
-        {index: 13, elid: 'abandonedmines', filter: true, visible: false, visibleModel: false, 
-          opacity: 0.9, category: 'both', title: 'Former Mine Lands',  inBuffer: false, inExtent: false, description: 'short description',
-          longDescription: 'This layer identifies sites that operated as mines between 1977-2006. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. The mine lands layer uses the best available nationwide data on mines <a href="https://mrdata.usgs.gov/usmin/" target="_blank">(USGS geospatial database).</a> Users are advised that the data are of inconsistent quality and better data may be available from state mining agencies. Mines in the dataset include former coal mines, silica mines, iron pits, lignite pits, open pit mines, quarries, and strip mines.', 
-          totalArea: 0, percentOfTotal: 0, legendImg: ''},
-        {index: 14, elid: 'brownfields', filter: true, visible: false, visibleModel: false, opacity: 0.9,
-          category: 'both', title: 'Brownfields over 10 acres', inBuffer: false, inExtent: false, description: 'short description',
-          longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ', totalArea: 0, percentOfTotal: 0,  legendImg: ""},
-	      ]   
-    },
-  ]},
-  {header: 'Agricultural Considerations' , id: 'agriculture', expanded: false, 
-   subheaders: [
-  {title: 'Highest Quality Farmland', id: 'ag', visible: true, visibleModel: true, expanded: false,
-      sublayers: [
-       {index: 18, elid: 'ag2', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'Highest Quality Farmland: 50-75th percentile', description: 'short description',
-        longDescription: 'It is anticipated that 90% of utility-scale solar capacity will be installed in rural communities, much of that on farmland (<a href="https://www.energy.gov/sites/default/files/2021-09/Solar%20Futures%20Study.pdf" target="_blank">U.S. Department of Energy 2021 </a>). This layer identifies the top 90%, 75%, and 50% of farm and ranchland in each state based on the land’s productivity, versatility, and resiliency (PVR) values, as defined by the American Farmland Trust. These data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>). The American Farmland Trust recommends that high quality agricultural lands are maintained as farmland and not converted to large-scale solar development. However, agrivoltaics (co-location of solar and agriculture) are considered compatible with farmland (<a href="https://farmland.org/smart-solar" target="_blank">Smart Solar Principles</a>) as is wind development. <br/><br/>As with any large-scale analysis, local and on-the-ground verification is required. Sites mapped as high quality based on current crop production and soil characteristics might become unproductive if they are water-stressed or contain highly erodible soils. In these areas, renewable energy projects, if designed intentionally, can reduce water use, improve soil stability, and promote ecosystem recovery over time. For example, the California Energy Commission (CEC) developed a Cropland Index Model to identify low quality or water-limited agricultural lands (cropland suitability score < 7.7), which the CEC promotes as better suited for renewable energy development (<a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC Land-use Screens</a>). For this reason, we removed cropland with a CEC suitability score below 7.7 from the layer.',
-        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAAIklEQVQ4T2O8tn/efwYKABO6AKlg1IBRAxhGDWBgGBQGAAA4yQNSWk4GhAAAAABJRU5ErkJggg==", pngWidth: '100'
-      },
-         {index: 19, elid: 'ag3', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'Highest Quality Farmland: 75-90th percentile', description: 'short description',
-        longDescription: 'It is anticipated that 90% of utility-scale solar capacity will be installed in rural communities, much of that on farmland (<a href="https://www.energy.gov/sites/default/files/2021-09/Solar%20Futures%20Study.pdf" target="_blank">U.S. Department of Energy 2021 </a>). This layer identifies the top 90%, 75%, and 50% of farm and ranchland in each state based on the land’s productivity, versatility, and resiliency (PVR) values, as defined by the American Farmland Trust. These data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>). The American Farmland Trust recommends that high quality agricultural lands are maintained as farmland and not converted to large-scale solar development. However, agrivoltaics (co-location of solar and agriculture) are considered compatible with farmland (<a href="https://farmland.org/smart-solar" target="_blank">Smart Solar Principles</a>) as is wind development. <br/><br/>As with any large-scale analysis, local and on-the-ground verification is required. Sites mapped as high quality based on current crop production and soil characteristics might become unproductive if they are water-stressed or contain highly erodible soils. In these areas, renewable energy projects, if designed intentionally, can reduce water use, improve soil stability, and promote ecosystem recovery over time. For example, the California Energy Commission (CEC) developed a Cropland Index Model to identify low quality or water-limited agricultural lands (cropland suitability score < 7.7), which the CEC promotes as better suited for renewable energy development (<a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC Land-use Screens</a>). For this reason, we removed cropland with a CEC suitability score below 7.7 from the layer.',
-        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAAIUlEQVQ4T2P8+0f/PwMFgAldgFQwasCoAQyjBjAwDAoDAAzFA0dLPJrOAAAAAElFTkSuQmCC", pngWidth: '100'
-      },
-        {index: 20, elid: 'ag4', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'Highest Quality Farmland:   >=90th percentile', description: 'short description',
-        longDescription: 'It is anticipated that 90% of utility-scale solar capacity will be installed in rural communities, much of that on farmland (<a href="https://www.energy.gov/sites/default/files/2021-09/Solar%20Futures%20Study.pdf" target="_blank">U.S. Department of Energy 2021 </a>). This layer identifies the top 90%, 75%, and 50% of farm and ranchland in each state based on the land’s productivity, versatility, and resiliency (PVR) values, as defined by the American Farmland Trust. These data are based on soil productivity and capacity, land cover and use, crop type, and length of the growing season (<a href="https://farmlandinfo.org/publications/farms-under-threat-the-state-of-the-states/" target="_blank"> Farms Under Threat 2020</a>). The American Farmland Trust recommends that high quality agricultural lands are maintained as farmland and not converted to large-scale solar development. However, agrivoltaics (co-location of solar and agriculture) are considered compatible with farmland (<a href="https://farmland.org/smart-solar" target="_blank">Smart Solar Principles</a>) as is wind development. <br/><br/>As with any large-scale analysis, local and on-the-ground verification is required. Sites mapped as high quality based on current crop production and soil characteristics might become unproductive if they are water-stressed or contain highly erodible soils. In these areas, renewable energy projects, if designed intentionally, can reduce water use, improve soil stability, and promote ecosystem recovery over time. For example, the California Energy Commission (CEC) developed a Cropland Index Model to identify low quality or water-limited agricultural lands (cropland suitability score < 7.7), which the CEC promotes as better suited for renewable energy development (<a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC Land-use Screens</a>). For this reason, we removed cropland with a CEC suitability score below 7.7 from the layer.',
-        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAAIUlEQVQ4T2P8u1X/PwMFgAldgFQwasCoAQyjBjAwDAoDAOzFAwAbfhr4AAAAAElFTkSuQmCC", 
-      },
-      
-     
- 	   ]
-  },
-  {title: 'Limitations to Farmland', id: '', visible: true, visibleModel: true, expanded: false,
-      sublayers: [
-        {index: 15, elid: 'abandonedag', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland',  inBuffer: false, inExtent: false, description: 'short description', 
-          longDescription: 'This layer identifies croplands that were abandoned between 1986-2018 (<a href="https://iopscience.iop.org/article/10.1088/1748-9326/ad2d12" target="_blank"> Xie et al. 2024</a>). These areas are likely marginal for food production and therefore could be a suitable location for large-scale solar development, according to the American Farmland Trust. However, 20% of this area was enrolled in the Conservation Reserve Program as of 2020, and may be ecologically sensitive or susceptible to erosion, either of which may make these lands unsuitable for large-scale solar developments.',
-          totalArea: 0, percentOfTotal: 0, legendImg:  "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAAKElEQVQ4T2N8MqXmPwMVARO6AKVg1EDKwaiBlINRAykHowZSDga/gQAoQQMbGEmzEAAAAABJRU5ErkJggg=="},
-       {index: 17, elid: 'waterLimited', serviceId: 'rasters',  filter: true, visible: true, visibleModel: false,
-       opacity: 0.9, category: 'both', title: 'Surface Water-limited Lands', description: 'short description',
-        longDescription: 'Surface water-limited lands are areas where water demand is approaching available supply. These water shortages may make farming infeasible, such that solar development may be more appropriate than agriculture. Renewable energy projects, if well-designed, could result in reduced water use and ecosystem stability over time. Water limitation across the lower 48 United States is shown as the average from 2010 to 2020 for each watershed (HUC12) from the <a href="https://water.usgs.gov/vizlab/water-availability/01-water-limitation" target="_blank">U.S. Geological Survey.</a> Only high and severe levels of water limitation are shown.',
-        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAA9UlEQVQ4T52TIa6EMBBAHyCp2ASHqyQVOAQn4MSEEyBAN8g6MJAgQBK+YNkU8pcsPNnpzLy2U6fv+5U3xhiMMQBIKZFS7qED8zyjtWaaJlyAZVkYhgFjDF3XEcfxZXLbtjRNgxBiKzCOI0VRAJBlGa/X65z3QWtNWZakaYpSCqeu6/WuthACpRS+7+M+0U6SBN/3AbYj3NW2caWUBEGA53mHAO/OVVUxTRNRFBGG4afzjvtE28Y9L+xcads49iBxcdvfOBj8qr0zz/OxwK/aO1rr7Qh3tQ9/4Ym2vd/J83xtmoY0Tf995zNVVWHvd6+GxObbUP0B1TfSIusLipIAAAAASUVORK5CYII=", pngWidth: '100'
-      },
-      ]}
-  ]},
-  {header: 'Community Considerations' , id: 'community', expanded: false, 
-   subheaders: [
-    {title: 'Community Considerations', id: 'comm', selection: 'Low Income Percentile', visible: true, visibleModel: true, expanded: false,
-      sublayers: [
-  {
-    index: 14, elid: 'cjest_lowincome', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Low Income Percentile', style: 'styles/P200_I_PFS.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'The percentage of a census tract’s population living in households with incomes at or below 200% of the federal poverty level, excluding students enrolled in higher education.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendType: 'ramp',  lowLabel: 'Low Income', highLabel: 'High Income',  gradient: 'linear-gradient(to right, #f4edf7, #b56bc7)',
-  },      
-{
-    index: 15, elid: 'cjest_climate', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Climate Burdened', style: 'styles/N_CLT_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for expected agriculture loss rate OR expected building loss rate OR expected population loss rate OR projected flood risk OR projected wildfire risk AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 16, elid: 'cjest_energy', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Energy Burdened', style: 'styles/N_ENY_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for energy cost OR PM2.5 in the air AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-   {
-    index: 21, elid: 'cjest_health', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Health Burdened', style: 'styles/N_HLTH_90.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for asthma OR diabetes OR heart disease OR low life expectancy AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 18, elid: 'cjest_housing', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Housing Burdened', style: 'styles/N_HSG_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that experienced historic underinvestment OR are at or above the 90th percentile for housing cost OR lack of green space OR lack of indoor plumbing OR lead paint AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-   {
-    index: 19, elid: 'cjest_pollution', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Pollution Burdened', style: 'styles/N_PLN_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that have at least one abandoned mine land OR Formerly Used Defense Sites OR are at or above the 90th percentile for proximity to hazardous waste facilities OR proximity to Superfund sites (National Priorities List (NPL)) OR proximity to Risk Management Plan (RMP) facilities AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
-  {
-    index: 17, elid: 'cjest_transportation', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Transportation Burdened', style: 'styles/N_TRN_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for diesel particulate matter exposure OR transportation barriers OR traffic proximity and volume AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
   
- 
-  {
-    index: 20, elid: 'cjest_water', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Water Burdened', style: '/styles/N_WTR_EOMI.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for underground storage tanks and releases OR wastewater discharge AND are at or above the 65th percentile for low income.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  },
- 
-  {
-    index: 22, elid: 'cjest_workforce', serviceId: 'vtl', filter: true, type: 'radio',
-    visible: false, visibleModel: false, opacity: 0.9, category: 'both',
-    title: 'Workforce Burdened', style: 'styles/N_WKFC_91.json',
-    inBuffer: false, inExtent: false,
-    description: 'short description',
-    longDescription: 'Communities are identified as disadvantaged if they are in census tracts that are at or above the 90th percentile for linguistic isolation OR low median income OR poverty OR unemployment AND more than 10% of people ages 25 years or older whose high school education is less than a high school diploma.',
-    totalArea: 0,
-    percentOfTotal: 0,
-    legendImg: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAGUlEQVR4nGMst29nIAUwkaR6VMOohiGlAQD8gwFdEJxTQgAAAABJRU5ErkJggg=='
-  }
-
-	   ]
-  },
-  ]},
-  {header: 'Predicted Renewable Energy Buildout', id: 'renewable', expanded: false, 
-   subheaders: [
-    {title: 'Predicted Renewable Energy Buildout', id: 'renewable', visible: true, selection: 'Predicted Solar Buildout',visibleModel: true, expanded: false,
-      sublayers:  [
-        {index: 0, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false, 
-          opacity: 0.9, category: 'both', title: 'Predicted Solar Buildout',  inBuffer: false, inExtent: false, description: 'short description',
-           longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see solar development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that solar projects are more likely to be developed in areas with high infrastructure accessibility, closer to load centers, and lower environmental impacts (e.g., ecological sensitivities and forested land). ', type: 'radio', 
-           totalArea: 0, percentOfTotal: 0},
-        {index: 1, elid: 'lassoWind', filter: true, visible: false, visibleModel: false, opacity: 0.9,
-           category: 'both', title: 'Predicted Wind Buildout', inBuffer: false, inExtent: false, description: 'short description',
-            longDescription: 'Communities can best respond to renewable energy project proposals with advance preparation on community values and conservation priorities. This layer is included to provide insights on areas of the country that may see wind development in the future. This map was created using past siting trends to model the likelihood of development in the future, also incorporating forward-looking data such as planned transmission and capacity (Wu et al. In press). Note that this map does not show a total forecasted footprint based on energy needs, but rather probabilities of development given site characteristics (i.e., the map shows more development than is likely needed in the U.S.). The analysis found that wind projects are more likely to be developed in areas that are windier, have favorable land cover (agricultural and non-forested), closer to transmission lines, on more sloped terrain, and with lower land acquisition costs. ', type: 'radio', 
-            legendType: 'ramp',  lowLabel: 'Low',  highLabel: 'High',  gradient: 'linear-gradient(to right, #e8ecff, #5b6fd6)'},
-        ]   
-  },
-  ]},
-  {header: 'Native Lands' , id: 'native', expanded: true, 
-   subheaders: [
-     {title: 'Native Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
-      sublayers: [
-        {index: 0, elid: 'nativeLands', serviceId: 'rasters',  filter: true, visible: true, visibleModel: true,
-       opacity: 0.9, category: 'both', title: 'American Indian, Alaska Native, and Native Hawaiian Areas', description: 'short description',
-        longDescription: 
-'This layer displays locations of the Federally Recognized Tribal entities in the contiguous U.S. and Alaska (<a href="https://www.arcgis.com/home/item.html?id=1d6231f4358c4e3781557e702c319d9a" target="_blank">National Geospatial Data Asset data from the U.S. Census Bureau</a>). Categories included are:<br/> <ul><li>American Indian Reservations (AIR). The Bureau of Indian Affairs (BIA) defines AIRs as "areas of land reserved for a tribe or tribes under treaty or other agreement with the United States, executive order, or federal statute or administrative action as permanent tribal homelands, and where the federal government holds title to the land in trust on behalf of the tribe".</li><br/><li>Federally Recognized Tribal Entities (FRTE). According to the BIA, an FRTE is "an American Indian or Alaska Native tribal entity that is recognized as having a government-to-government relationship with the United States, with the responsibilities, powers, limitations, and obligations attached to that designation."</li></ul>',        totalArea: 0, percentOfTotal: 0, inExtent: '',
-        legendImg: "iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAMUlEQVR4nGNgGOyAEca4du3af0oM0tLSYmRgYGBgotRF6GDUwFEDRw0cNZA+Bg5+AADqfAQg5jR4QQAAAABJRU5ErkJggg=="      }]
-  },
-  ]}
-  ],*/
   /*cleaned layers*/
 
   //layers object used in layer list control and reporting
@@ -840,7 +421,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     subheaders: [
       {
         title: 'Probability of Renewable Energy Buildout', id: 'renewable', visible: true, selection: 'Probability of Solar Buildout', visibleModel: true, expanded: false,
-        subheaderBlurb:'Areas with a higher likelihood for future wind and solar development', subheaderLayerBlurb: 'Areas with a higher likelihood for future wind and solar development',
+        subheaderBlurb:'Areas with a higher likelihood for future wind and solar development.', subheaderLayerBlurb: 'Areas with a higher likelihood for future wind and solar development.',
         sublayers: [
           {
             index: 0, elid: 'lassoSolar', filter: true, visible: false, visibleModel: false,
@@ -867,7 +448,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     subheaders: [
       {
         title: 'Indigenous Lands', id: 'native', visible: true, visibleModel: true, expanded: false,
-        subheaderBlurb: 'Federally recognized Tribal lands and jurisdictions', subheaderLayerBlurb: 'Federally recognized Tribal lands and jurisdictions',
+        subheaderBlurb: 'Federally recognized Tribal lands and jurisdictions.', subheaderLayerBlurb: 'Federally recognized Tribal lands and jurisdictions.',
         sublayers: [
           {
             index: 0, elid: 'nativeLands', serviceId: 'rasters', filter: true, visible: true, visibleModel: true,
@@ -1140,13 +721,16 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   /**functions for report*/
   hideSiteReport() {
-    const el = document.querySelector('arcgis-map')
+    this.hidePointAndBuffer()
+    this.showSiteReport = false
+  },
+  hidePointAndBuffer(){
+  const el = document.querySelector('arcgis-map')
     const map = el?.map
     const pointLayer = map?.findLayerById('pointLayer')
     const bufferLayer = map?.findLayerById('bufferLayer')
     if (bufferLayer) bufferLayer.visible = false
     if (pointLayer) pointLayer.visible = false
-    this.showSiteReport = false
   },
   viewSiteReport() {
     const el = document.querySelector('arcgis-map')

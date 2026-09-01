@@ -161,7 +161,7 @@ export async function generateSiteReport(mapStore, options = {}) {
       sectionHeaderLarge: { fontSize: 15, bold: true, color: BRAND.navy, margin: [0, 0, 0, 10] },
       categoryHeader: { fontSize: 12, bold: true, color: "#fff" },
       statLabel: { fontSize: 8, color: "#999", bold: true },
-      statValue: { fontSize: 13, bold: true, color: "#333" },
+      statValue: { fontSize: 12, bold: true, color: "#333" },
       layerName: { fontSize: 10, color: "#333" },
       layerDesc: { fontSize: 8, color: "#777", italics: true },
       legendHeader: { fontSize: 11, bold: true, color: BRAND.navy, margin: [0, 0, 0, 6] },
@@ -179,6 +179,7 @@ function buildCategories(mapStore) {
     if (!group.header) return;
     if (EXCLUDE_GROUPS.includes(group.header)) return;   // drop excluded groups
     const layers = [];
+    let subIdx = 0;
     group.subheaders?.forEach((subheader) => {
       subheader.sublayers?.forEach((sublayer) => {
         if (
@@ -189,13 +190,18 @@ function buildCategories(mapStore) {
           layers.push({
             elid: sublayer.elid,
             title: sublayer.title || sublayer.elid,
-            description: sublayer.infoAbout || "",   // ← reads from infoAbout
-            subheaderTitle: subheader.title || "",   // ← carried through for dividers
+            description: sublayer.infoAbout || "",
+            subheaderTitle: subheader.title || "",
+            _subOrder: subIdx,               // ← keeps subheader groups together
             result: r,
           });
         }
       });
+      subIdx++;
     });
+
+    // keep subheader groups in order, highest value first within each
+    layers.sort((a, b) => a._subOrder - b._subOrder || rankValue(b.result) - rankValue(a.result));
     if (layers.length) {
       categories.push({
         name: group.header,
@@ -439,16 +445,16 @@ function buildCategorySections(categories, includeDescriptions, bufferAreaAc) {
         : { text: l.title, style: "layerName" };
       const hit = isHit(l.result);
       // stats layers span the Result + % columns with their range summary
+     // stats layers: value in Result column, dash in % of Buffer
       if (l.result?.summaryType === "stats") {
         body.push([
           nameCell,
           {
             text: formatSummary(l.result),
-            colSpan: 2,
             fontSize: 10, alignment: "right",
             color: hit ? "#333" : "#999", bold: hit,
           },
-          {},
+          { text: "—", fontSize: 10, alignment: "right", color: "#999" },
         ]);
       } else {
         body.push([
@@ -488,6 +494,14 @@ function isHit(result) {
   if ((result.areaAc || 0) > 0) return true;
   return false;
 }
+/** Sort key: higher = shows first. Reads from the layer's result. */
+function rankValue(result) {
+  if (!result) return -1;
+  if (result.summaryType === "count")   return result.count || 0;
+  if (result.summaryType === "boolean") return result.intersected ? 1 : 0;
+  if (result.summaryType === "stats")   return result.intersected ? (result.mean || 0) : 0;
+  return result.areaAc || 0;   // raster area layers
+}
 function formatSummary(result) {
   if (!result) return "—";
   if (result.ok === false) return "Error";
@@ -496,7 +510,7 @@ function formatSummary(result) {
   if (result.summaryType === "stats") {
     if (!result.intersected || result.mean == null) return "No data";
     const p = (v) => `${Math.round(v * 100)}%`;   // P200_I_PFS is a 0–1 percentile
-    return `${p(result.min)}–${p(result.max)} (avg ${p(result.mean)})`;
+    return `${p(result.mean)} (avg)`;
   }
   if (result.areaAc != null) return formatArea(result.areaAc);
   return "—";

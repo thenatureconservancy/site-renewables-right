@@ -28,6 +28,7 @@ const mobile = computed(() => {
 
 const height = ref(window.innerHeight)
 const width = ref(window.innerWidth / 2.2)
+
 </script>
 
 <template>

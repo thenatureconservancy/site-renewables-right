@@ -180,14 +180,19 @@ export function startTour(mapStore) {
     highlightEls(ALL_HIGHLIGHTS, false)   // clear any lingering button glows
 
   }
-  tour.on('complete', cleanup)
+  tour.on('complete', () => {
+  localStorage.setItem('SRRTourCompleted', 'yes')
+  cleanup()
+  })
   tour.on('cancel', () => {
+    localStorage.setItem('SRRTourCompleted', 'yes')
     if (!endedByUser && activeStepId === 'site-report') {
       setTimeout(() => tour.show('site-report'), 50)
       return
     }
     cleanup()
   })
+ 
 
   // -------------------------------------------------------------------------
   // 1. Welcome
