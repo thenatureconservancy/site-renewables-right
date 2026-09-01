@@ -26,15 +26,14 @@
       "type": "fill",
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
-      "filter": [
-        "==",
-        [
-          "get",
-          "N_HSG_EOMI"
-        ],
-        0
+       "filter": [
+        "all",
+        ["==", ["get", "N_HSG_EOMI"], 0],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
-      "layout": {},
+     "layout": {},
       "paint": {
         "fill-color": "#ffffff",
         "fill-opacity": 0.1,
@@ -47,13 +46,13 @@
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
       "filter": [
-        "==",
-        [
-          "get",
-          "N_HSG_EOMI"
-        ],
-        1
+        "all",
+        ["==", ["get", "N_HSG_EOMI"], 1],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
+     
       "layout": {},
       "paint": {
         "fill-color": "#7E3F8F",

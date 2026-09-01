@@ -21,6 +21,12 @@
       "type": "fill",
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
+        "filter": [
+        "all",
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
+      ],
       "layout": {},
       "paint": {
         "fill-color": [

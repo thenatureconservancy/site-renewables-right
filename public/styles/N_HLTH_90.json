@@ -26,13 +26,12 @@
       "type": "fill",
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
-      "filter": [
-        "==",
-        [
-          "get",
-          "N_HLTH_90"
-        ],
-        0
+     "filter": [
+        "all",
+        ["==", ["get", "N_HLTH_90"], 0],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
       "layout": {},
       "paint": {
@@ -47,13 +46,13 @@
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
       "filter": [
-        "==",
-        [
-          "get",
-          "N_HLTH_90"
-        ],
-        1
+        "all",
+        ["==", ["get", "N_HLTH_90"], 1],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
+     
       "layout": {},
       "paint": {
         "fill-color": "#7E3F8F",

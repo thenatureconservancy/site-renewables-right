@@ -26,13 +26,12 @@
       "type": "fill",
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
-      "filter": [
-        "==",
-        [
-          "get",
-          "N_PLN_EOMI"
-        ],
-        0
+       "filter": [
+        "all",
+        ["==", ["get", "N_PLN_EOMI"], 0],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
       "layout": {},
       "paint": {
@@ -47,12 +46,11 @@
       "source": "CJEST_SRR_VTL",
       "source-layer": "usa_project",
       "filter": [
-        "==",
-        [
-          "get",
-          "N_PLN_EOMI"
-        ],
-        1
+        "all",
+        ["==", ["get", "N_PLN_EOMI"], 1],
+        ["!=", ["get", "SF"], "Alaska"],
+        ["!=", ["get", "SF"], "Hawaii"],
+        ["!=", ["get", "SF"], "Puerto Rico"]
       ],
       "layout": {},
       "paint": {
