@@ -296,7 +296,7 @@ onMounted(() => {
 
         if (state === 'Maine') {
           return `
-      <strong>Maine Policy Details:</strong>
+      <strong>Maine Details:</strong>
         TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
         Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
         solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
@@ -314,7 +314,7 @@ onMounted(() => {
 
         if (state === 'California') {
           return `
-        <strong>California Policy Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+        <strong>California Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
       `
         }
 
@@ -369,7 +369,7 @@ onMounted(() => {
 
         if (state === 'Maine') {
           return `
-      <strong>Maine Policy Details:</strong>
+      <strong>Maine Details:</strong>
         TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
         Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
         solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
@@ -387,7 +387,7 @@ onMounted(() => {
 
         if (state === 'California') {
           return `
-        <strong>California Policy Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+        <strong>California Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
       `
         }
 
