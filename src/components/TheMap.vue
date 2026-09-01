@@ -159,6 +159,7 @@ onMounted(() => {
     id: 'abandonedmines',
     visible: false,
     opacity: 0.8,
+    definitionExpression: "State <> 'PR' AND State <> 'AK' AND State <> 'HI'",
   })
   let brownfields = new FeatureLayer({
     url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
@@ -206,14 +207,14 @@ onMounted(() => {
   let lassoWind = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'lassoWind',
-    sublayers: [{ id: 2 }],
+    sublayers: [{ id: 82 }],
     visible: false,
     opacity: 0.8,
   })
   let lassoSolar = new MapImageLayer({
     url: 'https://cumulus-ags.tnc.org/arcgis/rest/services/nascience/CCS_Rasters/MapServer',
     id: 'lassoSolar',
-    sublayers: [{ id: 1 }],
+    sublayers: [{ id: 81 }],
     visible: false,
     opacity: 0.8,
   })
@@ -223,7 +224,7 @@ onMounted(() => {
     id: 'nativeLands',
     visible: true,
     opacity: 1,
-
+    definitionExpression: "stateFIPS <> '02' AND stateFIPS <> '15'",
     popupTemplate: {
       title: '{NAME}',
       content:
@@ -459,7 +460,6 @@ onMounted(() => {
   mapStore.filterLayers('solar')
 
   arcgisMap.addEventListener('arcgisViewChange', (e) => {
-    console.log('CurrentExtent:', arcgisMap.scale)
     arcgisMap.extent ? (mapStore.currentMapExtent = markRaw(arcgisMap.extent)) : ''
     arcgisMap.zoom > 3 ? (showResetZoomButton.value = true) : (showResetZoomButton.value = false)
   })

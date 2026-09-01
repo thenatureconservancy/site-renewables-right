@@ -458,7 +458,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     header: 'Conservation Values', id: 'avoid', expanded: false,
     subheaders: [
       {
-        title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false, subheaderBlurb: 'This category includes wildlife, habitats and ecosystems to consider during wind and solar planning.', subheaderLayerBlurb: 'This category includes wildlife, habitats and ecosystems to consider during wind and solar planning.',
+        title: 'Highly Sensitive', id: 'high', visible: true, visibleModel: true, expanded: false, subheaderBlurb: 'Wildlife, habitats and ecosystems to consider during wind and solar planning.', subheaderLayerBlurb: 'Wildlife, habitats and ecosystems to consider during wind and solar planning.',
         sublayers: [
           {
             index: 4,
@@ -613,7 +613,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         ],
       },
       {
-        title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false, subheaderBlurb: 'This category includes wildlife, habitats and ecosystems to consider during wind and solar planning.',
+        title: 'Moderately Sensitive', id: 'moderate', visible: true, visibleModel: true, expanded: false, subheaderBlurb: 'Wildlife, habitats and ecosystems to consider during wind and solar planning.',
         sublayers: [
           {
             index: 12,
@@ -1347,6 +1347,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.applyResultsToLayers(this.reportResults)
 
     this.reportLoading = false
+    this.getConservationPercent(buffer)
     return this.reportResults
   },
   countForValue(hist, value) {
@@ -1542,6 +1543,88 @@ export const useMapStore = defineStore('mapStore', () => ({
     return intersectionResults
   },
 
+  //gets percent of buffer that intersects with any conservation layer
+  // The conservation rasters + their category filter + OBJECTID (from your list)
+  async getConservationPercent(buffer) {
+    const CONSERVATION_RASTERS = [
+      { Name: "Bats_10_Final_02_NoCA_5070", OBJECTID: 2,  filter: "wind" },
+      { Name: "BigGame_08_NoCA_5070", OBJECTID: 3,  filter: "solar" },
+      { Name: "Birds_05_NoCA_5070", OBJECTID: 4,  filter: "wind" },
+      { Name: "IntactHabitats_HMI200_20260518_NoCA_R_5070", OBJECTID: 5,  filter: "" },
+      { Name: "PrairieGrouseA_5070", OBJECTID: 8,  filter: "" },
+      { Name: "RCN_NoCal_20260728_5070_new", OBJECTID: 13, filter: "" },
+      { Name: "TE_Species_03_20260630_NoCA_5070", OBJECTID: 14, filter: "" },
+      { Name: "Water_02_reclass_20260630_NoCA_5070", OBJECTID: 15, filter: "" },
+      { Name: "WhoopingCraneSolar_20260408_NoCA_R_5070", OBJECTID: 16, filter: "solar" },
+      { Name: "WhoopingCraneWind_20260408_NoCA_R_5070", OBJECTID: 17, filter: "wind" },
+      { Name: "ProtectedAreas_01_Final_NoCA_5070_new2", OBJECTID: 19, filter: "" },
+      { Name: "Migratory_Bird_Stopover_NoCA_5070_8bit", OBJECTID: 24, filter: "wind" },
+    ]
+    // --- Floating solar: single conservation layer, use its own already-computed % ---
+    if (this.category === 'floating solar') {
+      const r = this.reportResults?.qualitywater
+      const areaAc = r?.areaAc ?? 0
+      const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
+      this.conservationPct = +pct.toFixed(1)
+      return this.conservationPct
+    }
+
+    // --- Wind / Solar: union the relevant conservation rasters ---
+    // filter '' = always included; plus the ones matching the current category
+    const ids = CONSERVATION_RASTERS
+      .filter((r) => r.filter === '' || r.filter === this.category)
+      .map((r) => r.OBJECTID)
+    const map = document.querySelector('arcgis-map').map
+    const imageLayer = map.findLayerById('imageLayer')
+
+    const names = CONSERVATION_RASTERS
+    .filter((r) => r.filter === '' || r.filter === this.category)
+    .map((r) => `'${r.Name}'`)
+    .join(', ')
+
+    const mosaicRule = new MosaicRule({
+      method: 'attribute',
+      where: `Name IN (${names})`,
+      operation: 'max',        // ← the union across the selected rasters
+    })
+    const ALBERS = new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
+    const params = new ImageHistogramParameters({
+      geometry: buffer,                                   // already in 5070
+      mosaicRule,
+      pixelSize: { x: 30, y: 30, spatialReference: ALBERS },
+    })
+
+    try {
+      const res = await imageLayer.computeStatisticsHistograms(params)
+      const hist = res.histograms?.[0]
+      console.log(res)
+      console.log(hist.min, hist.max, hist.size, hist.counts)
+      // sum ALL bins = every non-NoData pixel = union coverage (no double count)
+      const unionPixels = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
+      const unionAreaAc = unionPixels * this.AC_PER_PIXEL   // 0.2224 ac/px
+      const pct = this.reportBufferAreaAc ? (unionAreaAc / this.reportBufferAreaAc) * 100 : 0
+      console.log(this.unionCount(hist), 'pixels in union of conservation rasters')
+      this.conservationPct = +pct.toFixed(1)
+      this.conservationAreaAc = +unionAreaAc.toFixed(2)
+      console.log('Conservation % computed:', this.conservationPct, '%')
+      return this.conservationPct
+    } catch (err) {
+      console.error('Conservation % query failed', err)
+      this.conservationPct = null
+      return null
+    }
+  },
+  unionCount(hist) {
+  if (!hist?.counts?.length) return 0
+  const binWidth = (hist.max - hist.min) / hist.size
+  let total = 0
+  hist.counts.forEach((count, i) => {
+    const value = hist.min + (i + 0.5) * binWidth  // bin center
+    if (value > 0.5) total += count                // skip the 0 / NoData bin
+  })
+  return total
+},
+
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {
     const map = document.querySelector('arcgis-map').map
@@ -1585,7 +1668,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
   statePolicyHtml(state) {
   if (state === 'Maine') {
-    return `<strong>Maine Policy Details:</strong>
+    return `<strong>Maine Details:</strong>
       TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
       Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
       solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
@@ -1600,7 +1683,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       Georgia Department of Natural Resources, industry stakeholders and others.`
   }
   if (state === 'California') {
-    return `<strong>California Policy Details:</strong> TNC recommends use of the State of California’s
+    return `<strong>California Details:</strong> TNC recommends use of the State of California’s
       screening tool for energy planning, developed with TNC and other stakeholders:
       <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>`
   }

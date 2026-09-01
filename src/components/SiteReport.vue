@@ -50,6 +50,10 @@ const intersectionResults = computed(() => {
   return results
 })
 
+const capitalize = computed(() => {
+  if (!mapStore.category) return ''
+  return mapStore.category.charAt(0).toUpperCase() + mapStore.category.slice(1)
+})
 // --- Unified "did this layer hit?" test (raster area OR vector intersect) ---
 const layerHit = (layer) => {
   if (layer.intersected === true) return true // vector/point layers
@@ -287,15 +291,16 @@ onUnmounted(() => {
         ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
         : '--'
     }}
-    , Lon:
+    <br/> Lon:
     {{
       mapStore.currentPoint.detail.mapPoint.longitude
         ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
         : '--'
     }}
   </span>
-  <span style="flex: 1; text-align: center;">Energy Type: {{ mapStore.category }}</span>
-  <span style="flex: 1; text-align: center;">Area: {{ formatArea(mapStore.reportBufferAreaAc) }}</span>
+  <span style="flex: 1; text-align: center;">Energy Type:<br/> {{ capitalize }}</span>
+  <span style="flex: 1; text-align: center;">Area:<br/> {{ formatArea(mapStore.reportBufferAreaAc) }}</span>
+   <span style="flex: 1; text-align: center;">Conservation <br/>Area: {{ mapStore.conservationArea}}%</span>
 </div>
 
         <!-- Buffer Size Control -->
