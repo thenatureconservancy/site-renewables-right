@@ -72,7 +72,6 @@ const switcher = ref(null)
 function selectBasemap(bm) {
   currentBasemap.value = bm
   isExpanded.value = false
-
   const arcgisMap = document.querySelector('arcgis-map')
   if (arcgisMap?.map) {
     arcgisMap.map.basemap = new Basemap({

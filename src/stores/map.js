@@ -1207,7 +1207,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     if (value > 0.5) total += count                // skip the 0 / NoData bin
   })
   return total
-},
+  },
 
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {

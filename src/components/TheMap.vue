@@ -59,7 +59,6 @@ async function reorderBasemap() {
     // insert the labels just BELOW the states overlay
     map.add(ref, statesIndex) // adds at statesIndex, pushing states up by one
   })
-  
 }
 onMounted(() => {
   const arcgisMap = document.querySelector('arcgis-map')
@@ -710,7 +709,7 @@ onMounted(() => {
     mapStore.changeOpacity()
   })
   reorderBasemap()
- 
+
 })
 
 </script>

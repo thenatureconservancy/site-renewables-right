@@ -39,7 +39,7 @@ const intersectionResults = computed(() => {
               ...sublayer,
               groupHeader: group.header,
               subheaderTitle: subheader.title,
-              _subOrder: subIdx,          // ← keeps subheader groups together
+              _subOrder: subIdx, // ← keeps subheader groups together
             })
           }
         })
@@ -47,9 +47,7 @@ const intersectionResults = computed(() => {
       })
 
       // keep subheader groups in original order, highest value first within each
-      results[group.header].sort(
-        (a, b) => a._subOrder - b._subOrder || rankValue(b) - rankValue(a)
-      )
+      results[group.header].sort((a, b) => a._subOrder - b._subOrder || rankValue(b) - rankValue(a))
     }
   })
   return results
@@ -67,10 +65,10 @@ const layerHit = (layer) => {
 }
 // sort key: higher = shows first. Works per category since type is consistent.
 const rankValue = (layer) => {
-  if (layer.summaryType === 'count')   return layer.count || 0
+  if (layer.summaryType === 'count') return layer.count || 0
   if (layer.summaryType === 'boolean') return layer.intersected ? 1 : 0
-  if (layer.summaryType === 'stats')   return layer.intersected ? (layer.mean || 0) : 0
-  return layer.totalArea || 0   // raster area layers
+  if (layer.summaryType === 'stats') return layer.intersected ? layer.mean || 0 : 0
+  return layer.totalArea || 0 // raster area layers
 }
 
 // Calculate total area from results (rasters only contribute area)
@@ -116,9 +114,9 @@ const formatSummary = (layer) => {
     return layer.intersected ? 'Present' : 'Not present'
   }
   if (layer.summaryType === 'stats') {
-  if (!layer.intersected) return 'No data'
-    return `${layer.mean?.toFixed(2)*100}% (Avg)`
-}
+    if (!layer.intersected) return 'No data'
+    return `${layer.mean?.toFixed(2) * 100}% (Avg)`
+  }
   // default = raster area layer
   return formatArea(layer.totalArea)
 }
@@ -219,8 +217,6 @@ const onDragEnd = () => {
   isDragging.value = false
 }
 
-
-
 onMounted(() => {
   document.addEventListener('mousemove', onDragMove)
   document.addEventListener('mouseup', onDragEnd)
@@ -243,10 +239,8 @@ onUnmounted(() => {
     <!-- INACTIVE STATE -->
     <div v-if="!hasSelection">
       <div class="results-header q-pr-sm">
-        <div
-          style="display: flex; "
-        >
-           <p class="text-overline q-ml-sm q-mb-none text-bold" >INSTRUCTIONS</p>
+        <div style="display: flex">
+          <p class="text-overline q-ml-sm q-mb-none text-bold">INSTRUCTIONS</p>
           <q-space></q-space>
           <q-btn
             flat
@@ -289,32 +283,46 @@ onUnmounted(() => {
             @click="mapStore.hideSiteReport()"
           />
         </div>
-<div
-  style="
-    font-size: 10px;
-    opacity: 0.85;
-    display: flex;
-    align-items: center;
-  "
->
-  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px" >
-    Lat:
-    {{
-      mapStore.currentPoint.detail.mapPoint.latitude
-        ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
-        : '--'
-    }}
-    <br/> Lon:
-    {{
-      mapStore.currentPoint.detail.mapPoint.longitude
-        ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
-        : '--'
-    }}
-  </span>
-  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px; padding-left: 8px">Energy Type:<br/><b>{{ capitalize }}</b></span>
-  <span style="flex: 1; text-align: left;border-right: 1px solid #ccc; padding-right: 4px; padding-left: 8px">Buffer Area:<br/><b>{{ formatArea(mapStore.reportBufferAreaAc) }}</b></span>
-   <span style="flex: 1; text-align: left; padding-right: 4px; padding-left: 8px">Conservation <br/>Area: {{ mapStore.conservationArea}}%</span>
-</div>
+        <div style="font-size: 10px; opacity: 0.85; display: flex; align-items: center">
+          <span style="flex: 1; text-align: left; border-right: 1px solid #ccc; padding-right: 4px">
+            Lat:
+            {{
+              mapStore.currentPoint.detail.mapPoint.latitude
+                ? mapStore.currentPoint.detail.mapPoint.latitude?.toFixed(2)
+                : '--'
+            }}
+            <br />
+            Lon:
+            {{
+              mapStore.currentPoint.detail.mapPoint.longitude
+                ? mapStore.currentPoint.detail.mapPoint.longitude?.toFixed(2)
+                : '--'
+            }}
+          </span>
+          <span
+            style="
+              flex: 1;
+              text-align: left;
+              border-right: 1px solid #ccc;
+              padding-right: 4px;
+              padding-left: 8px;
+            "
+            >Energy Type:<br /><b>{{ capitalize }}</b></span
+          >
+          <span
+            style="
+              flex: 1;
+              text-align: left;
+              border-right: 1px solid #ccc;
+              padding-right: 4px;
+              padding-left: 8px;
+            "
+            >Buffer Area:<br /><b>{{ formatArea(mapStore.reportBufferAreaAc) }}</b></span
+          >
+          <span style="flex: 1; text-align: left; padding-right: 4px; padding-left: 8px"
+            >Conservation <br />Area: {{ mapStore.conservationArea }}%</span
+          >
+        </div>
 
         <!-- Buffer Size Control -->
         <div class="buffer-section q-pa-sm">
@@ -370,6 +378,7 @@ onUnmounted(() => {
               style="flex: 1"
               placeholder="input radius: max allowed 35 mi"
               suffix="mi"
+              debounce="600"
             />
           </div>
         </div>
