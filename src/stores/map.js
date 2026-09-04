@@ -6,6 +6,7 @@ import MosaicRule from '@arcgis/core/layers/support/MosaicRule.js';
 import ImageHistogramParameters from '@arcgis/core/rest/support/ImageHistogramParameters.js';
 import * as projectOperator from "@arcgis/core/geometry/operators/projectOperator.js";
 import SpatialReference from "@arcgis/core/geometry/SpatialReference.js";
+import RasterFunction from "@arcgis/core/layers/support/RasterFunction.js"
 
 export const useMapStore = defineStore('mapStore', () => ({
   showHelpPanel: false,
@@ -261,8 +262,8 @@ export const useMapStore = defineStore('mapStore', () => ({
           },
           {
             index: 14, elid: 'brownfields', filter: true, visible: false, visibleModel: false, opacity: 0.9,
-            category: 'both', title: 'Brownfields Over 10 Acres',  
-            infoAbout: `This layer depicts sites over 10 acres that are identified as brownfields by the U.S. Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. This data layer is a selection of the <a href="https://www.epa.gov/re-powering/re-powering-mapper" target="_blank">EPA’s RE-Powering America’s Land Initiative</a> data. For more details, see the methods paper at the <a href="https://www.nature.org/cleanenergycompass" target="_blank">Compass Resource Hub</a>.`,
+            category: 'both', title: 'Brownfields Over 50 Acres',  
+            infoAbout: `This layer depicts sites over 50 acres that are identified as brownfields by the U.S. Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. This data layer is a selection of the <a href="https://www.epa.gov/re-powering/re-powering-mapper" target="_blank">EPA’s RE-Powering America’s Land Initiative</a> data. For more details, see the methods paper at the <a href="https://www.nature.org/cleanenergycompass" target="_blank">Compass Resource Hub</a>.`,
             infoWhy: `Brownfields are contaminated or previously developed industrial lands that are often unsuitable for other uses and may provide little ecological value. These sites may present an opportunity for wind and solar development after further site assessment and feasibility analysis, including evaluation of current wildlife value. Siting wind and solar development on these lands may provide opportunities to meet energy goals while minimizing impacts to high-value habitats, avoiding additional fragmentation of intact ecosystems and supporting local economic development through job creation, tax revenue and investment in communities with a history of resource extraction.`,
             infoHow: `The Nature Conservancy developed the Clean Energy Compass to help accelerate a clean energy transition by improving outcomes for climate, conservation and communities—the 3Cs. The tool should be used as a starting point to identify potential conservation and community considerations early in the planning process, not as a standalone siting or decision-making tool. For practical guidance and resources to help navigate these considerations, visit the Compass Resource Hub at <a href="http://www.nature.org/cleanenergycompass" target="_blank">www.nature.org/cleanenergycompass</a>.`,
             longDescription: 'This layer depicts sites (over 10 acres) which are identified as Brownfields by the US Environmental Protection Agency (EPA), defined as abandoned, underused, or idled commercial or industrial properties whose redevelopment or expansion may be complicated by the presence or potential presence of a hazardous pollutant. These sites may present an opportunity for renewable energy development after further site assessment and feasibility analysis. This data layer is a selection of the EPA’s RE-Powering America’s Land Initiative data. ',
@@ -753,10 +754,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     //clear prior results
     this.reportResults = ''
     this.getStatePolicy(e.detail.mapPoint)
-    if(this.bufferSize > 36){
-      alert('Buffer size cannot exceed 35 miles')
-      return
-    }
+    
     const polySymbol = {
       type: 'simple-fill',
       color: [255, 255, 255, 0.3],
@@ -931,7 +929,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.applyResultsToLayers(this.reportResults)
 
     this.reportLoading = false
-    this.getConservationPercent(buffer)
+    //this.getConservationPercent(buffer)
     return this.reportResults
   },
   countForValue(hist, value) {
@@ -993,7 +991,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/7',
       summaryType: 'count' },
 
-    { name: 'Brownfields over 10 acres', elid: 'brownfields',
+    { name: 'Brownfields over 50 acres', elid: 'brownfields',
       featureUrl: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_AGOL_Vector/FeatureServer/8',
       summaryType: 'count' },
     
@@ -1129,85 +1127,106 @@ export const useMapStore = defineStore('mapStore', () => ({
 
   //gets percent of buffer that intersects with any conservation layer
   // The conservation rasters + their category filter + OBJECTID (from your list)
-  async getConservationPercent(buffer) {
-    const CONSERVATION_RASTERS = [
-      { Name: "Bats_10_Final_02_NoCA_5070", OBJECTID: 2,  filter: "wind" },
-      { Name: "BigGame_08_NoCA_5070", OBJECTID: 3,  filter: "solar" },
-      { Name: "Birds_05_NoCA_5070", OBJECTID: 4,  filter: "wind" },
-      { Name: "IntactHabitats_HMI200_20260518_NoCA_R_5070", OBJECTID: 5,  filter: "" },
-      { Name: "PrairieGrouseA_5070", OBJECTID: 8,  filter: "" },
-      { Name: "RCN_NoCal_20260728_5070_new", OBJECTID: 13, filter: "" },
-      { Name: "TE_Species_03_20260630_NoCA_5070", OBJECTID: 14, filter: "" },
-      { Name: "Water_02_reclass_20260630_NoCA_5070", OBJECTID: 15, filter: "" },
-      { Name: "WhoopingCraneSolar_20260408_NoCA_R_5070", OBJECTID: 16, filter: "solar" },
-      { Name: "WhoopingCraneWind_20260408_NoCA_R_5070", OBJECTID: 17, filter: "wind" },
-      { Name: "ProtectedAreas_01_Final_NoCA_5070_new2", OBJECTID: 19, filter: "" },
-      { Name: "Migratory_Bird_Stopover_NoCA_5070_8bit", OBJECTID: 24, filter: "wind" },
-    ]
-    // --- Floating solar: single conservation layer, use its own already-computed % ---
-    if (this.category === 'floating solar') {
-      const r = this.reportResults?.qualitywater
-      const areaAc = r?.areaAc ?? 0
-      const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
-      this.conservationPct = +pct.toFixed(1)
-      return this.conservationPct
-    }
+ 
+// (MosaicRule, ImageHistogramParameters, SpatialReference already imported)
 
-    // --- Wind / Solar: union the relevant conservation rasters ---
-    // filter '' = always included; plus the ones matching the current category
-    const ids = CONSERVATION_RASTERS
-      .filter((r) => r.filter === '' || r.filter === this.category)
-      .map((r) => r.OBJECTID)
-    const map = document.querySelector('arcgis-map').map
-    const imageLayer = map.findLayerById('imageLayer')
+async getConservationPercent(buffer) {
+  const CONSERVATION_RASTERS = [
+    { Name: "Bats_10_Final_02_NoCA_5070", filter: "wind" },
+    { Name: "BigGame_08_NoCA_5070", filter: "solar" },
+    { Name: "Birds_05_NoCA_5070", filter: "wind" },
+    { Name: "IntactHabitats_HMI200_20260518_NoCA_R_5070", filter: "" },
+    { Name: "PrairieGrouseA_5070", filter: "" },
+    { Name: "RCN_NoCal_20260728_5070_new", filter: "" },
+    { Name: "TE_Species_03_20260630_NoCA_5070", filter: "" },
+    { Name: "Water_02_reclass_20260630_NoCA_5070", filter: "" },
+    { Name: "WhoopingCraneSolar_20260408_NoCA_R_5070", filter: "solar" },
+    { Name: "WhoopingCraneWind_20260408_NoCA_R_5070", filter: "wind" },
+    { Name: "ProtectedAreas_01_Final_NoCA_5070_new2", filter: "" },
+    { Name: "Migratory_Bird_Stopover_NoCA_5070_8bit", filter: "wind" },
+  ]
 
-    const names = CONSERVATION_RASTERS
+  // --- Floating solar: single conservation layer, use its own already-computed % ---
+  if (this.category === 'floating solar') {
+    const r = this.reportResults?.qualitywater
+    const areaAc = r?.areaAc ?? 0
+    const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
+    this.conservationPct = +pct.toFixed(1)
+    return this.conservationPct
+  }
+
+  const imageLayer = document.querySelector('arcgis-map').map.findLayerById('imageLayer')
+  const ALBERS = new SpatialReference({ wkid: 5070 })
+
+  const names = CONSERVATION_RASTERS
     .filter((r) => r.filter === '' || r.filter === this.category)
     .map((r) => `'${r.Name}'`)
     .join(', ')
 
-    const mosaicRule = new MosaicRule({
-      method: 'attribute',
-      where: `Name IN (${names})`,
-      operation: 'max',        // ← the union across the selected rasters
-    })
-    const ALBERS = new SpatialReference({ wkid: 5070 }) // NAD83 / Conus Albers
-    const params = new ImageHistogramParameters({
-      geometry: buffer,                                   // already in 5070
-      mosaicRule,
-      pixelSize: { x: 30, y: 30, spatialReference: ALBERS },
-    })
-
-    try {
-      const res = await imageLayer.computeStatisticsHistograms(params)
-      const hist = res.histograms?.[0]
-      console.log(res)
-      console.log(hist.min, hist.max, hist.size, hist.counts)
-      // sum ALL bins = every non-NoData pixel = union coverage (no double count)
-      const unionPixels = hist?.counts?.reduce((a, b) => a + b, 0) ?? 0
-      const unionAreaAc = unionPixels * this.AC_PER_PIXEL   // 0.2224 ac/px
-      const pct = this.reportBufferAreaAc ? (unionAreaAc / this.reportBufferAreaAc) * 100 : 0
-      console.log(this.unionCount(hist), 'pixels in union of conservation rasters')
-      this.conservationPct = +pct.toFixed(1)
-      this.conservationAreaAc = +unionAreaAc.toFixed(2)
-      console.log('Conservation % computed:', this.conservationPct, '%')
-      return this.conservationPct
-    } catch (err) {
-      console.error('Conservation % query failed', err)
-      this.conservationPct = null
-      return null
-    }
-  },
-  unionCount(hist) {
-  if (!hist?.counts?.length) return 0
-  const binWidth = (hist.max - hist.min) / hist.size
-  let total = 0
-  hist.counts.forEach((count, i) => {
-    const value = hist.min + (i + 0.5) * binWidth  // bin center
-    if (value > 0.5) total += count                // skip the 0 / NoData bin
+  // Remap EVERY contributing raster to binary BEFORE the mosaic max:
+  //   values 1..255 → 1 (present)   |   value 0 → NoData (absent)
+  // This neutralizes the 255-flood and the missing-NoData problem server-side.
+  const remapToBinary = new RasterFunction({
+    functionName: "Remap",
+    functionArguments: {
+      InputRanges: [1, 256],      // [min, maxExclusive) → 1..255 map to...
+      OutputValues: [1],          // ...output value 1
+      NoDataRanges: [0, 1],       // 0..<1 → NoData (absent)
+      AllowUnmatched: false,      // anything unmatched → NoData
+    },
+    outputPixelType: "U8",
   })
-  return total
-  },
+
+ const mosaicRule = new MosaicRule({
+  method: 'attribute',
+  where: `Name IN (${names})`,
+  operation: 'max',
+  itemRenderingRule: remapToBinary,   // ← per-raster, BEFORE the max
+})
+
+const params = new ImageHistogramParameters({
+  geometry: buffer,
+  mosaicRule,
+  // renderingRule REMOVED — it's now on the mosaic as itemRenderingRule
+  pixelSize: { x: 30, y: 30, spatialReference: ALBERS },
+})
+
+  try {
+    const res = await imageLayer.computeStatisticsHistograms(params)
+    const hist = res.histograms?.[0]
+
+    // ===== DECISION GATE — read this one log to know if it worked =====
+    console.log('CONSERVATION UNION →',
+      'min:', hist?.min, 'max:', hist?.max, 'size:', hist?.size)
+    console.log('counts:', hist?.counts)
+    // ✅ WORKED if:  min ≈ -0.5..0.5, max ≈ 1.5, size = 2  (clean binary)
+    // ❌ FAILED if:  max ≈ 255, size = 256  (remap applied AFTER mosaic → flood)
+    // =================================================================
+
+    // Count union pixels = value-1 bin(s); skip the 0/NoData bin.
+    let unionPixels = 0
+    if (hist?.counts?.length) {
+      const binWidth = (hist.max - hist.min) / hist.size
+      hist.counts.forEach((c, i) => {
+        const v = hist.min + (i + 0.5) * binWidth
+        if (v > 0.5) unionPixels += c
+      })
+    }
+
+    const unionAreaAc = unionPixels * this.AC_PER_PIXEL
+    const pct = this.reportBufferAreaAc ? (unionAreaAc / this.reportBufferAreaAc) * 100 : 0
+
+    console.log('union pixels:', unionPixels, '→ conservation %:', pct.toFixed(1))
+
+    this.conservationPct = +pct.toFixed(1)
+    this.conservationAreaAc = +unionAreaAc.toFixed(2)
+    return this.conservationPct
+  } catch (err) {
+    console.error('Conservation % query failed', err)
+    this.conservationPct = null
+    return null
+  }
+},
 
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {

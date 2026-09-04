@@ -28,12 +28,11 @@ const mobile = computed(() => {
 
 const height = ref(window.innerHeight)
 const width = ref(window.innerWidth / 2.2)
-
 </script>
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-white text-dark text-body1 shadow-1"   data-tour="header-about">
+    <q-header class="bg-white text-dark text-body1 shadow-1" data-tour="header-about">
       <q-toolbar>
         <a href="https://www.nature.org/en-us/" target="_blank">
           <img src="./assets/tnc_globe.jpg" style="width: 30px; margin-top: 3px" />
@@ -44,14 +43,10 @@ const width = ref(window.innerWidth / 2.2)
             <span class="title-strong">Clean Energy </span>
             <span class="title-accent">Compass</span>
           </p>
-          <div class="app-subtitle">
-            Navigating 3Cs considerations for clean energy
-            planning
-          </div>
+          <div class="app-subtitle">Navigating 3Cs considerations for clean energy planning</div>
         </div>
         <q-space></q-space>
 
-        
         <q-space></q-space>
         <q-btn
           color="blue"
@@ -66,7 +61,7 @@ const width = ref(window.innerWidth / 2.2)
           href="https://tnc.app.box.com/file/2402477476742?s=0u67qsxf5s9ydcb8yigdcrztmztobw4o"
           target="_blank"
         ></q-btn>
-       
+
         <q-btn
           color="secondary"
           class="q-mr-sm"
@@ -88,7 +83,6 @@ const width = ref(window.innerWidth / 2.2)
           square
           size="12px"
           @click="mapStore.showHelpPanel = true"
-
         ></q-btn>
         <q-btn
           class="q-ml-sm"
@@ -98,7 +92,7 @@ const width = ref(window.innerWidth / 2.2)
           unelevated
           square
           size="12px"
-          @click="helpStore.showDialog = true"
+          @click="mapStore.showDialog = true"
           data-tour="header-about"
         ></q-btn>
       </q-toolbar>
@@ -149,9 +143,11 @@ const width = ref(window.innerWidth / 2.2)
   letter-spacing: 0.1px;
   margin-top: 2px;
   white-space: nowrap; /* keep it one line */
-  
 }
-.subtitle-accent { color: #1a3a2e; font-weight: 700; }
+.subtitle-accent {
+  color: #1a3a2e;
+  font-weight: 700;
+}
 .q-header.soft-shadow {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05) !important;
 }

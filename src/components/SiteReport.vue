@@ -173,15 +173,23 @@ const onBufferChange = (bufferValue) => {
   mapStore.bufferSize = bufferValue
   mapStore.createBuffer('current')
 }
+const onValidBufferChange = (val) => {
+  clearLayerResults()
+  mapStore.reportResults = {}
+  expandedCategories.value = {}
+  // only run if within valid range — prevents the "runs anyway" bug
+  if (val == null || val === '' || val <= 0 || val > 35) return
+  onBufferChange(val)
+}
 
 // Toggle category accordion
 const toggleCategory = (categoryName) => {
   expandedCategories.value[categoryName] = !expandedCategories.value[categoryName]
 }
 
-// Clear results
-const clearResults = () => {
-  mapStore.layers.forEach((group) => {
+// clear layer results
+const clearLayerResults = () => {
+    mapStore.layers.forEach((group) => {
     group.subheaders?.forEach((subheader) => {
       subheader.sublayers?.forEach((sublayer) => {
         sublayer.totalArea = 0
@@ -191,6 +199,10 @@ const clearResults = () => {
       })
     })
   })
+}
+// Clear results
+const clearResults = () => {
+  clearLayerResults()
   mapStore.reportResults = {}
   mapStore.currentPoint = null
   mapStore.statePolicy = null
@@ -373,12 +385,19 @@ onUnmounted(() => {
               color="white"
               type="number"
               min="0.1"
+              max="35"
               step="0.1"
-              @update:model-value="onBufferChange(mapStore.bufferSize)"
               style="flex: 1"
-              placeholder="input radius: max allowed 35 mi"
+              placeholder="input radius"
               suffix="mi"
               debounce="600"
+              hint="Maximum allowed is 35 miles"
+              :rules="[
+                (val) => (val !== null && val !== '') || 'Enter a buffer radius',
+                (val) => val > 0 || 'Must be greater than 0',
+                (val) => val <= 35 || 'Maximum allowed is 35 miles',
+              ]"
+              @update:model-value="onValidBufferChange"
             />
           </div>
         </div>

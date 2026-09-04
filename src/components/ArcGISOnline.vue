@@ -26,13 +26,13 @@ const authStore = useAuthStore()
           title="Search Results"
         ></paginated-list>
       </q-card-section>
-      <q-card-section class="q-pt-none">
+      <!--q-card-section class="q-pt-none">
         <paginated-list
           :items="agolStore.recommendedLayers"
           :total="agolStore.recommendedLayers.length"
           title="Suggested Layers"
         ></paginated-list>
-      </q-card-section>
+      </q-card-section-->
 
       <!--manage layers section-->
       <q-card-section class="q-pt-none" v-if="agolStore.mapLayers.length > 0">
