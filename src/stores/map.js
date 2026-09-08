@@ -30,6 +30,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   reportResults: [],
   reportLoading: false,
   reportGeneratedAt: null,
+  conservationPct: 0,
   
   
   /*cleaned layers*/
@@ -837,7 +838,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       { name: 'pvr_val_3_GT_5070_new_mask', elid: 'ag3', values:[1]},
       { name: 'pvr_val_4_GT_5070_new_mask', elid: 'ag4', values:[1]},
       { name: 'lasso_wind_5070_fix', elid: 'lassoWind', values: [1]},
-      { name: 'lasso_solar_5070_fix_', elid: 'lassoSolar', values: [1]}
+      { name: 'lasso_solar_5070_fix_', elid: 'lassoSolar', values: [1]},
     
     ]
 
@@ -929,7 +930,7 @@ export const useMapStore = defineStore('mapStore', () => ({
     this.applyResultsToLayers(this.reportResults)
 
     this.reportLoading = false
-    //this.getConservationPercent(buffer)
+    this.getConservationPercent(buffer)
     return this.reportResults
   },
   countForValue(hist, value) {
@@ -939,7 +940,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       return hist.counts[idx] ?? 0
   },
   applyResultsToLayers(reportResults) {
-    this.layers.forEach((group) => {
+   this.layers.forEach((group) => {
       group.subheaders?.forEach((subheader) => {
         subheader.sublayers?.forEach((sublayer) => {
           const r = reportResults[sublayer.elid]
@@ -1126,107 +1127,56 @@ export const useMapStore = defineStore('mapStore', () => ({
   },
 
   //gets percent of buffer that intersects with any conservation layer
-  // The conservation rasters + their category filter + OBJECTID (from your list)
- 
-// (MosaicRule, ImageHistogramParameters, SpatialReference already imported)
+  async getConservationPercent(buffer) {
+    // --- Floating solar: single conservation layer, use its own already-computed % ---
+    /*if (this.category === 'floating solar') {
+      const r = this.reportResults?.qualitywater
+      const areaAc = r?.areaAc ?? 0
+      const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
+      this.conservationPct = +pct.toFixed(1)
+      this.conservationAreaAc = +areaAc.toFixed(2)
+      return this.conservationPct
+    }*/
 
-async getConservationPercent(buffer) {
-  const CONSERVATION_RASTERS = [
-    { Name: "Bats_10_Final_02_NoCA_5070", filter: "wind" },
-    { Name: "BigGame_08_NoCA_5070", filter: "solar" },
-    { Name: "Birds_05_NoCA_5070", filter: "wind" },
-    { Name: "IntactHabitats_HMI200_20260518_NoCA_R_5070", filter: "" },
-    { Name: "PrairieGrouseA_5070", filter: "" },
-    { Name: "RCN_NoCal_20260728_5070_new", filter: "" },
-    { Name: "TE_Species_03_20260630_NoCA_5070", filter: "" },
-    { Name: "Water_02_reclass_20260630_NoCA_5070", filter: "" },
-    { Name: "WhoopingCraneSolar_20260408_NoCA_R_5070", filter: "solar" },
-    { Name: "WhoopingCraneWind_20260408_NoCA_R_5070", filter: "wind" },
-    { Name: "ProtectedAreas_01_Final_NoCA_5070_new2", filter: "" },
-    { Name: "Migratory_Bird_Stopover_NoCA_5070_8bit", filter: "wind" },
-  ]
+    // --- Wind / Solar: use the pre-computed union raster for the category ---
+    const unionName = this.category === 'wind'
+      ? 'conservation_union_wind'
+      : 'conservation_union_solar'
 
-  // --- Floating solar: single conservation layer, use its own already-computed % ---
-  if (this.category === 'floating solar') {
-    const r = this.reportResults?.qualitywater
-    const areaAc = r?.areaAc ?? 0
-    const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
-    this.conservationPct = +pct.toFixed(1)
-    return this.conservationPct
-  }
+    const imageLayer = document.querySelector('arcgis-map').map.findLayerById('imageLayer')
+    const ALBERS = new SpatialReference({ wkid: 5070 })
 
-  const imageLayer = document.querySelector('arcgis-map').map.findLayerById('imageLayer')
-  const ALBERS = new SpatialReference({ wkid: 5070 })
+    const mosaicRule = new MosaicRule({
+      method: 'attribute',
+      where: `Name = '${unionName}'`,   // ONE clean 1/NoData raster — no runtime max/sum
+      operation: 'first',
+    })
 
-  const names = CONSERVATION_RASTERS
-    .filter((r) => r.filter === '' || r.filter === this.category)
-    .map((r) => `'${r.Name}'`)
-    .join(', ')
+    const params = new ImageHistogramParameters({
+      geometry: buffer,                  // already in 5070
+      mosaicRule,
+      pixelSize: { x: 30, y: 30, spatialReference: ALBERS },
+    })
 
-  // Remap EVERY contributing raster to binary BEFORE the mosaic max:
-  //   values 1..255 → 1 (present)   |   value 0 → NoData (absent)
-  // This neutralizes the 255-flood and the missing-NoData problem server-side.
-  const remapToBinary = new RasterFunction({
-    functionName: "Remap",
-    functionArguments: {
-      InputRanges: [1, 256],      // [min, maxExclusive) → 1..255 map to...
-      OutputValues: [1],          // ...output value 1
-      NoDataRanges: [0, 1],       // 0..<1 → NoData (absent)
-      AllowUnmatched: false,      // anything unmatched → NoData
-    },
-    outputPixelType: "U8",
-  })
+    try {
+      const res = await imageLayer.computeStatisticsHistograms(params)
+      const hist = res.histograms?.[0]
+      console.log('conservation union →', hist?.min, hist?.max, hist?.size, hist?.counts)
 
- const mosaicRule = new MosaicRule({
-  method: 'attribute',
-  where: `Name IN (${names})`,
-  operation: 'max',
-  itemRenderingRule: remapToBinary,   // ← per-raster, BEFORE the max
-})
+      const AC_PER_PIXEL = (30 * 30) / 4046.8564224   // 0.2224 — hardcoded, no this.
+      const pixels = this.countForValue(hist, 1)       // clean 1/NoData → count the 1s
+      const areaAc = pixels * AC_PER_PIXEL
+      const pct = this.reportBufferAreaAc ? (areaAc / this.reportBufferAreaAc) * 100 : 0
 
-const params = new ImageHistogramParameters({
-  geometry: buffer,
-  mosaicRule,
-  // renderingRule REMOVED — it's now on the mosaic as itemRenderingRule
-  pixelSize: { x: 30, y: 30, spatialReference: ALBERS },
-})
-
-  try {
-    const res = await imageLayer.computeStatisticsHistograms(params)
-    const hist = res.histograms?.[0]
-
-    // ===== DECISION GATE — read this one log to know if it worked =====
-    console.log('CONSERVATION UNION →',
-      'min:', hist?.min, 'max:', hist?.max, 'size:', hist?.size)
-    console.log('counts:', hist?.counts)
-    // ✅ WORKED if:  min ≈ -0.5..0.5, max ≈ 1.5, size = 2  (clean binary)
-    // ❌ FAILED if:  max ≈ 255, size = 256  (remap applied AFTER mosaic → flood)
-    // =================================================================
-
-    // Count union pixels = value-1 bin(s); skip the 0/NoData bin.
-    let unionPixels = 0
-    if (hist?.counts?.length) {
-      const binWidth = (hist.max - hist.min) / hist.size
-      hist.counts.forEach((c, i) => {
-        const v = hist.min + (i + 0.5) * binWidth
-        if (v > 0.5) unionPixels += c
-      })
+      this.conservationPct = +pct.toFixed(1)
+      this.conservationAreaAc = +areaAc.toFixed(2)
+      return this.conservationPct
+    } catch (err) {
+      console.error('Conservation % query failed', err)
+      this.conservationPct = null
+      return null
     }
-
-    const unionAreaAc = unionPixels * this.AC_PER_PIXEL
-    const pct = this.reportBufferAreaAc ? (unionAreaAc / this.reportBufferAreaAc) * 100 : 0
-
-    console.log('union pixels:', unionPixels, '→ conservation %:', pct.toFixed(1))
-
-    this.conservationPct = +pct.toFixed(1)
-    this.conservationAreaAc = +unionAreaAc.toFixed(2)
-    return this.conservationPct
-  } catch (err) {
-    console.error('Conservation % query failed', err)
-    this.conservationPct = null
-    return null
-  }
-},
+  },
 
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {

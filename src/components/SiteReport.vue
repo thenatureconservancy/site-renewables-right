@@ -332,7 +332,7 @@ onUnmounted(() => {
             >Buffer Area:<br /><b>{{ formatArea(mapStore.reportBufferAreaAc) }}</b></span
           >
           <span style="flex: 1; text-align: left; padding-right: 4px; padding-left: 8px"
-            >Conservation <br />Area: {{ mapStore.conservationArea }}%</span
+            >Conservation %<br />of buffer: <b>{{ mapStore.conservationPct }}%</b></span
           >
         </div>
 
