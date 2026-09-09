@@ -1196,7 +1196,7 @@ export const useMapStore = defineStore('mapStore', () => ({
       if (!feat) { this.statePolicy = null; return null }
 
       // ⚠️ adjust field name to your states layer (see question below)
-      const state = feat.attributes.STATE_NAME
+      const state = feat.attributes.NAME
       const category = this.category   // 'wind' | 'solar' | 'floating solar'
 
       // eligibility: which categories trigger a message per state
