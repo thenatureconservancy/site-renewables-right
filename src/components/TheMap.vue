@@ -398,7 +398,7 @@ onMounted(() => {
       type: 'simple',
       symbol: {
         type: 'simple-fill',
-        color: [246, 245, 239, 0.9],
+        color: [246, 245, 239, 0.97],
         outline: {
           color: [246, 245, 239], // beige fill, 0.9 opacity
           width: 6,
