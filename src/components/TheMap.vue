@@ -51,7 +51,7 @@ async function reorderBasemap() {
   const basemap = map.basemap
   await basemap.load()
 
-  const statesLayer = map.findLayerById('states') // your overlay
+  const statesLayer = map.findLayerById('states1') // your overlay
   const statesIndex = map.layers.indexOf(statesLayer) // its current position
 
   basemap.referenceLayers.forEach((ref) => {
@@ -259,13 +259,12 @@ onMounted(() => {
     visible: false,
     opacity: 0.8,
   })
-  let states = new FeatureLayer({
-    url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
+  /*let states = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_States/FeatureServer/0',
     id: 'states',
     visible: true,
     // Added California to your filter expression
-    definitionExpression:
-      "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'",
+    definitionExpression: "NAME = 'Maine' or NAME = 'Georgia' or NAME = 'California'",
     minScale: 9244649,
 
     labelingInfo: [
@@ -290,9 +289,83 @@ onMounted(() => {
       },
     ],
     popupTemplate: {
-      title: '{STATE_NAME} Details',
+      title: '{NAME} Details',
       content: (feature) => {
-        const state = feature.graphic.attributes.STATE_NAME
+        const state = feature.graphic.attributes.NAME
+
+        if (state === 'Maine') {
+          return `
+      <strong>Maine Details:</strong>
+        TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
+        Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
+        solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
+        high-value agricultural land.</a> These policies were supported by TNC and other partners and
+        developed with extensive public input.
+      `
+        }
+
+        if (state === 'Georgia') {
+          return `
+        <strong>Georgia Solar Details:</strong>
+        TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a> as an environmental sensitivity screening tool to guide solar development to places of lower environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service, Georgia Department of Natural Resources, industry stakeholders and others.
+      `
+        }
+
+        if (state === 'California') {
+          return `
+        <strong>California Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+      `
+        }
+
+        return 'No information available.'
+      },
+    },
+    renderer: {
+      type: 'simple',
+      symbol: {
+        type: 'simple-fill',
+        color: [246, 245, 239, 0.9],
+        outline: {
+          color: [246, 245, 239], // beige fill, 0.9 opacity
+          width: 6,
+        },
+      },
+    },
+  })*/
+  let states1 = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_States/FeatureServer/0',
+    id: 'states1',
+    visible: true,
+    // Added California to your filter expression
+    definitionExpression: "NAME = 'Maine' or NAME = 'Georgia' or NAME = 'California'",
+    minScale: 9244649,
+    maxScale: 0,
+
+    labelingInfo: [
+      {
+        labelPlacement: 'always-horizontal',
+        labelExpressionInfo: {
+          expression: "'ℹ️ ' + 'Additional' + TextFormatting.NewLine + 'Info'",
+        },
+        symbol: {
+          type: 'text',
+          color: '#0079c1',
+          font: {
+            size: 8,
+            weight: 'normal', // was bold — lighter reads smaller
+            family: 'sans-serif',
+          },
+          backgroundColor: [246, 245, 239, 0.9],
+          borderLineColor: '#004b75',
+          borderLineSize: 0.5, // was 1
+          haloColor: '#0079c1',
+        },
+      },
+    ],
+    popupTemplate: {
+      title: '{NAME} Details',
+      content: (feature) => {
+        const state = feature.graphic.attributes.NAME
 
         if (state === 'Maine') {
           return `
@@ -333,12 +406,13 @@ onMounted(() => {
       },
     },
   })
-  let states2 = new FeatureLayer({
-    url: 'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized_Boundaries/FeatureServer/0',
+
+  /*let states2 = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_States/FeatureServer/0',
     id: 'states2',
     visible: true,
     // Added California to your filter expression
-    definitionExpression: "STATE_NAME = 'California'",
+    definitionExpression: "NAME = 'California'",
     maxScale: 9244649,
 
     labelingInfo: [
@@ -363,9 +437,80 @@ onMounted(() => {
       },
     ],
     popupTemplate: {
-      title: '{STATE_NAME} Details',
+      title: '{NAME} Details',
       content: (feature) => {
-        const state = feature.graphic.attributes.STATE_NAME
+        const state = feature.graphic.attributes.NAME
+
+        if (state === 'Maine') {
+          return `
+      <strong>Maine Details:</strong>
+        TNC recommends referring to <a href="https://www.maine.gov/dep/land/rules/index.html" target="_blank">
+        Maine Department of Environmental Protection’s Chapter 375 rules</a> and permitting information for
+        solar energy on <a href="https://www.maine.gov/dacf/ard/solar/solar-hval.shtml" target="_blank">
+        high-value agricultural land.</a> These policies were supported by TNC and other partners and
+        developed with extensive public input.
+      `
+        }
+
+        if (state === 'Georgia') {
+          return `
+        <strong>Georgia Solar Details:</strong>
+        TNC recommends use of the <a href="https://galowimpactsolar.tnc.org/" target="_blank">Georgia Low Impact Solar Siting Tool</a> as an environmental sensitivity screening tool to guide solar development to places of lower environmental impact. The tool was developed by TNC, United States Fish and Wildlife Service, Georgia Department of Natural Resources, industry stakeholders and others.
+      `
+        }
+
+        if (state === 'California') {
+          return `
+        <strong>California Details:</strong> TNC recommends use of the State of California’s screening tool for energy planning, developed with TNC and other stakeholders: <a href="https://www.energy.ca.gov/data-reports/california-energy-planning-library/land-use-screens/cec-2023-land-use-screens-electric" target="_blank">CEC 2023 Land-Use Screens for Electric System Planning</a>
+      `
+        }
+
+        return 'No information available.'
+      },
+    },
+    renderer: {
+      type: 'simple',
+      symbol: {
+        type: 'simple-fill',
+        color: [246, 245, 239, 0.9],
+        outline: {
+          color: [246, 245, 239], // beige fill, 0.9 opacity
+          width: 6,
+        },
+      },
+    },
+  })*/
+  let states3 = new FeatureLayer({
+    url: 'https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/SRR_States/FeatureServer/0',
+    id: 'states3',
+    visible: true,
+    definitionExpression: "NAME = 'California'",
+    maxScale: 9244649,
+    labelingInfo: [
+      {
+        labelPlacement: 'always-horizontal',
+        labelExpressionInfo: {
+          expression: "'ℹ️ ' + 'Additional' + TextFormatting.NewLine + 'Info'",
+        },
+        symbol: {
+          type: 'text',
+          color: '#0079c1',
+          font: {
+            size: 8,
+            weight: 'normal', // was bold — lighter reads smaller
+            family: 'sans-serif',
+          },
+          backgroundColor: [246, 245, 239, 0.9],
+          borderLineColor: '#004b75',
+          borderLineSize: 0.5, // was 1
+          haloColor: '#0079c1',
+        },
+      },
+    ],
+    popupTemplate: {
+      title: '{NAME} Details',
+      content: (feature) => {
+        const state = feature.graphic.attributes.NAME
 
         if (state === 'Maine') {
           return `
@@ -449,8 +594,10 @@ onMounted(() => {
       protectedAreas,
 
       nativeLands,
-      states,
-      states2,
+      /*states,
+      states2,*/
+      states1,
+      states3,
       bufferLayer,
       pointLayer,
       imageLayer,
@@ -709,9 +856,7 @@ onMounted(() => {
     mapStore.changeOpacity()
   })
   reorderBasemap()
-
 })
-
 </script>
 
 <template>

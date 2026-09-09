@@ -666,25 +666,25 @@ export const useMapStore = defineStore('mapStore', () => ({
   //show hide state overlays with more info button 
   filterStateOverlays(){
     let map = document.querySelector("arcgis-map").map;
-    let layer = map.findLayerById('states');
-    let layer2 = map.findLayerById('states2')
+    let layer = map.findLayerById('states1');
+    let layer2 = map.findLayerById('states3')
     //only show overlay on conservation values visible = true
     if(this.layers[0].expanded == false){
-      layer.definitionExpression = "STATE_NAME = 'N/A'"
-      layer2.definitionExpression = "STATE_NAME = 'N/A"
+      layer.definitionExpression = "NAME = 'N/A'"
+      layer2.definitionExpression = "NAME = 'N/A"
     }
     else{
        if(this.category == 'solar'){
-        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'Georgia' or STATE_NAME = 'California'"
-        layer2.definitionExpression = "STATE_NAME = 'California'"
+        layer.definitionExpression = "NAME = 'Maine' or NAME = 'Georgia' or NAME = 'California'"
+        layer2.definitionExpression = "NAME = 'California'"
        } 
        if(this.category == 'wind'){
-        layer.definitionExpression = "STATE_NAME = 'Maine' or STATE_NAME = 'California'"
-        layer2.definitionExpression = "STATE_NAME = 'California'"
+        layer.definitionExpression = "NAME = 'Maine' or NAME = 'California'"
+        layer2.definitionExpression = "NAME = 'California'"
        }
        if(this.category == 'floating solar'){
-        layer.definitionExpression = "STATE_NAME = 'Maine'"
-        layer2.definitionExpression = "STATE_NAME = 'N/A'"
+        layer.definitionExpression = "NAME = 'Maine'"
+        layer2.definitionExpression = "NAME = 'N/A'"
        }
        
     }
@@ -1181,7 +1181,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   //does the intersection query for excluding states and returns policy html for the report
   async getStatePolicy(point) {
     const map = document.querySelector('arcgis-map').map
-    const layer = map.findLayerById('states')
+    const layer = map.findLayerById('states1')
     if (!layer) { this.statePolicy = null; return null }
 
     try {
