@@ -44,7 +44,7 @@ function trackMapAccess() {
     submitter_position: mapStore.role.value,
   })
   localStorage.setItem('SRRAccessCounted', 'true') // 🔒 lock it so it never fires again
-  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role)) // save the role for later 
+  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
   if (localStorage.getItem('showSRRSplash') == 'hide') {
@@ -82,8 +82,8 @@ onMounted(() => {
     backdrop-filter="blur(4px)"
     full-width=""
   >
-    <q-card class="q-pa-none q-ma-none no-scrollbar full-height" style="overflow: hidden">
-      <div class="row q-pa-none q-ma-none">
+    <q-card class="q-pa-none q-ma-none no-scrollbar" style="overflow: hidden; height: 90vh">
+      <div class="row q-pa-none q-ma-none full-height">
         <q-card-section class="col-sm-5 col-md-6 col-lg-6 q-pa-none q-ma-none">
           <q-img src="/srr.jpg" class="full-height" fit="cover"></q-img>
         </q-card-section>
@@ -92,11 +92,7 @@ onMounted(() => {
           class="col-sm-7 col-md-6 col-lg-6 q-pa-lg column self-stretch"
           style="min-height: 0"
         >
-          <q-scroll-area
-            style="height: calc(100vh - 80px); margin-right: -20px"
-            class="q-pa-lg"
-            :visible="true"
-          >
+          <q-scroll-area style="margin-right: -20px" class="col q-pa-lg" :visible="true">
             <div id="topdiv">
               <a href="https://www.nature.org/en-us/">
                 <img
@@ -160,26 +156,10 @@ onMounted(() => {
                   label="Enter Tool"
                   icon-right="arrow_forward_ios"
                   size="md"
-                  class="q-mb-md"
+                  class="q-mb-lg"
                   :disabled="mapStore.role == '' ? true : false"
                   @click="dialogControl()"
                 />
-              </div>
-            </q-toolbar>
-            <q-toolbar class="q-mt-xl q-pa-none bg-grey-3">
-              <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
-                <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
-              >
-              <q-space></q-space>
-              <div>
-                <q-btn
-                  flat
-                  dense
-                  color="blue-7"
-                  href=""
-                  icon-right="3p"
-                  label="Take our survey"
-                ></q-btn>
               </div>
             </q-toolbar>
 
@@ -194,6 +174,22 @@ onMounted(() => {
                 to learn more.
               </div-->
           </q-scroll-area>
+          <q-toolbar class="q-pa-none bg-grey-3">
+            <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
+              <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
+            >
+            <q-space></q-space>
+            <div>
+              <q-btn
+                flat
+                dense
+                color="blue-7"
+                href=""
+                icon-right="3p"
+                label="Take our survey"
+              ></q-btn>
+            </div>
+          </q-toolbar>
         </q-card-section>
       </div>
     </q-card>
