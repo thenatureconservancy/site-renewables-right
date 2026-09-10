@@ -36,20 +36,17 @@ const mobile = computed(() => {
 function trackMapAccess() {
   // Only count the FIRST time this browser ever enters the tool
   if (localStorage.getItem('SRRAccessCounted')) {
-    return  // already counted this browser — bail out
+    return // already counted this browser — bail out
   }
-
-  console.log('tracking map access (first time)', mapStore.role)
-
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({
     event: 'map_access',
-    submitter_position: mapStore.role?.value ?? mapStore.role,
+    submitter_position: mapStore.role.value,
   })
-  localStorage.setItem('SRRAccessCounted', 'true')  // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRAccessCounted', 'true') // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role)) // save the role for later 
 }
 onMounted(() => {
-  //localStorage.removeItem('SRRUserRole') // remove old role value from local storage;
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -63,6 +60,7 @@ onMounted(() => {
     mapStore.tourCompleted = true
   }
   const saved = localStorage.getItem('SRRUserRole')
+  console.log('SRRUserRole', saved)
   if (saved) {
     try {
       mapStore.role = JSON.parse(saved) // back to { label, value }
@@ -168,9 +166,22 @@ onMounted(() => {
                 />
               </div>
             </q-toolbar>
-            <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
-              <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
-            >
+            <q-toolbar class="q-mt-xl q-pa-none bg-grey-3">
+              <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
+                <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
+              >
+              <q-space></q-space>
+              <div>
+                <q-btn
+                  flat
+                  dense
+                  color="blue-7"
+                  href=""
+                  icon-right="3p"
+                  label="Take our survey"
+                ></q-btn>
+              </div>
+            </q-toolbar>
 
             <!--div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
                 TNC is advancing energy solutions that reduce carbon emissions, protect natural
