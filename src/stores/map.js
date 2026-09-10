@@ -307,7 +307,7 @@ export const useMapStore = defineStore('mapStore', () => ({
         ],
       },
       {
-        title: 'Limitations to Farmland', id: '', visible: true, visibleModel: true, expanded: false,
+        title: 'Limitations to Farmland', id: '', visible: true, visibleModel: true, expanded: false, subheaderBlurb: 'Areas where farmland is most productive, now and in the future.',
         sublayers: [
           {
             index: 15, elid: 'abandonedag', serviceId: 'rasters', filter: true, visible: true, visibleModel: false, opacity: 0.9, category: 'both', title: 'Abandoned Cropland', 
