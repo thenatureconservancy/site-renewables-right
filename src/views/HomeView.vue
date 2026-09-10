@@ -10,8 +10,14 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
+const options = [
+  { label: 'Education', value: 'A' },
+  { label: 'Conservation', value: 'B' },
+  { label: 'Community', value: 'C' },
+]
 
 function dialogControl() {
+  trackMapAccess()
   mapStore.showDialog = false
   if (mapStore.checkboxHideSplash) {
     localStorage.setItem('showSRRSplash', 'hide')
@@ -26,8 +32,17 @@ const $q = useQuasar()
 const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
-
+function trackMapAccess() {
+  console.log('tracking map access')
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event: 'map_access',
+    submitter_position: mapStore.role.value, // whatever your model is bound to
+  })
+  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role))
+}
 onMounted(() => {
+  //localStorage.removeItem('SRRUserRole') // remove old role value from local storage;
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -39,6 +54,15 @@ onMounted(() => {
   }
   if (localStorage.getItem('SRRTourCompleted') == 'yes') {
     mapStore.tourCompleted = true
+  }
+  const saved = localStorage.getItem('SRRUserRole')
+  if (saved) {
+    try {
+      mapStore.role = JSON.parse(saved) // back to { label, value }
+    } catch {
+      mapStore.role = saved // fallback for old string values
+    }
+    //trackMapAccess()
   }
 })
 </script>
@@ -107,15 +131,22 @@ onMounted(() => {
                 >
               </p>
             </div>
-            <div class="row q-mt-xl">
-              <div id="bottom-div" class="text-left col-6 self-center">
-                <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash">
-                  <span class="text-body2 text-weight-medium">
-                    Hide splash screen at startup</span
-                  ></q-checkbox
-                >
+            <q-toolbar class="q-mt-xl q-pa-none">
+              <div class="text-left">
+                <q-select
+                  outlined
+                  size="sm"
+                  dense
+                  v-model="mapStore.role"
+                  :options="options"
+                  label="Select Role ( *required )"
+                  :rules="[(val) => (val !== null && val !== '') || '*Required']"
+                  style="width: 250px"
+                  class="q-ml-none"
+                ></q-select>
               </div>
-              <div class="text-right q-pt-lg col-6">
+              <q-space></q-space>
+              <div class="text-right q-pt-lg6">
                 <q-btn
                   unelevated=""
                   color="primary"
@@ -124,11 +155,16 @@ onMounted(() => {
                   icon-right="arrow_forward_ios"
                   size="md"
                   class="q-mb-md"
+                  :disabled="mapStore.role == '' ? true : false"
                   @click="dialogControl()"
                 />
               </div>
+            </q-toolbar>
+            <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
+              <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
+            >
 
-              <!--div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
+            <!--div class="text-caption q-pa-md" style="border-top: 1px solid gainsboro">
                 TNC is advancing energy solutions that reduce carbon emissions, protect natural
                 lands and support livelihoods worldwide. Visit us at
                 <a
@@ -138,7 +174,6 @@ onMounted(() => {
                 >
                 to learn more.
               </div-->
-            </div>
           </q-scroll-area>
         </q-card-section>
       </div>

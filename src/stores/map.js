@@ -31,6 +31,7 @@ export const useMapStore = defineStore('mapStore', () => ({
   reportLoading: false,
   reportGeneratedAt: null,
   conservationPct: 0,
+  role: '',
   
   
   /*cleaned layers*/

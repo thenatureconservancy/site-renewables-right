@@ -393,7 +393,7 @@ onUnmounted(() => {
               debounce="600"
               hint="Maximum allowed is 35 miles"
               :rules="[
-                (val) => (val !== null && val !== '') || 'Enter a buffer radius',
+                (val) => (val !== null && val !== '') || '*Required',
                 (val) => val > 0 || 'Must be greater than 0',
                 (val) => val <= 35 || 'Maximum allowed is 35 miles',
               ]"
