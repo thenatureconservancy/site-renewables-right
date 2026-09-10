@@ -69,7 +69,7 @@ const width = ref(window.innerWidth / 2.2)
           unelevated
           square
           size="12px"
-          icon="play_arrow"
+          icon-right="play_arrow"
           @click="startTour(mapStore)"
           flat
         ></q-btn>
@@ -78,7 +78,7 @@ const width = ref(window.innerWidth / 2.2)
           color="secondary"
           label="Layer Info"
           flat
-          icon="info_outline"
+          icon-right="info_outline"
           unelevated
           square
           size="12px"
