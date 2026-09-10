@@ -10,6 +10,7 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
+const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted') !== 'true')
 const options = [
   { label: 'Education', value: 'A' },
   { label: 'Conservation', value: 'B' },
@@ -33,13 +34,19 @@ const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
 function trackMapAccess() {
-  console.log('tracking map access')
+  // Only count the FIRST time this browser ever enters the tool
+  if (localStorage.getItem('SRRAccessCounted')) {
+    return  // already counted this browser — bail out
+  }
+
+  console.log('tracking map access (first time)', mapStore.role)
+
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({
     event: 'map_access',
-    submitter_position: mapStore.role.value, // whatever your model is bound to
+    submitter_position: mapStore.role?.value ?? mapStore.role,
   })
-  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role))
+  localStorage.setItem('SRRAccessCounted', 'true')  // 🔒 lock it so it never fires again
 }
 onMounted(() => {
   //localStorage.removeItem('SRRUserRole') // remove old role value from local storage;
@@ -143,6 +150,7 @@ onMounted(() => {
                   :rules="[(val) => (val !== null && val !== '') || '*Required']"
                   style="width: 250px"
                   class="q-ml-none"
+                  v-if="showRoleSelect"
                 ></q-select>
               </div>
               <q-space></q-space>

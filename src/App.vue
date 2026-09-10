@@ -55,7 +55,7 @@ const width = ref(window.innerWidth / 2.2)
           unelevated
           square
           size="12px"
-          icon="download"
+          icon-right="open_in_new"
           outline
           data-tour="download-data"
           href="https://tnc.app.box.com/file/2402477476742?s=0u67qsxf5s9ydcb8yigdcrztmztobw4o"
@@ -92,9 +92,31 @@ const width = ref(window.innerWidth / 2.2)
           unelevated
           square
           size="12px"
-          @click="mapStore.showDialog = true"
           data-tour="header-about"
-        ></q-btn>
+          icon-right="arrow_drop_down"
+        >
+          <q-menu anchor="bottom right" self="top right">
+            <q-list style="min-width: 180px">
+              <q-item clickable v-close-popup @click="mapStore.showDialog = true">
+                <q-item-section>About the Compass</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup tag="a" href="PRIVACY_POLICY_URL" target="_blank">
+                <q-item-section>Privacy Policy</q-item-section>
+                <q-item-section side>
+                  <q-icon name="open_in_new" />
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup tag="a" href="DATA_USE_POLICY_URL" target="_blank">
+                <q-item-section>Data Use Policy</q-item-section>
+                <q-item-section side>
+                  <q-icon name="open_in_new" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
