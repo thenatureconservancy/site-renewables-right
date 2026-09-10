@@ -101,15 +101,27 @@ const width = ref(window.innerWidth / 2.2)
                 <q-item-section>About the Compass</q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup tag="a" href="PRIVACY_POLICY_URL" target="_blank">
-                <q-item-section>Privacy Policy</q-item-section>
+              <q-item
+                clickable
+                v-close-popup
+                tag="a"
+                href="https://www.nature.org/en-us/about-us/who-we-are/accountability/privacy-policy/"
+                target="_blank"
+              >
+                <q-item-section>Privacy Notice</q-item-section>
                 <q-item-section side>
                   <q-icon name="open_in_new" />
                 </q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup tag="a" href="DATA_USE_POLICY_URL" target="_blank">
-                <q-item-section>Data Use Policy</q-item-section>
+              <q-item
+                clickable
+                v-close-popup
+                tag="a"
+                href="https://www.nature.org/en-us/about-us/who-we-are/accountability/terms-of-use/"
+                target="_blank"
+              >
+                <q-item-section>Terms of use</q-item-section>
                 <q-item-section side>
                   <q-icon name="open_in_new" />
                 </q-item-section>
