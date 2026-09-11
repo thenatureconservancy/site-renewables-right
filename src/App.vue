@@ -101,6 +101,13 @@ const width = ref(window.innerWidth / 2.2)
                 <q-item-section>About the Compass</q-item-section>
               </q-item>
               <q-separator />
+              <q-item clickable v-close-popup tag="a" href="" target="_blank">
+                <q-item-section>Take our survey</q-item-section>
+                 <q-item-section side>
+                  <q-icon name="3p" />
+                </q-item-section>
+              </q-item>
+              <q-separator />
               <q-item
                 clickable
                 v-close-popup

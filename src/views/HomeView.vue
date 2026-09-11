@@ -12,9 +12,20 @@ const mapStore = useMapStore()
 const agolStore = useAgolStore()
 const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted') !== 'true')
 const options = [
-  { label: 'Education', value: 'A' },
-  { label: 'Conservation', value: 'B' },
-  { label: 'Community', value: 'C' },
+  { label: 'Clean energy developer', value: 'A' },
+  { label: 'Community member', value: 'B' },
+  { label: 'Conservation', value: 'C' },
+  { label: 'Corporate energy buyer', value: 'D' },
+  { label: 'Economic development authority', value: 'E' },
+  { label: 'Education/Research', value: 'F' },
+  { label: 'Federal agency', value: 'G' },
+  { label: 'Land use planner', value: 'H' },
+  { label: 'Local government (i.e. municipal or county)', value: 'I' },
+  { label: 'Nonprofit', value: 'J' },
+  { label: 'State agency', value: 'K' },
+  { label: 'Tribal Energy', value: 'L' },
+  { label: 'Utility', value: 'M' },
+  { label: 'Not listed', value: 'N' },
 ]
 
 function dialogControl() {
@@ -47,6 +58,8 @@ function trackMapAccess() {
   localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
+  //localStorage.removeItem('SRRAccessCounted') // for testing only — remove this line in production
+ // localStorage.removeItem('SRRUserRole') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -135,12 +148,13 @@ onMounted(() => {
             <q-toolbar class="q-mt-xl q-pa-none">
               <div class="text-left">
                 <q-select
+                  options-dense
                   outlined
                   size="sm"
                   dense
                   v-model="mapStore.role"
                   :options="options"
-                  label="Select Role ( *required )"
+                  label="What is your role? ( *required )"
                   :rules="[(val) => (val !== null && val !== '') || '*Required']"
                   style="width: 250px"
                   class="q-ml-none"
