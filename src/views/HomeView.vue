@@ -10,7 +10,7 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
-const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted') !== 'true')
+const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted2') !== 'true')
 const options = [
   { label: 'Clean energy developer', value: 'A' },
   { label: 'Community member', value: 'B' },
@@ -46,7 +46,7 @@ const mobile = computed(() => {
 })
 function trackMapAccess() {
   // Only count the FIRST time this browser ever enters the tool
-  if (localStorage.getItem('SRRAccessCounted')) {
+  if (localStorage.getItem('SRRAccessCounted2') === 'true') {
     return // already counted this browser — bail out
   }
   window.dataLayer = window.dataLayer || []
@@ -54,12 +54,12 @@ function trackMapAccess() {
     event: 'map_access',
     submitter_position: mapStore.role.value,
   })
-  localStorage.setItem('SRRAccessCounted', 'true') // 🔒 lock it so it never fires again
-  localStorage.setItem('SRRUserRole', JSON.stringify(mapStore.role)) // save the role for later
+  localStorage.setItem('SRRAccessCounted2', 'true') // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRUserRole2', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
-  //localStorage.removeItem('SRRAccessCounted') // for testing only — remove this line in production
- // localStorage.removeItem('SRRUserRole') // for testing only — remove this line in production
+  localStorage.removeItem('SRRAccessCounted') // for testing only — remove this line in production
+  localStorage.removeItem('SRRUserRole') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -72,8 +72,7 @@ onMounted(() => {
   if (localStorage.getItem('SRRTourCompleted') == 'yes') {
     mapStore.tourCompleted = true
   }
-  const saved = localStorage.getItem('SRRUserRole')
-  console.log('SRRUserRole', saved)
+  const saved = localStorage.getItem('SRRUserRole2')
   if (saved) {
     try {
       mapStore.role = JSON.parse(saved) // back to { label, value }
