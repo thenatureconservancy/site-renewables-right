@@ -167,7 +167,12 @@ export async function generateSiteReport(mapStore, options = {}) {
       legendHeader: { fontSize: 11, bold: true, color: BRAND.navy, margin: [0, 0, 0, 6] },
     },
   };
-  pdfMake.createPdf(docDefinition).download("srr-site-report.pdf");
+  const today = new Date().toISOString().split('T')[0]; // 2026-09-14
+
+    pdfMake.createPdf(docDefinition).download(
+  `Clean Energy Compass Site Report_${today}.pdf`
+);
+
 }
 // ============================================================================
 //  DATA BUILDERS

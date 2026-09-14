@@ -58,7 +58,7 @@ const width = ref(window.innerWidth / 2.2)
           icon-right="open_in_new"
           outline
           data-tour="download-data"
-          href="https://tnc.app.box.com/file/2402477476742?s=0u67qsxf5s9ydcb8yigdcrztmztobw4o"
+          href="https://tnc.box.com/s/kinksqzv87lx2s30kmjiqh8l0bnq9kvg"
           target="_blank"
         ></q-btn>
 
@@ -103,7 +103,7 @@ const width = ref(window.innerWidth / 2.2)
               <q-separator />
               <q-item clickable v-close-popup tag="a" href="" target="_blank">
                 <q-item-section>Take our survey</q-item-section>
-                 <q-item-section side>
+                <q-item-section side>
                   <q-icon name="3p" />
                 </q-item-section>
               </q-item>

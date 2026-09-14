@@ -10,7 +10,7 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
-const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted2') !== 'true')
+const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted3') !== 'true')
 const options = [
   { label: 'Clean energy developer', value: 'A' },
   { label: 'Community member', value: 'B' },
@@ -21,9 +21,9 @@ const options = [
   { label: 'Federal agency', value: 'G' },
   { label: 'Land use planner', value: 'H' },
   { label: 'Local government (i.e. municipal or county)', value: 'I' },
-  { label: 'Nonprofit', value: 'J' },
+  { label: 'Nonprofit (other than conservation)', value: 'J' },
   { label: 'State agency', value: 'K' },
-  { label: 'Tribal Energy', value: 'L' },
+  { label: 'Tribal energy', value: 'L' },
   { label: 'Utility', value: 'M' },
   { label: 'Not listed', value: 'N' },
 ]
@@ -45,21 +45,25 @@ const mobile = computed(() => {
   return $q.screen.lt.sm || $q.screen.lt.xs ? true : false
 })
 function trackMapAccess() {
+  console.log('TRACK FIRED')
   // Only count the FIRST time this browser ever enters the tool
-  if (localStorage.getItem('SRRAccessCounted2') === 'true') {
+  /* if (localStorage.getItem('SRRAccessCounted2') === 'true') {
     return // already counted this browser — bail out
-  }
+  }*/
+  /* this.$gtag.event('event', 'map_access', {
+    submitter_position: mapStore.role.value,
+  })*/
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({
     event: 'map_access',
-    submitter_position: mapStore.role.value,
+    submitter_position: [mapStore.role.value],
   })
-  localStorage.setItem('SRRAccessCounted2', 'true') // 🔒 lock it so it never fires again
-  localStorage.setItem('SRRUserRole2', JSON.stringify(mapStore.role)) // save the role for later
+  localStorage.setItem('SRRAccessCounted3', 'true') // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRUserRole3', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
-  localStorage.removeItem('SRRAccessCounted') // for testing only — remove this line in production
-  localStorage.removeItem('SRRUserRole') // for testing only — remove this line in production
+  localStorage.removeItem('SRRAccessCounted2') // for testing only — remove this line in production
+  localStorage.removeItem('SRRUserRole2') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -72,7 +76,7 @@ onMounted(() => {
   if (localStorage.getItem('SRRTourCompleted') == 'yes') {
     mapStore.tourCompleted = true
   }
-  const saved = localStorage.getItem('SRRUserRole2')
+  const saved = localStorage.getItem('SRRUserRole3')
   if (saved) {
     try {
       mapStore.role = JSON.parse(saved) // back to { label, value }
@@ -172,6 +176,7 @@ onMounted(() => {
                   class="q-mb-lg"
                   :disabled="mapStore.role == '' ? true : false"
                   @click="dialogControl()"
+                  id="enter-site-btn"
                 />
               </div>
             </q-toolbar>
@@ -197,7 +202,7 @@ onMounted(() => {
                 flat
                 dense
                 color="blue-7"
-                href=""
+                href="https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?subpage=design&id=wW2-eY7Xu0uyK9mUwKQXp0CxlQT7uhpMskXEZHKNoC5UNENKTzBTUUVJQkZaWUtXN0hDTUpJNVlTMS4u"
                 icon-right="3p"
                 label="Take our survey"
               ></q-btn>
