@@ -10,7 +10,7 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
-const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted4') !== 'true')
+const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted5') !== 'true')
 const options = [
   { label: 'Clean energy developer', value: 'A' },
   { label: 'Community member', value: 'B' },
@@ -58,12 +58,12 @@ function trackMapAccess() {
     event: 'map_access',
     submitter_position: mapStore.role.value,
   })
-  localStorage.setItem('SRRAccessCounted4', 'true') // 🔒 lock it so it never fires again
-  localStorage.setItem('SRRUserRole4', JSON.stringify(mapStore.role)) // save the role for later
+  localStorage.setItem('SRRAccessCounted5', 'true') // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRUserRole5', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
-  localStorage.removeItem('SRRAccessCounted3') // for testing only — remove this line in production
-  localStorage.removeItem('SRRUserRole3') // for testing only — remove this line in production
+  localStorage.removeItem('SRRAccessCounted4') // for testing only — remove this line in production
+  localStorage.removeItem('SRRUserRole4') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -76,7 +76,7 @@ onMounted(() => {
   if (localStorage.getItem('SRRTourCompleted') == 'yes') {
     mapStore.tourCompleted = true
   }
-  const saved = localStorage.getItem('SRRUserRole4')
+  const saved = localStorage.getItem('SRRUserRole5')
   if (saved) {
     try {
       mapStore.role = JSON.parse(saved) // back to { label, value }
@@ -207,9 +207,11 @@ onMounted(() => {
               >
                 <div class="row items-center no-wrap full-width">
                   <div class="column text-left" style="line-height: 1.3; font-size: 12px">
-                    <div class="text-blue-7 text-weight-medium" >Stay Connected</div>
+                    <div class="text-blue-7 text-weight-medium">Stay Connected</div>
                     <div class="text-blue-7 text-weight-medium">with</div>
-                    <div class="text-blue-7 text-weight-medium">Clean Energy Compass &nbsp;&nbsp;&nbsp;</div>
+                    <div class="text-blue-7 text-weight-medium">
+                      Clean Energy Compass &nbsp;&nbsp;&nbsp;
+                    </div>
                   </div>
 
                   <q-space />
