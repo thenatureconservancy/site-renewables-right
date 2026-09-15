@@ -10,7 +10,7 @@ import { startTour } from '@/utils/appTour'
 
 const mapStore = useMapStore()
 const agolStore = useAgolStore()
-const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted3') !== 'true')
+const showRoleSelect = ref(localStorage.getItem('SRRAccessCounted4') !== 'true')
 const options = [
   { label: 'Clean energy developer', value: 'A' },
   { label: 'Community member', value: 'B' },
@@ -56,14 +56,14 @@ function trackMapAccess() {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({
     event: 'map_access',
-    submitter_position: [mapStore.role.value],
+    submitter_position: mapStore.role.value,
   })
-  localStorage.setItem('SRRAccessCounted3', 'true') // 🔒 lock it so it never fires again
-  localStorage.setItem('SRRUserRole3', JSON.stringify(mapStore.role)) // save the role for later
+  localStorage.setItem('SRRAccessCounted4', 'true') // 🔒 lock it so it never fires again
+  localStorage.setItem('SRRUserRole4', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
-  localStorage.removeItem('SRRAccessCounted2') // for testing only — remove this line in production
-  localStorage.removeItem('SRRUserRole2') // for testing only — remove this line in production
+  localStorage.removeItem('SRRAccessCounted3') // for testing only — remove this line in production
+  localStorage.removeItem('SRRUserRole3') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
@@ -76,7 +76,7 @@ onMounted(() => {
   if (localStorage.getItem('SRRTourCompleted') == 'yes') {
     mapStore.tourCompleted = true
   }
-  const saved = localStorage.getItem('SRRUserRole3')
+  const saved = localStorage.getItem('SRRUserRole4')
   if (saved) {
     try {
       mapStore.role = JSON.parse(saved) // back to { label, value }
@@ -192,20 +192,31 @@ onMounted(() => {
                 to learn more.
               </div-->
           </q-scroll-area>
-          <q-toolbar class="q-pa-none bg-grey-3">
+          <q-toolbar class="q-pa-sm" style="border-top: 1px solid lightgrey">
             <q-checkbox size="xs" v-model="mapStore.checkboxHideSplash" class="">
               <span class="text-caption"> Hide splash screen at startup</span></q-checkbox
             >
             <q-space></q-space>
             <div>
               <q-btn
-                flat
-                dense
+                outline
                 color="blue-7"
                 href="https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?subpage=design&id=wW2-eY7Xu0uyK9mUwKQXp0CxlQT7uhpMskXEZHKNoC5UNENKTzBTUUVJQkZaWUtXN0hDTUpJNVlTMS4u"
-                icon-right="3p"
-                label="Take our survey"
-              ></q-btn>
+                target="_blank"
+                class="full-width q-pa-sm bg-white"
+              >
+                <div class="row items-center no-wrap full-width">
+                  <div class="column text-left" style="line-height: 1.3; font-size: 12px">
+                    <div class="text-blue-7 text-weight-medium" >Stay Connected</div>
+                    <div class="text-blue-7 text-weight-medium">with</div>
+                    <div class="text-blue-7 text-weight-medium">Clean Energy Compass &nbsp;&nbsp;&nbsp;</div>
+                  </div>
+
+                  <q-space />
+
+                  <q-icon name="mail_outline" size="sm" color="blue-7" />
+                </div>
+              </q-btn>
             </div>
           </q-toolbar>
         </q-card-section>

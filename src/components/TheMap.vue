@@ -1044,4 +1044,11 @@ h2.esri-widget__heading {
 calcite-slider {
   --calcite-color-brand: #49a942;
 }
+:root {
+  --calcite-color-focus: transparent !important;
+}
+.esri-view .esri-view-surface--touch-none:focus::after {
+  outline: none !important;
+}
+
 </style>

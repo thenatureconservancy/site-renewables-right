@@ -55,12 +55,11 @@ const width = ref(window.innerWidth / 2.2)
           unelevated
           square
           size="12px"
-          icon-right="open_in_new"
           outline
           data-tour="download-data"
           href="https://tnc.box.com/s/kinksqzv87lx2s30kmjiqh8l0bnq9kvg"
           target="_blank"
-        ></q-btn>
+        >&nbsp;<q-icon name="open_in_new" size="15px"></q-icon></q-btn>
 
         <q-btn
           color="secondary"
@@ -101,13 +100,7 @@ const width = ref(window.innerWidth / 2.2)
                 <q-item-section>About the Compass</q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable v-close-popup tag="a" href="" target="_blank">
-                <q-item-section>Take our survey</q-item-section>
-                <q-item-section side>
-                  <q-icon name="3p" />
-                </q-item-section>
-              </q-item>
-              <q-separator />
+
               <q-item
                 clickable
                 v-close-popup
@@ -117,7 +110,7 @@ const width = ref(window.innerWidth / 2.2)
               >
                 <q-item-section>Privacy Notice</q-item-section>
                 <q-item-section side>
-                  <q-icon name="open_in_new" />
+                  <q-icon name="open_in_new" size="20px" />
                 </q-item-section>
               </q-item>
               <q-separator />
@@ -130,9 +123,24 @@ const width = ref(window.innerWidth / 2.2)
               >
                 <q-item-section>Terms of use</q-item-section>
                 <q-item-section side>
-                  <q-icon name="open_in_new" />
+                  <q-icon name="open_in_new" size="20px" />
                 </q-item-section>
               </q-item>
+               <q-separator />
+              <q-item clickable v-close-popup tag="a" href="" target="_blank">
+                <div class="row items-center no-wrap full-width">
+                  <div class="column text-left" style="line-height: 1.3; font-size: 12px">
+                    <div class="text-blue-7 text-weight-medium">STAY CONNECTED</div>
+                    <div class="text-blue-7 text-weight-medium">WITH</div>
+                    <div class="text-blue-7 text-weight-medium">
+                      CLEAN ENERGY COMPASS &nbsp;&nbsp;&nbsp;
+                    </div>
+                  </div>
+                  <q-space />
+                  <q-icon name="mail_outline" size="sm" color="blue-7" />
+                </div>
+              </q-item>
+              <q-separator />
             </q-list>
           </q-menu>
         </q-btn>
