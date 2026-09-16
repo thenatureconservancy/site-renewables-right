@@ -101,7 +101,7 @@ onMounted(() => {
     <q-card class="q-pa-none q-ma-none no-scrollbar" style="overflow: hidden; height: 90vh">
       <div class="row q-pa-none q-ma-none full-height">
         <q-card-section class="col-sm-5 col-md-6 col-lg-6 q-pa-none q-ma-none">
-          <q-img src="/srr.jpg" class="full-height" fit="cover"></q-img>
+          <q-img src="srr.jpg" class="full-height" fit="cover" loading="eager"></q-img>
         </q-card-section>
 
         <q-card-section
