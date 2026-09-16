@@ -47,9 +47,9 @@ const mobile = computed(() => {
 function trackMapAccess() {
   console.log('TRACK FIRED')
   // Only count the FIRST time this browser ever enters the tool
-  /* if (localStorage.getItem('SRRAccessCounted2') === 'true') {
+  if (localStorage.getItem('SRRAccessCounted5') === 'true') {
     return // already counted this browser — bail out
-  }*/
+  }
   /* this.$gtag.event('event', 'map_access', {
     submitter_position: mapStore.role.value,
   })*/
@@ -62,8 +62,6 @@ function trackMapAccess() {
   localStorage.setItem('SRRUserRole5', JSON.stringify(mapStore.role)) // save the role for later
 }
 onMounted(() => {
-  localStorage.removeItem('SRRAccessCounted4') // for testing only — remove this line in production
-  localStorage.removeItem('SRRUserRole4') // for testing only — remove this line in production
   if (localStorage.getItem('showSRRSplash') == 'hide') {
     mapStore.checkboxHideSplash = true
     mapStore.showDialog = false
