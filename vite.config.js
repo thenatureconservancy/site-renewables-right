@@ -4,7 +4,6 @@ import { quasar } from '@quasar/vite-plugin'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-
 // https://vite.dev/config/
 export default defineConfig({
   base: process.env.VITE_BASE_URL || '/',
@@ -25,7 +24,6 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': {}
-  }
+    'process.env': {},
+  },
 })
-
