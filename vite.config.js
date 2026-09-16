@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.VITE_BASE_URL || '/',
+  base: '/cleanenergycompass/',
   plugins: [
     vue({
       template: {
